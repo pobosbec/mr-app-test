@@ -13,12 +13,6 @@
         "cordova-plugin-device": {
             "PACKAGE_NAME": "com.bosbec.mrapptest"
         },
-        "cordova-plugin-console": {
-            "PACKAGE_NAME": "com.bosbec.mrapptest"
-        },
-        "phonegap-plugin-push": {
-            "PACKAGE_NAME": "com.bosbec.mrapptest"
-        },
         "com.pushwoosh.plugins.pushwoosh": {
             "PACKAGE_NAME": "com.bosbec.mrapptest"
         }
