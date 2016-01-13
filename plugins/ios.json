@@ -8,13 +8,13 @@
     },
     "installed_plugins": {
         "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.bosbec.mrapptest"
+            "PACKAGE_NAME": "com.bosbec.testapp"
         },
         "cordova-plugin-device": {
-            "PACKAGE_NAME": "com.bosbec.mrapptest"
+            "PACKAGE_NAME": "com.bosbec.testapp"
         },
         "com.pushwoosh.plugins.pushwoosh": {
-            "PACKAGE_NAME": "com.bosbec.mrapptest"
+            "PACKAGE_NAME": "com.bosbec.testapp"
         }
     },
     "dependent_plugins": {}
