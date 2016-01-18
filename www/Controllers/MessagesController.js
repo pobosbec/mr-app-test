@@ -23,7 +23,7 @@
 
     function init() {
         if ($scope.authenticationToken == undefined) {
-            $location.path('/login');
+            $location.path('http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/login');
         }
         listMessages($scope.authenticationToken, conversationId);
         $scope.conversation = conversationsFactory.getCurrentConversation();

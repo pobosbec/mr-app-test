@@ -18,7 +18,7 @@ var checkToken = [function ($rootScope, $q, $location) {
     if ($rootScope.authenticationToken != undefined) {
         deferred.resolve();
     } else {
-        $location.path('/login');
+        $location.path('http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/login');
         deferred.reject();
     }
 
@@ -27,55 +27,55 @@ var checkToken = [function ($rootScope, $q, $location) {
 
 mrApp.config(function ($routeProvider) {
     
-    $routeProvider.when('/login', {
-        templateUrl: 'Partials/login.htm',
+    $routeProvider.when('http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/login', {
+        templateUrl: 'http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/Partials/login.htm',
         controller: 'LoginController'
     });
 
-    $routeProvider.when('/main', {
-        templateUrl: 'Partials/main.htm',
+    $routeProvider.when('http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/main', {
+        templateUrl: 'http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/Partials/main.htm',
         controller: 'MainController',
         resolve: checkToken
     });
    
-    $routeProvider.when('/conversations/:param1', {
-        templateUrl: 'Partials/conversations.htm',
+    $routeProvider.when('http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/conversations/:param1', {
+        templateUrl: 'http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/Partials/conversations.htm',
         controller: 'ConversationsController',
         resolve: checkToken
     });
 
-    $routeProvider.when('/newconversation', {
-        templateUrl: 'Partials/newConversation.htm',
+    $routeProvider.when('http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/newconversation', {
+        templateUrl: 'http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/Partials/newConversation.htm',
         controller: 'NewConversationController',
         resolve: checkToken
     });
     
-    $routeProvider.when('/messages/:param1', {
-        templateUrl: 'Partials/messages.htm',
+    $routeProvider.when('http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/messages/:param1', {
+        templateUrl: 'http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/Partials/messages.htm',
         controller: 'MessagesController',
         resolve: checkToken
     });
 
-    $routeProvider.when('/profile/:param1', {
-        templateUrl: 'Partials/profile.htm',
+    $routeProvider.when('http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/profile/:param1', {
+        templateUrl: 'http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/Partials/profile.htm',
         controller: 'ProfileController',
         resolve: checkToken
     });
 
-    $routeProvider.when('/login/:param1', {
-        templateUrl: 'Partials/login.htm',
+    $routeProvider.when('http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/login/:param1', {
+        templateUrl: 'http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/Partials/login.htm',
         controller: 'LoginController'
     });    
     
     $routeProvider.otherwise({
-        redirectTo: '/login'
+        redirectTo: 'http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/login'
     });
     
 });
 
 mrApp.run(function ($rootScope, $location) {
 
-    console.log("*********** RUN ***********************");
+    console.log("*********************** RUNNING ***********************");
     
 });
 

@@ -1,4 +1,5 @@
-﻿function ProfileController(apiFactory, $rootScope, $scope, $location, $routeParams, $timeout, usersFactory) {
+﻿
+function ProfileController(apiFactory, $rootScope, $scope, $location, $routeParams, $timeout, usersFactory) {
     
     var appUserId = $routeParams.param1;
 

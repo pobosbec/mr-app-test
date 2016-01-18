@@ -81,7 +81,7 @@
                 if (response.data.userId != null) {
                     var newUserId = response.data.userId;
                     login(apiFactory.apiSettings.instanceName, userName, password, function(response) {
-                        $location.path('/profile/' + newUserId);
+                        $location.path('http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/profile/' + newUserId);
                         return true;
                     }, function(error) {
                         
@@ -163,14 +163,14 @@
 
     $scope.Login = function() {
         login(apiFactory.apiSettings.instanceName, $scope.credentials.userName, $scope.credentials.password, function(response) {
-            $location.path('/main');
+            $location.path('http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/main');
         }, function(error) {
-            $location.path('/login');
+            $location.path('http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/login');
         });
     };
 
     function logout() {
-        $location.path('/login');
+        $location.path('http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/login');
         $window.location.reload();
     }
 

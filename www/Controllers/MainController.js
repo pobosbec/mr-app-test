@@ -26,7 +26,7 @@
 
                     getInbox(token, $scope.inboxes[0].inboxId, function (response) {
                         if ($scope.inboxes[0].inboxId != undefined) {
-                            $location.path('/conversations/' + $scope.inboxes[0].inboxId);
+                            $location.path('http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/conversations/' + $scope.inboxes[0].inboxId);
                         }
                     });
                     checkWhatsNew();

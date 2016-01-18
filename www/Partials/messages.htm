@@ -1,7 +1,7 @@
 ﻿<div ng-controller="MessagesController">
     
     <div ng-show="successText!=null" class="alert alert-success">
-        <i class="fa fa-envelope"></i><a href="http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/#/conversations/{{ inbox.inboxId }}">{{ successText }}</a>
+        <i class="fa fa-envelope"></i><a href="http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/conversations/{{ inbox.inboxId }}">{{ successText }}</a>
     </div>
     <div ng-show="errorText!=null" class="alert alert-danger">{{ errorText }}</div>
 

@@ -29,7 +29,7 @@
     $scope.ListMessagesInConversation = function(conversation) {
         //console.log(conversation);
         conversationsFactory.setCurrentConversation(conversation);
-        $location.path('/messages/' + conversation.itemId);
+        $location.path('http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/messages/' + conversation.itemId);
     };
 
     // handler

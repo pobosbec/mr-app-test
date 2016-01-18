@@ -33,7 +33,7 @@
         conversationsFactory.createNewConversation(inboxId, participants, messageText, function (response) {
             //console.log(response);
             showAlert("New conversation created", "success", 5000);
-            $location.path('/messages/' + response.conversationId);
+            $location.path('http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/messages/' + response.conversationId);
         }, function (error) {
             showAlert("Failed to create conversation", "error", 5000);
             console.log(error);
