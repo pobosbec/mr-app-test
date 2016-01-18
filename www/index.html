@@ -38,13 +38,13 @@
     <!-- Sidebars -->
 
     <div class="sidebar sidebar-left" toggleable parent-active-class="sidebar-left-in" id="mainSidebar">
-        <h1 class="app-name"><a href="#/main"><img src="http://mobileresponse.com/wp-content/uploads/2013/12/logo1.png" class="logo" alt="Mobile Response" /></a></h1>
+        <h1 class="app-name"><a href="http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/#/main"><img src="http://mobileresponse.com/wp-content/uploads/2013/12/logo1.png" class="logo" alt="Mobile Response" /></a></h1>
 
         <div class="scrollable">
             <div class="scrollable-content">
 
                 <div ng-show="validateLoad('inboxes')" class="list-group" toggle="off" bubble target="mainSidebar">
-                    <a ng-repeat="inbox in inboxes" class="list-group-item" href="#/conversations/{{ inbox.inboxId }}">
+                    <a ng-repeat="inbox in inboxes" class="list-group-item" href="http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/#/conversations/{{ inbox.inboxId }}">
                         <div ng-show="inbox.inboxIcon != null">
                             <img height="25" alt="inboxIcon" src="{{ inbox.inboxIcon }}" />
                         </div>
@@ -61,7 +61,7 @@
 
         <div class="navbar navbar-app navbar-absolute-bottom">
             <div class="btn-group justified">
-                <a ng-show="validateLoad('profile')" href="#/profile/{{ myAppUser.id }}" class="btn btn-navbar btn-icon-only">
+                <a ng-show="validateLoad('profile')" href="http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/#/profile/{{ myAppUser.id }}" class="btn btn-navbar btn-icon-only">
                     <div ng-show="myAppUser.avatar != null">
                         <img height="25" alt="avatar" src="{{ myAppUser.avatar }}" />
                     </div>
@@ -69,7 +69,7 @@
                         <i class="fa fa-user fa-navbar"></i>
                     </div>
                 </a>
-                <a ng-show="validateLoad('logout')" href="#/login/logout" class="btn btn-navbar btn-icon-only"><i class="fa fa-list fa-expand"></i></a>
+                <a ng-show="validateLoad('logout')" href="http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/#/login/logout" class="btn btn-navbar btn-icon-only"><i class="fa fa-list fa-expand"></i></a>
             </div>
         </div>
 
@@ -77,7 +77,7 @@
         <div class="navbar navbar-app navbar-absolute-top">
 
             <div ng-show="validateLoad('inbox')" class="navbar-brand navbar-brand-center" yield-to="title">
-                <a href="#/conversations/{{ inbox.inboxId }}"><span> {{ inbox.inboxDisplayName }}</span></a>
+                <a href="http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/#/conversations/{{ inbox.inboxId }}"><span> {{ inbox.inboxDisplayName }}</span></a>
             </div>
 
             <div class="btn-group pull-left">
@@ -88,7 +88,7 @@
 
             <div ng-show="validateLoad('inbox')" class="btn-group pull-right" yield-to="navbarAction">
                 <div class="btn btn-navbar">
-                    <a href="#/newconversation/"><span><i class="fa fa-plus"></i> New </span></a>
+                    <a href="http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/#/newconversation/"><span><i class="fa fa-plus"></i> New </span></a>
                 </div>
             </div>
 
