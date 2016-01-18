@@ -16,24 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-function initPushwoosh() {
-	var pushNotification = cordova.require("com.pushwoosh.plugins.pushwoosh.PushNotification");
-	if(device.platform == "Android")
-	{
-		registerPushwooshAndroid();
-	}
-
-	if(device.platform == "iPhone" || device.platform == "iOS")
-	{
-		registerPushwooshIOS();
-	}
-
-	if (device.platform == "Win32NT") {
-	    registerPushwooshWP();
-	}
-}
-
 var app = {
     // Application Constructor
     initialize: function() {
@@ -49,20 +31,23 @@ var app = {
     // deviceready Event Handler
     //
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
-    // function, we must explicity call 'app.receivedEvent(...);'
+    // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        initPushwoosh();
         app.receivedEvent('deviceready');
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
+        //var parentElement = document.getElementById(id);
+        //var listeningElement = parentElement.querySelector('.listening');
+        //var receivedElement = parentElement.querySelector('.received');
 
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
+        //listeningElement.setAttribute('style', 'display:none;');
+        //receivedElement.setAttribute('style', 'display:block;');
 
-        console.log('Received Event: ' + id);
+        //console.log('Received Event: ' + id);
+
+     //   alert("Test");
     }
 };
+
+app.initialize();
