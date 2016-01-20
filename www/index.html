@@ -40,6 +40,18 @@
             document.onNotification("test");
         </script>
 
+        <script type="text/javascript">
+          var db = window.sqlitePlugin.openDatabase({name: "my.db", location: 1}, successcb, errorcb);
+          myDB.transaction(function(transaction) {
+            transaction.executeSql('CREATE TABLE IF NOT EXISTS bosbec (id integer primary key, title text, desc text)', [],
+            function(tx, result) {
+              alert("Table created successfully");
+            },
+            function(error) {
+              alert("Error occurred while creating the table.");
+            });
+          });
+        </script>
         <script type="text/javascript" src="cordova.js"></script>
 
         <script type="text/javascript" src="js/PushwooshAndroid.js"></script>

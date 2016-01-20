@@ -2,7 +2,7 @@
 <widget id="com.bosbec.testapp" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>mr-app-test</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        Another test-app for Bosbec, MobileResponse.
     </description>
     <author email="support@mobileresponse.se" href="https://www.mobileresponse.com">
         Bosbec MobileResponse Team
@@ -11,6 +11,7 @@
       <icon src="img/icon.png" width="180" height="180" />
     </platform>
     <content src="index.html" />
+    <plugin name="io.litehelpers.cordova.sqlite" spec="0.7.10" source="pgb" />
     <plugin name="cordova-plugin-whitelist" spec="1" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
