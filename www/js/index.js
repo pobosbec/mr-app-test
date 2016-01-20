@@ -64,16 +64,24 @@ var app = {
         receivedElement.setAttribute('style', 'display:block;');
 
         console.log('Received Event: ' + id);
-
-        var db = window.sqlitePlugin.openDatabase({name: "my.db", location: 1}, successcb, errorcb);
-        myDB.transaction(function(transaction) {
+				try{
+				var myDB = window.sqlitePlugin.openDatabase({name: "bosbec1.db"});
+				console.log('Open db: ' + result);
+				myDB.transaction(function(transaction) {
           transaction.executeSql('CREATE TABLE IF NOT EXISTS bosbec (id integer primary key, title text, desc text)', [],
           function(tx, result) {
-            alert("Table created successfully");
+					        console.log('Db OK: ' + result);
+
+            document.sqlVal = "Table created successfully";
           },
           function(error) {
-            alert("Error occurred while creating the table.");
+					        console.log('Database error: ' + error);
+
+            document.sqlVal = "Error occurred while creating the table.";
           });
         });
+			}catch (ex){
+				console.log("Exception with db: " + ex.message);
+			}
     }
 };
