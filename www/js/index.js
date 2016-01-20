@@ -66,17 +66,15 @@ var app = {
         console.log('Received Event: ' + id);
 				try{
 				var myDB = window.sqlitePlugin.openDatabase({name: "bosbec1.db"});
-				console.log('Open db: ' + result);
+				console.log('Open db: ');
 				myDB.transaction(function(transaction) {
           transaction.executeSql('CREATE TABLE IF NOT EXISTS bosbec (id integer primary key, title text, desc text)', [],
           function(tx, result) {
-					        console.log('Db OK: ' + result);
-
-            document.sqlVal = "Table created successfully";
+						document.sqlVal = "Table created successfully";
+						console.log('Db OK: ' + document.sqlVal + ". RESULT: " + result);
           },
           function(error) {
-					        console.log('Database error: ' + error);
-
+						console.log('Database error: ' + error);
             document.sqlVal = "Error occurred while creating the table.";
           });
         });
