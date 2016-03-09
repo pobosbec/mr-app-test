@@ -10,25 +10,18 @@ angular.module('login', [])
         this.register = 0;
         this.forgot = 0;
 
-
-
         $scope.showLoginError = false;
         $scope.errorMsg = "";
 
-      $scope.login =function (data) {
-
-          //if theres something in the input field try to authenticate
-          if( !((data.username == "" || data.username == null) || (data.password == "" || data.password == null))){
-              authenticate(data.username,data.password);
-          }
-              //nothing in the inputfields use the hard coded user
-          else{
-
-          }
-
-      };
-
-
+        $scope.login = function (data) {
+            //if theres something in the input field try to authenticate
+            if (!((data.username == "" || data.username == null) || (data.password == "" || data.password == null))) {
+                authenticate(data.username, data.password);
+            }
+            //nothing in the inputfields use the hard coded user
+            else {
+            }
+        };
 
         /**
          *
@@ -36,39 +29,31 @@ angular.module('login', [])
          * @param username
          * @param password
          */
-
-
-        function authenticate(username,password) {
-
+        function authenticate(username, password) {
 
             var req = {
                 method: 'POST',
-                url: tokenService.currentApiUrl+ 'authenticate',
+                url: tokenService.currentApiUrl + 'authenticate',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                data: { "Data": {
-                    "InstanceName": "mobileresponse",
-                    "Username": username,
-                    "Password": password
-                },
+                data: {
+                    "Data": {
+                        "InstanceName": "mobileresponse",
+                        "Username": username,
+                        "Password": password
+                    },
                     "Tags": null
-
                 }
             };
-
 
             $http(req
             ).then(function successCallback(response) {
                 // this callback will be called asynchronously
                 // when the response is available
                 var token = response.data.data.id;
-
                 tokenService.isAuthenticated(token);
-
                 $scope.showLoginError = false;
-
-
 
             }, function errorCallback(response) {
                 // called asynchronously if an error occurs
@@ -77,24 +62,16 @@ angular.module('login', [])
 
                 if (response.data != null) {
 
-                
-                if(response.data.errors[0].errorMessage.indexOf("AuthenticationToken") > -1){
-
-                    $scope.errorMessage = "Wrong Username / Password";
-
-                }
+                    if (response.data.errors[0].errorMessage.indexOf("AuthenticationToken") > -1) {
+                        $scope.errorMessage = "Wrong Username / Password";
+                    }
 
                 }
                 else {
                     $scope.errorMessage = "Error";
                 }
-
-
-
             });
-
         }
-
 
 
         /**
@@ -105,12 +82,11 @@ angular.module('login', [])
          *
          * @param data contains valid administrator username
          */
-        $scope.requestPw = function(data){
-
+        $scope.requestPw = function (data) {
 
             var req = {
                 method: 'POST',
-                url: tokenService.currentApiUrl+ 'administrators/restore-password',
+                url: tokenService.currentApiUrl + 'administrators/restore-password',
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -122,40 +98,30 @@ angular.module('login', [])
                 }
             };
 
-
             $http(req
             ).then(function successCallback(response) {
-                    // this callback will be called asynchronously
-                    // when the response is available
-
+                // this callback will be called asynchronously
+                // when the response is available
 
                 $scope.errorMessage = "Success";
-
                 $scope.showLoginError = true;
 
-
-                }, function errorCallback(response) {
-                    // called asynchronously if an error occurs
-                    // or server returns response with an error status.
-
+            }, function errorCallback(response) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
                 $scope.showLoginError = true;
 
+                if (response.data != null) {
 
-                if(response.data != null){
-
-                    if( $scope.errorMessage = response.data.data[1].errorMessage != null){
+                    if ($scope.errorMessage = response.data.data[1].errorMessage != null) {
                         $scope.errorMessage = response.data.data[1].errorMessage;
-
                     }
                 }
 
-                else{
+                else {
                     $scope.errorMessage = "Error";
                 }
 
-
-                });
+            });
         }
-
-
-}]);
+    }]);

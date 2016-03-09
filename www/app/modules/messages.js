@@ -8,15 +8,7 @@ angular.module('messages', [])
         $scope.username = tokenService.getUsername;
 
         $scope.$watch('$viewContentLoaded', function () {
-
-
-
-
         });
-
-
-
-
 
 
         /**
