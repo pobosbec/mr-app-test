@@ -10,20 +10,28 @@ angular.module('messages', [])
 
         $scope.test = [
             {
-                name: "Sms",
-                activated: true
+                AuthorAvatar: "img/profile-pics/6.jpg",
+                AuthorDisplayName: "Testa Testsson",
+                CreatedOn: "2016-03-09 15:36:05",
+                Content : "Testmeddelande 1",
+                Comments : null
             },
             {
-                name: "Email",
-                activated: true
+                AuthorAvatar: "img/profile-pics/2.jpg",
+                AuthorDisplayName: "Börje Tumme",
+                CreatedOn: "2016-02-25 15:36:05",
+                Content : "Testmeddelande 2",
+                Comments : [{
+                    AuthorAvatar: "img/profile-pics/6.jpg",
+                    AuthorDisplayName: "Testa Testsson",
+                    Content : "Gu va trevligt"}]
             },
             {
-                name: "App",
-                activated: true
-            },
-            {
-                name: "Iot",
-                activated: true
+                AuthorAvatar: "img/profile-pics/5.jpg",
+                AuthorDisplayName: "Pannbandine Grön",
+                CreatedOn: "2016-01-12 15:36:05",
+                Content : "Testmeddelande 3 :)",
+                Comments : null
             }
         ];
 
