@@ -31,8 +31,7 @@
 
 
 </head>
-
-<body ng-class="{'login-content':itemsPerPage == count}" class="login-content">
+<body ng-class="{'login-content': $state.includes('login')}">
 
 <data ui-view></data>
 

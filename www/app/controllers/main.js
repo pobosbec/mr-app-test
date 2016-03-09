@@ -3,8 +3,11 @@ mobileresponseWebbApp
     // Base controller for common functions
     // =========================================================================
 
-    .controller('materialadminCtrl', function($timeout, $state){
+    .controller('materialadminCtrl', function($timeout, $state, $rootScope){
 
+
+        //ui router
+        $rootScope.$state = $state;
         //Welcome Message
         //growlService.growl('Welcome back Mallinda!', 'inverse')
         
