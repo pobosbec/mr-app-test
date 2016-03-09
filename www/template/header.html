@@ -1,0 +1,43 @@
+<ul class="header-inner clearfix">
+    <li id="menu-trigger" data-target="mainmenu" data-toggle-sidebar data-model-left="mactrl.sidebarToggle.left" data-ng-class="{ 'open': mactrl.sidebarToggle.left === true }">
+        <div class="line-wrap">
+            <div class="line top"></div>
+            <div class="line center"></div>
+            <div class="line bottom"></div>  
+        </div>
+    </li>
+
+    <li class="logo hidden-xs">
+        <a data-ui-sref="home" data-ng-click="mactrl.sidebarStat($event)">Mobile Response</a>
+    </li>
+
+    <li class="pull-right">
+        <ul class="top-menu">
+
+            <li class="dropdown" uib-dropdown>
+                <a uib-dropdown-toggle href="">
+                    <i class="tm-icon zmdi zmdi-more-vert"></i>
+                </a>
+
+                <ul class="dropdown-menu dm-icon pull-right">
+                    <div class="lv-header">
+                        Conversation Layout
+                    </div>
+
+                    <li class="hidden-xs">
+                        <a data-ng-click="" href=""><i class="zmdi zmdi-widgets"></i></i> Grid Layout</a>
+                    </li>
+                    <li>
+                        <a data-ng-click="" href=""><i class="zmdi zmdi-menu"></i> List Layout</a>
+                    </li>
+                    <li>
+                        <a href=""><i class="tm-icon zmdi zmdi-comment-alt-text"></i>Conversation Layout</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="hidden-xs" data-target="chat" data-toggle-sidebar data-model-right="mactrl.sidebarToggle.right" data-ng-class="{ 'open': mactrl.sidebarToggle.right === true }">
+                <a href=""><i class="tm-icon zmdi zmdi-comment-alt-text"></i></a>
+            </li>
+        </ul>
+    </li>
+</ul>

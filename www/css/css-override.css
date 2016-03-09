@@ -1,0 +1,268 @@
+﻿body {
+    display: block;
+    background-color: white;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+.header {
+    background-color: #009688;
+}
+
+.animate-show {
+}
+
+.animate-show.ng-hide-add, .animate-show.ng-hide-remove {
+  transition: all linear 0.5s;
+}
+
+.animate-show.ng-hide {
+  opacity: 0;
+}
+
+.animate-if.ng-enter, .animate-if.ng-leave {
+  transition:all linear 0.5s;
+}
+
+
+.animate-if.ng-leave.ng-leave-active {
+  opacity:0;
+}
+
+.administrators.widget-box {
+  background: red;
+  position: relative;
+}
+.table-container {
+  position: relative;
+}
+.table-content{
+  position: absolute;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.login-container{
+  margin: 0 auto;
+  float: none;
+}
+
+.grid-container {
+}
+
+#devicesTable th:last-of-type, #devicesTable tr>td:last-of-type {
+    max-width: 6em;
+    text-align: right;
+}
+
+.card-inner-padding {
+  padding:1.0em;
+}
+
+.backgroundlogo {
+    opacity: 0.75;
+    z-index: -1;
+    position: absolute;
+    top: 100px;
+    left: 50px;
+}
+
+
+.connectionBadge {
+    /*float: right;*/
+    text-align: right;
+    font-size: 1.2rem;
+    clear: both;
+}
+
+.easy-pie .non-percent {
+    position: absolute;
+    font-weight: 300;
+    width: 100%;
+    line-height: 100%;
+    left: 0;
+}
+
+.easy-pie.main-pie .non-percent {
+    margin-top: 49px;
+    font-size: 50px;
+    text-align: center;
+}
+.easy-pie.main-pie .non-percent:not([class*="c-"]) {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+
+/*.has-feedback > .ng-dirty.ng-invalid {
+    border-color: red;
+}*/
+
+.no-padding-modal {
+    padding-right: 0px !important;
+}
+
+nav {
+    text-align: left;
+
+}
+
+header {
+ background-color: white;
+}
+
+#header-2 {
+    padding-left: 0 !important;
+}
+
+#header-2:before {
+    background-color:  white !important;
+}
+
+.background-blue {
+    background-color: #0C85E9 !important;
+}
+
+.color-blue {
+    color:#0C85E9 !important;
+}
+
+#main {
+    padding-bottom: 0px !important;
+}
+
+.dropdown-menu-waves {
+    overflow: inherit !important;
+}
+
+.modal-dialog-custom {
+    margin-top:10em !important;
+}
+
+.cc_banner-wrapper {
+    float:right !important;
+}
+
+
+.black-link {
+    color: #4D4E4C !important;
+    font-weight: bolder !important;
+    padding-left: 0 !important;
+    padding-right:0 !important;
+    margin-right:15px !important;
+}
+
+.nav-left-align {
+    padding-left:0 !important;
+    padding-right: 0!important;
+}
+
+
+
+.logo{
+
+    max-height:4.000em;
+    margin-left:0;
+}
+
+
+
+@media (min-width: 768px) {
+    .container {
+        width: 100%;
+    }
+}
+@media (min-width: 992px) {
+    .container {
+        width: 100%;
+    }
+}
+@media (min-width: 1200px) {
+
+    .container {
+        width: 1170px;
+        margin-left: 5% !important;
+        padding-left:0 !important;
+    }
+    .avatar {
+        margin-right: -10em;
+    }
+
+    .logo{
+
+        max-height:4.000em !important;
+        margin-left:-3.0em !important;
+    }
+
+}
+
+.small-cards-align-fix{
+margin-left: -15px !important;
+}
+
+
+
+
+@media screen and (min-width: 768px) {
+
+
+
+
+    .twitter-header:not(.ch-alt) {
+        padding-top: 34px;
+        padding-bottom: 34px;
+        text-align: center !important;
+        margin-left: -15px !important;
+        margin-right: -15px!important;
+    }
+    .twitter-card {
+        padding-right:15px!important;
+        padding-left:15px!important;
+
+    }
+}
+
+
+
+
+.card {
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.15) !important;
+}
+
+.bgm-mr-yellow {
+    background-color: #EEA32D !important;
+}
+.bgm-mr-red {
+    background-color: #D8695D !important;
+}
+.bgm-mr-green {
+    background-color: #6FB84F !important;
+}
+.bgm-mr-blue {
+    background-color: #23A6C6 !important;
+}
+.bgm-mr-black {
+    background-color: #4D4E4C !important;
+}
+
+.text-mr-yellow {
+    color: #EEA32D !important;
+}
+.text-mr-red {
+    color: #D8695D !important;
+}
+.text-mr-green {
+    color: #6FB84F !important;
+}
+.text-mr-blue {
+    color: #23A6C6 !important;
+}
+.text-mr-black {
+    color: #4D4E4C !important;
+}
