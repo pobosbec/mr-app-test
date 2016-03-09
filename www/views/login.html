@@ -1,18 +1,25 @@
 <div data-ng-controller="loginCtrl as lctrl">
 
     <!-- Login -->
+
+
     <div class="lc-block" id="l-login" data-ng-class="{ 'toggled': lctrl.login === 1 }" data-ng-if="lctrl.login === 1">
-        <div class="input-group m-b-20">
+
+        <form role="form" class="ng-pristine ng-valid" ng-keyup="$event.keyCode == 13 && login(login)">
+
+            <div class="input-group m-b-20">
             <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
             <div class="fg-line">
-                <input type="text" class="form-control" placeholder="Username">
+                <input type="text" class="form-control" placeholder="Username" name="username" ng-model="login.username">
             </div>
         </div>
+
+
 
         <div class="input-group m-b-20">
             <span class="input-group-addon"><i class="zmdi zmdi-male"></i></span>
             <div class="fg-line">
-                <input type="password" class="form-control" placeholder="Password">
+                <input type="password" class="form-control" placeholder="Password" name="password" ng-model="login.password">
             </div>
         </div>
 
@@ -26,7 +33,8 @@
             </label>
         </div>
 
-        <a data-ui-sref="home" class="btn btn-login btn-danger btn-float"><i class="zmdi zmdi-arrow-forward"></i></a>
+        </form>
+        <a ng-click="login(login)" class="btn btn-login btn-danger btn-float"><i class="zmdi zmdi-arrow-forward"></i></a>
 
         <ul class="login-navigation">
             <li data-block="#l-register" class="bgm-red" data-ng-click="lctrl.login = 0; lctrl.register = 1">Register

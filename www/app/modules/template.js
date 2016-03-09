@@ -39,14 +39,12 @@ mobileresponseWebbApp
                         else {
                             scope.$apply(function(){
                                 scope.modelRight = false;
-                            })
+                            });
                         }
-                        
                     }
-                })
+                });
             }
         }
-    
     })
     
 

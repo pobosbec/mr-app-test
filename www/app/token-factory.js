@@ -3,9 +3,9 @@
  */
 
 angular.module('token', [])
-    .factory('tokenService', ['$http','$window','$rootScope','$location', function($http, win, $rootScope, $location, $q) {
+    .factory('tokenService', ['$http','$window','$rootScope','$location','$q','$state', function($http, win, $rootScope, $location, $q,$state) {
         $rootScope.token = null;
-        $rootScope.username = "noName";
+        var username = "noName";
         var token = null;
         var adminId = null;
         var accountId = null;
@@ -34,12 +34,10 @@ angular.module('token', [])
         $rootScope.$watch('$viewContentLoaded', function () {
 
             if (win.sessionStorage.accessToken != null) {
-
                 factory.isAuthenticated(win.sessionStorage.accessToken);
-
             }
             else {
-                $location.path('#/login');
+                $state.go('login');
             }
         });
 
@@ -66,7 +64,6 @@ angular.module('token', [])
 
         $rootScope.logout = function(){
 
-            $rootScope.toast('','Successfully logged out');
 
             //TODO abandon function
 
@@ -75,7 +72,7 @@ angular.module('token', [])
             $rootScope.token = null;
             token = null;
 
-            $location.path('#/login');
+            $state.go('login');
             clearTimeout(tokenTimer);
 
             $('#template-2').hide();
@@ -148,7 +145,7 @@ angular.module('token', [])
 
                 win.alert("error abandoning token");
 
-                //TODO put a toast here
+
 
             });
 
@@ -219,9 +216,9 @@ angular.module('token', [])
                 win.sessionStorage.accessToken = token;
 
                 //redirect to dashboard
-                if (window.location.hash.indexOf("/login")>-1){
-                    $location.path('/dashboard');
-                    $location.replace();
+                if ($state.includes('login')){
+
+                    $state.go('home');
                 }
 
 
@@ -230,26 +227,12 @@ angular.module('token', [])
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
 
-
-
                 //store token in session
                 win.sessionStorage.accessToken = null;
 
-                //TODO create some error handling and method to show errors
-                $rootScope.showLoginError = true;
-                $rootScope.errorMessage = response.data.errors[0].errorMessage;
-
-
-                $rootScope.toast('Error!','service.js isAuthenticated', {x:20,y:165});
-
-                $rootScope.toast('Error','Your session has expired');
-
-
                 //redirect to login
                 //change to dashboard
-                $location.path('/login');
-                $location.replace();
-
+                $state.go('login');
 
                 //we are logged in show navbar and redirect
                 $('#template-2').hide();
@@ -288,8 +271,8 @@ angular.module('token', [])
                 var data = response.data;
 
                 if (response.data.data.name != null) {
-                    $rootScope.username = response.data.data.name;
-                    $rootScope.toast('Welcome!',$rootScope.username);
+                    username = response.data.data.name;
+
 
                 }
 
@@ -301,6 +284,18 @@ angular.module('token', [])
 
             });
         };
+
+        factory.getUsername = function() {
+            if (adminId === null) {
+                var refreshIds = factory.refreshIds();
+                refreshIds.then(function(response) {
+                    return username; //response.data.administratorId();
+                });
+            } else {
+                return username;
+            }
+        };
+
 
         factory.getAdminId = function() {
             if (adminId === null) {
