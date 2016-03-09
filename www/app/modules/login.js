@@ -2,7 +2,14 @@
  * Created by robinpipirs on 09/12/15.
  */
 angular.module('login', [])
-    .controller('loginController', ['$scope', '$http', 'tokenService', '$rootScope', '$window', '$location', function ($scope, $http, tokenService, $rootScope, win, $location) {
+    .controller('loginCtrl', ['$scope', '$http', 'tokenService', '$rootScope', '$window', '$location', function ($scope, $http, tokenService, $rootScope, win, $location) {
+
+
+        //taken from main.js
+        this.login = 1;
+        this.register = 0;
+        this.forgot = 0;
+
 
 
         $scope.showLoginError = false;
