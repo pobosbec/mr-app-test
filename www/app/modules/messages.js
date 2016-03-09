@@ -7,6 +7,27 @@ angular.module('messages', [])
         $scope.token = tokenService.getAuthToken();
         $scope.username = tokenService.getUsername;
 
+
+        $scope.test = [
+            {
+                name: "Sms",
+                activated: true
+            },
+            {
+                name: "Email",
+                activated: true
+            },
+            {
+                name: "App",
+                activated: true
+            },
+            {
+                name: "Iot",
+                activated: true
+            }
+        ];
+
+
         $scope.$watch('$viewContentLoaded', function () {
         });
 

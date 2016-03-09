@@ -43,10 +43,11 @@
 
             </div>
 
-            <div class="card" ng-controller="messagesController as msgCtrl">
-                <div class="card-header">
-                    <h2>Messages <small>username: {{username()}} token: {{token}}</small></h2>
 
+            <!-- Recent Posts -->
+            <div class="card" data-ng-controller="messagesController as msgCtrl">
+                <div class="card-header ch-alt m-b-20">
+                    <h2>Recent Posts <small>username: {{username()}} token: {{token}}</small></h2>
                     <ul class="actions">
                         <li>
                             <a href="">
@@ -76,9 +77,32 @@
                             </ul>
                         </li>
                     </ul>
+
+                    <button class="btn bgm-cyan btn-float"><i class="zmdi zmdi-plus"></i></button>
                 </div>
 
+                <div class="card-body">
+                    <div class="listview">
+
+                        <a class="lv-item" href="" ng-repeat="item in test">
+                            <div class="media">
+                                <div class="pull-left">
+                                    <img class="lv-img-sm" ng-src="img/profile-pics/{{ w.img }}" alt="">
+                                </div>
+                                <div class="media-body">
+                                    <div class="lv-title">{{item.name }}</div>
+                                    <small class="lv-small">{{ item.activated }}</small>
+                                </div>
+                            </div>
+                        </a>
+
+                        <div class="clearfix"></div>
+
+                        <a class="lv-footer" href="">View All</a>
+                    </div>
                 </div>
+            </div>
+
         </div>
     </section>
 </section>
