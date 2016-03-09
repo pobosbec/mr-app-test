@@ -32,7 +32,7 @@
 
 </head>
 
-<body>
+<body ng-class="{'login-content':itemsPerPage == count}" class="login-content">
 
 <data ui-view></data>
 
@@ -52,10 +52,12 @@
 
 <script src="node_modules/oclazyload/dist/ocLazyLoad.js"></script>
 
-<script src="node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js"></script>
+
 
 <!-- Angular ui router -->
 <script src="node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
+
+<script src="node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
 
 <!-- scroll custom -->
 <script src="node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.js"></script>
@@ -75,6 +77,9 @@
 <script src="app/controllers/main.js"></script>
 <script src="app/modules/template.js"></script>
 <script src="app/modules/ui.js"></script>
+<script src="app/modules/messages.js"></script>
+<script src="app/modules/login.js"></script>
+<script src="app/token-factory.js"></script>
 
 
 <!-- End of body -->

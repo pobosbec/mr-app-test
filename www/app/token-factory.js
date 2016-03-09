@@ -2,7 +2,7 @@
  * Created by robinpipirs on 11/12/15.
  */
 
-angular.module('service', [])
+angular.module('token', [])
     .factory('tokenService', ['$http','$window','$rootScope','$location', function($http, win, $rootScope, $location, $q) {
         $rootScope.token = null;
         $rootScope.username = "noName";
