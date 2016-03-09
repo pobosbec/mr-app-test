@@ -5,7 +5,7 @@
 angular.module('token', [])
     .factory('tokenService', ['$http','$window','$rootScope','$location','$q','$state', function($http, win, $rootScope, $location, $q,$state) {
         $rootScope.token = null;
-        var username = "noName";
+        var username = null;
         var token = null;
         var adminId = null;
         var accountId = null;
@@ -160,10 +160,9 @@ angular.module('token', [])
                 $rootScope.token = token;
                 adminId = response.data.data.administratorId;
                 accountId = response.data.data.accountId;
-                username = response.data.data.username;
             });
             return response;
-        }
+        };
 
 
         /**
@@ -198,11 +197,9 @@ angular.module('token', [])
                     $rootScope.token = token;
                     adminId = response.data.data.administratorId;
                     accountId = response.data.data.accountId;
-                    username = response.data.data.username;
 
                 if(!aquiredUserName){
                     aquiredUserName = !aquiredUserName;
-
                     factory.getDetails();
                 }
 
@@ -223,6 +220,7 @@ angular.module('token', [])
 
 
                 return response;
+
             }, function errorCallback(response) {
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
@@ -271,9 +269,7 @@ angular.module('token', [])
                 var data = response.data;
 
                 if (response.data.data.name != null) {
-                    username = response.data.data.name;
-
-
+                   username = response.data.data.name;
                 }
 
 
@@ -286,14 +282,7 @@ angular.module('token', [])
         };
 
         factory.getUsername = function() {
-            if (adminId === null) {
-                var refreshIds = factory.refreshIds();
-                refreshIds.then(function(response) {
-                    return username; //response.data.administratorId();
-                });
-            } else {
-                return username;
-            }
+            return username;
         };
 
 
@@ -405,7 +394,6 @@ angular.module('token', [])
         factory.currentApiUrl = factory.getApiUrl(window.location);
         factory.currentDeviceServiceUrl = factory.getDeviceServiceUrl(window.location);
         factory.currentReservationServiceUrl = factory.getReservationServiceUrl(window.location);
-
         return factory;
 
     }])

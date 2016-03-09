@@ -3,11 +3,15 @@ mobileresponseWebbApp
     // Base controller for common functions
     // =========================================================================
 
-    .controller('materialadminCtrl', function($timeout, $state, $rootScope){
+    .controller('materialadminCtrl', function($timeout, $state, $rootScope,tokenService,$scope){
 
 
         //ui router
         $rootScope.$state = $state;
+
+        //username
+        $scope.username = tokenService.getUsername; //passing getter to the view
+
         //Welcome Message
         //growlService.growl('Welcome back Mallinda!', 'inverse')
         

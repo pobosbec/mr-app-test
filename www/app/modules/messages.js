@@ -4,13 +4,13 @@
 angular.module('messages', [])
     .controller('messagesController', ['$scope', '$http', 'tokenService', function ($scope, $http, tokenService) {
 
-
-        $scope.username = "username";
+        $scope.token = tokenService.getAuthToken();
+        $scope.username = tokenService.getUsername;
 
         $scope.$watch('$viewContentLoaded', function () {
 
 
-           // $scope.username = tokenService.getUsername();
+
 
         });
 
