@@ -20,8 +20,8 @@ angular.module('token', [])
 
         //the instance of the Timeout event that run keepTokenAlive
         var tokenTimer;
-        //The intervall which keepTokenAlive should be runned
-        var intervall = 1000000;
+        //The interval which keepTokenAlive should be runned
+        var interval = 1000000;
 
 
         /**
@@ -97,7 +97,7 @@ angular.module('token', [])
          *
          * function that increments our tokens expire time
          *
-         * @var intervall here you can set the interval time for refresh 1000 = 1s, 60000 = 1min
+         * @var interval here you can set the interval time for refresh 1000 = 1s, 60000 = 1min
          *
          */
         factory.keepTokenAlive = function (){
@@ -204,7 +204,7 @@ angular.module('token', [])
                 }
 
                     //start keepTokenAlive timer
-                    tokenTimer = setTimeout(function(){factory.keepTokenAlive}, intervall);
+                    tokenTimer = setTimeout(function(){factory.keepTokenAlive}, interval);
 
                 //show navbar
                 $('#template-2').show();
