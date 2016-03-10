@@ -5,7 +5,7 @@
 angular.module('message', [])
     .factory('messageRepository', ['$http','$window','$rootScope','$location','$q','$state', 'tokenService', function($http, win, $rootScope, $location, $q,$state,tokenService) {
 
-        factory.getMesages = function () {
+        factory.getMessages = function () {
             var result =  [
                 {
                     AuthorAvatar: "img/profile-pics/6.jpg",
@@ -16,7 +16,7 @@ angular.module('message', [])
                 },
                 {
                     AuthorAvatar: "img/profile-pics/2.jpg",
-                    AuthorDisplayName: "Börje Tumme",
+                    AuthorDisplayName: "Bï¿½rje Tumme",
                     CreatedOn: "2016-02-25 15:36:05",
                     Content: "Testmeddelande 2",
                     Comments: [
@@ -29,7 +29,7 @@ angular.module('message', [])
                 },
                 {
                     AuthorAvatar: "img/profile-pics/5.jpg",
-                    AuthorDisplayName: "Pannbandine Grön",
+                    AuthorDisplayName: "Pannbandine Grï¿½n",
                     CreatedOn: "2016-01-12 15:36:05",
                     Content: "Testmeddelande 3 :)",
                     Comments: null
