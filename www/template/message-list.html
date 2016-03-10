@@ -1,0 +1,35 @@
+<!-- Latest -->
+<div class="card" ng-repeat="message in messages">
+    <div class="card-header bgm-cyan">
+        <div class="media">
+            <div class="pull-left">
+                <img class="lv-img" ng-src="{{ message.AuthorAvatar || 'img/profile-pics/8.jpg' }}" alt="">
+            </div>
+            <div class="media-body m-t-5">
+                <h2>{{message.AuthorDisplayName || 'Namn Namnsson' }}
+                    <small> {{ message.CreatedOn || 'yyyy-mm-dd hh:ii:ss' }}</small>
+                </h2>
+            </div>
+        </div>
+
+        <ul class="actions actions-alt">
+            <li class="dropdown" uib-dropdown="">
+                <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle" aria-haspopup="true">
+                    <i class="zmdi zmdi-more-vert"></i>
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li>
+                        <a href="">Something</a>
+                    </li>
+                    <li>
+                        <a href="">Something else</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body card-padding">
+        {{ message.Content || 'Ett Meddelande' }}
+    </div>
+</div>
