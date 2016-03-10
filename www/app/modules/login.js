@@ -2,8 +2,7 @@
  * Created by robinpipirs on 09/12/15.
  */
 angular.module('login', [])
-    .controller('loginCtrl', ['$scope', '$http', 'tokenService', '$rootScope', '$window', '$location', function ($scope, $http, tokenService, $rootScope, win, $location) {
-
+    .controller('loginCtrl', ['$scope', '$http', 'tokenService', function ($scope, $http, tokenService) {
 
         //taken from main.js
         this.login = 1;
@@ -24,7 +23,6 @@ angular.module('login', [])
         };
 
         /**
-         *
          * Calls api for authentication call, sets token and admin id
          * @param username
          * @param password
@@ -59,27 +57,19 @@ angular.module('login', [])
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
                 $scope.showLoginError = true;
-
                 if (response.data != null) {
-
                     if (response.data.errors[0].errorMessage.indexOf("AuthenticationToken") > -1) {
                         $scope.errorMessage = "Wrong Username / Password";
                     }
-
-                }
-                else {
+                } else {
                     $scope.errorMessage = "Error";
                 }
             });
         }
 
-
         /**
-         *
          * Used by login-forgot-password.html
-         *
          * used to reset password.
-         *
          * @param data contains valid administrator username
          */
         $scope.requestPw = function (data) {
@@ -97,31 +87,23 @@ angular.module('login', [])
                     "Tags": null
                 }
             };
-
             $http(req
             ).then(function successCallback(response) {
                 // this callback will be called asynchronously
                 // when the response is available
-
                 $scope.errorMessage = "Success";
                 $scope.showLoginError = true;
-
             }, function errorCallback(response) {
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
                 $scope.showLoginError = true;
-
                 if (response.data != null) {
-
                     if ($scope.errorMessage = response.data.data[1].errorMessage != null) {
                         $scope.errorMessage = response.data.data[1].errorMessage;
                     }
-                }
-
-                else {
+                } else {
                     $scope.errorMessage = "Error";
                 }
-
             });
         }
     }]);
