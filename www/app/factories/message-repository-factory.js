@@ -4,23 +4,39 @@
 
 angular.module('message', [])
     .factory('messageRepository', ['$http','$window','$rootScope','$location','$q','$state', 'tokenService', function($http, win, $rootScope, $location, $q,$state,tokenService) {
-//Junk mojs fix moj yarr
-        factory.getDeviceServiceUrl = function () {
-            return "https://bngw1w5u7e.execute-api.eu-west-1.amazonaws.com/production/";
-        };
 
-        factory.getReservationServiceUrl = function () {
-            //return "http://localhost:8885/";
-            return "https://reservations.mobileresponse.se/";
-        };
+        factory.getMesages = function () {
+            var result =  [
+                {
+                    AuthorAvatar: "img/profile-pics/6.jpg",
+                    AuthorDisplayName: "Testa Testsson",
+                    CreatedOn: "2016-03-09 15:36:05",
+                    Content: "Testmeddelande 1",
+                    Comments: null
+                },
+                {
+                    AuthorAvatar: "img/profile-pics/2.jpg",
+                    AuthorDisplayName: "Börje Tumme",
+                    CreatedOn: "2016-02-25 15:36:05",
+                    Content: "Testmeddelande 2",
+                    Comments: [
+                        {
+                            AuthorAvatar: "img/profile-pics/6.jpg",
+                            AuthorDisplayName: "Testa Testsson",
+                            Content: "Gu va trevligt"
+                        }
+                    ]
+                },
+                {
+                    AuthorAvatar: "img/profile-pics/5.jpg",
+                    AuthorDisplayName: "Pannbandine Grön",
+                    CreatedOn: "2016-01-12 15:36:05",
+                    Content: "Testmeddelande 3 :)",
+                    Comments: null
+                }
+            ];
+            return result;
+        }
 
-        /**
-         * Instancing our apiurl to the browsers
-         * @type {*}
-         */
-        factory.currentApiUrl = factory.getApiUrl(window.location);
-        factory.currentDeviceServiceUrl = factory.getDeviceServiceUrl(window.location);
-        factory.currentReservationServiceUrl = factory.getReservationServiceUrl(window.location);
         return factory;
-
     }])
