@@ -12,6 +12,14 @@ mobileresponseWebbApp
         //username
         $scope.username = tokenService.getUsername; //passing getter to the view
 
+        //message listing view
+        $scope.messageViewMode =1;
+
+        this.changeMessageView = function(event) {
+          $scope.messageViewMode = event.target.id;
+        };
+
+
         //Welcome Message
         //growlService.growl('Welcome back Mallinda!', 'inverse')
         
@@ -25,7 +33,7 @@ mobileresponseWebbApp
         this.sidebarToggle = {
             left: false,
             right: false
-        }
+        };
 
         // By default template has a boxed layout
         this.layoutType = localStorage.getItem('ma-layout-status');

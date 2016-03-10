@@ -16,22 +16,26 @@
 
             <li class="dropdown" uib-dropdown>
                 <a uib-dropdown-toggle href="">
-                    <i class="tm-icon zmdi zmdi-more-vert"></i>
+
+                    <i ng-if="messageViewMode == 1" class="tm-icon zmdi zmdi-menu"></i>
+                    <i ng-if="messageViewMode == 2" class="tm-icon zmdi zmdi-comment-alt-text"></i>
+                    <i ng-if="messageViewMode == 3" class="tm-icon zmdi zmdi-widgets"></i>
+
+
                 </a>
 
                 <ul class="dropdown-menu dm-icon pull-right">
                     <div class="lv-header">
                         Conversation Layout
                     </div>
-
-                    <li class="hidden-xs">
-                        <a data-ng-click="" href=""><i class="zmdi zmdi-widgets"></i></i> Grid Layout</a>
+                    <li ng-class="{'active' : messageViewMode ==1}">
+                        <a  id="1" data-ng-click="mactrl.changeMessageView($event)" href=""><i class="zmdi zmdi-menu"></i> List Layout</a>
                     </li>
-                    <li>
-                        <a data-ng-click="" href=""><i class="zmdi zmdi-menu"></i> List Layout</a>
+                    <li ng-class="{'active' : messageViewMode ==2}">
+                        <a id="2" data-ng-click="mactrl.changeMessageView($event)" href=""><i class="tm-icon zmdi zmdi-comment-alt-text"></i>Conversation Layout</a>
                     </li>
-                    <li>
-                        <a href=""><i class="tm-icon zmdi zmdi-comment-alt-text"></i>Conversation Layout</a>
+                    <li ng-class="{'active' : messageViewMode ==3}">
+                        <a id="3" data-ng-click="mactrl.changeMessageView($event)" href=""><i class="zmdi zmdi-widgets"></i></i> Grid Layout</a>
                     </li>
                 </ul>
             </li>
