@@ -44,8 +44,8 @@
             </div>
 
             <!-- Recent Posts -->
-            <div ng-if="view == 1" class="container" data-ng-include="'template/message-list.html'" data-ng-controller="messagesController as msgCtrl"></div>
-                <div ng-if="view == 2" class="container" data-ng-include="'template/message-wall.html'" data-ng-controller="messagesController as msgCtrl"></div>
+            <div ng-if="messageViewMode == 1" class="container" data-ng-include="'template/message-list.html'" data-ng-controller="messagesController as msgCtrl"></div>
+                <div ng-if="messageViewMode == 2" class="container" data-ng-include="'template/message-wall.html'" data-ng-controller="messagesController as msgCtrl"></div>
 
 
         </div>
