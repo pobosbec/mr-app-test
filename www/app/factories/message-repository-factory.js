@@ -5,6 +5,7 @@
 angular.module('message', [])
     .factory('messageRepository', ['$http','$window','$rootScope','$location','$q','$state', 'tokenService', function($http, win, $rootScope, $location, $q,$state,tokenService) {
 
+        var factory = {};
         factory.getMessages = function () {
             var result =  [
                 {
