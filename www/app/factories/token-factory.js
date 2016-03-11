@@ -11,12 +11,8 @@ angular.module('token', [])
         var accountId = null;
         var wfId = null;
         var factory = {};
-
         var aquiredUserName = false;
 
-
-        //development mode
-        $rootScope.showDev = false;
 
         //the instance of the Timeout event that run keepTokenAlive
         var tokenTimer;
@@ -25,12 +21,8 @@ angular.module('token', [])
 
 
         /**
-         *
          * Checks if theres an token in the sessionStorage if so authenticate it
-         *
          */
-
-
         $rootScope.$watch('$viewContentLoaded', function () {
 
             if (win.sessionStorage.accessToken != null) {
@@ -41,13 +33,9 @@ angular.module('token', [])
             }
         });
 
-
         /**
-         *
          * checks if the user opens the page with a passed token. if so try to authenticate with it.
-         *
          */
-
         var location = $location;
         $rootScope.$watch('location.search()', function() {
             var token = ($location.search()).token;
@@ -57,67 +45,34 @@ angular.module('token', [])
         }, true);
 
         /**
-         *
          * Logout function
-         *
          */
-
         $rootScope.logout = function(){
 
-
             //TODO abandon function
-
             factory.abandonToken($rootScope.token);
             win.sessionStorage.accessToken = null;
             $rootScope.token = null;
             token = null;
-
             $state.go('login');
             clearTimeout(tokenTimer);
-
             $('#template-2').hide();
-
             aquiredUserName = false;
-
-
-
-        };
-
-
-
-        factory.setWfId = function (data){
-            wfId = data;
-        };
-
-        factory.getWfId = function (){
-            return wfId;
         };
 
         /**
-         *
          * function that increments our tokens expire time
-         *
          * @var interval here you can set the interval time for refresh 1000 = 1s, 60000 = 1min
-         *
          */
         factory.keepTokenAlive = function (){
-
             factory.isAuthenticated(token);
-
         };
 
-
-
-
-
         /**
-         *
          * Calls api /is-authenticated with data as token this call also refreshes the lifetime of the token
          * @param data token
          */
         factory.abandonToken = function(data){
-
-
             var req = {
                 method: 'POST',
                 url: factory.currentApiUrl+ 'is-authenticated',
@@ -136,23 +91,13 @@ angular.module('token', [])
                 // this callback will be called asynchronously
                 // when the response is available
 
-
-
-
             }, function errorCallback(response) {
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
 
                 win.alert("error abandoning token");
-
-
-
             });
-
         };
-
-
-
 
         factory.refreshIds = function () {
             var response = factory.isAuthenticated(win.sessionStorage.accessToken).then(function(response) {
@@ -164,16 +109,12 @@ angular.module('token', [])
             return response;
         };
 
-
         /**
-         *
          * Calls api /is-authenticated with data as token this call also refreshes the lifetime of the token
          * @param data token
          */
         factory.isAuthenticated = function(data){
-
             token = data;
-
             var req = {
                 method: 'POST',
                 url: factory.currentApiUrl+ 'is-authenticated',
@@ -202,23 +143,14 @@ angular.module('token', [])
                     aquiredUserName = !aquiredUserName;
                     factory.getDetails();
                 }
-
                     //start keepTokenAlive timer
-                    tokenTimer = setTimeout(function(){factory.keepTokenAlive}, interval);
-
-                //show navbar
-                $('#template-2').show();
-
+                tokenTimer = setTimeout(function(){factory.keepTokenAlive}, interval);
                 //store token in session
                 win.sessionStorage.accessToken = token;
-
                 //redirect to dashboard
                 if ($state.includes('login')){
-
                     $state.go('home');
                 }
-
-
                 return response;
 
             }, function errorCallback(response) {
@@ -227,20 +159,14 @@ angular.module('token', [])
 
                 //store token in session
                 win.sessionStorage.accessToken = null;
-
                 //redirect to login
                 //change to dashboard
                 $state.go('login');
-
                 //we are logged in show navbar and redirect
                 $('#template-2').hide();
-
                 });
             return $q.reject(response);
         };
-
-
-
 
         /**
          * getDetails http posts to api to fetch accounts details
@@ -265,26 +191,20 @@ angular.module('token', [])
             ).then(function successCallback(response) {
                 // this callback will be called asynchronously
                 // when the response is available
-
                 var data = response.data;
-
                 if (response.data.data.name != null) {
                    username = response.data.data.name;
                 }
 
-
-
             }, function errorCallback(response) {
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
-
             });
         };
 
         factory.getUsername = function() {
             return username;
         };
-
 
         factory.getAdminId = function() {
             if (adminId === null) {
@@ -312,47 +232,7 @@ angular.module('token', [])
             return token;
         };
 
-
         /**
-         *
-         * When the service is runned, depending on what url mobile response uses we set the admin address differently
-         * @param host
-         * @returns {*}
-         */
-
-
-        factory.getWfUrl = function (host)
-        {
-            // in test
-            if (host.indexOf("test.mobileresponse") > -1)
-                return "http://admin.test.mobileresponse.se/";
-
-            // in production
-            if (host.indexOf("mobileresponse.se") > -1)
-                return "https://admin.mobileresponse.se/";
-
-            // in localhost
-            if (host.indexOf("localhost:63342") > -1)
-                return "http://api2.mobileresponse.se/";
-
-            // in localhost
-            else if (host.indexOf("localhost") > -1)
-                return "http://admin.test.mobileresponse.se/";
-
-            // in staging
-            return "https://admin.mobileresponse.se/";
-        };
-
-        /**
-         * Instancing our adminurl to the browsers
-         * @type {*}
-         */
-        factory.currentwfUrl = factory.getWfUrl(window.location.host);
-
-
-
-        /**
-         *
          * When the service is runned, depending on what url mobile response uses we set the api address differently
          * @param host
          * @returns {*}
@@ -370,10 +250,7 @@ angular.module('token', [])
             if (host.host.indexOf("localhost") > -1)
                 //return "http://10.100.126.80:8887/";
                 //return "http://api2.test.mobileresponse.se/";
-
                 return "https://api2.mobileresponse.se/";
-
-
             // in staging
             return "http://api2.test.mobileresponse.se/";
         };

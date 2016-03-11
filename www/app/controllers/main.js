@@ -2,9 +2,7 @@ mobileresponseWebbApp
     // =========================================================================
     // Base controller for common functions
     // =========================================================================
-
     .controller('materialadminCtrl', function($timeout, $state, $rootScope,tokenService,$scope){
-
 
         //ui router
         $rootScope.$state = $state;
@@ -19,10 +17,8 @@ mobileresponseWebbApp
           $scope.messageViewMode = event.target.id;
         };
 
-
         //Welcome Message
         //growlService.growl('Welcome back Mallinda!', 'inverse')
-        
         
         // Detact Mobile Browser
         if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
@@ -46,15 +42,13 @@ mobileresponseWebbApp
             if (!angular.element(event.target).parent().hasClass('active')) {
                 this.sidebarToggle.left = false;
             }
-        }
-
+        };
         
         //Listview menu toggle in small screens
         this.lvMenuStat = false;
 
         //Skin Switch
         this.currentSkin = 'blue';
-
         this.skinList = [
             'lightblue',
             'bluegray',
@@ -65,20 +59,13 @@ mobileresponseWebbApp
             'blue',
             'purple'
         ]
-
-    
     })
-
 
     // =========================================================================
     // Header
     // =========================================================================
     .controller('headerCtrl', function($timeout){
-
-
     })
-
-
 
     // =========================================================================
     // ANIMATIONS DEMO
@@ -95,51 +82,51 @@ mobileresponseWebbApp
             { animation: 'swing', target: 'attentionSeeker' },
             { animation: 'tada', target: 'attentionSeeker' },
             { animation: 'wobble', target: 'attentionSeeker' }
-        ]
+        ];
         this.flippers = [
             { animation: 'flip', target: 'flippers' },
             { animation: 'flipInX', target: 'flippers' },
             { animation: 'flipInY', target: 'flippers' },
             { animation: 'flipOutX', target: 'flippers' },
             { animation: 'flipOutY', target: 'flippers'  }
-        ]
+        ];
          this.lightSpeed = [
             { animation: 'lightSpeedIn', target: 'lightSpeed' },
             { animation: 'lightSpeedOut', target: 'lightSpeed' }
-        ]
+        ];
         this.special = [
             { animation: 'hinge', target: 'special' },
             { animation: 'rollIn', target: 'special' },
             { animation: 'rollOut', target: 'special' }
-        ]
+        ];
         this.bouncingEntrance = [
             { animation: 'bounceIn', target: 'bouncingEntrance' },
             { animation: 'bounceInDown', target: 'bouncingEntrance' },
             { animation: 'bounceInLeft', target: 'bouncingEntrance' },
             { animation: 'bounceInRight', target: 'bouncingEntrance' },
             { animation: 'bounceInUp', target: 'bouncingEntrance'  }
-        ]
+        ];
         this.bouncingExits = [
             { animation: 'bounceOut', target: 'bouncingExits' },
             { animation: 'bounceOutDown', target: 'bouncingExits' },
             { animation: 'bounceOutLeft', target: 'bouncingExits' },
             { animation: 'bounceOutRight', target: 'bouncingExits' },
             { animation: 'bounceOutUp', target: 'bouncingExits'  }
-        ]
+        ];
         this.rotatingEntrances = [
             { animation: 'rotateIn', target: 'rotatingEntrances' },
             { animation: 'rotateInDownLeft', target: 'rotatingEntrances' },
             { animation: 'rotateInDownRight', target: 'rotatingEntrances' },
             { animation: 'rotateInUpLeft', target: 'rotatingEntrances' },
             { animation: 'rotateInUpRight', target: 'rotatingEntrances'  }
-        ]
+        ];
         this.rotatingExits = [
             { animation: 'rotateOut', target: 'rotatingExits' },
             { animation: 'rotateOutDownLeft', target: 'rotatingExits' },
             { animation: 'rotateOutDownRight', target: 'rotatingExits' },
             { animation: 'rotateOutUpLeft', target: 'rotatingExits' },
             { animation: 'rotateOutUpRight', target: 'rotatingExits'  }
-        ]
+        ];
         this.fadeingEntrances = [
             { animation: 'fadeIn', target: 'fadeingEntrances' },
             { animation: 'fadeInDown', target: 'fadeingEntrances' },
@@ -150,7 +137,7 @@ mobileresponseWebbApp
             { animation: 'fadeInRightBig', target: 'fadeingEntrances'  },
             { animation: 'fadeInUp', target: 'fadeingEntrances'  },
             { animation: 'fadeInBig', target: 'fadeingEntrances'  }
-        ]
+        ];
         this.fadeingExits = [
             { animation: 'fadeOut', target: 'fadeingExits' },
             { animation: 'fadeOutDown', target: 'fadeingExits' },
@@ -161,21 +148,21 @@ mobileresponseWebbApp
             { animation: 'fadeOutRightBig', target: 'fadeingExits'  },
             { animation: 'fadeOutUp', target: 'fadeingExits'  },
             { animation: 'fadeOutUpBig', target: 'fadeingExits'  }
-        ]
+        ];
         this.zoomEntrances = [
             { animation: 'zoomIn', target: 'zoomEntrances' },
             { animation: 'zoomInDown', target: 'zoomEntrances' },
             { animation: 'zoomInLeft', target: 'zoomEntrances' },
             { animation: 'zoomInRight', target: 'zoomEntrances' },
             { animation: 'zoomInUp', target: 'zoomEntrances'  }
-        ]
+        ];
         this.zoomExits = [
             { animation: 'zoomOut', target: 'zoomExits' },
             { animation: 'zoomOutDown', target: 'zoomExits' },
             { animation: 'zoomOutLeft', target: 'zoomExits' },
             { animation: 'zoomOutRight', target: 'zoomExits' },
             { animation: 'zoomOutUp', target: 'zoomExits'  }
-        ]
+        ];
 
         //Animate    
         this.ca = '';
@@ -194,6 +181,5 @@ mobileresponseWebbApp
                 angular.element('#'+target).removeClass(animation);
             }, animationDuration);
         }
-    
-    })
+    });
 

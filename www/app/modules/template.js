@@ -6,14 +6,12 @@ mobileresponseWebbApp
     // =========================================================================
 
     .directive('toggleSidebar', function(){
-
         return {
             restrict: 'A',
             scope: {
                 modelLeft: '=',
                 modelRight: '='
             },
-            
             link: function(scope, element, attr) {
                 element.on('click', function(){
  
@@ -46,15 +44,11 @@ mobileresponseWebbApp
             }
         }
     })
-    
 
-    
     // =========================================================================
     // SUBMENU TOGGLE
     // =========================================================================
-
     .directive('toggleSubmenu', function(){
-
         return {
             restrict: 'A',
             link: function(scope, element, attrs) {
@@ -66,11 +60,9 @@ mobileresponseWebbApp
         }
     })
 
-
     // =========================================================================
     // STOP PROPAGATION
     // =========================================================================
-    
     .directive('stopPropagate', function(){
         return {
             restrict: 'C',
@@ -91,7 +83,7 @@ mobileresponseWebbApp
                 });
             }
         }
-    })
+    });
 
 
 

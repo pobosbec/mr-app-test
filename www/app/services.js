@@ -15,8 +15,6 @@ mobileresponseWebbApp
                     preventDefault: true
                 }
             });
-        }
-        
+        };
         return ss;
-    })
-
+    });
