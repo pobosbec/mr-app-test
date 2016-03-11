@@ -2,7 +2,7 @@
  * Created by robinpipirs on 09/12/15.
  */
 angular.module('login', [])
-    .controller('loginCtrl', ['$scope', '$http', 'tokenService', 'messageRepository', function ($scope, $http, tokenService, messageRepository) {
+    .controller('loginCtrl', ['$scope', '$http', 'tokenService', function ($scope, $http, tokenService) {
 
         //taken from main.js
         this.login = 1;
@@ -105,11 +105,5 @@ angular.module('login', [])
                     $scope.errorMessage = "Error";
                 }
             });
-        }
-
-        $scope.test = function () {
-            alert("1");
-            $scope.testtest = messageRepository.testtest();
-            alert($scope.testtest);
         }
     }]);

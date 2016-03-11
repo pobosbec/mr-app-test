@@ -41,15 +41,16 @@ var app = {
     // Bind any events that are required on startup. Common events are:
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function () {
-        document.addEventListener('deviceready', app.onDeviceReady, false);
+        document.addEventListener('deviceready', this.onDeviceReady, false);
     },
     // deviceready Event Handler
     //
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function () {
-        app.receivedEvent('deviceready');
         initPushwoosh();
+        app.receivedEvent('deviceready');
+        this.Test();
     },
     // Update DOM on a Received Event
     receivedEvent: function (id) {
@@ -75,9 +76,29 @@ var app = {
                     document.sqlVal = "Error occurred while creating the table.";
                 });
             });
-            //alert(db);
         } catch (ex) {
-            //alert("Exception with db: " + ex.message);
+            console.log("Exception with db: " + ex.message);
+        }
+    },
+
+    Test: function() {
+        try {
+            alert(1);
+            var myDB = window.sqlitePlugin.openDatabase({ name: "bosbec1.db" });
+            console.log('Open db: ');
+            myDB.transaction(function (transaction) {
+                transaction.executeSql('CREATE TABLE IF NOT EXISTS bosbec (id integer primary key, title text, desc text)', [],
+                function (tx, result) {
+                    document.sqlVal = "Table created successfully";
+                    console.log('Db OK: ' + document.sqlVal + ". RESULT: " + result);
+                },
+                function (error) {
+                    console.log('Database error: ' + error);
+                    document.sqlVal = "Error occurred while creating the table.";
+                });
+            });
+            alert(myDB);
+        } catch (ex) {
             console.log("Exception with db: " + ex.message);
         }
     }
