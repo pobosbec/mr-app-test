@@ -31,7 +31,7 @@
 
 
 </head>
-<body ng-class="{'login-content': $state.includes('login')}">
+<body ng-class="{'login-content': $state.includes('login')}"  data-ng-controller="eventCtrl as ectrl">
 
 <data ui-view></data>
 
@@ -74,6 +74,7 @@
 <script src="app/config.js"></script>
 <script src="app/services.js"></script>
 <script src="app/controllers/main.js"></script>
+<script src="app/modules/events.js"></script>
 <script src="app/modules/template.js"></script>
 <script src="app/modules/ui.js"></script>
 <script src="app/modules/messages.js"></script>
