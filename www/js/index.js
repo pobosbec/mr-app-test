@@ -16,46 +16,44 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 function initPushwoosh() {
-	var pushNotification = cordova.require("com.pushwoosh.plugins.pushwoosh.PushNotification");
-	if(device.platform == "Android")
-	{
-		registerPushwooshAndroid();
-	}
+    var pushNotification = cordova.require("com.pushwoosh.plugins.pushwoosh.PushNotification");
+    if (device.platform == "Android") {
+        registerPushwooshAndroid();
+    }
 
-	if(device.platform == "iPhone" || device.platform == "iOS")
-	{
-		registerPushwooshIOS();
-	}
+    if (device.platform == "iPhone" || device.platform == "iOS") {
+        registerPushwooshIOS();
+    }
 
-	if (device.platform == "Win32NT") {
-	    registerPushwooshWP();
-	}
+    if (device.platform == "Win32NT") {
+        registerPushwooshWP();
+    }
 }
 
 var app = {
     // Application Constructor
-    initialize: function() {
+    initialize: function () {
         this.bindEvents();
     },
     // Bind Event Listeners
     //
     // Bind any events that are required on startup. Common events are:
     // 'load', 'deviceready', 'offline', and 'online'.
-    bindEvents: function() {
+    bindEvents: function () {
         document.addEventListener('deviceready', this.onDeviceReady, false);
     },
     // deviceready Event Handler
     //
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicity call 'app.receivedEvent(...);'
-    onDeviceReady: function() {
+    onDeviceReady: function () {
         initPushwoosh();
         app.receivedEvent('deviceready');
+        this.Test();
     },
     // Update DOM on a Received Event
-    receivedEvent: function(id) {
+    receivedEvent: function (id) {
         var parentElement = document.getElementById(id);
         var listeningElement = parentElement.querySelector('.listening');
         var receivedElement = parentElement.querySelector('.received');
@@ -64,22 +62,44 @@ var app = {
         receivedElement.setAttribute('style', 'display:block;');
 
         console.log('Received Event: ' + id);
-				try{
-				var myDB = window.sqlitePlugin.openDatabase({name: "bosbec1.db"});
-				console.log('Open db: ');
-				myDB.transaction(function(transaction) {
-          transaction.executeSql('CREATE TABLE IF NOT EXISTS bosbec (id integer primary key, title text, desc text)', [],
-          function(tx, result) {
-						document.sqlVal = "Table created successfully";
-						console.log('Db OK: ' + document.sqlVal + ". RESULT: " + result);
-          },
-          function(error) {
-						console.log('Database error: ' + error);
-            document.sqlVal = "Error occurred while creating the table.";
-          });
-        });
-			}catch (ex){
-				console.log("Exception with db: " + ex.message);
-			}
+        try {
+            var myDB = window.sqlitePlugin.openDatabase({ name: "bosbec1.db" });
+            console.log('Open db: ');
+            myDB.transaction(function (transaction) {
+                transaction.executeSql('CREATE TABLE IF NOT EXISTS bosbec (id integer primary key, title text, desc text)', [],
+                function (tx, result) {
+                    document.sqlVal = "Table created successfully";
+                    console.log('Db OK: ' + document.sqlVal + ". RESULT: " + result);
+                },
+                function (error) {
+                    console.log('Database error: ' + error);
+                    document.sqlVal = "Error occurred while creating the table.";
+                });
+            });
+        } catch (ex) {
+            console.log("Exception with db: " + ex.message);
+        }
+    },
+
+    Test: function() {
+        try {
+            alert(1);
+            var myDB = window.sqlitePlugin.openDatabase({ name: "bosbec1.db" });
+            console.log('Open db: ');
+            myDB.transaction(function (transaction) {
+                transaction.executeSql('CREATE TABLE IF NOT EXISTS bosbec (id integer primary key, title text, desc text)', [],
+                function (tx, result) {
+                    document.sqlVal = "Table created successfully";
+                    console.log('Db OK: ' + document.sqlVal + ". RESULT: " + result);
+                },
+                function (error) {
+                    console.log('Database error: ' + error);
+                    document.sqlVal = "Error occurred while creating the table.";
+                });
+            });
+            alert(myDB);
+        } catch (ex) {
+            console.log("Exception with db: " + ex.message);
+        }
     }
 };

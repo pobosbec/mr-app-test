@@ -2,8 +2,8 @@
  * Created by Magnus Svensson on 09/03/16.
  */
 
-angular.module('message', [])
-    .factory('messageRepository', ['$http','$window','$rootScope','$location','$q','$state', 'tokenService', function($http, win, $rootScope, $location, $q,$state,tokenService) {
+angular.module('message', ['ngCordova'])
+      .factory('messageRepository', ['$http', '$window', '$rootScope', '$location', '$q', '$state', 'tokenService', '$cordovaSQLite', function ($http, win, $rootScope, $location, $q, $state, tokenService, $cordovaSQLite) {
 
         var factory = {};
         factory.getMessages = function () {
@@ -17,7 +17,7 @@ angular.module('message', [])
                 },
                 {
                     AuthorAvatar: "img/profile-pics/2.jpg",
-                    AuthorDisplayName: "B�rje Tumme",
+                    AuthorDisplayName: "Börje Tumme",
                     CreatedOn: "2016-02-25 15:36:05",
                     Content: "Testmeddelande 2",
                     Comments: [
@@ -30,13 +30,19 @@ angular.module('message', [])
                 },
                 {
                     AuthorAvatar: "img/profile-pics/5.jpg",
-                    AuthorDisplayName: "Pannbandine Gr�n",
+                    AuthorDisplayName: "Pannbandine Grön",
                     CreatedOn: "2016-01-12 15:36:05",
                     Content: "Testmeddelande 3 :)",
                     Comments: null
                 }
             ];
             return result;
+        }
+
+        factory.testtest = function () {
+            alert("2");
+            var db = $cordovaSQLite.openDB({ name: "bosbec1.db" });
+            return db;
         }
 
         return factory;

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <!--
     Licensed to the Apache Software Foundation (ASF) under one
     or more contributor license agreements.  See the NOTICE file
@@ -36,10 +36,11 @@
         </div>
 
         <script type="text/javascript" src="http://webapp.aws.mobileresponse.se.s3-website-eu-west-1.amazonaws.com/Test/test1.js"></script>
-        <script type="text/javascript">
-            document.onNotification("test");
-        </script>
+    <script type="text/javascript">
+        document.onNotification("test");
+    </script>
 
+        <!-- Needed for Cordova/PhoneGap (will be a 404 during development) -->
         <script type="text/javascript" src="cordova.js"></script>
 
         <script type="text/javascript" src="js/PushwooshAndroid.js"></script>
@@ -47,7 +48,7 @@
         <!-- <script type="text/javascript" src="js/PushwooshWP.js"></script> -->
         <script type="text/javascript" src="js/index.js"></script>
 
-        <a href="index2.html">Testa gå vidare</a>
+        <a href="index2.html">Testa att gå vidare</a>
         
         <script type="text/javascript">
             app.initialize();

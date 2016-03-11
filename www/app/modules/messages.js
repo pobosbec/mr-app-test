@@ -6,5 +6,10 @@ angular.module('messages', [])
 
 
         $scope.messages = messageRepository.getMessages();
-
+        $scope.test = function () {
+            alert("1");
+            $scope.testtest = messageRepository.testtest();
+            alert($scope.testtest);
+        }
+        
     }]);
