@@ -2,7 +2,16 @@
  * Created by robinpipirs on 09/12/15.
  */
 angular.module('messages', [])
-    .controller('messagesController', ['$scope', '$http', '$rootScope', 'messageRepository', function ($scope, $http, $rootScope, messageRepository) {
+    .controller('messagesController', ['$scope', '$http', '$rootScope', 'messageRepository', 'communicationService', function ($scope, $http, $rootScope, messageRepository, communicationService) {
+        $scope.messages = [];
 
-        $scope.messages = messageRepository.getMessages();
+        setInterval(function(){
+            $rootScope.$broadcast('download-whats-new');
+        }, 5000);
+
+        $scope.$on('messages-downloaded', function(event, args) {
+            if(args.data.messages.length > 0){
+                Array.prototype.push.apply($scope.messages, args.data.messages);
+            }
+        });
     }]);

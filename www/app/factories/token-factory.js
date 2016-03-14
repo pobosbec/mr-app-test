@@ -7,12 +7,14 @@ angular.module('token', [])
         $rootScope.token = null;
         var username = null;
         var token = null;
+        var appToken = null;
+        var appUserId = null;
+        var appUsername = null;
         var adminId = null;
         var accountId = null;
         var wfId = null;
         var factory = {};
         var aquiredUserName = false;
-
 
         //the instance of the Timeout event that run keepTokenAlive
         var tokenTimer;
@@ -109,6 +111,30 @@ angular.module('token', [])
             return response;
         };
 
+        factory.isAppAuthenticated = function (authenticationToken){
+            var req = {
+                method: 'POST',
+                url: factory.currentApiUrl+ 'app/is-token-valid',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: {
+                    Data: { AuthenticationToken: authenticationToken },
+                    AuthenticationToken: authenticationToken
+                }
+            };
+
+            return $http(req
+            ).then(function successCallback(response) {
+                // this callback will be called asynchronously
+                // when the response is available
+                appToken = response.data.data.id;
+            }, function errorCallback(response) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+            });
+        };
+
         /**
          * Calls api /is-authenticated with data as token this call also refreshes the lifetime of the token
          * @param data token
@@ -138,6 +164,7 @@ angular.module('token', [])
                     $rootScope.token = token;
                     adminId = response.data.data.administratorId;
                     accountId = response.data.data.accountId;
+                    appUserId = response.data.data.appuserid;
 
                 if(!aquiredUserName){
                     aquiredUserName = !aquiredUserName;
@@ -151,6 +178,9 @@ angular.module('token', [])
                 if ($state.includes('login')){
                     $state.go('home');
                 }
+
+                factory.isAppAuthenticated(token);
+
                 return response;
 
             }, function errorCallback(response) {
@@ -232,6 +262,10 @@ angular.module('token', [])
             return token;
         };
 
+        factory.getAppAuthToken = function() {
+            return appToken;
+        }
+
         /**
          * When the service is runned, depending on what url mobile response uses we set the api address differently
          * @param host
@@ -252,7 +286,7 @@ angular.module('token', [])
                 //return "http://api2.test.mobileresponse.se/";
                 return "https://api2.mobileresponse.se/";
             // in staging
-            return "http://api2.test.mobileresponse.se/";
+            return "http://api.test.mobileresponse.se/";
         };
 
         factory.getDeviceServiceUrl = function () {
