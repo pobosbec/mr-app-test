@@ -4,7 +4,7 @@
 angular.module('event', [])
     .controller('eventCtrl', ['$scope', '$http', 'tokenService', 'messageRepository', function ($scope, $http, tokenService, messageRepository) {
 
-        $scope.$on('new-message', function (event, args) {
+        $scope.$on('new-messages', function (event, args) {
             messageRepository.on(event, args);
         });
 

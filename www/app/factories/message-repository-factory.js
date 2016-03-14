@@ -64,7 +64,7 @@ angular.module('message', ['ngCordova'])
                       console.log("updated-message");
                       console.log(args);
                       break;
-                  case 'new-message':
+                  case 'new-messages':
                       console.log("new-message");
                       console.log(args);
                       break;

@@ -42,8 +42,6 @@ angular.module('communication', [])
         }
 
         $rootScope.$on('download-whats-new', function(event, args) {
-
-            // TODO: get authentication token. What if null?
             var appAuthToken = tokenService.getAppAuthToken();
             if(appAuthToken === null || appAuthToken === 'undefined' || appAuthToken === undefined){
                 tokenService.isAppAuthenticated(tokenService.getAuthToken());
@@ -54,7 +52,20 @@ angular.module('communication', [])
         });
 
         factory.messagesDownloaded = function (data){
-            $rootScope.$broadcast('messages-downloaded', data);
+
+            var newMessages = [];
+
+            for(i = 0; i < data.data.messages.length; i++){
+                var msg = data.data.messages[i];
+
+                var newMessage = {};
+                newMessage.Author = msg.authorId;
+                newMessage.CreatedOn = msg.createdOn;
+                newMessage.Content = msg.content;
+                newMessages.push(newMessage);
+            }
+
+            $rootScope.$broadcast('new-messages', newMessages);
         }
 
         return factory;

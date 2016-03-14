@@ -6,12 +6,7 @@ angular.module('messages', [])
         $scope.messages = [];
 
         setInterval(function(){
+            console.log('sending download-whats-new!');
             $rootScope.$broadcast('download-whats-new');
         }, 5000);
-
-        $scope.$on('messages-downloaded', function(event, args) {
-            if(args.data.messages.length > 0){
-                Array.prototype.push.apply($scope.messages, args.data.messages);
-            }
-        });
     }]);
