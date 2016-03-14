@@ -41,16 +41,6 @@ angular.module('communication', [])
             });
         }
 
-        $rootScope.$on('download-whats-new', function(event, args) {
-            var appAuthToken = tokenService.getAppAuthToken();
-            if(appAuthToken === null || appAuthToken === 'undefined' || appAuthToken === undefined){
-                tokenService.isAppAuthenticated(tokenService.getAuthToken());
-                console.log('AppToken was null');
-                return;
-            }
-                factory.synchronize(tokenService.getAppAuthToken());
-        });
-
         factory.messagesDownloaded = function (data){
 
             var newMessages = [];
@@ -66,6 +56,28 @@ angular.module('communication', [])
             }
 
             $rootScope.$broadcast('new-messages', newMessages);
+        }
+
+        factory.on = function (event, args) {
+            switch (event.name) {
+                case 'download-whats-new':
+                    console.log("download-whats-new");
+                    console.log(args);
+                    downloadWhatsNew(args);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        function downloadWhatsNew(){
+            var appAuthToken = tokenService.getAppAuthToken();
+            if(appAuthToken === null || appAuthToken === 'undefined' || appAuthToken === undefined){
+                tokenService.isAppAuthenticated(tokenService.getAuthToken());
+                console.log('AppToken was null');
+                return;
+            }
+            factory.synchronize(tokenService.getAppAuthToken());
         }
 
         return factory;
