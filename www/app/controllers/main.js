@@ -79,7 +79,10 @@ mobileresponseWebbApp
             //var image = document.getElementById("theImage");
             //alert(image.height + ' ' + image.width);
 
-            //alert($scope.fullSizeImage);
+            //alert($scope);
+            //alert($scope.theImageElement);
+
+            //alert($scope.theImageElement);
         };
     })
 

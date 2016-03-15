@@ -61,6 +61,29 @@ mobileresponseWebbApp
     })
 
     // =========================================================================
+    // IMAGE
+    // =========================================================================
+    .directive('fullSizeImageDiv', function () {
+        function link(scope, element) {
+
+        }
+        return {
+            restrict: 'AE',
+            link: link,
+            controller: function ($scope, $element) {
+                var theImageElement = $element.find('#theImage');
+                //alert($element);
+                //alert($element.style.height);
+                //alert(theImageElement);
+                //alert(theImageElement.attr('id'));
+                //alert(theImageElement.style.height);
+                //alert(theImageElement.prop('offsetHeight'));
+                alert($element.prop('offsetHeight')); //Works, but returns 0 immediately when the div is created (if set on the image div)
+            }
+        };
+    })
+
+    // =========================================================================
     // STOP PROPAGATION
     // =========================================================================
     .directive('stopPropagate', function(){
