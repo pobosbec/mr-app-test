@@ -63,7 +63,9 @@ angular.module('communication', [])
             switch (event.name) {
                 case 'download-whats-new':
                     console.log("download-whats-new");
-                    console.log(args);
+                    if (args != undefined) {
+                        console.log(args);
+                    }
                     downloadWhatsNew(args);
                     break;
                 default:
@@ -73,8 +75,8 @@ angular.module('communication', [])
 
         function downloadWhatsNew(){
             var appAuthToken = tokenService.getAppAuthToken();
-            if(appAuthToken === null || appAuthToken === 'undefined' || appAuthToken === undefined){
-                tokenService.isAppAuthenticated(tokenService.getAuthToken());
+            if (appAuthToken === null || appAuthToken === 'undefined' || appAuthToken === undefined) {
+                tokenService.isAppAuthenticated();
                 console.log('AppToken was null');
                 return;
             }

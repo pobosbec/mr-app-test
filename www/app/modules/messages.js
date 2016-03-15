@@ -22,4 +22,9 @@ angular.module('messages', [])
                 }
             }
         });
+        //$scope.$on('messages-added', function (event, args) {
+        //    console.log("fetching new messages!");
+        //    $scope.messages = messageRepository.getMessages();
+        //    $scope.$apply();
+        //});
     }]);
