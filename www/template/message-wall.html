@@ -1,91 +1,238 @@
- <!-- Post -->
-                <div class="card wall-posting card-padding">
-                    <div class="card-body card-padding">
-                        <textarea class="wp-text" data-auto-size="" placeholder="Write Something..." data-autosize-on="true" style="overflow: hidden; word-wrap: break-word; height: 36px;"></textarea>
+<!-- Post -->
+<div class="card wall-posting card-padding">
+    <div class="card-body card-padding">
+        <textarea class="wp-text" data-auto-size="" placeholder="Write Something..." data-autosize-on="true"
+                  style="overflow: hidden; word-wrap: break-word; height: 36px;"></textarea>
 
-                        <!-- ngIf: mactrl.wallImage -->
+        <!-- ngIf: mactrl.wallImage -->
 
-                        <!-- ngIf: mactrl.wallVideo -->
+        <!-- ngIf: mactrl.wallVideo -->
 
-                        <!-- ngIf: mactrl.wallLink -->
-                    </div>
+        <!-- ngIf: mactrl.wallLink -->
+    </div>
 
-                    <ul class="list-unstyled clearfix wpb-actions">
-                        <li class="wpba-attrs">
-                            <ul class="list-unstyled list-inline m-l-0 m-t-5">
-                                <li><a data-wpba="image" href="" data-ng-class="{ 'active': mactrl.wallImage }" data-ng-click="mactrl.wallImage = true; mactrl.wallVideo = false; mactrl.wallLink = false"><i class="zmdi zmdi-image"></i></a></li>
-                                <li><a data-wpba="video" href="" data-ng-class="{ 'active': mactrl.wallVideo }" data-ng-click="mactrl.wallVideo= true; mactrl.wallImage = false; mactrl.wallLink = false"><i class="zmdi zmdi-play-circle"></i></a></li>
-                                <li><a data-wpba="link" href="" data-ng-class="{ 'active': mactrl.wallLink }" data-ng-click="mactrl.wallLink = true; mactrl.wallImage = false; mactrl.wallVideo = false"><i class="zmdi zmdi-link"></i></a></li>
+    <ul class="list-unstyled clearfix wpb-actions">
+        <li class="wpba-attrs">
+            <ul class="list-unstyled list-inline m-l-0 m-t-5">
+                <li><a data-wpba="image" href="" data-ng-class="{ 'active': mactrl.wallImage }"
+                       data-ng-click="mactrl.wallImage = true; mactrl.wallVideo = false; mactrl.wallLink = false"><i
+                        class="zmdi zmdi-image"></i></a></li>
+                <li><a data-wpba="video" href="" data-ng-class="{ 'active': mactrl.wallVideo }"
+                       data-ng-click="mactrl.wallVideo= true; mactrl.wallImage = false; mactrl.wallLink = false"><i
+                        class="zmdi zmdi-play-circle"></i></a></li>
+                <li><a data-wpba="link" href="" data-ng-class="{ 'active': mactrl.wallLink }"
+                       data-ng-click="mactrl.wallLink = true; mactrl.wallImage = false; mactrl.wallVideo = false"><i
+                        class="zmdi zmdi-link"></i></a></li>
+            </ul>
+        </li>
+
+        <li class="pull-right">
+            <button class="btn btn-primary btn-sm waves-effect">Post</button>
+        </li>
+    </ul>
+</div>
+
+<!-- Latest -->
+<div class="card" ng-repeat="conv in conversations track by $index">
+    <div class="card-header">
+        <div class="media">
+            <div class="pull-left">
+                <img class="lv-img-sm" ng-src="{{ comment.AuthorAvatar || 'img/profile-pics/8.jpg' }}" alt="">
+            </div>
+
+            <div class="media-body m-t-5">
+                <h2>{{conv.messages[0].AuthorDisplayName || 'Namn Namnsson' }}
+                    <small>{{ conv.messages[0].CreatedOn || 'yyyy-mm-dd hh:ii:ss' }}</small>
+                </h2>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="card-body card-padding">
+        <p>{{ conv.messages[0].Content || 'Ett Meddelande' }}</p>
+
+        <div class="wall-img-preview lightbox clearfix">
+            <div class="wip-item" data-src="img/headers/4.png" style="background-image: url(img/headers/4.png);">
+                <div class="lightbox-item"></div>
+            </div>
+        </div>
+
+        <ul class="wall-attrs clearfix list-inline list-unstyled">
+            <li class="wa-stats">
+                <span><i class="zmdi zmdi-comments"></i> 36</span>
+                <span class="active"><i class="zmdi zmdi-favorite"></i> 220</span>
+            </li>
+
+            <li class="wa-users">
+                <a href=""><img src="img/profile-pics/1.jpg" alt=""></a>
+                <a href=""><img src="img/profile-pics/2.jpg" alt=""></a>
+                <a href=""><img src="img/profile-pics/3.jpg" alt=""></a>
+                <a href=""><img src="img/profile-pics/5.jpg" alt=""></a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="wall-comment-list">
+
+        <!-- Comment Listing -->
+        <div class="wcl-list">
+            <div class="media">
+                <a href="" class="pull-left">
+                    <img src="img/profile-pics/5.jpg" alt="" class="lv-img-sm">
+                </a>
+
+                <div class="pull-right p-0">
+                    <ul class="actions">
+                        <li class="dropdown" uib-dropdown>
+                            <a href="" uib-dropdown-toggle aria-haspopup="true" aria-expanded="false">
+                                <i class="zmdi zmdi-more-vert"></i>
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    <a href="">Report</a>
+                                </li>
+                                <li>
+                                    <a href="">Delete</a>
+                                </li>
                             </ul>
                         </li>
-
-                        <li class="pull-right"><button class="btn btn-primary btn-sm waves-effect">Post</button></li>
                     </ul>
                 </div>
 
-                <!-- Latest -->
-                <div class="card" ng-repeat="message in messages track by $index">
-                    <div class="card-header bgm-cyan">
-                        <div class="media">
-                            <div class="pull-left">
-                                <img class="lv-img" ng-src="{{ message.AuthorAvatar || 'img/profile-pics/8.jpg' }}" alt="">
-                            </div>
-                            <div class="media-body m-t-5">
-                                <h2>{{message.AuthorDisplayName || 'Namn Namnsson' }}<small> {{ message.CreatedOn || 'yyyy-mm-dd hh:ii:ss' }}</small></h2>
-                            </div>
-                        </div>
+                <div class="media-body">
+                    <a href="" class="a-title">David Nathan</a>
+                    <small class="c-gray m-l-10">3 mins ago...</small>
+                    <p class="m-t-5 m-b-0">Maecenas dignissim in neque id commodo. Nam pretium a tortor a convallis.
+                        Curabitur in arcu quis nulla aliquam condimentum. Morbi eu cursus diam, vitae tristique dui.</p>
+                </div>
+            </div>
 
-                        <ul class="actions actions-alt">
-                            <li class="dropdown" uib-dropdown="">
-                                <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle" aria-haspopup="true">
-                                    <i class="zmdi zmdi-more-vert"></i>
-                                </a>
+            <div class="media">
+                <a href="" class="pull-left">
+                    <img src="img/profile-pics/4.jpg" alt="" class="lv-img-sm">
+                </a>
 
-                                <ul class="dropdown-menu dropdown-menu-right">
-                                    <li>
-                                        <a href="">Something</a>
-                                    </li>
-                                    <li>
-                                        <a href="">Something else</a>
-                                    </li>
-                                </ul>
+                <div class="media-body">
+                    <a href="" class="a-title">Sam Anderson</a>
+                    <small class="c-gray m-l-10">3 mins ago...</small>
+                    <p class="m-t-5 m-b-0">Curabitur in arcu quis nulla aliquam condimentum.</p>
+                </div>
+
+                <ul class="actions">
+                    <li class="dropdown" uib-dropdown>
+                        <a href="" uib-dropdown-toggle aria-haspopup="true" aria-expanded="false">
+                            <i class="zmdi zmdi-more-vert"></i>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li>
+                                <a href="">Report</a>
+                            </li>
+                            <li>
+                                <a href="">Delete</a>
                             </li>
                         </ul>
-                    </div>
-                    <div class="card-body card-padding">
-                        {{ message.Content || 'Ett Meddelande' }}
-                    </div>
-                    <div class="wall-comment-list" ng-hide="!message.Comments">
-                        <div class="wcl-list" ng-repeat="comment in message.Comments">
-                            <div class="media">
-                                <a href="" class="pull-left">
-                                    <img class="lv-img-sm" ng-src="{{ comment.AuthorAvatar || 'img/profile-pics/8.jpg' }}" alt="">
-                                </a>
-                                <div class="pull-right p-0">
-                                    <ul class="actions">
-                                        <li class="dropdown" uib-dropdown="" style="">
-                                            <a href="" uib-dropdown-toggle="" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle">
-                                                <i class="zmdi zmdi-more-vert"></i>
-                                            </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
 
-                                            <ul class="dropdown-menu dropdown-menu-right">
-                                                <li>
-                                                    <a href="">Report</a>
-                                                </li>
-                                                <li>
-                                                    <a href="">Delete</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="media-body">
-                                    <a href="" class="a-title">{{comment.AuthorDisplayName || 'Namn Namnsson' }}</a> <small class="c-gray m-l-10">3 mins ago...</small>
-                                    <p class="m-t-5 m-b-0">
-                                        {{ comment.Content || 'Ett Meddelande' }}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <!-- Comment form -->
+        <div class="wcl-form">
+            <div class="wc-comment" data-ng-if="!mactrl.wallCommenting[1]"
+                 data-ng-click="mactrl.wallCommenting[1] = true">
+                <div class="wcc-inner">
+                    Write Something...
                 </div>
+            </div>
+
+            <div class="wc-comment" data-ng-if="mactrl.wallCommenting[1]">
+                <div class="wcc-inner">
+                    <textarea class="wcci-text" data-auto-size placeholder="Write Something..."></textarea>
+                </div>
+
+                <div class="m-t-15">
+                    <button class="btn btn-sm btn-primary">Post</button>
+                    <button class="btn btn-sm btn-link" data-ng-click="mactrl.wallCommenting[1] = false">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- working -->
+
+
+<div class="card" ng-repeat="message in messages track by $index">
+    <div class="card-header bgm-cyan">
+        <div class="media">
+            <div class="pull-left">
+                <img class="lv-img" ng-src="{{ message.AuthorAvatar || 'img/profile-pics/8.jpg' }}" alt="">
+            </div>
+            <div class="media-body m-t-5">
+                <h2>{{message.AuthorDisplayName || 'Namn Namnsson' }}
+                    <small> {{ message.CreatedOn || 'yyyy-mm-dd hh:ii:ss' }}</small>
+                </h2>
+            </div>
+        </div>
+
+        <ul class="actions actions-alt">
+            <li class="dropdown" uib-dropdown="">
+                <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle" aria-haspopup="true">
+                    <i class="zmdi zmdi-more-vert"></i>
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li>
+                        <a href="">Something</a>
+                    </li>
+                    <li>
+                        <a href="">Something else</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body card-padding">
+        {{ message.Content || 'Ett Meddelande' }}
+    </div>
+    <div class="wall-comment-list" ng-hide="!message.Comments">
+        <div class="wcl-list" ng-repeat="comment in message.Comments">
+            <div class="media">
+                <a href="" class="pull-left">
+                    <img class="lv-img-sm" ng-src="{{ comment.AuthorAvatar || 'img/profile-pics/8.jpg' }}" alt="">
+                </a>
+                <div class="pull-right p-0">
+                    <ul class="actions">
+                        <li class="dropdown" uib-dropdown="" style="">
+                            <a href="" uib-dropdown-toggle="" aria-haspopup="true" aria-expanded="false"
+                               class="dropdown-toggle">
+                                <i class="zmdi zmdi-more-vert"></i>
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    <a href="">Report</a>
+                                </li>
+                                <li>
+                                    <a href="">Delete</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="media-body">
+                    <a href="" class="a-title">{{comment.AuthorDisplayName || 'Namn Namnsson' }}</a>
+                    <small class="c-gray m-l-10">3 mins ago...</small>
+                    <p class="m-t-5 m-b-0">
+                        {{ comment.Content || 'Ett Meddelande' }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
