@@ -7,36 +7,36 @@ mobileresponseWebbApp
         //------------------------------
         // HOME
         //------------------------------
-            .state ('home', {
-                url: '/home',
-                templateUrl: 'views/home.html'
-            })
+        .state ('home', {
+            url: '/home',
+            templateUrl: 'views/home.html'
+        })
 
-            //------------------------------
-            // HEADERS
-            //------------------------------
-            .state ('headers', {
-                url: '/headers',
-                templateUrl: 'views/common-2.html'
-            })
+        //------------------------------
+        // HEADERS
+        //------------------------------
+        .state ('headers', {
+            url: '/headers',
+            templateUrl: 'views/common-2.html'
+        })
 
-            //------------------------------
-            // LOGIN
-            //------------------------------
-            .state ('login', {
-                url: '/login',
-                templateUrl: 'views/login.html'
-            })
+        //------------------------------
+        // LOGIN
+        //------------------------------
+        .state ('login', {
+            url: '/login',
+            templateUrl: 'views/login.html'
+        })
 
-            //------------------------------
-            // PAGES
-            //------------------------------
-            .state ('pages', {
-                url: '/pages',
-                templateUrl: 'views/common.html'
-            })
-            .state ('pages.messages', {
-                url: '/messages',
-                templateUrl: 'views/messages.html'
-            })
+        //------------------------------
+        // PAGES
+        //------------------------------
+        .state ('pages', {
+            url: '/pages',
+            templateUrl: 'views/common.html'
+        })
+        .state ('pages.messages', {
+            url: '/messages',
+            templateUrl: 'views/messages.html'
+        })
     });
