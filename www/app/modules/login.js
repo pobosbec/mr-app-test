@@ -58,6 +58,7 @@ angular.module('login', [])
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
                 $scope.showLoginError = true;
+                console.log(response); // TODO: REMOVE! only for debugging.
                 if (response.data != null) {
                     if (response.data.errors[0].errorMessage.indexOf("AuthenticationToken") > -1) {
                         $scope.errorMessage = "Wrong Username / Password";
