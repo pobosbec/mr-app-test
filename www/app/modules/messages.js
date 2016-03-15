@@ -7,7 +7,6 @@ angular.module('messages', [])
         $scope.messages = messageRepository.getMessages();
 
         setInterval(function () {
-            console.log("messagesController.emitting:download-whats-new");
             $rootScope.$broadcast('download-whats-new');
         }, 10000);
 
