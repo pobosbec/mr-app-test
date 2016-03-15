@@ -72,8 +72,8 @@ angular.module('communication', [])
 
         function downloadWhatsNew(){
             var appAuthToken = tokenService.getAppAuthToken();
-            if(appAuthToken === null || appAuthToken === 'undefined' || appAuthToken === undefined){
-                tokenService.isAppAuthenticated(tokenService.getAuthToken());
+            if (appAuthToken === null || appAuthToken === 'undefined' || appAuthToken === undefined) {
+                tokenService.isAppAuthenticated();
                 console.log('AppToken was null');
                 return;
             }

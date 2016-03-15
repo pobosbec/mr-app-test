@@ -2,7 +2,7 @@
  * Created by robinpipirs on 09/12/15.
  */
 angular.module('event', [])
-    .controller('eventCtrl', ['$scope', '$rootScope', '$http', 'tokenService', 'messageRepository', 'communicationService', function ($scope, $rootScope,, $http, tokenService, messageRepository, communicationService) {
+    .controller('eventCtrl', ['$scope', '$rootScope', '$http', 'tokenService', 'messageRepository', 'communicationService', function ($scope, $rootScope, $http, tokenService, messageRepository, communicationService) {
 
         document.addEventListener('deviceready', function (event, args) {
             $rootScope.$broadcast('device-ready', args);

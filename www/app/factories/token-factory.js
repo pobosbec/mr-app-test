@@ -111,10 +111,11 @@ angular.module('token', [])
             return response;
         };
 
-        factory.isAppAuthenticated = function (authenticationToken){
+        factory.isAppAuthenticated = function (authenticationToken) {
+            console.log();
             var req = {
                 method: 'POST',
-                url: factory.currentAppApiUrl+ 'app/is-token-valid',
+                url: factory.currentAppApiUrl + 'app/is-token-valid',
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -308,7 +309,7 @@ angular.module('token', [])
             //return "http://api2.test.mobileresponse.se/";
                 return "https://api.mobileresponse.se/";
             // in staging
-            return "http://api.test.mobileresponse.se/";
+            return "http://api.mobileresponse.se/";
         };
 
         factory.getDeviceServiceUrl = function () {
