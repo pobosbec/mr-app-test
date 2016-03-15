@@ -7,11 +7,9 @@ angular.module('messages', [])
 
         setInterval(function(){
             $rootScope.$broadcast('download-whats-new');
-        }, 5000);
+        }, 10000);
 
-        $scope.$on('messages-downloaded', function(event, args) {
-            if(args.data.messages.length > 0){
-                Array.prototype.push.apply($scope.messages, args.data.messages);
-            }
-        });
+        messageRepository.get
+
+
     }]);

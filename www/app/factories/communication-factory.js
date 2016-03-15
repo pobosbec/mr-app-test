@@ -12,7 +12,7 @@ angular.module('communication', [])
 
             var req = {
                 method: 'POST',
-                url: tokenService.currentApiUrl + 'app/conversations/what-is-new',
+                url: tokenService.currentAppApiUrl + 'app/conversations/what-is-new',
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -41,20 +41,43 @@ angular.module('communication', [])
             });
         }
 
-        $rootScope.$on('download-whats-new', function(event, args) {
+        factory.messagesDownloaded = function (data){
 
-            // TODO: get authentication token. What if null?
+            var newMessages = [];
+
+            for(i = 0; i < data.data.messages.length; i++){
+                var msg = data.data.messages[i];
+
+                var newMessage = {};
+                newMessage.Author = msg.authorId;
+                newMessage.CreatedOn = msg.createdOn;
+                newMessage.Content = msg.content;
+                newMessages.push(newMessage);
+            }
+
+            $rootScope.$broadcast('new-messages', newMessages);
+        }
+
+        factory.on = function (event, args) {
+            switch (event.name) {
+                case 'download-whats-new':
+                    console.log("download-whats-new");
+                    console.log(args);
+                    downloadWhatsNew(args);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        function downloadWhatsNew(){
             var appAuthToken = tokenService.getAppAuthToken();
             if(appAuthToken === null || appAuthToken === 'undefined' || appAuthToken === undefined){
                 tokenService.isAppAuthenticated(tokenService.getAuthToken());
                 console.log('AppToken was null');
                 return;
             }
-                factory.synchronize(tokenService.getAppAuthToken());
-        });
-
-        factory.messagesDownloaded = function (data){
-            $rootScope.$broadcast('messages-downloaded', data);
+            factory.synchronize(tokenService.getAppAuthToken());
         }
 
         return factory;

@@ -114,7 +114,7 @@ angular.module('token', [])
         factory.isAppAuthenticated = function (authenticationToken){
             var req = {
                 method: 'POST',
-                url: factory.currentApiUrl+ 'app/is-token-valid',
+                url: factory.currentAppApiUrl+ 'app/is-token-valid',
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -186,7 +186,6 @@ angular.module('token', [])
             }, function errorCallback(response) {
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
-
                 //store token in session
                 win.sessionStorage.accessToken = null;
                 //redirect to login
@@ -264,7 +263,7 @@ angular.module('token', [])
 
         factory.getAppAuthToken = function() {
             return appToken;
-        }
+        };
 
         /**
          * When the service is runned, depending on what url mobile response uses we set the api address differently
@@ -289,6 +288,29 @@ angular.module('token', [])
             return "http://api.test.mobileresponse.se/";
         };
 
+        /**
+         * When the service is runned, depending on what url mobile response uses we set the api address differently
+         * @param host
+         * @returns {*}
+         */
+        factory.getAppApiUrl = function (host) {
+            // in test
+            if (host.pathname.indexOf("/test") > -1)
+                return "http://api.test.mobileresponse.se";
+
+            // in production
+            if (host.pathname.indexOf("/production") > -1)
+                return "https://api.mobileresponse.se/";
+
+            // in localhost
+            if (host.host.indexOf("localhost") > -1)
+            //return "http://10.100.126.80:8887/";
+            //return "http://api2.test.mobileresponse.se/";
+                return "https://api.mobileresponse.se/";
+            // in staging
+            return "http://api.test.mobileresponse.se/";
+        };
+
         factory.getDeviceServiceUrl = function () {
             return "https://bngw1w5u7e.execute-api.eu-west-1.amazonaws.com/production/";
         };
@@ -302,6 +324,7 @@ angular.module('token', [])
          * Instancing our apiurl to the browsers
          * @type {*}
          */
+        factory.currentAppApiUrl = factory.getAppApiUrl(window.location);
         factory.currentApiUrl = factory.getApiUrl(window.location);
         factory.currentDeviceServiceUrl = factory.getDeviceServiceUrl(window.location);
         factory.currentReservationServiceUrl = factory.getReservationServiceUrl(window.location);
