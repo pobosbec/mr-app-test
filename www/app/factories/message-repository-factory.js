@@ -9,8 +9,6 @@ angular.module('message', ['ngCordova'])
               db: "bosbec1.db"
           }
 
-
-
           factory.messages = [];
 
           factory.init = function () {
@@ -42,6 +40,7 @@ angular.module('message', ['ngCordova'])
               DisplayName: "Pannbandine Grön"
           }];
 
+
           factory.getMessages = function () {
               var messages = factory.messages;
               if (factory.messages != undefined) {
@@ -53,10 +52,10 @@ angular.module('message', ['ngCordova'])
                           })[0];
 
                           if (author != undefined) {
-                              if (author.hasOwnProperty("Avatar")) {
+                              if (!messages[thisMessage].hasOwnProperty("AuthorAvatar") && author.hasOwnProperty("Avatar")) {
                                   messages[thisMessage]["AuthorAvatar"] = author.Avatar;
                               }
-                              if (author.hasOwnProperty("DisplayName")) {
+                              if (!messages[thisMessage].hasOwnProperty("AuthorDisplayName") && author.hasOwnProperty("DisplayName")) {
                                   messages[thisMessage]["AuthorDisplayName"] = author.DisplayName;
                               }
                           }
@@ -71,14 +70,16 @@ angular.module('message', ['ngCordova'])
           }
 
           factory.addMessage = function (data) {
-              if (data.hasOwnProperty("Id")) {
+              if (data.hasOwnProperty("MessageId")) {
                   var oldMessagesWithId = factory.messages.filter(function(v) {
-                      return v.Id === data.Id;
+                      return v.MessageId === data.MessageId;
                   });
                   if (oldMessagesWithId && oldMessagesWithId.constructor === Array && oldMessagesWithId.length > 0) {
+                      //factory.messages.push(data); //<--- change!
                       return;
+                  } else {
+                      factory.messages.push(data);
                   }
-                  factory.messages.push(data);
                   factory.saveMessages();
                   factory.messageAdded(data);
               } else if (data.hasOwnProperty("CreatedOn") && data.hasOwnProperty("Author")) {
@@ -143,7 +144,7 @@ angular.module('message', ['ngCordova'])
 
           factory.test = function () {
               var data = [{
-                  Id: "30952957-476B-4760-9B04-632A198D2F1B",
+                  MessageId: "30952957-476B-4760-9B04-632A198D2F1B",
                   Author: "956EF224-E73B-453A-97BA-DDEBFAAA9D17",
                   CreatedOn: "2016-02-12 15:36:05",
                   Content: "(4 sek)något meddelande1",
@@ -155,7 +156,7 @@ angular.module('message', ['ngCordova'])
 
           factory.test2 = function () {
               var data = [{
-                  Id: "30952957-476B-4760-9B04-632A198D2F1C",
+                  MessageId: "30952957-476B-4760-9B04-632A198D2F1C",
                   Author: "37F57046-F1FD-4EEC-8E31-BB74246EB0AC",
                   CreatedOn: "2016-01-01 05:05:05",
                   Content: "(8 sek)något meddelande2, äldst datum, med bild i metadata",
@@ -179,7 +180,7 @@ angular.module('message', ['ngCordova'])
 
           factory.test3 = function () {
               var data = [{
-                  Id: "30952957-476B-4760-9B04-632A198D2F1D",
+                  MessageId: "30952957-476B-4760-9B04-632A198D2F1D",
                   Author: "956EF224-E73B-453A-97BA-DDEBFAAA9D17",
                   CreatedOn: "2016-01-05 05:05:05",
                   Content: "(12 sek)något meddelande3",
