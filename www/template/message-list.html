@@ -6,8 +6,8 @@
                 <img class="lv-img" ng-src="{{ message.AuthorAvatar || 'img/profile-pics/8.jpg' }}" alt="">
             </div>
             <div class="media-body m-t-5">
-                <h2>{{message.authorDisplayName || 'Namn Namnsson' }}
-                    <small> {{ message.createdOn || 'yyyy-mm-dd hh:ii:ss' }}</small>
+                <h2>{{message.AuthorDisplayName || 'Namn Namnsson' }}
+                    <small> {{ message.CreatedOn || 'yyyy-mm-dd hh:ii:ss' }}</small>
                 </h2>
             </div>
         </div>
@@ -30,7 +30,7 @@
         </ul>
     </div>
     <div class="card-body card-padding">
-        {{ message.content || 'Ett Meddelande' }}
+        {{ message.Content || 'Ett Meddelande' }}
     </div>
 </div>
 <div ng-click="test()" class="row">&nbsp;</div>

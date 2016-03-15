@@ -9,7 +9,14 @@ angular.module('messages', [])
             $rootScope.$broadcast('download-whats-new');
         }, 10000);
 
-        messageRepository.get
+
+        $scope.$on('new-messages', function (event,args ) {
+            console.log("new-message");
+            for(var msg in args){
+                $scope.messages.push(args[msg]);
+            }
+
+        });
 
 
     }]);
