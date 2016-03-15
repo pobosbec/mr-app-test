@@ -49,6 +49,9 @@ angular.module('communication', [])
                 var msg = data.data.messages[i];
 
                 var newMessage = {};
+                newMessage.MessageId = msg.messageId;
+                newMessage.ParticipantId = msg.participantId;
+                newMessage.ConversationId = msg.conversationId;
                 newMessage.AuthorDisplayName = msg.authorDisplayName;
                 newMessage.Author = msg.authorId;
                 newMessage.CreatedOn = msg.createdOn;
