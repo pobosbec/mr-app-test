@@ -31,6 +31,9 @@
     </div>
     <div class="card-body card-padding">
         {{ message.Content || 'Ett Meddelande' }}
+        <br /><br />
+        <a href="{{ message.metaData.url || 'https://s3-eu-west-1.amazonaws.com/mr-app-images/2016-03-07%2B15-08-18.jpg' }}"><img class="lv-img" ng-src="{{ message.metaData.thumbnail || 'https://s3-eu-west-1.amazonaws.com/mr-app-images/2016-03-07%2B15-08-18thumb.jpg' }}" alt="Attached image"></a>
+        <img class="lv-img" ng-src="{{ 'https://s3-eu-west-1.amazonaws.com/mr-app-images/map-icon.png' }}" alt="Attached position"></a>
     </div>
 </div>
 <div ng-click="test()" class="row">&nbsp;</div>

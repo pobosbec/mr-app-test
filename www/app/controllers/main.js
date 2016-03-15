@@ -90,7 +90,7 @@ mobileresponseWebbApp
             { animation: 'flipOutX', target: 'flippers' },
             { animation: 'flipOutY', target: 'flippers'  }
         ];
-         this.lightSpeed = [
+        this.lightSpeed = [
             { animation: 'lightSpeedIn', target: 'lightSpeed' },
             { animation: 'lightSpeedOut', target: 'lightSpeed' }
         ];
