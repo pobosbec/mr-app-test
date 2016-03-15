@@ -1,12 +1,12 @@
-<!-- Latest -->
-<div class="card" ng-repeat="message in messages track by $index">
+<div class="card" ng-repeat="message in messages track by $index" data-ng-controller="messageCtrl as msgctrl">
     <div class="card-header bgm-cyan">
         <div class="media">
             <div class="pull-left">
                 <img class="lv-img" ng-src="{{ message.AuthorAvatar || 'img/profile-pics/8.jpg' }}" alt="">
             </div>
             <div class="media-body m-t-5">
-                <h2>{{message.AuthorDisplayName || 'Namn Namnsson' }}
+                <h2>
+                    {{message.AuthorDisplayName || 'Namn Namnsson' }}
                     <small> {{ message.CreatedOn || 'yyyy-mm-dd hh:ii:ss' }}</small>
                 </h2>
             </div>
@@ -32,11 +32,11 @@
     <div class="card-body card-padding">
         {{ message.Content || 'Ett Meddelande' }}
         <br /><br />
-        <a id="1" data-ng-click="mactrl.toggleShowImage($event)" href="">
+        <a data-ng-click="msgctrl.toggleShowImage($event)" href="">
             <img class="lv-img" ng-src="{{ message.metaData.thumbnail || 'https://s3-eu-west-1.amazonaws.com/mr-app-images/2016-03-07%2B15-08-18thumb.jpg' }}" alt="Attached image thumbnail">
         </a>
         <!--<img class="lv-img" ng-src="{{ 'https://s3-eu-west-1.amazonaws.com/mr-app-images/map-icon.png' }}" alt="Attached position">-->
     </div>
-    <div ng-if="showAttachedImage == 1" class="container" data-ng-include="'template/image-view.html'"></div>
+    <div ng-if="showAttachedImage == 1" class="container" data-ng-include="'template/image-view.html'" data-ng-model="fullSizeImageDiv"></div>
 </div>
 <div ng-click="test()" class="row">&nbsp;</div>

@@ -13,4 +13,5 @@ angular.module('messages', [])
         $scope.$on('messages-added', function (event, args) {
             $scope.messages = messageRepository.getMessages();    
         });
+
     }]);
