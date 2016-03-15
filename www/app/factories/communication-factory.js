@@ -62,7 +62,7 @@ angular.module('communication', [])
         factory.on = function (event, args) {
             switch (event.name) {
                 case 'download-whats-new':
-                    console.log("download-whats-new");
+                    //console.log("download-whats-new");
                     if (args != undefined) {
                         console.log(args);
                     }

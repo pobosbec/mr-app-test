@@ -112,7 +112,6 @@ angular.module('token', [])
         };
 
         factory.isAppAuthenticated = function (authenticationToken) {
-            console.log();
             var req = {
                 method: 'POST',
                 url: factory.currentAppApiUrl + 'app/is-token-valid',
