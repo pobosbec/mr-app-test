@@ -129,6 +129,7 @@ angular.module('token', [])
                 // this callback will be called asynchronously
                 // when the response is available
                 appToken = response.data.data.id;
+                $rootScope.$broadcast("app-token-available");
             }, function errorCallback(response) {
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.

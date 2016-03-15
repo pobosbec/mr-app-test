@@ -76,6 +76,7 @@ angular.module('communication', [])
             }
         }
 
+
         function downloadWhatsNew(){
             var appAuthToken = tokenService.getAppAuthToken();
             if (appAuthToken === null || appAuthToken === 'undefined' || appAuthToken === undefined) {
