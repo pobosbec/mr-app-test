@@ -49,6 +49,9 @@ angular.module('communication', [])
                 var msg = data.data.messages[i];
 
                 var newMessage = {};
+                newMessage.MessageId = msg.messageId;
+                newMessage.ParticipantId = msg.participantId;
+                newMessage.ConversationId = msg.conversationId;
                 newMessage.AuthorDisplayName = msg.authorDisplayName;
                 newMessage.Author = msg.authorId;
                 newMessage.CreatedOn = msg.createdOn;
@@ -62,8 +65,10 @@ angular.module('communication', [])
         factory.on = function (event, args) {
             switch (event.name) {
                 case 'download-whats-new':
-                    console.log("download-whats-new");
-                    console.log(args);
+                    //console.log("download-whats-new");
+                    if (args != undefined) {
+                        console.log(args);
+                    }
                     downloadWhatsNew(args);
                     break;
                 default:
@@ -73,8 +78,8 @@ angular.module('communication', [])
 
         function downloadWhatsNew(){
             var appAuthToken = tokenService.getAppAuthToken();
-            if(appAuthToken === null || appAuthToken === 'undefined' || appAuthToken === undefined){
-                tokenService.isAppAuthenticated(tokenService.getAuthToken());
+            if (appAuthToken === null || appAuthToken === 'undefined' || appAuthToken === undefined) {
+                tokenService.isAppAuthenticated();
                 console.log('AppToken was null');
                 return;
             }
