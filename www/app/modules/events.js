@@ -55,7 +55,16 @@ angular.module('event', [])
 
         $scope.$on('offline', function (event, args) { });
 
-        $scope.$on('back-button', function (event, args) { });
+        $scope.$on('back-button', function (event, args) {
+            console.log($.mobile.activePage);
+            if ($.mobile.activePage.is('#/login') || $.mobile.activePage.is('#/home')) {
+                e.preventDefault();
+                navigator.app.exitApp();
+            }
+            else {
+                navigator.app.backHistory();
+            }
+        });
 
         $scope.$on('menu-button', function (event, args) { });
 
