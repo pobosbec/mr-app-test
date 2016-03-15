@@ -285,7 +285,7 @@ angular.module('token', [])
                 //return "http://api2.test.mobileresponse.se/";
                 return "https://api2.mobileresponse.se/";
             // in staging
-            return "http://api.test.mobileresponse.se/";
+            return "https://api2.mobileresponse.se/";
         };
 
         /**
@@ -304,11 +304,9 @@ angular.module('token', [])
 
             // in localhost
             if (host.host.indexOf("localhost") > -1)
-            //return "http://10.100.126.80:8887/";
-            //return "http://api2.test.mobileresponse.se/";
                 return "https://api.mobileresponse.se/";
             // in staging
-            return "http://api.test.mobileresponse.se/";
+            return "https://api.mobileresponse.se/";
         };
 
         factory.getDeviceServiceUrl = function () {

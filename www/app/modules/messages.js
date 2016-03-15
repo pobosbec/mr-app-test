@@ -3,12 +3,12 @@
  */
 angular.module('messages', [])
     .controller('messagesController', ['$scope', '$http', '$rootScope', 'messageRepository', 'communicationService', function ($scope, $http, $rootScope, messageRepository, communicationService) {
+
         $scope.messages = messageRepository.getMessages();
 
         setInterval(function(){
             $rootScope.$broadcast('download-whats-new');
         }, 10000);
-
 
         /**
          * Just for testing
@@ -21,9 +21,5 @@ angular.module('messages', [])
                     $scope.messages.push(args[msg]);
                 }
             }
-
-
         });
-
-
     }]);
