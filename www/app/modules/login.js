@@ -2,7 +2,7 @@
  * Created by robinpipirs on 09/12/15.
  */
 angular.module('login', [])
-    .controller('loginCtrl', ['$scope', '$http', 'tokenService', function ($scope, $http, tokenService) {
+    .controller('loginCtrl', ['$scope', '$rootScope', '$http', 'tokenService', function ($scope, $rootScope, $http, tokenService) {
 
         //taken from main.js
         this.login = 1;
@@ -51,6 +51,7 @@ angular.module('login', [])
                 // when the response is available
                 var token = response.data.data.id;
                 tokenService.isAuthenticated(token);
+                $rootScope.$broadcast("logged-in");
                 $scope.showLoginError = false;
 
             }, function errorCallback(response) {

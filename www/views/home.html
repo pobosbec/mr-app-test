@@ -8,45 +8,12 @@
     <section id="content" data-ng-controller="messagesController as msgCtrl">
 
         <div class="container">
-            <div class="block-header">
-                <h2>Messages</h2>
 
-                <ul class="actions">
-                    <li>
-                        <a href="">
-                            <i class="zmdi zmdi-trending-up"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="">
-                            <i class="zmdi zmdi-check-all"></i>
-                        </a>
-                    </li>
-                    <li class="dropdown" uib-dropdown>
-                        <a href="" uib-dropdown-toggle>
-                            <i class="zmdi zmdi-more-vert"></i>
-                        </a>
-
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <li>
-                                <a href="">Refresh</a>
-                            </li>
-                            <li>
-                                <a href="">Manage Widgets</a>
-                            </li>
-                            <li>
-                                <a href="">Widgets Settings</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-
-            </div>
+            <div class="block-header" data-ng-include="'template/messages-header.html'"></div>
 
             <!-- Recent Posts -->
-            <div ng-if="messageViewMode == 1" class="container" data-ng-include="'template/message-list.html'" ></div>
-                <div ng-if="messageViewMode == 2" class="container" data-ng-include="'template/message-wall.html'" ></div>
-
+            <div ng-if="messageViewMode == 1" class="container" data-ng-include="'template/message-list.html'"></div>
+            <div ng-if="messageViewMode == 2" class="container" data-ng-include="'template/message-wall.html'"></div>
 
         </div>
     </section>

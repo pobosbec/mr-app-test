@@ -2,7 +2,7 @@ mobileresponseWebbApp
     // =========================================================================
     // Base controller for common functions
     // =========================================================================
-    .controller('materialadminCtrl', function($timeout, $state, $rootScope,tokenService,$scope){
+    .controller('materialadminCtrl', function($timeout, $state, $rootScope,tokenService, $scope){
 
         //ui router
         $rootScope.$state = $state;
@@ -11,10 +11,24 @@ mobileresponseWebbApp
         $scope.username = tokenService.getUsername; //passing getter to the view
 
         //message listing view
-        $scope.messageViewMode =1;
+        $scope.messageViewMode = 1;
 
         this.changeMessageView = function(event) {
           $scope.messageViewMode = event.target.id;
+        };
+
+        $scope.showAttachedImage = 0;
+        $scope.fullImageClass = "";
+
+        this.toggleShowImage = function (event) {
+            if ($scope.showAttachedImage == 1) {
+                $scope.showAttachedImage = 0;
+            }
+            else {
+                $scope.showAttachedImage = 1;
+            }
+
+            $scope.fullImageClass = "fullImage rotate90";
         };
 
         //Welcome Message
