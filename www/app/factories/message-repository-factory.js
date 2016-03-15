@@ -55,12 +55,18 @@ angular.module('message', ['ngCordova'])
               for (var thisMessage in messages) {
                   if (messages.hasOwnProperty(thisMessage));
                   {
-                        var author = factory.authors.filter(function(v) {
-                            return v.Id === messages[thisMessage].Author;
-                        })[0];
-                        messages[thisMessage]["AuthorAvatar"] = author.Avatar;
-                        messages[thisMessage]["AuthorDisplayName"] = author.DisplayName;
-                        console.log(thisMessage);
+                      var author = factory.authors.filter(function (v) {
+                          return v.Id === messages[thisMessage].Author;
+                      })[0];
+
+                      if (author != undefined) {
+                          if (author.hasOwnProperty("Avatar")) {
+                              messages[thisMessage]["AuthorAvatar"] = author.Avatar;
+                          }
+                          if (author.hasOwnProperty("DisplayName")) {
+                              messages[thisMessage]["AuthorDisplayName"] = author.DisplayName;
+                          }
+                      }
                   }
               }
 

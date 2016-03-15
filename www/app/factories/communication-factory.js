@@ -62,7 +62,9 @@ angular.module('communication', [])
             switch (event.name) {
                 case 'download-whats-new':
                     console.log("download-whats-new");
-                    console.log(args);
+                    if (args != undefined) {
+                        console.log(args);
+                    }
                     downloadWhatsNew(args);
                     break;
                 default:

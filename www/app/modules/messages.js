@@ -11,9 +11,9 @@ angular.module('messages', [])
 
         $scope.messages = messageRepository.getMessages();
 
-        $scope.$on('messages-added', function (event, args) {
-            console.log("fetching new messages!");
-            $scope.messages = messageRepository.getMessages();
-            $scope.$apply();
-        });
+        //$scope.$on('messages-added', function (event, args) {
+        //    console.log("fetching new messages!");
+        //    $scope.messages = messageRepository.getMessages();
+        //    $scope.$apply();
+        //});
     }]);
