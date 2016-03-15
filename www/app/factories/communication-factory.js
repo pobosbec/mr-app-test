@@ -12,7 +12,7 @@ angular.module('communication', [])
 
             var req = {
                 method: 'POST',
-                url: tokenService.currentApiUrl + 'app/conversations/what-is-new',
+                url: tokenService.currentAppApiUrl + 'app/conversations/what-is-new',
                 headers: {
                     'Content-Type': 'application/json'
                 },

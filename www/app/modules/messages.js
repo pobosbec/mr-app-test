@@ -8,4 +8,8 @@ angular.module('messages', [])
         setInterval(function(){
             $rootScope.$broadcast('download-whats-new');
         }, 10000);
+
+        messageRepository.get
+
+
     }]);
