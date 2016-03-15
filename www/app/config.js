@@ -25,7 +25,8 @@ mobileresponseWebbApp
         //------------------------------
         .state ('login', {
             url: '/login',
-            templateUrl: 'views/login.html'
+            templateUrl: 'views/login.html',
+            controller: 'loginCtrl as lctrl'
         })
 
         //------------------------------
