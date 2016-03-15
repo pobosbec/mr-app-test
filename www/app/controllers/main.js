@@ -77,7 +77,9 @@ mobileresponseWebbApp
             $scope.imageClasses = 'fullSize rotate90';
 
             //var image = document.getElementById("theImage");
-            //alert(image.width);
+            //alert(image.height + ' ' + image.width);
+
+            //alert($scope.fullSizeImage);
         };
     })
 
