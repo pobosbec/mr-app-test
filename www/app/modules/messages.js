@@ -14,4 +14,5 @@ angular.module('messages', [])
             $scope.messages = messageRepository.getMessages();
             //$scope.$apply();
         });
+
     }]);
