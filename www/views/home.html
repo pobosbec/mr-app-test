@@ -5,7 +5,7 @@
 
     <aside id="chat" data-ng-include="'template/chat.html'" data-ng-class="{ 'toggled': mactrl.sidebarToggle.right === true }"></aside>
 
-    <section id="content">
+    <section id="content" data-ng-controller="messagesController as msgCtrl">
 
         <div class="container">
             <div class="block-header">
@@ -44,8 +44,8 @@
             </div>
 
             <!-- Recent Posts -->
-            <div ng-if="messageViewMode == 1" class="container" data-ng-include="'template/message-list.html'" data-ng-controller="messagesController as msgCtrl"></div>
-                <div ng-if="messageViewMode == 2" class="container" data-ng-include="'template/message-wall.html'" data-ng-controller="messagesController as msgCtrl"></div>
+            <div ng-if="messageViewMode == 1" class="container" data-ng-include="'template/message-list.html'" ></div>
+                <div ng-if="messageViewMode == 2" class="container" data-ng-include="'template/message-wall.html'" ></div>
 
 
         </div>
