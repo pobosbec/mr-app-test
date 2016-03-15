@@ -12,5 +12,6 @@ var mobileresponseWebbApp = angular.module('administratorApp', [
     'messages',
     'event',
     'login',
-    'message'
+    'message',
+    'communication'
     ])

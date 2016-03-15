@@ -2,7 +2,7 @@
  * Created by robinpipirs on 09/12/15.
  */
 angular.module('event', [])
-    .controller('eventCtrl', ['$scope', '$rootScope', '$http', 'tokenService', 'messageRepository', function ($scope, $rootScope, $http, tokenService, messageRepository) {
+    .controller('eventCtrl', ['$scope', '$rootScope', '$http', 'tokenService', 'messageRepository', 'communicationService', function ($scope, $rootScope,, $http, tokenService, messageRepository, communicationService) {
 
         document.addEventListener('deviceready', function (event, args) {
             $rootScope.$broadcast('device-ready', args);
@@ -18,5 +18,9 @@ angular.module('event', [])
 
         $scope.$on('updated-message', function (event, args) {
             messageRepository.on(event, args);
+        });
+
+        $scope.$on('download-whats-new', function (event, args) {
+            communicationService.on(event, args);
         });
     }]);
