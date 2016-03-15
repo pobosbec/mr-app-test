@@ -16,25 +16,8 @@ mobileresponseWebbApp
         this.changeMessageView = function(event) {
           $scope.messageViewMode = event.target.id;
         };
-
-        $scope.showAttachedImage = 0;
-        $scope.fullImageClass = "";
-
-        this.toggleShowImage = function (event) {
-            if ($scope.showAttachedImage == 1) {
-                $scope.showAttachedImage = 0;
-            }
-            else {
-                $scope.showAttachedImage = 1;
-            }
-
-            $scope.fullImageClass = "fullImage rotate90";
-        };
-
-        //Welcome Message
-        //growlService.growl('Welcome back Mallinda!', 'inverse')
         
-        // Detact Mobile Browser
+        // Detect Mobile Browser
         if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
            angular.element('html').addClass('ismobile');
         }
@@ -73,6 +56,29 @@ mobileresponseWebbApp
             'blue',
             'purple'
         ]
+    })
+
+    // =========================================================================
+    // Message
+    // =========================================================================
+    .controller('messageCtrl', function($timeout, $scope){
+
+        $scope.showAttachedImage = 0;
+        $scope.imageClasses = '';
+
+        this.toggleShowImage = function (event) {
+            if ($scope.showAttachedImage == 1) {
+                $scope.showAttachedImage = 0;
+            }
+            else {
+                $scope.showAttachedImage = 1;
+            }
+
+            $scope.imageClasses = 'fullSize rotate90';
+
+            //var image = document.getElementById("theImage");
+            //alert(image.width);
+        };
     })
 
     // =========================================================================
