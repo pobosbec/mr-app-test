@@ -5,7 +5,7 @@ angular.module('event', [])
     .controller('eventCtrl', ['$scope', '$rootScope', '$location', '$http', 'tokenService', 'communicationService', 'messageRepository', function ($scope, $rootScope, $location, $http, tokenService, communicationService, messageRepository) {
 
         $scope.deviceReady = false;
-
+        $scope.isPhoneGap = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
         // ------------------------------------
         // PhoneGap/Cordova events
         // ------------------------------------
@@ -78,8 +78,7 @@ angular.module('event', [])
             if ($scope.deviceReady) {
                 console.log('back-button');
                 if (($location.path() === '/home' || $location.path() === '/login') && !$scope.isIOS) {
-                    console.log('first check : true');
-                    if (window.isPhoneGap) {
+                    if ($scope.isPhoneGap) {
                         console.log('second check : isPhoneGap');
                         navigator.notification.confirm("Exit application?", function (exit) {
                             if (exit == 1) {

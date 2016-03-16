@@ -4,9 +4,10 @@
 <widget xmlns     = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
         id        = "com.bosbec.test-app"
-        version   = "0.2.0">
+version   = "0.2.0">
+  <!--id        = "com.phonegap.hello-world"-->
 
-  <name>Bosbec-MR</name>
+<name>Bosbec-MR</name>
 
   <description>
     Test appliction for Bosbec and MobileResponse
