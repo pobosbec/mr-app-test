@@ -23,7 +23,6 @@ function registerPushwooshAndroid() {
 	//set push notifications handler
  	document.addEventListener('push-notification',
 		function(event) {
-		    alert('push-notification recieved oringal');
             var title = event.notification.title;
             var userData = event.notification.userdata;
 
@@ -48,7 +47,8 @@ function registerPushwooshAndroid() {
 	pushNotification.registerDevice(
 		function(token)
 		{
-			alert(token);
+		    document.dispatchEvent(new CustomEvent("push-service-initialized", { "token": token }));
+
 			//callback when pushwoosh is ready
 			onPushwooshAndroidInitialized(token);
 		},

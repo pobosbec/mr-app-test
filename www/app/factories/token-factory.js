@@ -114,6 +114,7 @@ angular.module('token', [])
         factory.isAppAuthenticated = function (authenticationToken) {
             var req = {
                 method: 'POST',
+                ignoreLoadingBar: true,
                 url: factory.currentAppApiUrl + 'app/is-token-valid',
                 headers: {
                     'Content-Type': 'application/json'
