@@ -11,7 +11,12 @@ angular.module('event', [])
         // ------------------------------------
 
         // Native
-        document.addEventListener('deviceready', onDeviceReady, false);
+        document.addEventListener('deviceready', function (event, args) {
+            //alert("events.js>deviceready");
+            console.log('deviceready');
+            $scope.deviceReady = true;
+            $rootScope.$broadcast('device-ready', args);
+        }, false);
 
         document.addEventListener('resume', function (event, args) {
             $rootScope.$broadcast('on-focus', args);
@@ -39,15 +44,14 @@ angular.module('event', [])
 
 
         // Wrapped
-        function onDeviceReady(event, args) {
-            console.log('deviceready');
-            $scope.deviceReady = true;
-            $rootScope.$broadcast('device-ready', args);
-        }
-
         $scope.$on('device-ready', function (event, args) {
+            //alert("events.js>device-ready");
             console.log('device-ready');
+            if (!$scope.deviceReady) {
+                initPushwoosh();
+            }
             $scope.deviceReady = true;
+
             messageRepository.on(event, args);
         });
 
@@ -75,15 +79,18 @@ angular.module('event', [])
                 console.log('back-button');
                 if (($location.path() === '/home' || $location.path() === '/login') && !$scope.isIOS) {
                     console.log('first check : true');
-                    console.log('second check');
-                    var exit = window.confirm("Exit application?");
-                    if (window.isPhoneGap && exit === 1) {
-                        console.log('second check : true');
-                        $rootScope.$broadcast('app-exit');
-                        navigator.app.exitApp();
-                    } else {
-                        console.log('second check : false');
-                        window.history.back();
+                    if (window.isPhoneGap || true) {
+                        console.log('second check');
+                        var exit = window.confirm("Exit application?");
+                        if (exit === 1) {
+                            console.log('second check : true');
+                            $rootScope.$broadcast('app-exit');
+                            navigator.app.exitApp();
+                        } else {
+                            console.log('second check : false');
+                            return;
+                        }
+                        return;
                     }
                     return;
                 } else {
