@@ -17,7 +17,7 @@
  * under the License.
  */
 function initPushwoosh() {
-    var pushNotification = cordova.require("com.pushwoosh.plugins.pushwoosh.PushNotification");
+    var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
     if (device.platform == "Android") {
         registerPushwooshAndroid();
     }
@@ -41,17 +41,17 @@ var app = {
     // Bind any events that are required on startup. Common events are:
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function () {
-        //alert("index.js>binding events");
-        //document.addEventListener('deviceready', this.onDeviceReady, false);
+        alert("index.js>binding events");
+        document.addEventListener('deviceready', this.onDeviceReady, false);
     },
     // deviceready Event Handler
     //
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function () {
-        //alert("index.js>deviceready");
-        //initPushwoosh();
-        //app.receivedEvent('deviceready');
+        alert("index.js>deviceready");
+        initPushwoosh();
+        app.receivedEvent('deviceready');
     },
     // Update DOM on a Received Event
     receivedEvent: function (id) {
