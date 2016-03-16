@@ -78,8 +78,8 @@
         <!-- Comment Listing -->
         <div class="wcl-list" >
             <div class="">
-                <a class="UFIPagerLink" role="button" ng-click="incrementComments(Math.ceil((conversation.messages.length-conversation.No)/2),conversation.ConversationId)">
-                    <!-- react-text: 30 -->View {{Math.ceil((conversation.messages.length-conversation.No)/2)}} of ({{conversation.messages.length-conversation.No}}) more comments<!-- /react-text --></a>
+                <a class="UFIPagerLink" role="button" ng-click="incrementComments(incrementStep(conversation.ConversationId),conversation.ConversationId)">
+                    <!-- react-text: 30 -->View {{incrementStep(conversation.ConversationId)}} of ({{conversation.messages.length}}) comments<!-- /react-text --></a>
                 <a class="UFIPagerLink" role="button" ng-click="hideComments(conversation.ConversationId)" style="float: right">
                     <!-- react-text: 30 -->Hide comments<!-- /react-text --></a>
             </div>

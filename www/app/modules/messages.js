@@ -56,9 +56,45 @@ angular.module('messages', [])
             return -1;
         }
 
+        $scope.incrementStep = function(ConversationId){
+
+            var nIncr = 0;
+            var no = $scope.conversations[findConversation(ConversationId)].No;
+            var total = $scope.conversations[findConversation(ConversationId)].messages.length;
+            if (total <= 20){
+                return total;
+            }
+            else {
+                if (no < 20) {
+                    nIncr = 20;
+                }
+                else if (total <= 50) {
+                    nIncr = total;
+                }
+                else if (no < 50) {
+                    nIncr = 50;
+                }
+                else if (total <= 100) {
+                    nIncr = total;
+                }
+                else if (no < 250) {
+                    nIncr = 250;
+                }
+                else if (total < 250) {
+                    nIncr = total;
+                }
+                else
+                    nIncr = total;
+            }
+            return nIncr;
+        };
+
         $scope.incrementComments = function(n,ConversationId){
-            $scope.conversations[findConversation(ConversationId)].No += n;
-            $scope.conversations[findConversation(ConversationId)].StartPosition += -n;
+            $scope.conversations[findConversation(ConversationId)].No = n;
+            if( $scope.conversations[findConversation(ConversationId)].messages.length > n){
+            $scope.conversations[findConversation(ConversationId)].StartPosition = -n;
+            }
+            else {$scope.conversations[findConversation(ConversationId)].StartPosition = 1;}
         };
 
         $scope.hideComments = function(ConversationId){
