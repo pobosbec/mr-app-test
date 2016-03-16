@@ -8,6 +8,7 @@ angular.module('token', [])
         var username = null;
         var token = null;
         var appToken = null;
+        var pushToken = null;
         var appUserId = null;
         var appUsername = null;
         var adminId = null;
@@ -130,6 +131,7 @@ angular.module('token', [])
                 // this callback will be called asynchronously
                 // when the response is available
                 appToken = response.data.data.id;
+                factory.saveToDb("appAuthToken", appToken);
                 $rootScope.$broadcast("app-token-available");
             }, function errorCallback(response) {
                 // called asynchronously if an error occurs
@@ -190,6 +192,9 @@ angular.module('token', [])
                     // or server returns response with an error status.
                 //store token in session
                 win.sessionStorage.accessToken = null;
+                factory.saveToDb("authToken", null);
+                factory.saveToDb("appAuthToken", null);
+                factory.saveToDb("userName", null);
                 //redirect to login
                 //change to dashboard
                 $state.go('login');
@@ -198,6 +203,30 @@ angular.module('token', [])
                 });
             return $q.reject(response);
         };
+
+
+        factory.registerPushToken = function (pushToken) {
+            token = data;
+            var req = {
+                method: 'POST',
+                url: factory.currentApiUrl+ 'is-authenticated',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: {
+                    "Data": {
+                        InstanceName: "com.bosbec.test-app",
+                        UserId: token, 
+                        HardwareId: device.uuid,
+                        PushToken: pushToken,
+                        DeviceType: window.deviceType,
+                        MacAddress: "01:23:45:67:89:ab"
+                    },
+                    "AuthenticationToken": token,
+                    "Tags": null
+                }
+            };
+        }
 
         /**
          * getDetails http posts to api to fetch accounts details
@@ -233,7 +262,10 @@ angular.module('token', [])
             });
         };
 
-        factory.getUsername = function() {
+        factory.getUsername = function () {
+            if (username == null) {
+                username = JSON.Parse(localStorage.getItem("userName"));
+            }
             return username;
         };
 
@@ -259,13 +291,31 @@ angular.module('token', [])
             }
         };
 
-        factory.getAuthToken = function() {
+        factory.getAuthToken = function () {
+            if (token == null) {
+                token = JSON.Parse(localStorage.getItem("authToken"));
+            }
             return token;
         };
 
-        factory.getAppAuthToken = function() {
+        factory.getAppAuthToken = function () {
+            if (appToken == null) {
+                appToken = JSON.Parse(localStorage.getItem("appAuthToken"));
+            }
             return appToken;
         };
+
+        factory.getPushToken = function () {
+            if (pushToken == null) {
+                pushToken = JSON.Parse(localStorage.getItem("pushToken"));
+            }
+            return pushToken;
+        }
+            
+        factory.saveToDb = function (key, value) {
+            var valueAsJson = JSON.stringify(value);
+            localStorage.setItem(key, valueAsJson);
+        }
 
         /**
          * When the service is runned, depending on what url mobile response uses we set the api address differently

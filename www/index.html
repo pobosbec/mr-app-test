@@ -102,11 +102,14 @@
         }
 
         (function loadCordova() {
+            window.deviceType = 0;
             var CORDOVA_EDITION = null;
             if (isAndroid()) {
                 CORDOVA_EDITION = "android";
+                window.deviceType = 3;
             } else if (isIOS()) {
                 CORDOVA_EDITION = "ios";
+                window.deviceType = 1;
             }
             document.write('<script src="js/ng-cordova.js"><\/script>');
             if (CORDOVA_EDITION != null) {
