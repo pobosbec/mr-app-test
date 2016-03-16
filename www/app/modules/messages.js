@@ -4,11 +4,10 @@
 angular.module('messages', [])
     .controller('messagesController', ['$scope', '$http', '$rootScope', 'communicationService', 'messageRepository','tokenService', function ($scope, $http, $rootScope, communicationService, messageRepository,tokenService) {
 
+        $scope.Math = window.Math;
+
         $scope.messages = messageRepository.getMessages();
         $scope.conversations = [];
-        $scope.noobs = [{"hehe": "haa"},
-            {"hehe": "tjoo"}
-        ];
         messagesToConversations($scope.messages,$scope.conversations);
 
         setInterval(function () {
@@ -17,22 +16,26 @@ angular.module('messages', [])
 
         $scope.$on('messages-added', function (event, args) {
             $scope.messages = messageRepository.getMessages();
-             messagesToConversations(messageRepository.getMessages(),$scope.conversations);
+            $scope.conversations = [];
+            messagesToConversations(messageRepository.getMessages(),$scope.conversations);
         });
 
         //converts a list of mesasges into conversations
         function messagesToConversations(messages,destination) {
-
             for (var msg in messages) {
                 if (messages[msg].ConversationId != null) {
                     var index = findConversation(messages[msg].ConversationId);
                     //when conversation exists
                     if (index != -1) {
                         destination[index].messages.push(messages[msg]);
+                        destination[index].StartPosition = destination[index].messages.length-5;
                     }
                     else {
                         destination.push(
                             {
+                                "TextArea" : "",
+                                "No":5,
+                                "StartPosition":1,
                                 "ConversationId": messages[msg].ConversationId,
                                 "messages": [messages[msg]]
                             }
@@ -40,7 +43,6 @@ angular.module('messages', [])
                     }
                 }
             }
-            console.log($scope.conversations);
         }
 
         //function to find the index of an certain conversations
@@ -54,9 +56,19 @@ angular.module('messages', [])
             return -1;
         }
 
-        $scope.reply = function (conversationId, content) {
+        $scope.incrementComments = function(n,ConversationId){
+            $scope.conversations[findConversation(ConversationId)].No += n;
+            $scope.conversations[findConversation(ConversationId)].StartPosition += -n;
+        };
 
-            console.log("convId: "+conversationId+" content: "+content);
+        $scope.hideComments = function(ConversationId){
+            $scope.conversations[findConversation(ConversationId)].No = 5;
+            $scope.conversations[findConversation(ConversationId)].StartPosition = $scope.conversations[findConversation(ConversationId)].messages.length-5;
+        };
+
+
+        $scope.reply = function (conversationId) {
+            var content = $scope.conversations[findConversation(conversationId)].TextArea;
             var req = {
                 method: 'POST',
                 url: tokenService.currentAppApiUrl + 'app/conversations/reply',
@@ -73,18 +85,21 @@ angular.module('messages', [])
                     "Tags": null
                 }
             };
-            content = "";
             $http(req
             ).then(function successCallback(response) {
                 // this callback will be called asynchronously
                 // when the response is available
                 var data = response.data;
                 console.log(data);
+                //TODO check if success
+                $scope.conversations[findConversation(conversationId)].TextArea = "";
+                $rootScope.$broadcast('download-whats-new');
             }, function errorCallback(response) {
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
                 console.log("Error in reply conversation");
             });
         }
+
 
     }]);
