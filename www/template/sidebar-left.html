@@ -45,8 +45,8 @@
         <li class="sub-menu">
             <a href="" toggle-submenu><i class="zmdi zmdi-bug"></i> Debugging</a>
             <ul>
-                <li style="cursor: pointer;"><a onClick="localStorage.clear();"><i class="zmdi zmdi-delete"></i> Empty localStorage</a></li>
-                <li style="cursor: pointer;"><a onClick="window.location.reload();"><i class="zmdi zmdi-refresh"></i> Reload Page</a></li>
+                <li style="cursor: pointer;"><a onClick="localStorage.clear(); console.log('[Debug] localStorage Cleared.');"><i class="zmdi zmdi-delete"></i> Empty localStorage</a></li>
+                <li style="cursor: pointer;"><a onClick="window.location.reload(); console.log('[Debug] Reloading page.');"><i class="zmdi zmdi-refresh"></i> Reload Page</a></li>
             </ul>
         </li>
 

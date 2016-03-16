@@ -5,7 +5,7 @@ angular.module('event', [])
     .controller('eventCtrl', ['$scope', '$rootScope', '$location', '$http', 'tokenService', 'communicationService', 'messageRepository', function ($scope, $rootScope, $location, $http, tokenService, communicationService, messageRepository) {
 
         $scope.deviceReady = false;
-        $scope.isPhoneGap = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
+        $scope.isPhoneGap = window.isPhoneGap;
         // ------------------------------------
         // PhoneGap/Cordova events
         // ------------------------------------

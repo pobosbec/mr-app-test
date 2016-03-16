@@ -12,6 +12,7 @@ angular.module('communication', [])
 
             var req = {
                 method: 'POST',
+                ignoreLoadingBar: true,
                 url: tokenService.currentAppApiUrl + 'app/conversations/what-is-new',
                 headers: {
                     'Content-Type': 'application/json'
