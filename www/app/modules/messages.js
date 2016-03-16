@@ -2,7 +2,7 @@
  * Created by robinpipirs on 09/12/15.
  */
 angular.module('messages', [])
-    .controller('messagesController', ['$scope', '$http', '$rootScope', 'communicationService', 'messageRepository', function ($scope, $http, $rootScope, communicationService, messageRepository) {
+    .controller('messagesController', ['$scope', '$http', '$rootScope', 'communicationService', 'messageRepository','tokenService', function ($scope, $http, $rootScope, communicationService, messageRepository,tokenService) {
 
         $scope.messages = messageRepository.getMessages();
         $scope.conversations = [];
@@ -19,7 +19,6 @@ angular.module('messages', [])
             $scope.messages = messageRepository.getMessages();
              messagesToConversations(messageRepository.getMessages(),$scope.conversations);
         });
-
 
         //converts a list of mesasges into conversations
         function messagesToConversations(messages,destination) {
@@ -53,6 +52,39 @@ angular.module('messages', [])
                 }
             }
             return -1;
+        }
+
+        $scope.reply = function (conversationId, content) {
+
+            console.log("convId: "+conversationId+" content: "+content);
+            var req = {
+                method: 'POST',
+                url: tokenService.currentAppApiUrl + 'app/conversations/reply',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: {
+                    "Data": {
+                        "ConversationId": conversationId,
+                        "Message": content,
+                        "MetaData": null
+                    },
+                    "AuthenticationToken": tokenService.getAppAuthToken(),
+                    "Tags": null
+                }
+            };
+            content = "";
+            $http(req
+            ).then(function successCallback(response) {
+                // this callback will be called asynchronously
+                // when the response is available
+                var data = response.data;
+                console.log(data);
+            }, function errorCallback(response) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+                console.log("Error in reply conversation");
+            });
         }
 
     }]);

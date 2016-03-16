@@ -33,7 +33,7 @@
 </div>
 
 <!-- Latest -->
-<div class="card" ng-repeat="conversation in conversations track by $index">
+<div class="card" ng-repeat="conversation in conversations">
     <div class="card-header">
         <div class="media">
             <div class="pull-left">
@@ -80,7 +80,7 @@
         <div class="wcl-list" >
 
             <!-- Comment -->
-            <div class="media" ng-repeat="message in conversation.messages | limitTo:conversation.messages.length-1 | reverse">
+            <div class="media" ng-repeat="message in conversation.messages | orderBy:'CreatedOn'| startFrom:1 track by $index">
                 <a href="" class="pull-left">
                     <img src="img/profile-pics/5.jpg" alt="" class="lv-img-sm">
                 </a>
@@ -123,11 +123,11 @@
 
             <div class="wc-comment" data-ng-if="mactrl.wallCommenting[1]">
                 <div class="wcc-inner">
-                    <textarea class="wcci-text" data-auto-size placeholder="Write Something..."></textarea>
+                    <textarea class="wcci-text" ng-model="replyModel" data-auto-size placeholder="Write Something..."></textarea>
                 </div>
 
                 <div class="m-t-15">
-                    <button class="btn btn-sm btn-primary">Post</button>
+                    <button class="btn btn-sm btn-primary" ng-click="reply(conversation.ConversationId,replyModel)">Post</button>
                     <button class="btn btn-sm btn-link" data-ng-click="mactrl.wallCommenting[1] = false">Cancel</button>
                 </div>
             </div>
