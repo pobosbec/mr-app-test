@@ -15,7 +15,6 @@ mobileresponseWebbApp
             return input.slice(start);
             }
             else{
-                console.log("invalid input to short");
             return input;
             }
 
