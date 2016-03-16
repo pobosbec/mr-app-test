@@ -37,7 +37,7 @@
     <div class="card-header">
         <div class="media">
             <div class="pull-left">
-                <img class="lv-img-sm" ng-src="{{ comment.AuthorAvatar || 'img/profile-pics/8.jpg' }}" alt="">
+                <img class="lv-img-sm" ng-src="{{ conversation.messages[conversation.messages.length-1].Avatar || 'img/profile-pics/8.jpg' }}" alt="">
             </div>
 
             <div class="media-body m-t-5">
@@ -46,8 +46,6 @@
                 </h2>
             </div>
         </div>
-
-
     </div>
 
     <div class="card-body card-padding">
@@ -67,10 +65,9 @@
             </li>
 
             <li class="wa-users">
-                <a href=""><img src="img/profile-pics/1.jpg" alt=""></a>
-                <a href=""><img src="img/profile-pics/2.jpg" alt=""></a>
-                <a href=""><img src="img/profile-pics/3.jpg" alt=""></a>
-                <a href=""><img src="img/profile-pics/5.jpg" alt=""></a>
+                <a ng-repeat="user in conversation.Users" >
+                    <img ng-src="{{ user.Avatar || 'img/profile-pics/8.jpg' }}" title="{{user.DisplayName}}" alt="">
+                </a>
             </li>
         </ul>
     </div>
