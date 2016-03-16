@@ -12,7 +12,6 @@ angular.module('event', [])
 
         // Native
         document.addEventListener('deviceready', function (event, args) {
-            //alert("events.js>deviceready");
             console.log('deviceready');
             $scope.deviceReady = true;
             $rootScope.$broadcast('device-ready', args);
@@ -41,6 +40,13 @@ angular.module('event', [])
         document.addEventListener('menubutton', function (event, args) {
             $rootScope.$broadcast('menu-button', args);
         }, false);
+
+        document.addEventListener('push-notification', function (event, args) {
+            alert("Push revieved!: " + args);
+            console.log(args);
+            $rootScope.$broadcast('push-notification', args);
+        }, false);
+        
 
 
         // Wrapped
