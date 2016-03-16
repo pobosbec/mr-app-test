@@ -12,7 +12,6 @@ angular.module('event', [])
 
         // Native
         document.addEventListener('deviceready', function (event, args) {
-            console.log('deviceready');
             $rootScope.$broadcast('device-ready', args);
         }, false);
 
@@ -41,11 +40,9 @@ angular.module('event', [])
         }, false);
 
         document.addEventListener('push-notification', function (event, args) {
-            alert("Push revieved!: " + args);
-            console.log(args);
-            $rootScope.$broadcast('push-notification', args);
+            $rootScope.$broadcast('push-notification', event);
         }, false);
-        
+
 
 
         // Wrapped
@@ -120,6 +117,12 @@ angular.module('event', [])
 
         $scope.$on('menu-button', function (event, args) { });
 
+        $scope.$on('push-notification', function (event, args) {
+            var title = args.notification.title;
+            var userData = args.notification.userdata;
+            alert(title + " > " + userData);
+            console.log(args);
+        });
 
         // ------------------------------------
         // Browser specific events 
