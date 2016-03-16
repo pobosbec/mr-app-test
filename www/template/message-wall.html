@@ -61,7 +61,7 @@
 
         <ul class="wall-attrs clearfix list-inline list-unstyled">
             <li class="wa-stats">
-                <span><i class="zmdi zmdi-comments"></i> 36</span>
+                <span><i class="zmdi zmdi-comments"></i>{{conversation.messages.length || 'NaN'}}</span>
                 <span class="active"><i class="zmdi zmdi-favorite"></i> 220</span>
             </li>
 
@@ -79,7 +79,7 @@
         <div class="wcl-list" >
             <div class="">
                 <a class="UFIPagerLink" role="button" ng-click="incrementComments(Math.ceil((conversation.messages.length-conversation.No)/2),conversation.ConversationId)">
-                    <!-- react-text: 30 -->View {{Math.ceil((conversation.messages.length-conversation.No)/2)}} more comments<!-- /react-text --></a>
+                    <!-- react-text: 30 -->View {{Math.ceil((conversation.messages.length-conversation.No)/2)}} of ({{conversation.messages.length-conversation.No}}) more comments<!-- /react-text --></a>
                 <a class="UFIPagerLink" role="button" ng-click="hideComments(conversation.ConversationId)" style="float: right">
                     <!-- react-text: 30 -->Hide comments<!-- /react-text --></a>
             </div>
