@@ -2,7 +2,9 @@
  * Created by robinpipirs on 09/12/15.
  */
 angular.module('event', [])
-    .controller('eventCtrl', ['$scope', '$rootScope', '$http', 'tokenService', 'communicationService', 'messageRepository', function ($scope, $rootScope, $http, tokenService, communicationService, messageRepository) {
+    .controller('eventCtrl', ['$scope', '$rootScope', '$location', '$http', '$notification', 'tokenService', 'communicationService', 'messageRepository', function ($scope, $rootScope, $location, $http, $notification, tokenService, communicationService, messageRepository) {
+
+        $scope.deviceReady = false;
 
         // ------------------------------------
         // PhoneGap/Cordova events
@@ -40,6 +42,7 @@ angular.module('event', [])
 
         // Wrapped
         $scope.$on('device-ready', function (event, args) {
+            $scope.deviceReady = true;
             messageRepository.on(event, args);
         });
 
@@ -56,13 +59,30 @@ angular.module('event', [])
         $scope.$on('offline', function (event, args) { });
 
         $scope.$on('back-button', function (event, args) {
-            console.log($.mobile.activePage);
-            if ($.mobile.activePage.is('#/login') || $.mobile.activePage.is('#/home')) {
-                e.preventDefault();
-                navigator.app.exitApp();
+            if (event != null) {
+                if (event.preventDefault) {
+                    event.preventDefault();
+                }
             }
-            else {
-                navigator.app.backHistory();
+            if ($scope.deviceReady) {
+                console.log('back-button');
+                if (($location.path() === '/home' || $location.path() === '/login') && !$scope.isIOS) {
+                    console.log('first check : true');
+                    $notification.confirm("Exit application?", function (result) {
+                        console.log('second check');
+                        if (window.isPhoneGap && result === 1) {
+                            console.log('second check : true');
+                            $rootScope.$broadcast('app-exit');
+                            navigator.app.exitApp();
+                        } else {
+                            console.log('second check : false');
+                            $window.history.back();
+                        }
+                    });
+                } else {
+                    console.log('first check : false');
+                    $window.history.back();
+                }
             }
         });
 

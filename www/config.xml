@@ -3,7 +3,7 @@
 <!-- config.xml reference: https://build.phonegap.com/docs/config-xml -->
 <widget xmlns     = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
-        id        = "com.phonegap.hello-world"
+        id        = "com.bosbec.test-app"
         version   = "0.2.0">
 
   <name>Bosbec-MR</name>
@@ -125,6 +125,7 @@
 
   <access origin="*"/>
   <plugin name="cordova-plugin-whitelist" version="1" />
+    <allow-navigation href="*" />
   <allow-intent href="http://*/*" />
   <allow-intent href="https://*/*" />
   <allow-intent href="tel:*" />
