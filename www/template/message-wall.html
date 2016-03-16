@@ -75,7 +75,6 @@
     </div>
 
     <div class="wall-comment-list">
-
         <!-- Comment Listing -->
         <div class="wcl-list" >
 
@@ -123,11 +122,11 @@
 
             <div class="wc-comment" data-ng-if="mactrl.wallCommenting[1]">
                 <div class="wcc-inner">
-                    <textarea class="wcci-text" ng-model="replyModel" data-auto-size placeholder="Write Something..."></textarea>
+                    <textarea class="wcci-text" ng-model="conversation.TextArea" data-auto-size placeholder="Write Something..."></textarea>
                 </div>
 
                 <div class="m-t-15">
-                    <button class="btn btn-sm btn-primary" ng-click="reply(conversation.ConversationId,replyModel)">Post</button>
+                    <button class="btn btn-sm btn-primary" ng-click="reply(conversation.ConversationId,conversation.TextArea)">Post</button>
                     <button class="btn btn-sm btn-link" data-ng-click="mactrl.wallCommenting[1] = false">Cancel</button>
                 </div>
             </div>
