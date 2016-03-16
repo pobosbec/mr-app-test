@@ -13,6 +13,7 @@
     <content src="index.html" />
     <plugin name="io.litehelpers.cordova.sqlite" spec="0.7.10" source="pgb" />
     <plugin name="cordova-plugin-whitelist" spec="1" />
+    <plugin name="com.pushwoosh.plugins.pushwoosh" spec="3.0.2" source="pgb" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
