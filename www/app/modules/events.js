@@ -12,6 +12,7 @@ angular.module('event', [])
 
         // Native
         document.addEventListener('deviceready', function (event, args) {
+            $scope.deviceReady = true;
             $rootScope.$broadcast('device-ready', args);
         }, false);
 
@@ -59,16 +60,18 @@ angular.module('event', [])
         $scope.$on('offline', function (event, args) { });
 
         $scope.$on('back-button', function (event, args) {
+            console.log('back pressed');
             if (event != null) {
                 if (event.preventDefault) {
                     event.preventDefault();
                 }
             }
+
             if ($scope.deviceReady) {
                 console.log('back-button');
                 if (($location.path() === '/home' || $location.path() === '/login') && !$scope.isIOS) {
                     console.log('first check : true');
-                    navigator.notification.confirm("Exit application?", function (result) {
+                    navigator.notification.confirm("Exit application?", function(result) {
                         console.log('second check');
                         if (window.isPhoneGap && result === 1) {
                             console.log('second check : true');
@@ -83,6 +86,8 @@ angular.module('event', [])
                     console.log('first check : false');
                     $window.history.back();
                 }
+            } else {
+                console.log('back pressed before device-ready');
             }
         });
 
