@@ -2,7 +2,7 @@
  * Created by robinpipirs on 09/12/15.
  */
 angular.module('event', [])
-    .controller('eventCtrl', ['$scope', '$rootScope', '$location', '$http', '$notification', 'tokenService', 'communicationService', 'messageRepository', function ($scope, $rootScope, $location, $http, $notification, tokenService, communicationService, messageRepository) {
+    .controller('eventCtrl', ['$scope', '$rootScope', '$location', '$http', 'tokenService', 'communicationService', 'messageRepository', function ($scope, $rootScope, $location, $http, tokenService, communicationService, messageRepository) {
 
         $scope.deviceReady = false;
 
@@ -68,7 +68,7 @@ angular.module('event', [])
                 console.log('back-button');
                 if (($location.path() === '/home' || $location.path() === '/login') && !$scope.isIOS) {
                     console.log('first check : true');
-                    $notification.confirm("Exit application?", function (result) {
+                    navigator.notification.confirm("Exit application?", function (result) {
                         console.log('second check');
                         if (window.isPhoneGap && result === 1) {
                             console.log('second check : true');
