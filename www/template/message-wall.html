@@ -124,15 +124,14 @@
                     Write Something...
                 </div>
             </div>
-
             <div class="wc-comment" data-ng-if="mactrl.wallCommenting[1]">
                 <div class="wcc-inner">
-                    <textarea class="wcci-text" ng-model="conversation.TextArea" data-auto-size placeholder="Write Something..."></textarea>
+                    <textarea class="wcci-text" ng-model="conversation.TextArea" focus-me="true" data-auto-size placeholder="Write Something..." ng-keyup="$event.keyCode == 13 && reply(conversation.ConversationId,conversation.TextArea)"></textarea>
                 </div>
 
                 <div class="m-t-15">
-                    <button class="btn btn-sm btn-primary" ng-click="reply(conversation.ConversationId,conversation.TextArea)">Post</button>
-                    <button class="btn btn-sm btn-link" data-ng-click="mactrl.wallCommenting[1] = false">Cancel</button>
+                    <button class="btn btn-sm btn-primary" ng-click="reply(conversation.ConversationId,conversation.TextArea)">Reply</button>
+                    <button class="btn btn-sm btn-link" data-ng-click="reset(conversation.ConversationId,conversation.TextArea)">Cancel</button>
                 </div>
             </div>
         </div>

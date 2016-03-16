@@ -57,7 +57,6 @@ angular.module('messages', [])
         }
 
         $scope.incrementStep = function(ConversationId){
-
             var nIncr = 0;
             var no = $scope.conversations[findConversation(ConversationId)].No;
             var total = $scope.conversations[findConversation(ConversationId)].messages.length;
@@ -91,10 +90,12 @@ angular.module('messages', [])
 
         $scope.incrementComments = function(n,ConversationId){
             $scope.conversations[findConversation(ConversationId)].No = n;
-            if( $scope.conversations[findConversation(ConversationId)].messages.length > n){
-            $scope.conversations[findConversation(ConversationId)].StartPosition = -n;
+            if( $scope.conversations[findConversation(ConversationId)].messages.length > n) {
+                $scope.conversations[findConversation(ConversationId)].StartPosition = -n;
             }
-            else {$scope.conversations[findConversation(ConversationId)].StartPosition = 1;}
+            else {
+                $scope.conversations[findConversation(ConversationId)].StartPosition = 1;
+            }
         };
 
         $scope.hideComments = function(ConversationId){
