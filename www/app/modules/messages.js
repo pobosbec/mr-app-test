@@ -6,7 +6,10 @@ angular.module('messages', [])
 
         $scope.messages = messageRepository.getMessages();
         $scope.conversations = [];
-        $scope.conversations = messagesToConversations($scope.messages);
+        $scope.noobs = [{"hehe": "haa"},
+            {"hehe": "tjoo"}
+        ];
+        messagesToConversations($scope.messages,$scope.conversations);
 
         setInterval(function () {
             $rootScope.$broadcast('download-whats-new');
@@ -14,26 +17,25 @@ angular.module('messages', [])
 
         $scope.$on('messages-added', function (event, args) {
             $scope.messages = messageRepository.getMessages();
-            $scope.conversations = messagesToConversations(messageRepository.getMessages());
+             messagesToConversations(messageRepository.getMessages(),$scope.conversations);
         });
 
 
-        //  if (!messages[thisMessage].hasOwnProperty("AuthorAvatar") && author.hasOwnProperty("Avatar")) {
         //converts a list of mesasges into conversations
-        function messagesToConversations(messages) {
-            console.log(messages);
+        function messagesToConversations(messages,destination) {
+
             for (var msg in messages) {
-                if (msg.ConversationId != null) {
-                    var index = findConversation(msg.ConversationId);
+                if (messages[msg].ConversationId != null) {
+                    var index = findConversation(messages[msg].ConversationId);
                     //when conversation exists
                     if (index != -1) {
-                        $scope.conversations[index].messages.push(msg);
+                        destination[index].messages.push(messages[msg]);
                     }
                     else {
-                        $scope.conversations.push(
+                        destination.push(
                             {
-                                "ConversationId": msg.ConversationId,
-                                "messages": [msg]
+                                "ConversationId": messages[msg].ConversationId,
+                                "messages": [messages[msg]]
                             }
                         );
                     }
@@ -44,11 +46,9 @@ angular.module('messages', [])
 
         //function to find the index of an certain conversations
         function findConversation(id) {
-            console.log(id);
             for (var i in $scope.conversations) {
                 var test = angular.equals($scope.conversations[i].ConversationId, id);
                 if (test) {
-                    console.log("match");
                     return i;
                 }
             }
