@@ -37,7 +37,7 @@
     <div class="card-header">
         <div class="media">
             <div class="pull-left">
-                <img class="lv-img-sm" ng-src="{{ comment.AuthorAvatar || 'img/profile-pics/8.jpg' }}" alt="">
+                <img class="lv-img-sm" ng-src="{{ conversation.messages[conversation.messages.length-1].Avatar || 'img/profile-pics/8.jpg' }}" alt="">
             </div>
 
             <div class="media-body m-t-5">
@@ -46,30 +46,28 @@
                 </h2>
             </div>
         </div>
-
-
     </div>
 
     <div class="card-body card-padding">
         <p>{{ conversation.messages[conversation.messages.length-1].Content || 'Ett Meddelande' }}</p>
 
-        <div class="wall-img-preview lightbox clearfix">
-            <div class="wip-item" data-src="img/headers/4.png" style="background-image: url(img/headers/4.png);">
+        <!-- store pic here ?-->
+        <div ng-if="conversation.messages[conversation.messages.length-1].picture" class="wall-img-preview lightbox clearfix">
+            <div class="wip-item">
                 <div class="lightbox-item"></div>
             </div>
         </div>
+        <!-- store pic above here ? -->
 
         <ul class="wall-attrs clearfix list-inline list-unstyled">
             <li class="wa-stats">
                 <span><i class="zmdi zmdi-comments"></i>{{conversation.messages.length || 'NaN'}}</span>
-                <span class="active"><i class="zmdi zmdi-favorite"></i> 220</span>
             </li>
 
             <li class="wa-users">
-                <a href=""><img src="img/profile-pics/1.jpg" alt=""></a>
-                <a href=""><img src="img/profile-pics/2.jpg" alt=""></a>
-                <a href=""><img src="img/profile-pics/3.jpg" alt=""></a>
-                <a href=""><img src="img/profile-pics/5.jpg" alt=""></a>
+                <a ng-repeat="user in conversation.Users | limitTo:5" >
+                    <img ng-src="{{ user.Avatar || 'img/profile-pics/8.jpg' }}" title="{{user.DisplayName}}" alt="">
+                </a>
             </li>
         </ul>
     </div>
@@ -78,15 +76,15 @@
         <!-- Comment Listing -->
         <div class="wcl-list" >
             <div class="">
-                <a class="UFIPagerLink" role="button" ng-click="incrementComments(incrementStep(conversation.ConversationId),conversation.ConversationId)">
+                <a class="UFIPagerLink" role="button" ng-if="conversation.No < conversation.messages.length" ng-click="incrementComments(incrementStep(conversation.ConversationId),conversation.ConversationId)">
                     <!-- react-text: 30 -->View {{incrementStep(conversation.ConversationId)}} of ({{conversation.messages.length}}) comments<!-- /react-text --></a>
-                <a class="UFIPagerLink" role="button" ng-click="hideComments(conversation.ConversationId)" style="float: right">
+                <a ng-if="conversation.No > 5" class="UFIPagerLink" role="button" ng-click="hideComments(conversation.ConversationId)" style="align-content: right">
                     <!-- react-text: 30 -->Hide comments<!-- /react-text --></a>
             </div>
             <!-- Comment -->
             <div class="media" ng-repeat="message in conversation.messages | orderBy:'CreatedOn'| startFromEnd:conversation.StartPosition|limitTo:conversation.No track by $index">
                 <a href="" class="pull-left">
-                    <img src="img/profile-pics/5.jpg" alt="" class="lv-img-sm">
+                    <img class="lv-img" ng-src="{{ message.AuthorAvatar || 'img/profile-pics/8.jpg' }}" alt="">
                 </a>
 
                 <div class="pull-right p-0">

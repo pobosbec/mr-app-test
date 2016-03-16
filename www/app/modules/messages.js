@@ -9,7 +9,7 @@ angular.module('messages', [])
         $scope.messages = messageRepository.getMessages();
         $scope.conversations = [];
         messagesToConversations($scope.messages,$scope.conversations);
-
+        console.log($scope.conversations);
         setInterval(function () {
             $rootScope.$broadcast('download-whats-new');
         }, 10000);
@@ -18,6 +18,7 @@ angular.module('messages', [])
             $scope.messages = messageRepository.getMessages();
             $scope.conversations = [];
             messagesToConversations(messageRepository.getMessages(),$scope.conversations);
+            console.log($scope.conversations);
         });
 
         //converts a list of mesasges into conversations
@@ -29,6 +30,11 @@ angular.module('messages', [])
                     if (index != -1) {
                         destination[index].messages.push(messages[msg]);
                         destination[index].StartPosition = destination[index].messages.length-5;
+                        if (findDisplayName(messages[msg].AuthorDisplayName,destination[index].Users) == -1){
+                            destination[index].Users.push({"DisplayName":messages[msg].AuthorDisplayName,
+                                "Avatar": messages[msg].Avatar
+                            });
+                        }
                     }
                     else {
                         destination.push(
@@ -36,6 +42,9 @@ angular.module('messages', [])
                                 "TextArea" : "",
                                 "No":5,
                                 "StartPosition":1,
+                                "Users": [{"DisplayName":messages[msg].AuthorDisplayName,
+                                "Avatar": messages[msg].Avatar
+                                }],
                                 "ConversationId": messages[msg].ConversationId,
                                 "messages": [messages[msg]]
                             }
@@ -49,6 +58,16 @@ angular.module('messages', [])
         function findConversation(id) {
             for (var i in $scope.conversations) {
                 var test = angular.equals($scope.conversations[i].ConversationId, id);
+                if (test) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        function findDisplayName(displayName,source){
+            for (var i in source) {
+                var test = angular.equals(source[i].DisplayName, displayName);
                 if (test) {
                     return i;
                 }
