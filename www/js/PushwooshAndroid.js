@@ -18,7 +18,7 @@
  */
 
 function registerPushwooshAndroid() {
-
+    console.log("registerPushwooshAndroid");
  	var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
 
 	//set push notifications handler
@@ -122,5 +122,6 @@ function onPushwooshAndroidInitialized(pushToken)
 	);
 
 	//Pushwoosh Android specific method that cares for the battery
-	//pushNotification.startGeoPushes();
+    //pushNotification.startGeoPushes();
+	console.log("Pushwoosh Android laddad");
 }

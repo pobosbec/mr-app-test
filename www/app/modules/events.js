@@ -13,7 +13,6 @@ angular.module('event', [])
         // Native
         document.addEventListener('deviceready', function (event, args) {
             console.log('deviceready');
-            $scope.deviceReady = true;
             $rootScope.$broadcast('device-ready', args);
         }, false);
 
@@ -51,9 +50,9 @@ angular.module('event', [])
 
         // Wrapped
         $scope.$on('device-ready', function (event, args) {
-            //alert("events.js>device-ready");
             console.log('device-ready');
             if (!$scope.deviceReady) {
+                console.log("initPushwoosh");
                 initPushwoosh();
             }
             $scope.deviceReady = true;
