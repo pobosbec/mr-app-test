@@ -42,6 +42,13 @@
                 <li><a data-ui-sref-active="active" data-ui-sref="pages.messages" data-ng-click="mactrl.sidebarStat($event)">Messages</a></li>
             </ul>
         </li>
+        <li class="sub-menu">
+            <a href="" toggle-submenu><i class="zmdi zmdi-bug"></i> Debugging</a>
+            <ul>
+                <li style="cursor: pointer;"><a onClick="localStorage.clear();"><i class="zmdi zmdi-delete"></i> Empty localStorage</a></li>
+                <li style="cursor: pointer;"><a onClick="window.location.reload();"><i class="zmdi zmdi-refresh"></i> Reload Page</a></li>
+            </ul>
+        </li>
 
     </ul>
 </div>
