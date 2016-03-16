@@ -79,20 +79,31 @@ angular.module('event', [])
                 console.log('back-button');
                 if (($location.path() === '/home' || $location.path() === '/login') && !$scope.isIOS) {
                     console.log('first check : true');
-                    if (window.isPhoneGap || true) {
-                        console.log('second check');
+                    if (window.isPhoneGap) {
+                        console.log('second check : isPhoneGap');
+                        navigator.notification.confirm("Exit application?", function (exit) {
+                            if (exit == 1) {
+                                console.log('second check : true');
+                                $rootScope.$broadcast('app-exit');
+                                navigator.app.exitApp();
+                            } else {
+                                console.log('second check : false');
+                                return;
+                            }
+                            return;
+                        });
+                    } else {
+                        console.log('second check : !isPhoneGap');
                         var exit = window.confirm("Exit application?");
-                        if (exit === 1) {
+                        if (exit == 1) {
                             console.log('second check : true');
                             $rootScope.$broadcast('app-exit');
-                            navigator.app.exitApp();
                         } else {
                             console.log('second check : false');
                             return;
                         }
                         return;
                     }
-                    return;
                 } else {
                     console.log('first check : false');
                     window.history.back();

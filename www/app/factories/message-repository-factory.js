@@ -142,58 +142,58 @@ angular.module('message', ['ngCordova'])
               }
           }
 
-          factory.test = function () {
-              var data = [{
-                  MessageId: "30952957-476B-4760-9B04-632A198D2F1B",
-                  Author: "956EF224-E73B-453A-97BA-DDEBFAAA9D17",
-                  CreatedOn: "2016-02-12 15:36:05",
-                  Content: "(4 sek)något meddelande1",
-                  Comments: null,
-                  MetaData: []
-              }];
-              $rootScope.$broadcast('new-messages', data);
-          };
+          //factory.test = function () {
+          //    var data = [{
+          //        MessageId: "30952957-476B-4760-9B04-632A198D2F1B",
+          //        Author: "956EF224-E73B-453A-97BA-DDEBFAAA9D17",
+          //        CreatedOn: "2016-02-12 15:36:05",
+          //        Content: "(4 sek)något meddelande1",
+          //        Comments: null,
+          //        MetaData: []
+          //    }];
+          //    $rootScope.$broadcast('new-messages', data);
+          //};
 
-          factory.test2 = function () {
-              var data = [{
-                  MessageId: "30952957-476B-4760-9B04-632A198D2F1C",
-                  Author: "37F57046-F1FD-4EEC-8E31-BB74246EB0AC",
-                  CreatedOn: "2016-01-01 05:05:05",
-                  Content: "(8 sek)något meddelande2, äldst datum, med bild i metadata",
-                  Comments: null,
-                  MetaData: [] //{
-                  //    url: "http://f6e33e1022533c629b47-4893d13bf206ba63c48db8211834dce5.r9.cf2.rackcdn.com/2016-03-07+15-08-18.jpg",
-                  //    urlRotation: 6,
-                  //    thumbnail: "http://f6e33e1022533c629b47-4893d13bf206ba63c48db8211834dce5.r9.cf2.rackcdn.com/2016-03-07+15-08-18thumb.jpg",
-                  //    thumbnailRotation: 0,
-                  //    value: "http://f6e33e1022533c629b47-4893d13bf206ba63c48db8211834dce5.r9.cf2.rackcdn.com/2016-03-07+15-08-18.jpg,6,http://f6e33e1022533c629b47-4893d13bf206ba63c48db8211834dce5.r9.cf2.rackcdn.com/2016-03-07+15-08-18thumb.jpg",
-                  //    contentType: "image/jpeg",
-                  //    name: "Image",
-                  //    createdOn: "2016-03-07T14:08:19",
-                  //    groupOrder: 1,
-                  //    _type: "image"
-                  //}
-              }];
+          //factory.test2 = function () {
+          //    var data = [{
+          //        MessageId: "30952957-476B-4760-9B04-632A198D2F1C",
+          //        Author: "37F57046-F1FD-4EEC-8E31-BB74246EB0AC",
+          //        CreatedOn: "2016-01-01 05:05:05",
+          //        Content: "(8 sek)något meddelande2, äldst datum, med bild i metadata",
+          //        Comments: null,
+          //        MetaData: [] //{
+          //        //    url: "http://f6e33e1022533c629b47-4893d13bf206ba63c48db8211834dce5.r9.cf2.rackcdn.com/2016-03-07+15-08-18.jpg",
+          //        //    urlRotation: 6,
+          //        //    thumbnail: "http://f6e33e1022533c629b47-4893d13bf206ba63c48db8211834dce5.r9.cf2.rackcdn.com/2016-03-07+15-08-18thumb.jpg",
+          //        //    thumbnailRotation: 0,
+          //        //    value: "http://f6e33e1022533c629b47-4893d13bf206ba63c48db8211834dce5.r9.cf2.rackcdn.com/2016-03-07+15-08-18.jpg,6,http://f6e33e1022533c629b47-4893d13bf206ba63c48db8211834dce5.r9.cf2.rackcdn.com/2016-03-07+15-08-18thumb.jpg",
+          //        //    contentType: "image/jpeg",
+          //        //    name: "Image",
+          //        //    createdOn: "2016-03-07T14:08:19",
+          //        //    groupOrder: 1,
+          //        //    _type: "image"
+          //        //}
+          //    }];
 
-              $rootScope.$broadcast('new-messages', data);
-          }
+          //    $rootScope.$broadcast('new-messages', data);
+          //}
 
-          factory.test3 = function () {
-              var data = [{
-                  MessageId: "30952957-476B-4760-9B04-632A198D2F1D",
-                  Author: "956EF224-E73B-453A-97BA-DDEBFAAA9D17",
-                  CreatedOn: "2016-01-05 05:05:05",
-                  Content: "(12 sek)något meddelande3",
-                  Comments: null,
-                  MetaData: []
-              }];
+          //factory.test3 = function () {
+          //    var data = [{
+          //        MessageId: "30952957-476B-4760-9B04-632A198D2F1D",
+          //        Author: "956EF224-E73B-453A-97BA-DDEBFAAA9D17",
+          //        CreatedOn: "2016-01-05 05:05:05",
+          //        Content: "(12 sek)något meddelande3",
+          //        Comments: null,
+          //        MetaData: []
+          //    }];
 
-              $rootScope.$broadcast('new-messages', data);
-          }
+          //    $rootScope.$broadcast('new-messages', data);
+          //}
 
-          factory.testingtesting = setTimeout(function () { factory.test() }, 4000);
-          factory.testingtesting2 = setTimeout(function () { factory.test2() }, 8000);
-          factory.testingtesting3 = setTimeout(function () { factory.test3() }, 12000);
+          //factory.testingtesting = setTimeout(function () { factory.test() }, 4000);
+          //factory.testingtesting2 = setTimeout(function () { factory.test2() }, 8000);
+          //factory.testingtesting3 = setTimeout(function () { factory.test3() }, 12000);
 
           factory.init();
           return factory;
