@@ -4,6 +4,8 @@
 angular.module('messages', [])
     .controller('messagesController', ['$scope', '$http', '$rootScope', 'communicationService', 'messageRepository','tokenService', function ($scope, $http, $rootScope, communicationService, messageRepository,tokenService) {
 
+        $scope.Math = window.Math;
+
         $scope.messages = messageRepository.getMessages();
         $scope.conversations = [];
         messagesToConversations($scope.messages,$scope.conversations);
@@ -26,11 +28,14 @@ angular.module('messages', [])
                     //when conversation exists
                     if (index != -1) {
                         destination[index].messages.push(messages[msg]);
+                        destination[index].StartPosition = destination[index].messages.length-5;
                     }
                     else {
                         destination.push(
                             {
                                 "TextArea" : "",
+                                "No":5,
+                                "StartPosition":1,
                                 "ConversationId": messages[msg].ConversationId,
                                 "messages": [messages[msg]]
                             }
@@ -50,6 +55,16 @@ angular.module('messages', [])
             }
             return -1;
         }
+
+        $scope.incrementComments = function(n,ConversationId){
+            $scope.conversations[findConversation(ConversationId)].No += n;
+            $scope.conversations[findConversation(ConversationId)].StartPosition += -n;
+        };
+
+        $scope.hideComments = function(ConversationId){
+            $scope.conversations[findConversation(ConversationId)].No = 5;
+            $scope.conversations[findConversation(ConversationId)].StartPosition = $scope.conversations[findConversation(ConversationId)].messages.length-5;
+        };
 
 
         $scope.reply = function (conversationId) {
