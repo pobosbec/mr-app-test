@@ -53,16 +53,17 @@
     <div class="card-body card-padding">
         <p>{{ conversation.messages[conversation.messages.length-1].Content || 'Ett Meddelande' }}</p>
 
-        <div class="wall-img-preview lightbox clearfix">
-            <div class="wip-item" data-src="img/headers/4.png" style="background-image: url(img/headers/4.png);">
+        <!-- store pic here ?-->
+        <div ng-if="conversation.messages[conversation.messages.length-1].picture" class="wall-img-preview lightbox clearfix">
+            <div class="wip-item">
                 <div class="lightbox-item"></div>
             </div>
         </div>
+        <!-- store pic above here ? -->
 
         <ul class="wall-attrs clearfix list-inline list-unstyled">
             <li class="wa-stats">
                 <span><i class="zmdi zmdi-comments"></i>{{conversation.messages.length || 'NaN'}}</span>
-                <span class="active"><i class="zmdi zmdi-favorite"></i> 220</span>
             </li>
 
             <li class="wa-users">
@@ -86,7 +87,7 @@
             <!-- Comment -->
             <div class="media" ng-repeat="message in conversation.messages | orderBy:'CreatedOn'| startFromEnd:conversation.StartPosition|limitTo:conversation.No track by $index">
                 <a href="" class="pull-left">
-                    <img src="img/profile-pics/5.jpg" alt="" class="lv-img-sm">
+                    <img class="lv-img" ng-src="{{ message.AuthorAvatar || 'img/profile-pics/8.jpg' }}" alt="">
                 </a>
 
                 <div class="pull-right p-0">
