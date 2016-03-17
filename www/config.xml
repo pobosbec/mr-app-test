@@ -137,6 +137,7 @@ version   = "0.2.0">
     <allow-intent href="market:*" />
   </platform>
   <platform name="ios">
+    <preference name="fullscreen" value="true" />
     <allow-intent href="itms:*" />
     <allow-intent href="itms-apps:*" />
   </platform>
