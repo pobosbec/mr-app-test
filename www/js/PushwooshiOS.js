@@ -46,10 +46,8 @@ function registerPushwooshIOS() {
 	pushNotification.registerDevice(
 		function(status)
 		{
-			var deviceToken = status['deviceToken'];
-			console.warn('registerDevice: ' + deviceToken);
-			var evt = document.createEvent("CustomEvent");
-			evt.initCustomEvent("push-service-initialized", true, true, { "token": deviceToken });
+		    localStorage.setItem("pushToken", JSON.stringify(deviceToken));
+			evt.initCustomEvent("push-service-initialized", true, true, { token: deviceToken });
 			window.dispatchEvent(evt);
 			//document.dispatchEvent(new CustomEvent("push-service-initialized", { "token": deviceToken }));
 
