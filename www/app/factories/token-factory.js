@@ -222,7 +222,7 @@ angular.module('token', [])
         factory.registerPushToken = function () {
             var req = {
                 method: 'POST',
-                url: factory.currentAppApiUrl + 'app/users/register-device',
+                url: factory.currentAppApiUrl + 'app/users/update-device',
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -239,19 +239,20 @@ angular.module('token', [])
                     "Tags": null
                 }
             };
-            console.log("registerPushToken registering");
+            console.log("registerPushToken updating");
             console.log(req);
 
             return $http(req).then(function updateSuccessCallback(response) {
 
-                console.log("registerPushToken register success");
+                console.log("registerPushToken update success");
                 console.log(response);
                 return response;
 
             }, function updateErrorCallback(response) {
 
-                console.log("registerPushToken register error");
+                console.log("registerPushToken update error");
                 console.log(response);
+
                 return $q.reject(response);
             });
 
