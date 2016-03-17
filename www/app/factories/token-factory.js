@@ -110,6 +110,8 @@ angular.module('token', [])
                 $rootScope.token = token;
                 adminId = response.data.data.administratorId;
                 accountId = response.data.data.accountId;
+            }).then(factory.isAppAuthenticated(factory.getAppAuthToken())).then(function (response) {
+                
             });
             return response;
         };
@@ -134,6 +136,7 @@ angular.module('token', [])
                 // when the response is available
                 appUserId = response.data.data.appUserId;
                 appToken = response.data.data.id;
+                factory.saveToDb("appUserId", appUserId);
                 factory.saveToDb("appAuthToken", appToken);
                 $rootScope.$broadcast("app-token-available");
             }, function errorCallback(response) {
@@ -204,6 +207,7 @@ angular.module('token', [])
                 win.sessionStorage.accessToken = null;
                 factory.saveToDb("authToken", null);
                 factory.saveToDb("appAuthToken", null);
+                factory.saveToDb("appUserId", null);
                 factory.saveToDb("userName", null);
                 //redirect to login
                 //change to dashboard
@@ -225,7 +229,7 @@ angular.module('token', [])
                 data: {
                     "Data": {
                         InstanceName: "mobileresponse",
-                        UserId: appUserId,
+                        UserId: factory.getAppUserId(),
                         HardwareId: device.uuid,
                         PushToken: factory.getPushToken(),
                         DeviceType: window.deviceType,
@@ -330,7 +334,16 @@ angular.module('token', [])
             }
             return appToken;
         };
-        factory.getAppUserId = function() {
+        factory.getAppUserId = function () {
+
+            if (appUserId === null) {
+                var refreshIds = factory.refreshIds();
+                refreshIds.then(function (response) {
+                    return appUserId;
+                });
+            } else {
+                return appUserId;
+            }
             return appUserId;
         };
 
