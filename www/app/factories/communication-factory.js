@@ -10,6 +10,8 @@ angular.module('communication', [])
 
         factory.synchronize = function (appAuthToken) {
 
+            console.log('Making request to what-is-new. Last update: ' + lastUpdate);
+
             var req = {
                 method: 'POST',
                 ignoreLoadingBar: true,
@@ -31,6 +33,8 @@ angular.module('communication', [])
                 // this callback will be called asynchronously
                 // when the response is available
                 var data = response.data;
+
+                console.log('Success response from what-is-new. Setting last update to: ' + data.LastUpdate);
 
                 lastUpdate = data.LastUpdate;
 
