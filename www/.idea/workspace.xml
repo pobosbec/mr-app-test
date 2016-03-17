@@ -43,17 +43,27 @@
             <state vertical-scroll-proportion="0.0">
               <caret line="124" column="0" selection-start-line="124" selection-start-column="0" selection-end-line="124" selection-end-column="0" />
               <folding>
-                <marker date="1458209593687" expanded="true" signature="1007:1017" placeholder="{...}" />
+                <marker date="1458210149735" expanded="true" signature="1007:1017" placeholder="{...}" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="message-list.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="message-list.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/template/message-list.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.70475227">
+            <state vertical-scroll-proportion="-26.807692">
               <caret line="41" column="33" selection-start-line="41" selection-start-column="33" selection-end-line="41" selection-end-column="33" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="token-factory.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/factories/token-factory.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.3133005">
+              <caret line="159" column="32" selection-start-line="159" selection-start-column="32" selection-end-line="159" selection-end-column="32" />
               <folding />
             </state>
           </provider>
@@ -99,9 +109,9 @@
         <option value="$PROJECT_DIR$/css/css-override.css" />
         <option value="$PROJECT_DIR$/app/controllers/main.js" />
         <option value="$PROJECT_DIR$/template/message-wall.html" />
-        <option value="$PROJECT_DIR$/app/factories/token-factory.js" />
         <option value="$PROJECT_DIR$/app/modules/messages.js" />
         <option value="$PROJECT_DIR$/template/message-list.html" />
+        <option value="$PROJECT_DIR$/app/factories/token-factory.js" />
       </list>
     </option>
   </component>
@@ -469,7 +479,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="3" selection-start-line="0" selection-start-column="3" selection-end-line="0" selection-end-column="3" />
           <folding>
-            <marker date="1458209593687" expanded="true" signature="1007:1017" placeholder="{...}" />
+            <marker date="1458210149735" expanded="true" signature="1007:1017" placeholder="{...}" />
           </folding>
         </state>
       </provider>
@@ -502,7 +512,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1458209593687" expanded="true" signature="1007:1017" placeholder="{...}" />
+            <marker date="1458210149735" expanded="true" signature="1007:1017" placeholder="{...}" />
           </folding>
         </state>
       </provider>
@@ -797,14 +807,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/factories/token-factory.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-19.931034">
-          <caret line="34" column="13" selection-start-line="34" selection-start-column="13" selection-end-line="34" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/factories/communication-factory.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -840,15 +842,23 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="124" column="0" selection-start-line="124" selection-start-column="0" selection-end-line="124" selection-end-column="0" />
           <folding>
-            <marker date="1458209593687" expanded="true" signature="1007:1017" placeholder="{...}" />
+            <marker date="1458210149735" expanded="true" signature="1007:1017" placeholder="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/template/message-list.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.70475227">
+        <state vertical-scroll-proportion="-26.807692">
           <caret line="41" column="33" selection-start-line="41" selection-start-column="33" selection-end-line="41" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/factories/token-factory.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3133005">
+          <caret line="159" column="32" selection-start-line="159" selection-start-column="32" selection-end-line="159" selection-end-column="32" />
           <folding />
         </state>
       </provider>

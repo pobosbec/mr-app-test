@@ -102,35 +102,38 @@
         }
 
         (function loadCordova() {
+            window.deviceType = 0;
             var CORDOVA_EDITION = null;
             if (isAndroid()) {
                 CORDOVA_EDITION = "android";
+                window.deviceType = 3;
             } else if (isIOS()) {
                 CORDOVA_EDITION = "ios";
+                window.deviceType = 1;
             }
-            document.write('<script src="js/ng-cordova.js"><\/script>');
-            if (CORDOVA_EDITION != null) {
-                console.log("Loading Cordova!");
+            window.isPhoneGap = (CORDOVA_EDITION != null); //document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
 
-                document.write('<script type="text/javascript" src="js/index.js"><\/script>');
+            document.write('<script src="js/ng-cordova.js"><\/script>');
+            document.write('<script type="text/javascript" src="js/index.js"><\/script>');
+            if (CORDOVA_EDITION != null) {
+                //console.log("Loading Cordova!");
                 document.write('<script type="text/javascript" src="cordova.js"><\/script>');
 
                 // now add plugins
                 if (isIOS()) {
-                    console.log("Loading Cordova IOS-Plugins!");
+                    //console.log("Loading Cordova IOS-Plugins!");
                     document.write('<script type="text/javascript" src="js/PushwooshiOS.js"><\/script>');
                 }
                 if (isAndroid()) {
-                    console.log("Loading Cordova Android-Plugins!");
+                    //console.log("Loading Cordova Android-Plugins!");
                     document.write('<script type="text/javascript" src="js/PushwooshAndroid.js"><\/script>');
                 }
 
                 app.initialize();
 
             } else {
-                console.log("Ignoring Cordova!");
+                //console.log("Ignoring Cordova!");
             }
-            window.isPhoneGap = (CORDOVA_EDITION != null); //document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
         })();
     </script>
 

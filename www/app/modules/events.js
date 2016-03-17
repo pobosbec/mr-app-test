@@ -74,7 +74,6 @@ angular.module('event', [])
         $scope.$on('offline', function (event, args) { });
 
         $scope.$on('back-button', function (event, args) {
-            console.log('back pressed');
             if (event != null) {
                 if (event.preventDefault) {
                     event.preventDefault();
@@ -82,35 +81,27 @@ angular.module('event', [])
             }
 
             if ($scope.deviceReady) {
-                console.log('back-button');
                 if (($location.path() === '/home' || $location.path() === '/login') && !$scope.isIOS) {
                     if ($scope.isPhoneGap) {
-                        console.log('second check : isPhoneGap');
                         navigator.notification.confirm("Exit application?", function (exit) {
                             if (exit == 1) {
-                                console.log('second check : true');
                                 $rootScope.$broadcast('app-exit');
                                 navigator.app.exitApp();
                             } else {
-                                console.log('second check : false');
                                 return;
                             }
                             return;
                         });
                     } else {
-                        console.log('second check : !isPhoneGap');
                         var exit = window.confirm("Exit application?");
                         if (exit == 1) {
-                            console.log('second check : true');
                             $rootScope.$broadcast('app-exit');
                         } else {
-                            console.log('second check : false');
                             return;
                         }
                         return;
                     }
                 } else {
-                    console.log('first check : false');
                     window.history.back();
                     return;
                 }
@@ -121,8 +112,11 @@ angular.module('event', [])
 
         $scope.$on('menu-button', function (event, args) { });
 
-        $scope.$on('push-service-initialized', function(event, args) {
+        $scope.$on('push-service-initialized', function (event, args) {
+            console.log(event);
+            console.log(args);
             console.log("Push service initialized: " + args.token);
+            tokenService.saveToDb("pushToken", args.token);
         });
 
         $scope.$on('push-notification', function (event, args) {
@@ -130,6 +124,7 @@ angular.module('event', [])
             var userData = args.notification.userdata;
             alert(title + " > " + userData);
             console.log(args);
+            communicationService.on(event, args);
         });
 
         // ------------------------------------
@@ -157,7 +152,8 @@ angular.module('event', [])
         // ------------------------------------
 
         $scope.$on('logged-in', function(event, args) {
-            console.log("Logged in, time to bind push token to app token");
+            //console.log("Logged in, time to bind push token to app token");
+            tokenService.registerPushToken();
         });
 
         $scope.$on('app-token-available', function (event, args) {

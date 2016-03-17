@@ -10,6 +10,8 @@ angular.module('communication', [])
 
         factory.synchronize = function (appAuthToken) {
 
+            console.log('Making request to what-is-new. Last update: ' + lastUpdate);
+
             var req = {
                 method: 'POST',
                 ignoreLoadingBar: true,
@@ -32,7 +34,9 @@ angular.module('communication', [])
                 // when the response is available
                 var data = response.data;
 
-                lastUpdate = data.LastUpdate;
+                console.log('Success response from what-is-new. Setting last update to: ' + data.data.lastUpdate);
+
+                lastUpdate = data.data.lastUpdate;
 
                 factory.messagesDownloaded(data);
 
@@ -66,19 +70,52 @@ angular.module('communication', [])
         factory.on = function (event, args) {
             switch (event.name) {
                 case 'download-whats-new':
-                    //console.log("download-whats-new");
+                    console.log("communication-factory received broadcast: download-whats-new");
                     if (args != undefined) {
                         console.log(args);
                     }
-                    downloadWhatsNew(args);
+                    factory.downloadWhatIsNew(args);
+                    break;
+                case 'push-notification':
+                    console.log("communication-factory received broadcast: push-notification");
+                    if (args != undefined) {
+                        console.log(args);
+                    }
+                    factory.downloadWhatIsNew(args);
+                    factory.requestBinTest();
                     break;
                 default:
                     break;
             }
         }
 
+        factory.requestBinTest = function (){
+            var req = {
+                method: 'POST',
+                ignoreLoadingBar: true,
+                url: 'http://requestb.in/11c8qfp1',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: {
+                    Data: {
+                        TestData: "hello bin!"
+                    }
+                }
+            };
 
-        function downloadWhatsNew(){
+            $http(req
+            ).then(function successCallback(response) {
+                // this callback will be called asynchronously
+                // when the response is available
+
+            }, function errorCallback(response) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+            });
+        }
+
+        factory.downloadWhatIsNew = function downloadWhatsNew(){
             var appAuthToken = tokenService.getAppAuthToken();
             if (appAuthToken === null || appAuthToken === 'undefined' || appAuthToken === undefined) {
                 tokenService.isAppAuthenticated();
