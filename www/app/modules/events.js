@@ -112,7 +112,9 @@ angular.module('event', [])
 
         $scope.$on('menu-button', function (event, args) { });
 
-        $scope.$on('push-service-initialized', function(event, args) {
+        $scope.$on('push-service-initialized', function (event, args) {
+            console.log(event);
+            console.log(args);
             console.log("Push service initialized: " + args.token);
             tokenService.saveToDb("pushToken", args.token);
         });

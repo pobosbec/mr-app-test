@@ -11,11 +11,12 @@ angular.module('login', [])
 
         $scope.showLoginError = false;
         $scope.errorMsg = "";
+        $scope.kli = JSON.parse(localStorage.getItem("klik"));
 
         $scope.login = function (data) {
             //if theres something in the input field try to authenticate
             if (!((data.username == "" || data.username == null) || (data.password == "" || data.password == null))) {
-                authenticate(data.username, data.password);
+                authenticate(data.username, data.password, (data.kli || false));
             }
             //nothing in the inputfields use the hard coded user
             else {
@@ -27,7 +28,7 @@ angular.module('login', [])
          * @param username
          * @param password
          */
-        function authenticate(username, password) {
+        function authenticate(username, password, kli) {
 
             var req = {
                 method: 'POST',
@@ -53,6 +54,11 @@ angular.module('login', [])
                 tokenService.isAuthenticated(token);
                 $rootScope.$broadcast("logged-in");
                 $scope.showLoginError = false;
+                if (kli) {
+                    tokenService.saveToDb("klik", true);
+                    tokenService.saveToDb("kliu", username);
+                    tokenService.saveToDb("klip", password);
+                }
 
             }, function errorCallback(response) {
                 // called asynchronously if an error occurs
@@ -67,6 +73,15 @@ angular.module('login', [])
                     $scope.errorMessage = "Error";
                 }
             });
+        }
+
+        function kli() {
+            var data = {
+                kli:        JSON.parse(localStorage.getItem("klik")),
+                username:   JSON.parse(localStorage.getItem("kliu")),
+                password:   JSON.parse(localStorage.getItem("klip"))
+            }
+            return data;
         }
 
         /**
@@ -107,6 +122,11 @@ angular.module('login', [])
                     $scope.errorMessage = "Error";
                 }
             });
+        }
+
+        if ($scope.kli) {
+            console.warn("auto-logging in");
+            $scope.login(kli());
         }
 
     }]);
