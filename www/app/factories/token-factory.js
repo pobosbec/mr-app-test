@@ -51,12 +51,14 @@ angular.module('token', [])
          * Logout function
          */
         $rootScope.logout = function () {
-
             //TODO abandon function
             factory.abandonToken($rootScope.token);
             win.sessionStorage.accessToken = null;
             $rootScope.token = null;
             token = null;
+            factory.saveToDb("klik", false);
+            factory.saveToDb("kliu", null);
+            factory.saveToDb("klip", null);
             $state.go('login');
             clearTimeout(tokenTimer);
             $('#template-2').hide();
@@ -208,7 +210,7 @@ angular.module('token', [])
         factory.registerPushToken = function () {
             var req = {
                 method: 'POST',
-                url: factory.currentAppApiUrl + 'app/users/update-device',
+                url: factory.currentAppApiUrl + 'app/users/register-device',
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -226,23 +228,7 @@ angular.module('token', [])
                 }
             };
 
-
-
-            return $http(req).then(function registerSuccessCallback(response) {
-
-                console.log("registerPushToken update success");
-                console.log(response);
-
-                return response;
-
-            }, function registerErrorCallback(response) {
-
-                console.log("registerPushToken update error");
-                console.log(response);
-
-                req.url = factory.currentAppApiUrl + 'app/users/register-device';
-                return $http(req);
-            }).then(function updateSuccessCallback(response) {
+            return $http(req).then(function updateSuccessCallback(response) {
 
                 console.log("registerPushToken register success");
                 console.log(response);
@@ -252,7 +238,6 @@ angular.module('token', [])
 
                 console.log("registerPushToken register error");
                 console.log(response);
-
                 return $q.reject(response);
             });
 
@@ -346,11 +331,6 @@ angular.module('token', [])
         factory.saveToDb = function (key, value) {
             var valueAsJson = JSON.stringify(value);
             localStorage.setItem(key, valueAsJson);
-        }
-
-        factory.keepLoggedIn = function()
-        {
-            
         }
 
         /**
