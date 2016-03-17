@@ -101,9 +101,9 @@ version   = "0.2.0">
 
   <!-- Define app splash screen for each platform. -->
 
-  <gap:splash src="www/img/logo.png"    gap:platform="ios"     width="320" height="480" />
-  <splash src="img/logo.png" platform="ios" width="320" height="480" />
-  <!--<gap:splash src="www/img/logo.png"    gap:platform="android"     width="320" height="480" />-->
+  <!--<gap:splash src="www/img/logo.png"    gap:platform="ios"     width="320" height="480" />-->
+
+  <gap:splash src="www/img/logo.png"    gap:platform="android"     width="320" height="480" />-->
   <!--
     <gap:splash src="res/screen/android/screen-ldpi-portrait.png"  gap:platform="android" gap:density="ldpi" />
     <gap:splash src="res/screen/android/screen-mdpi-portrait.png"  gap:platform="android" gap:density="mdpi" />
@@ -138,6 +138,7 @@ version   = "0.2.0">
     <allow-intent href="market:*" />
   </platform>
   <platform name="ios">
+    <splash src="www/img/logo.png" platform="ios" width="320" height="480" />
     <allow-intent href="itms:*" />
     <allow-intent href="itms-apps:*" />
   </platform>
