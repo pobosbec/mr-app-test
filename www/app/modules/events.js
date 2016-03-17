@@ -48,6 +48,7 @@ angular.module('event', [])
         }, false);
 
         document.addEventListener('push-notification', function (event, args) {
+            communicationService.on(event, args);
             $rootScope.$broadcast('push-notification', event);
         }, false);
 
@@ -128,7 +129,7 @@ angular.module('event', [])
             var userData = args.notification.userdata;
             alert(title + " > " + userData);
             console.log(args);
-            communicationService.on(event, args);
+            //communicationService.on(event, args);
         });
 
         // ------------------------------------
