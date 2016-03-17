@@ -34,9 +34,9 @@ angular.module('communication', [])
                 // when the response is available
                 var data = response.data;
 
-                console.log('Success response from what-is-new. Setting last update to: ' + data.LastUpdate);
+                console.log('Success response from what-is-new. Setting last update to: ' + data.data.lastUpdate);
 
-                lastUpdate = data.LastUpdate;
+                lastUpdate = data.data.lastUpdate;
 
                 factory.messagesDownloaded(data);
 
