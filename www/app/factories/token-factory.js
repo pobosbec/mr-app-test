@@ -349,13 +349,8 @@ angular.module('token', [])
             if (token == null) {
                 if (win.sessionStorage.accessToken != null) {
                     token = win.sessionStorage.accessToken;
-                } else if (localStorage.getItem("authToken") != null) {
-                    token = JSON.parse(localStorage.getItem("authToken"));
                 } else {
-                    var refreshIds = factory.refreshIds();
-                    refreshIds.then(function (response) {
-                        return token;
-                    });
+                    token = JSON.parse(localStorage.getItem("authToken"));
                 }
             }
 

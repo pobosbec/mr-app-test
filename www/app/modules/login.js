@@ -52,6 +52,7 @@ angular.module('login', [])
                 // this callback will be called asynchronously
                 // when the response is available
                 var token = response.data.data.id;
+                tokenService.saveToDb("authToken", token);
                 $scope.showLoginError = false;
                 tokenService.isAuthenticated(token).then($rootScope.$broadcast("logged-in"));
                 if (kli) {
