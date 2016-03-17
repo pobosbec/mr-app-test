@@ -348,8 +348,6 @@ angular.module('token', [])
         factory.getAuthToken = function () {
             if (token == null) {
                 token = JSON.parse(localStorage.getItem("authToken"));
-            } else {
-                token = JSON.parse(localStorage.getItem("authToken"));
             }
             return token;
         };
@@ -360,6 +358,7 @@ angular.module('token', [])
             }
             return appToken;
         };
+
         factory.getAppUserId = function () {
 
             if (appUserId === null) {
