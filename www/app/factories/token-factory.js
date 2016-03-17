@@ -3,7 +3,7 @@
  */
 
 angular.module('token', [])
-    .factory('tokenService', ['$http','$window','$rootScope','$location','$q','$state', function($http, win, $rootScope, $location, $q,$state) {
+    .factory('tokenService', ['$http', '$window', '$rootScope', '$location', '$q', '$state', function ($http, win, $rootScope, $location, $q, $state) {
         $rootScope.token = null;
         var username = null;
         var token = null;
@@ -40,9 +40,9 @@ angular.module('token', [])
          * checks if the user opens the page with a passed token. if so try to authenticate with it.
          */
         var location = $location;
-        $rootScope.$watch('location.search()', function() {
+        $rootScope.$watch('location.search()', function () {
             var token = ($location.search()).token;
-            if (token != null){
+            if (token != null) {
                 factory.isAuthenticated(token);
             }
         }, true);
@@ -50,7 +50,7 @@ angular.module('token', [])
         /**
          * Logout function
          */
-        $rootScope.logout = function(){
+        $rootScope.logout = function () {
 
             //TODO abandon function
             factory.abandonToken($rootScope.token);
@@ -67,7 +67,7 @@ angular.module('token', [])
          * function that increments our tokens expire time
          * @var interval here you can set the interval time for refresh 1000 = 1s, 60000 = 1min
          */
-        factory.keepTokenAlive = function (){
+        factory.keepTokenAlive = function () {
             factory.isAuthenticated(token);
         };
 
@@ -75,10 +75,10 @@ angular.module('token', [])
          * Calls api /is-authenticated with data as token this call also refreshes the lifetime of the token
          * @param data token
          */
-        factory.abandonToken = function(data){
+        factory.abandonToken = function (data) {
             var req = {
                 method: 'POST',
-                url: factory.currentApiUrl+ 'is-authenticated',
+                url: factory.currentApiUrl + 'is-authenticated',
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -103,7 +103,7 @@ angular.module('token', [])
         };
 
         factory.refreshIds = function () {
-            var response = factory.isAuthenticated(win.sessionStorage.accessToken).then(function(response) {
+            var response = factory.isAuthenticated(win.sessionStorage.accessToken).then(function (response) {
                 token = response.data.data.id;
                 $rootScope.token = token;
                 adminId = response.data.data.administratorId;
@@ -143,11 +143,11 @@ angular.module('token', [])
          * Calls api /is-authenticated with data as token this call also refreshes the lifetime of the token
          * @param data token
          */
-        factory.isAuthenticated = function(data){
+        factory.isAuthenticated = function (data) {
             token = data;
             var req = {
                 method: 'POST',
-                url: factory.currentApiUrl+ 'is-authenticated',
+                url: factory.currentApiUrl + 'is-authenticated',
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -170,16 +170,16 @@ angular.module('token', [])
                 accountId = response.data.data.accountId;
                 appUserId = response.data.data.appuserid;
 
-                if(!aquiredUserName){
+                if (!aquiredUserName) {
                     aquiredUserName = !aquiredUserName;
                     factory.getDetails();
                 }
                 //start keepTokenAlive timer
-                tokenTimer = setTimeout(function(){factory.keepTokenAlive}, interval);
+                tokenTimer = setTimeout(function () { factory.keepTokenAlive }, interval);
                 //store token in session
                 win.sessionStorage.accessToken = token;
                 //redirect to dashboard
-                if ($state.includes('login')){
+                if ($state.includes('login')) {
                     $state.go('home');
                 }
 
@@ -206,34 +206,56 @@ angular.module('token', [])
 
 
         factory.registerPushToken = function (pushToken) {
-            token = data;
             var req = {
                 method: 'POST',
-                url: factory.currentApiUrl + 'app/users/register-device',
+                url: factory.currentApiUrl + 'app/users/update-device',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 data: {
                     "Data": {
-                        InstanceName: "com.bosbec.test-app",
-                        UserId: token, 
+                        InstanceName: "mobileresponse",
+                        UserId: appUserId,
                         HardwareId: device.uuid,
                         PushToken: pushToken,
-                        DeviceType: window.deviceType,
-                        MacAddress: "01:23:45:67:89:ab"
+                        DeviceType: window.deviceType
+                        //MacAddress: ""
                     },
-                    "AuthenticationToken": token,
+                    "AuthenticationToken": factory.getAuthToken(),
                     "Tags": null
                 }
             };
-            return $http(req
-            ).then(function successCallback(response) {
-                console.log("registerPushToken.success");
+
+
+
+            return $http(req).then(function registerSuccessCallback(response) {
+
+                console.log("registerPushToken update success");
                 console.log(response);
-            }, function errorCallback(response) {
-                console.log("registerPushToken.error");
+
+                return response;
+
+            }, function registerErrorCallback(response) {
+
+                console.log("registerPushToken update error");
                 console.log(response);
+
+                req.url = factory.currentApiUrl + 'app/users/register-device';
+                return $http(req);
+            }).then(function updateSuccessCallback(response) {
+
+                console.log("registerPushToken register success");
+                console.log(response);
+                return response;
+
+            }, function updateErrorCallback(response) {
+
+                console.log("registerPushToken register error");
+                console.log(response);
+
+                return $q.reject(response);
             });
+
             return $q.reject(response);
         }
 
@@ -278,10 +300,10 @@ angular.module('token', [])
             return username;
         };
 
-        factory.getAdminId = function() {
+        factory.getAdminId = function () {
             if (adminId === null) {
                 var refreshIds = factory.refreshIds();
-                refreshIds.then(function(response) {
+                refreshIds.then(function (response) {
                     return adminId; //response.data.administratorId();
                 });
             } else {
@@ -320,7 +342,7 @@ angular.module('token', [])
             }
             return pushToken;
         }
-            
+
         factory.saveToDb = function (key, value) {
             var valueAsJson = JSON.stringify(value);
             localStorage.setItem(key, valueAsJson);
