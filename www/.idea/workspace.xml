@@ -72,8 +72,8 @@
       <file leaf-file-name="config.xml" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/config.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-1.0372882">
-              <caret line="76" column="0" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.6050847">
+              <caret line="91" column="2" selection-start-line="91" selection-start-column="2" selection-end-line="91" selection-end-column="2" />
               <folding />
             </state>
           </provider>
@@ -182,20 +182,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mobileresponsewebbapp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="www" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
     </panes>
@@ -216,11 +202,11 @@
       <recent name="C:\Users\Robin Jobb\WebstormProjects\mobileresponsewebbapp\template" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Robin Jobb\Documents\GitHub\mr-app-test\www\res" />
       <recent name="C:\Users\Robin Jobb\Documents\GitHub\mr-app-test\www" />
       <recent name="C:\Users\Robin Jobb\Documents\GitHub\mr-app-test\www\app\modules" />
       <recent name="C:\Users\Robin Jobb\Documents\GitHub\mr-app-test\www\template" />
       <recent name="C:\Users\Robin Jobb\Documents\GitHub\mr-app-test\www\views" />
-      <recent name="C:\Users\Robin Jobb\WebstormProjects\mobileresponsewebbapp\app" />
     </key>
   </component>
   <component name="RunManager" selected="JavaScript Debug.index.html">
@@ -367,14 +353,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/views/home.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/views/messages.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -751,10 +729,15 @@
         <state />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/res/screen/android/screen-hdpi-landscape.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/config.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.0372882">
-          <caret line="76" column="0" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.6050847">
+          <caret line="91" column="2" selection-start-line="91" selection-start-column="2" selection-end-line="91" selection-end-column="2" />
           <folding />
         </state>
       </provider>
