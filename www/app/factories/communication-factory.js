@@ -82,37 +82,10 @@ angular.module('communication', [])
                         console.log(args);
                     }
                     factory.downloadWhatIsNew(args);
-                    factory.requestBinTest();
                     break;
                 default:
                     break;
             }
-        }
-
-        factory.requestBinTest = function (){
-            var req = {
-                method: 'POST',
-                ignoreLoadingBar: true,
-                url: 'http://requestb.in/11c8qfp1',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                data: {
-                    Data: {
-                        TestData: "hello bin!"
-                    }
-                }
-            };
-
-            $http(req
-            ).then(function successCallback(response) {
-                // this callback will be called asynchronously
-                // when the response is available
-
-            }, function errorCallback(response) {
-                // called asynchronously if an error occurs
-                // or server returns response with an error status.
-            });
         }
 
         factory.downloadWhatIsNew = function downloadWhatsNew(){
