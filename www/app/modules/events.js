@@ -123,6 +123,7 @@ angular.module('event', [])
             var userData = args.notification.userdata;
             alert(title + " > " + userData);
             console.log(args);
+            communicationService.on(event, args);
         });
 
         // ------------------------------------

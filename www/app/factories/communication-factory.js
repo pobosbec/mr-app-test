@@ -66,19 +66,25 @@ angular.module('communication', [])
         factory.on = function (event, args) {
             switch (event.name) {
                 case 'download-whats-new':
-                    //console.log("download-whats-new");
+                    console.log("communication-factory received broadcast: download-whats-new");
                     if (args != undefined) {
                         console.log(args);
                     }
                     downloadWhatsNew(args);
+                    break;
+                case 'push-notification':
+                    console.log("communication-factory received broadcast: push-notification");
+                    if (args != undefined) {
+                        console.log(args);
+                    }
+                    factory.downloadWhatIsNew(args);
                     break;
                 default:
                     break;
             }
         }
 
-
-        function downloadWhatsNew(){
+        factory.downloadWhatIsNew = function downloadWhatsNew(){
             var appAuthToken = tokenService.getAppAuthToken();
             if (appAuthToken === null || appAuthToken === 'undefined' || appAuthToken === undefined) {
                 tokenService.isAppAuthenticated();
