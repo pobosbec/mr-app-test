@@ -56,6 +56,7 @@ angular.module('token', [])
             win.sessionStorage.accessToken = null;
             $rootScope.token = null;
             token = null;
+            factory.unRegisterPushToken();
             factory.saveToDb("klik", false);
             factory.saveToDb("kliu", null);
             factory.saveToDb("klip", null);
@@ -239,18 +240,40 @@ angular.module('token', [])
                     "Tags": null
                 }
             };
-            console.log("registerPushToken updating");
-            console.log(req);
-
-            return $http(req).then(function updateSuccessCallback(response) {
-
-                console.log("registerPushToken update success");
-                console.log(response);
+            return $http(req).then(function successCallback(response) {
                 return response;
-
-            }, function updateErrorCallback(response) {
+            }, function errorCallback(response) {
 
                 console.log("registerPushToken update error");
+                console.log(response);
+
+                return $q.reject(response);
+            });
+
+            return $q.reject(response);
+        }
+
+        factory.unRegisterPushToken = function () {
+            var req = {
+                method: 'POST',
+                url: factory.currentAppApiUrl + 'app/users/unregister-device',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: {
+                    "Data": {
+                        HardwareId: device.uuid
+                    },
+                    "AuthenticationToken": factory.getAuthToken(),
+                    "Tags": null
+                }
+            };
+
+            return $http(req).then(function successCallback(response) {
+                return response;
+            }, function errorCallback(response) {
+
+                console.log("unRegisterPushToken error");
                 console.log(response);
 
                 return $q.reject(response);
