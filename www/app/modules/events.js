@@ -149,13 +149,11 @@ angular.module('event', [])
         // ------------------------------------
 
         $scope.$on('logged-in', function(event, args) {
-            console.log("Logged in, time to bind push token to app token");
-            tokenService.refreshIds();
+            //console.log("Logged in, time to bind push token to app token");
             tokenService.registerPushToken();
         });
 
         $scope.$on('app-token-available', function (event, args) {
-            tokenService.refreshIds();
             $rootScope.$broadcast('download-whats-new', args);
         });
 
