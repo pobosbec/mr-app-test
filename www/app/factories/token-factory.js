@@ -205,7 +205,7 @@ angular.module('token', [])
         };
 
 
-        factory.registerPushToken = function (pushToken) {
+        factory.registerPushToken = function () {
             var req = {
                 method: 'POST',
                 url: factory.currentAppApiUrl + 'app/users/update-device',
@@ -217,7 +217,7 @@ angular.module('token', [])
                         InstanceName: "mobileresponse",
                         UserId: appUserId,
                         HardwareId: device.uuid,
-                        PushToken: pushToken,
+                        PushToken: factory.getPushToken(),
                         DeviceType: window.deviceType
                         //MacAddress: ""
                     },
@@ -346,6 +346,11 @@ angular.module('token', [])
         factory.saveToDb = function (key, value) {
             var valueAsJson = JSON.stringify(value);
             localStorage.setItem(key, valueAsJson);
+        }
+
+        factory.keepLoggedIn = function()
+        {
+            
         }
 
         /**

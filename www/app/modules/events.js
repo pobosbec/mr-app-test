@@ -115,7 +115,6 @@ angular.module('event', [])
         $scope.$on('push-service-initialized', function(event, args) {
             console.log("Push service initialized: " + args.token);
             tokenService.saveToDb("pushToken", args.token);
-            tokenService.registerPushToken(args.token);
         });
 
         $scope.$on('push-notification', function (event, args) {
@@ -151,7 +150,8 @@ angular.module('event', [])
         // ------------------------------------
 
         $scope.$on('logged-in', function(event, args) {
-            console.log("Logged in, time to bind push token to app token");
+            //console.log("Logged in, time to bind push token to app token");
+            tokenService.registerPushToken();
         });
 
         $scope.$on('app-token-available', function (event, args) {
