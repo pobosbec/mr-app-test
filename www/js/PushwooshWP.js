@@ -38,7 +38,10 @@ function registerPushwooshWP() {
             var deviceToken = status;
             console.warn('registerDevice: ' + deviceToken);
             alert("push token is " + deviceToken);
-            document.dispatchEvent(new CustomEvent("push-service-initialized", { "token": deviceToken }));
+            var evt = document.createEvent("CustomEvent");
+            evt.initCustomEvent("push-service-initialized", true, true, { "token": deviceToken });
+            window.dispatchEvent(evt);
+            //document.dispatchEvent(new CustomEvent("push-service-initialized", { "token": deviceToken }));
             onPushwooshWPInitialized();
         },
         function (status) {
