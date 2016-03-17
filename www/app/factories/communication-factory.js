@@ -70,7 +70,7 @@ angular.module('communication', [])
                     if (args != undefined) {
                         console.log(args);
                     }
-                    downloadWhatsNew(args);
+                    factory.downloadWhatIsNew(args);
                     break;
                 case 'push-notification':
                     console.log("communication-factory received broadcast: push-notification");
