@@ -208,7 +208,7 @@ angular.module('token', [])
         factory.registerPushToken = function (pushToken) {
             var req = {
                 method: 'POST',
-                url: factory.currentApiUrl + 'app/users/update-device',
+                url: factory.currentAppApiUrl + 'app/users/update-device',
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -240,7 +240,7 @@ angular.module('token', [])
                 console.log("registerPushToken update error");
                 console.log(response);
 
-                req.url = factory.currentApiUrl + 'app/users/register-device';
+                req.url = factory.currentAppApiUrl + 'app/users/register-device';
                 return $http(req);
             }).then(function updateSuccessCallback(response) {
 
