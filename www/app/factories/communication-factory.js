@@ -77,7 +77,7 @@ angular.module('communication', [])
                     if (args != undefined) {
                         console.log(args);
                     }
-                    downloadWhatsNew(args);
+                    factory.downloadWhatIsNew(args);
                     break;
                 default:
                     break;
