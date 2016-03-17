@@ -38,6 +38,11 @@ angular.module('communication', [])
 
                 lastUpdate = data.data.lastUpdate;
 
+                if(lastUpdate == null){
+                    console.log('Could not find lastUpdate in what-is-new response.')
+                    return;
+                }
+
                 factory.messagesDownloaded(data);
 
             }, function errorCallback(response) {
