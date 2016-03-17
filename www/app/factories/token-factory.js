@@ -112,7 +112,7 @@ angular.module('token', [])
                 adminId = response.data.data.administratorId;
                 accountId = response.data.data.accountId;
             }).then(factory.isAppAuthenticated(factory.getAppAuthToken())).then(function (response) {
-                
+
             });
             return response;
         };
@@ -167,13 +167,13 @@ angular.module('token', [])
 
             return $http(req
             ).then(function successCallback(response) {
-                    // this callback will be called asynchronously
-                    // when the response is available
-                    //things to fetch
-                    token = response.data.data.id;
-                    $rootScope.token = token;
-                    adminId = response.data.data.administratorId;
-                    accountId = response.data.data.accountId;
+                // this callback will be called asynchronously
+                // when the response is available
+                //things to fetch
+                token = response.data.data.id;
+                $rootScope.token = token;
+                adminId = response.data.data.administratorId;
+                accountId = response.data.data.accountId;
                 // this callback will be called asynchronously
                 // when the response is available
 
@@ -347,6 +347,8 @@ angular.module('token', [])
 
         factory.getAuthToken = function () {
             if (token == null) {
+                token = JSON.parse(localStorage.getItem("authToken"));
+            } else {
                 token = JSON.parse(localStorage.getItem("authToken"));
             }
             return token;
