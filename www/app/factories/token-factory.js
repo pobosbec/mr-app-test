@@ -112,7 +112,7 @@ angular.module('token', [])
                 adminId = response.data.data.administratorId;
                 accountId = response.data.data.accountId;
             }).then(factory.isAppAuthenticated(factory.getAppAuthToken())).then(function (response) {
-
+                
             });
             return response;
         };
@@ -167,13 +167,13 @@ angular.module('token', [])
 
             return $http(req
             ).then(function successCallback(response) {
-                // this callback will be called asynchronously
-                // when the response is available
-                //things to fetch
-                token = response.data.data.id;
-                $rootScope.token = token;
-                adminId = response.data.data.administratorId;
-                accountId = response.data.data.accountId;
+                    // this callback will be called asynchronously
+                    // when the response is available
+                    //things to fetch
+                    token = response.data.data.id;
+                    $rootScope.token = token;
+                    adminId = response.data.data.administratorId;
+                    accountId = response.data.data.accountId;
                 // this callback will be called asynchronously
                 // when the response is available
 
@@ -347,13 +347,8 @@ angular.module('token', [])
 
         factory.getAuthToken = function () {
             if (token == null) {
-                if (win.sessionStorage.accessToken != null) {
-                    token = win.sessionStorage.accessToken;
-                } else {
-                    token = JSON.parse(localStorage.getItem("authToken"));
-                }
+                token = JSON.parse(localStorage.getItem("authToken"));
             }
-
             return token;
         };
 
@@ -363,19 +358,16 @@ angular.module('token', [])
             }
             return appToken;
         };
-
         factory.getAppUserId = function () {
-            if (appUserId == null) {
-                if (localStorage.getItem("appUserId") != null) {
-                    appUserId = JSON.parse(localStorage.getItem("appUserId"));
-                } else {
-                    var refreshIds = factory.refreshIds();
-                    refreshIds.then(function (response) {
-                        return appUserId;
-                    });
-                }
-            }
 
+            if (appUserId === null) {
+                var refreshIds = factory.refreshIds();
+                refreshIds.then(function (response) {
+                    return appUserId;
+                });
+            } else {
+                return appUserId;
+            }
             return appUserId;
         };
 
