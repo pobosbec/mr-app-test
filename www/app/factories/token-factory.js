@@ -160,21 +160,21 @@ angular.module('token', [])
 
             return $http(req
             ).then(function successCallback(response) {
-                    // this callback will be called asynchronously
-                    // when the response is available
+                // this callback will be called asynchronously
+                // when the response is available
 
-                    //things to fetch
-                    token = response.data.data.id;
-                    $rootScope.token = token;
-                    adminId = response.data.data.administratorId;
-                    accountId = response.data.data.accountId;
-                    appUserId = response.data.data.appuserid;
+                //things to fetch
+                token = response.data.data.id;
+                $rootScope.token = token;
+                adminId = response.data.data.administratorId;
+                accountId = response.data.data.accountId;
+                appUserId = response.data.data.appuserid;
 
                 if(!aquiredUserName){
                     aquiredUserName = !aquiredUserName;
                     factory.getDetails();
                 }
-                    //start keepTokenAlive timer
+                //start keepTokenAlive timer
                 tokenTimer = setTimeout(function(){factory.keepTokenAlive}, interval);
                 //store token in session
                 win.sessionStorage.accessToken = token;
@@ -188,8 +188,8 @@ angular.module('token', [])
                 return response;
 
             }, function errorCallback(response) {
-                    // called asynchronously if an error occurs
-                    // or server returns response with an error status.
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
                 //store token in session
                 win.sessionStorage.accessToken = null;
                 factory.saveToDb("authToken", null);
@@ -200,7 +200,7 @@ angular.module('token', [])
                 $state.go('login');
                 //we are logged in show navbar and redirect
                 $('#template-2').hide();
-                });
+            });
             return $q.reject(response);
         };
 
@@ -209,7 +209,7 @@ angular.module('token', [])
             token = data;
             var req = {
                 method: 'POST',
-                url: factory.currentApiUrl+ 'is-authenticated',
+                url: factory.currentApiUrl + 'app/users/register-device',
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -226,6 +226,15 @@ angular.module('token', [])
                     "Tags": null
                 }
             };
+            return $http(req
+            ).then(function successCallback(response) {
+                console.log("registerPushToken.success");
+                console.log(response);
+            }, function errorCallback(response) {
+                console.log("registerPushToken.error");
+                console.log(response);
+            });
+            return $q.reject(response);
         }
 
         /**
@@ -253,7 +262,7 @@ angular.module('token', [])
                 // when the response is available
                 var data = response.data;
                 if (response.data.data.name != null) {
-                   username = response.data.data.name;
+                    username = response.data.data.name;
                 }
 
             }, function errorCallback(response) {
