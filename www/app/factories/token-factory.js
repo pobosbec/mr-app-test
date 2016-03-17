@@ -273,7 +273,7 @@ angular.module('token', [])
 
         factory.getUsername = function () {
             if (username == null) {
-                username = JSON.Parse(localStorage.getItem("userName"));
+                username = JSON.parse(localStorage.getItem("userName"));
             }
             return username;
         };
@@ -302,21 +302,21 @@ angular.module('token', [])
 
         factory.getAuthToken = function () {
             if (token == null) {
-                token = JSON.Parse(localStorage.getItem("authToken"));
+                token = JSON.parse(localStorage.getItem("authToken"));
             }
             return token;
         };
 
         factory.getAppAuthToken = function () {
             if (appToken == null) {
-                appToken = JSON.Parse(localStorage.getItem("appAuthToken"));
+                appToken = JSON.parse(localStorage.getItem("appAuthToken"));
             }
             return appToken;
         };
 
         factory.getPushToken = function () {
             if (pushToken == null) {
-                pushToken = JSON.Parse(localStorage.getItem("pushToken"));
+                pushToken = JSON.parse(localStorage.getItem("pushToken"));
             }
             return pushToken;
         }
