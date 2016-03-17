@@ -10,6 +10,8 @@ angular.module('communication', [])
 
         factory.synchronize = function (appAuthToken) {
 
+            console.log('Making request to what-is-new. Last update: ' + lastUpdate);
+
             var req = {
                 method: 'POST',
                 ignoreLoadingBar: true,
@@ -32,7 +34,9 @@ angular.module('communication', [])
                 // when the response is available
                 var data = response.data;
 
-                lastUpdate = data.LastUpdate;
+                console.log('Success response from what-is-new. Setting last update to: ' + data.data.lastUpdate);
+
+                lastUpdate = data.data.lastUpdate;
 
                 factory.messagesDownloaded(data);
 
