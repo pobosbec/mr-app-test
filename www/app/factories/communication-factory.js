@@ -5,12 +5,21 @@ angular.module('communication', [])
     .factory('communicationService', ['$http', '$window', '$rootScope', '$location', '$q', '$state', 'tokenService', function ($http, win, $rootScope, $location, $q, $state, tokenService) {
 
         var factory = {};
+        var latestUpdate;
 
-        var lastUpdate = "2016-01-01T00:00:00Z";
+        factory.init = function(){
+            if (typeof (Storage) !== "undefined"){
+                latestUpdate = localStorage.getItem('latestWhatIsNewUpdate');
+            }
+
+            if (latestUpdate == null){
+                latestUpdate = "2016-01-01T00:00:00Z";
+            }
+        };
 
         factory.synchronize = function (appAuthToken) {
 
-            console.log('Making request to what-is-new. Last update: ' + lastUpdate);
+            console.log('Making request to what-is-new. Last update: ' + latestUpdate);
 
             var req = {
                 method: 'POST',
@@ -21,7 +30,7 @@ angular.module('communication', [])
                 },
                 data: {
                     Data: {
-                        LastUpdate: lastUpdate,
+                        LastUpdate: latestUpdate,
                         DeviceId: "abc"
                     },
                     AuthenticationToken: appAuthToken
@@ -36,12 +45,14 @@ angular.module('communication', [])
 
                 console.log('Success response from what-is-new. Setting last update to: ' + data.data.lastUpdate);
 
-                lastUpdate = data.data.lastUpdate;
-
-                if(lastUpdate == null){
+                if(data.data.lastUpdate == null){
                     console.log('Could not find lastUpdate in what-is-new response.')
                     return;
                 }
+
+                latestUpdate = data.data.lastUpdate;
+
+                updateLastUpdated();
 
                 factory.messagesDownloaded(data);
 
@@ -102,6 +113,17 @@ angular.module('communication', [])
             }
             factory.synchronize(tokenService.getAppAuthToken());
         }
+
+        function updateLastUpdated(){
+            if (typeof (Storage) !== "undefined") {
+                localStorage.setItem('latestWhatIsNewUpdate', latestUpdate);
+            } else {
+                alert("ach nein! keiner storage!!!1");
+                return;
+            }
+        };
+
+        factory.init();
 
         return factory;
     }])
