@@ -4,6 +4,7 @@
 angular.module('messages', [])
     .controller('messagesController', ['$scope', '$http', '$rootScope', 'communicationService', 'messageRepository','tokenService', function ($scope, $http, $rootScope, communicationService, messageRepository,tokenService) {
 
+        $scope.id = tokenService.getAppUserId;
         $scope.Math = window.Math;
 
         $scope.messages = messageRepository.getMessages();
@@ -123,8 +124,11 @@ angular.module('messages', [])
         };
 
 
-        $scope.reply = function (conversationId) {
+        $scope.reply = function (conversationId,text) {
+
             var content = $scope.conversations[findConversation(conversationId)].TextArea;
+            if(content.length > 0 || text.length > 0){
+
             var req = {
                 method: 'POST',
                 url: tokenService.currentAppApiUrl + 'app/conversations/reply',
@@ -134,7 +138,7 @@ angular.module('messages', [])
                 data: {
                     "Data": {
                         "ConversationId": conversationId,
-                        "Message": content,
+                        "Message": content || text,
                         "MetaData": null
                     },
                     "AuthenticationToken": tokenService.getAppAuthToken(),
@@ -155,6 +159,7 @@ angular.module('messages', [])
                 // or server returns response with an error status.
                 console.log("Error in reply conversation");
             });
+            }
         }
 
 

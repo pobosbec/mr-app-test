@@ -132,6 +132,7 @@ angular.module('token', [])
             ).then(function successCallback(response) {
                 // this callback will be called asynchronously
                 // when the response is available
+                appUserId = response.data.data.appUserId;
                 appToken = response.data.data.id;
                 factory.saveToDb("appAuthToken", appToken);
                 $rootScope.$broadcast("app-token-available");
@@ -162,6 +163,13 @@ angular.module('token', [])
 
             return $http(req
             ).then(function successCallback(response) {
+                    // this callback will be called asynchronously
+                    // when the response is available
+                    //things to fetch
+                    token = response.data.data.id;
+                    $rootScope.token = token;
+                    adminId = response.data.data.administratorId;
+                    accountId = response.data.data.accountId;
                 // this callback will be called asynchronously
                 // when the response is available
 
@@ -170,7 +178,7 @@ angular.module('token', [])
                 $rootScope.token = token;
                 adminId = response.data.data.administratorId;
                 accountId = response.data.data.accountId;
-                appUserId = response.data.data.appuserid;
+
 
                 if (!aquiredUserName) {
                     aquiredUserName = !aquiredUserName;
@@ -319,6 +327,9 @@ angular.module('token', [])
                 appToken = JSON.parse(localStorage.getItem("appAuthToken"));
             }
             return appToken;
+        };
+        factory.getAppUserId = function() {
+            return appUserId;
         };
 
         factory.getPushToken = function () {

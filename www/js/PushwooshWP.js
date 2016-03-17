@@ -38,6 +38,7 @@ function registerPushwooshWP() {
             var deviceToken = status;
             console.warn('registerDevice: ' + deviceToken);
             alert("push token is " + deviceToken);
+            document.dispatchEvent(new CustomEvent("push-service-initialized", { "token": deviceToken }));
             onPushwooshWPInitialized();
         },
         function (status) {

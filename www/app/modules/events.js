@@ -40,7 +40,11 @@ angular.module('event', [])
         }, false);
 
         document.addEventListener('push-service-initialized', function (event, args) {
-            $rootScope.$broadcast('push-service-initialized', event);
+            console.log("------------");
+            console.log(event);
+            console.log(args);
+            console.log("------------");
+            $rootScope.$broadcast('push-service-initialized', event.token);
         }, false);
 
         document.addEventListener('push-notification', function (event, args) {
@@ -116,8 +120,8 @@ angular.module('event', [])
         $scope.$on('push-service-initialized', function (event, args) {
             console.log(event);
             console.log(args);
-            console.log("Push service initialized: " + args.token);
-            tokenService.saveToDb("pushToken", args.token);
+            console.log("Push service initialized: " + args);
+            tokenService.saveToDb("pushToken", args);
         });
 
         $scope.$on('push-notification', function (event, args) {
