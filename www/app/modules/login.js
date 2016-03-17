@@ -11,6 +11,7 @@ angular.module('login', [])
 
         $scope.showLoginError = false;
         $scope.errorMsg = "";
+        $scope.keepMeLoggedInAtStartup = JSON.parse(localStorage.getItem("klik"));
         $scope.kli = JSON.parse(localStorage.getItem("klik"));
 
         $scope.login = function (data) {
@@ -51,9 +52,9 @@ angular.module('login', [])
                 // this callback will be called asynchronously
                 // when the response is available
                 var token = response.data.data.id;
-                tokenService.isAuthenticated(token);
-                $rootScope.$broadcast("logged-in");
+                tokenService.saveToDb("authToken", token);
                 $scope.showLoginError = false;
+                tokenService.isAuthenticated(token).then($rootScope.$broadcast("logged-in"));
                 if (kli) {
                     tokenService.saveToDb("klik", true);
                     tokenService.saveToDb("kliu", username);
@@ -65,6 +66,11 @@ angular.module('login', [])
                 // or server returns response with an error status.
                 $scope.showLoginError = true;
                 console.log(response); // TODO: REMOVE! only for debugging.
+                $scope.keepMeLoggedInAtStartup = false;
+                tokenService.saveToDb("klik", false);
+                tokenService.saveToDb("kliu", null);
+                tokenService.saveToDb("klip", null);
+
                 if (response.data != null) {
                     if (response.data.errors[0].errorMessage.indexOf("AuthenticationToken") > -1) {
                         $scope.errorMessage = "Wrong Username / Password";
@@ -124,7 +130,7 @@ angular.module('login', [])
             });
         }
 
-        if ($scope.kli) {
+        if ($scope.keepMeLoggedInAtStartup) {
             console.warn("auto-logging in");
             $scope.login(kli());
         }

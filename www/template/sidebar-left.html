@@ -41,6 +41,10 @@
             <ul>
                 <li style="cursor: pointer;"><a onClick="localStorage.clear(); console.log('[Debug] localStorage Cleared.');"><i class="zmdi zmdi-delete"></i> Empty localStorage</a></li>
                 <li style="cursor: pointer;"><a onClick="window.location.reload(); console.log('[Debug] Reloading page.');"><i class="zmdi zmdi-refresh"></i> Reload Page</a></li>
+                <li style="cursor: pointer;"><a onClick="alert(device.uuid)"><i class="zmdi zmdi-card-sim"></i> Hardware Id</a></li>
+                <li style="cursor: pointer;"><a onClick="alert(localStorage.getItem('authToken'));"><i class="zmdi zmdi-tag"></i> Auth Token</a></li>
+                <li style="cursor: pointer;"><a onClick="alert(localStorage.getItem('appAuthToken'));"><i class="zmdi zmdi-tag"></i> App Auth Token</a></li>
+                <li style="cursor: pointer;"><a onClick="alert(localStorage.getItem('appUserId'));"><i class="zmdi zmdi-tag"></i> App User Id</a></li>
             </ul>
         </li>
 
