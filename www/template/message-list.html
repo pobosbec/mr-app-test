@@ -11,13 +11,11 @@
                 </h2>
             </div>
         </div>
-
         <ul class="actions actions-alt">
             <li class="dropdown" uib-dropdown="">
                 <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle" aria-haspopup="true">
                     <i class="zmdi zmdi-more-vert"></i>
                 </a>
-
                 <ul class="dropdown-menu dropdown-menu-right">
                     <li>
                         <a href="">Something</a>
@@ -38,5 +36,19 @@
         <!--<img class="lv-img" ng-src="{{ 'https://s3-eu-west-1.amazonaws.com/mr-app-images/map-icon.png' }}" alt="Attached position">-->
     </div>
     <div ng-if="showAttachedImage == 1" class="container" data-ng-include="'template/image-view.html'" full-size-image-div=""></div>
+    <!-- Comment reply form -->
+    <!-- show if its not yourself -->
+    <div class="wcl-form card-padding card-body" ng-if="message.Author != id()">
+        <div class="wc-comment" >
+            <div class="wcc-inner">
+                <input class="wcci-text" ng-model="textArea"  ng-focus="focused = true" ng-blur="focused = false" data-auto-size placeholder="Write Something..." ng-keyup="$event.keyCode == 13 && reply(conversation.ConversationId,conversation.TextArea)">
+            </div>
+            <div class="m-t-15">
+                <button class="btn btn-sm btn-primary btnCancel" ng-click="reply(message.ConversationId,textArea);textArea = ''" ng-show="focused||mouseover" ng-mouseover="mouseover=true" ng-mouseleave="mouseover=false">Reply</button>
+                <button class="btn btn-sm btn-link" data-ng-click="textArea = ''" ng-show="focused||mouseover" ng-mouseover="mouseover=true" ng-mouseleave="mouseover=false">Cancel</button>
+            </div>
+        </div>
+    </div>
+    <!-- Comment reply form end here -->
 </div>
 <div ng-click="test()" class="row">&nbsp;</div>
