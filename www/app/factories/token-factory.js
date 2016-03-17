@@ -228,13 +228,15 @@ angular.module('token', [])
                         UserId: appUserId,
                         HardwareId: device.uuid,
                         PushToken: factory.getPushToken(),
-                        DeviceType: window.deviceType
-                        //MacAddress: ""
+                        DeviceType: window.deviceType,
+                        MacAddress: null
                     },
                     "AuthenticationToken": factory.getAuthToken(),
                     "Tags": null
                 }
             };
+            console.log("registerPushToken registering");
+            console.log(req);
 
             return $http(req).then(function updateSuccessCallback(response) {
 
