@@ -26,20 +26,14 @@
     </div>
 
     <ul class="main-menu">
-        
         <li data-ui-sref-active="active">
             <a data-ui-sref="home" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-home"></i> Home</a>
         </li>
-
-
-
-
-
-
         <li class="sub-menu" data-ng-class="{ 'active toggled': mactrl.$state.includes('pages') }">
             <a href="" toggle-submenu><i class="zmdi zmdi-collection-item"></i> Sample Pages</a>
             <ul>
                 <li><a data-ui-sref-active="active" data-ui-sref="pages.messages" data-ng-click="mactrl.sidebarStat($event)">Messages</a></li>
+                <li><a data-ui-sref-active="active" data-ui-sref="pages.contacts" data-ng-click="mactrl.sidebarStat($event)">Contacts</a></li>
             </ul>
         </li>
         <li class="sub-menu">
