@@ -141,7 +141,7 @@ angular.module('event', [])
 
 
         // Wrapped
-        $scope.$on('load', function (event, args) { });
+        $scope.$on('load', function(event, args) { });
 
 
         // ------------------------------------

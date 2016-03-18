@@ -8,18 +8,24 @@ angular.module('communication', [])
         var latestUpdate;
 
         factory.init = function(){
-            if (typeof (Storage) !== "undefined"){
-                latestUpdate = localStorage.getItem('latestWhatIsNewUpdate');
+            latestUpdate = factory.getLatestUpdate();
+        };
+
+        factory.getLatestUpdate = function() {
+            var latest = null;
+            if (typeof (Storage) !== "undefined") {
+                latest = localStorage.getItem('latestWhatIsNewUpdate');
             }
 
-            if (latestUpdate == null){
-                latestUpdate = "2016-01-01T00:00:00Z";
+            if (latest == null) {
+                latest = "2016-01-01T00:00:00Z";
             }
+            return latest;
         };
 
         factory.synchronize = function (appAuthToken) {
-
-            console.log('Making request to what-is-new. Last update: ' + latestUpdate);
+            var latest = factory.getLatestUpdate();
+            console.log('Making request to what-is-new. Last update: ' + latest);
 
             var req = {
                 method: 'POST',
@@ -30,7 +36,7 @@ angular.module('communication', [])
                 },
                 data: {
                     Data: {
-                        LastUpdate: latestUpdate,
+                        LastUpdate: latest,
                         DeviceId: "abc"
                     },
                     AuthenticationToken: appAuthToken
