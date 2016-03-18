@@ -1,3 +1,4 @@
+
 /**
  * Created by robinpipirs on 11/12/15.
  */
@@ -5,65 +6,206 @@
 angular.module('token', [])
     .factory('tokenService', ['$http', '$window', '$rootScope', '$location', '$q', '$state', function ($http, win, $rootScope, $location, $q, $state) {
         $rootScope.token = null;
-        var username = null;
         var token = null;
-        var appToken = null;
         var pushToken = null;
-        var appUserId = null;
-        var appUsername = null;
-        var adminId = null;
-        var accountId = null;
-        var wfId = null;
         var factory = {};
-        var aquiredUserName = false;
-
-        //the instance of the Timeout event that run keepTokenAlive
-        var tokenTimer;
-        //The interval which keepTokenAlive should be runned
-        var interval = 1000000;
+        var userDetails = {};
 
 
-        /**
-         * Checks if theres an token in the sessionStorage if so authenticate it
-         */
-        $rootScope.$watch('$viewContentLoaded', function () {
 
-            if (win.sessionStorage.accessToken != null) {
-                factory.isAuthenticated(win.sessionStorage.accessToken);
-            }
-            else {
+        ///**
+// * Logout function
+// */
+//$rootScope.logout = function () {
+//    //TODO abandon function
+//    factory.abandonToken($rootScope.token);
+//    win.sessionStorage.accessToken = null;
+//    $rootScope.token = null;
+//    token = null;
+//    factory.unRegisterPushToken();
+//    factory.saveToDb("klik", false);
+//    factory.saveToDb("kliu", null);
+//    factory.saveToDb("klip", null);
+//    $state.go('login');
+//    clearTimeout(tokenTimer);
+//    $('#template-2').hide();
+//    aquiredUserName = false;
+//};
+
+
+
+        //set user credentials
+        function setCredentialsAndLogin(greeting) {
+            console.log("setting credentials for following user:");
+            console.log(greeting);
+            //fetch user details
+            userDetails = {
+                token: greeting.data.id,
+                accountId: greeting.data.accountId,
+                administratorId:greeting.data.administratorId,
+                appUserId: greeting.data.appUserId,
+                displayName: ""
+            };
+
+            var userDetailRequest = {
+                method: 'POST',
+                url: factory.currentAppApiUrl + 'app/users/details',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: {
+                    "Data": {
+                        "InstanceName": "mobileresponse"
+                    },
+                    "AuthenticationToken": greeting.data.id,
+                    "Tags": null
+                }
+            };
+            var promise = factory.httpPost(userDetailRequest);
+            promise.then(function(greeting) {
+                //Success
+                console.log('Success fetched userdetails');
+                console.log(greeting);
+                if (userDetails.displayName != null){
+                userDetails.displayName = greeting.data.displayName;
+                }
+                else if(userDetails.firstName != null){
+                    userDetails.displayName = greeting.data.firstName;
+                }
+                else if(userDetails.phoneNumber != null){
+                    userDetails.displayName = greeting.data.phoneNumber;
+                }
+                console.log(userDetails.displayName);
+                //TODO: logged in now transfer home
+                $rootScope.$broadcast("app-token-available");
+                $rootScope.$broadcast("logged-in");
+                if ($state.includes('login')) {
+                    $state.go('home');
+                }
+
+            }, function(reason) {
+                //failed try authenticate against admin->app
+                console.log('Failed getting userdetails');
+                console.log(reason);
+                //TODO: set username to something different
                 $state.go('login');
-            }
-        });
+                //we are logged in show navbar and redirect
+                $('#template-2').hide();
+            });
+        }
 
-        /**
-         * checks if the user opens the page with a passed token. if so try to authenticate with it.
-         */
-        var location = $location;
-        $rootScope.$watch('location.search()', function () {
-            var token = ($location.search()).token;
-            if (token != null) {
-                factory.isAuthenticated(token);
-            }
-        }, true);
+        factory.authenticate = function(username,password){
+           var appAuthenticate = {
+                method: 'POST',
+                ignoreLoadingBar: true,
+                url: factory.currentAppApiUrl + 'app/authenticate',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: {
+                    "Data": {
+                        "InstanceName": "mobileresponse",
+                        "Username": username,
+                        "Password": password
+                    },
+                    "Tags": null
+                }
+            };
 
-        /**
-         * Logout function
-         */
-        $rootScope.logout = function () {
-            //TODO abandon function
-            factory.abandonToken($rootScope.token);
-            win.sessionStorage.accessToken = null;
-            $rootScope.token = null;
-            token = null;
-            factory.unRegisterPushToken();
-            factory.saveToDb("klik", false);
-            factory.saveToDb("kliu", null);
-            factory.saveToDb("klip", null);
-            $state.go('login');
-            clearTimeout(tokenTimer);
-            $('#template-2').hide();
-            aquiredUserName = false;
+           var adminAuthenticate = {
+                    method: 'POST',
+                    ignoreLoadingBar: true,
+                    url: factory.currentApiUrl + 'authenticate',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    data: {
+                        "Data": {
+                            "InstanceName": "mobileresponse",
+                            "Username": username,
+                            "Password": password
+                        },
+                        "Tags": null
+                    }
+                };
+
+            var promise = factory.httpPost(appAuthenticate);
+            promise.then(function(greeting) {
+                //Success
+                console.log('Success appuser authentication');
+                console.log(greeting);
+                //TODO: logged in now
+                setCredentialsAndLogin(greeting);
+            }, function(reason) {
+                //failed try authenticate against admin
+                console.log('Failed App authentication, trying with admin');
+                console.log(reason);
+                promise = factory.httpPost(adminAuthenticate);
+                promise.then(function(greeting) {
+                    //Admin authenticate success
+                    console.log('Success admin authenticate now authenticating towards app');
+                    console.log(greeting);
+                    var authenticationTokenAdmin = greeting.data.id;
+                    appTokenAuthentication = {
+                        method: 'POST',
+                        ignoreLoadingBar: true,
+                        url: factory.currentAppApiUrl + 'app/is-token-valid',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        data: {
+                            Data: { AuthenticationToken: authenticationTokenAdmin },
+                            AuthenticationToken: authenticationTokenAdmin
+                        }
+                    };
+                    promise = factory.httpPost(appTokenAuthentication);
+                    promise.then(function(greeting) {
+                        //Success
+                        console.log('Success admin-> app');
+                        console.log(greeting);
+                        //TODO: logged in now
+                        setCredentialsAndLogin(greeting);
+
+                    }, function(reason) {
+                        //failed try authenticate against admin->app
+                        console.log('Failed login admin->app');
+                        console.log(reason);
+                        //TODO:go back to login
+                        $state.go('login');
+                        //we are logged in show navbar and redirect
+                        $('#template-2').hide();
+                    });
+
+                }, function(reason) {
+                    //failed try authenticate against admin
+                    console.log('Failed login admin');
+                    console.log(reason);
+                    //go back to login
+                    //TODO:go back to login
+                    $state.go('login');
+                    //we are logged in show navbar and redirect
+                    $('#template-2').hide();
+                });
+            });
+        };
+
+        factory.httpPost = function (req){
+
+            var deferred = $q.defer();
+
+            $http(req
+            ).then(function successCallback(response) {
+                // this callback will be called asynchronously
+                // when the response is available
+                deferred.resolve(response.data);
+
+            }, function errorCallback(response) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+                console.log(response); // TODO: REMOVE! only for debugging.
+                deferred.reject(response.data);
+            });
+            return deferred.promise;
         };
 
         /**
@@ -73,150 +215,6 @@ angular.module('token', [])
         factory.keepTokenAlive = function () {
             factory.isAuthenticated(token);
         };
-
-        /**
-         * Calls api /is-authenticated with data as token this call also refreshes the lifetime of the token
-         * @param data token
-         */
-        factory.abandonToken = function (data) {
-            var req = {
-                method: 'POST',
-                url: factory.currentApiUrl + 'is-authenticated',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                data: {
-                    "Data": {},
-                    "AuthenticationToken": data,
-                    "Tags": null
-                }
-            };
-
-            $http(req
-            ).then(function successCallback(response) {
-                // this callback will be called asynchronously
-                // when the response is available
-
-            }, function errorCallback(response) {
-                // called asynchronously if an error occurs
-                // or server returns response with an error status.
-
-                win.alert("error abandoning token");
-            });
-        };
-
-        factory.refreshIds = function () {
-            var response = factory.isAuthenticated(win.sessionStorage.accessToken).then(function(response) {
-                token = response.data.data.id;
-                $rootScope.token = token;
-                adminId = response.data.data.administratorId;
-                accountId = response.data.data.accountId;
-            });
-            return response;
-        };
-
-        factory.isAppAuthenticated = function (authenticationToken) {
-            var req = {
-                method: 'POST',
-                ignoreLoadingBar: true,
-                url: factory.currentAppApiUrl + 'app/is-token-valid',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                data: {
-                    Data: { AuthenticationToken: authenticationToken },
-                    AuthenticationToken: authenticationToken
-                }
-            };
-
-            return $http(req
-            ).then(function successCallback(response) {
-                // this callback will be called asynchronously
-                // when the response is available
-                appUserId = response.data.data.appUserId;
-                appToken = response.data.data.id;
-                factory.saveToDb("appUserId", appUserId);
-                factory.saveToDb("appAuthToken", appToken);
-                $rootScope.$broadcast("app-token-available");
-            }, function errorCallback(response) {
-                // called asynchronously if an error occurs
-                // or server returns response with an error status.
-            });
-        };
-
-        /**
-         * Calls api /is-authenticated with data as token this call also refreshes the lifetime of the token
-         * @param data token
-         */
-        factory.isAuthenticated = function (data) {
-            token = data;
-            var req = {
-                method: 'POST',
-                url: factory.currentApiUrl + 'is-authenticated',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                data: {
-                    "Data": {},
-                    "AuthenticationToken": data,
-                    "Tags": null
-                }
-            };
-
-            return $http(req
-            ).then(function successCallback(response) {
-                // this callback will be called asynchronously
-                // when the response is available
-                //things to fetch
-                token = response.data.data.id;
-                $rootScope.token = token;
-                adminId = response.data.data.administratorId;
-                accountId = response.data.data.accountId;
-                // this callback will be called asynchronously
-                // when the response is available
-
-                //things to fetch
-                token = response.data.data.id;
-                $rootScope.token = token;
-                adminId = response.data.data.administratorId;
-                accountId = response.data.data.accountId;
-
-
-                if (!aquiredUserName) {
-                    aquiredUserName = !aquiredUserName;
-                    factory.getDetails();
-                }
-                //start keepTokenAlive timer
-                tokenTimer = setTimeout(function () { factory.keepTokenAlive }, interval);
-                //store token in session
-                win.sessionStorage.accessToken = token;
-                //redirect to dashboard
-                if ($state.includes('login')) {
-                    $state.go('home');
-                }
-
-                factory.isAppAuthenticated(token);
-
-                return response;
-
-            }, function errorCallback(response) {
-                // called asynchronously if an error occurs
-                // or server returns response with an error status.
-                //store token in session
-                win.sessionStorage.accessToken = null;
-                factory.saveToDb("authToken", null);
-                factory.saveToDb("appAuthToken", null);
-                factory.saveToDb("appUserId", null);
-                factory.saveToDb("userName", null);
-                //redirect to login
-                //change to dashboard
-                $state.go('login');
-                //we are logged in show navbar and redirect
-                $('#template-2').hide();
-            });
-            return $q.reject(response);
-        };
-
 
         factory.registerPushToken = function () {
             if (factory.getAppUserId() == null || factory.getAuthToken() == null) {
@@ -284,100 +282,30 @@ angular.module('token', [])
             });
 
             return $q.reject(response);
-        }
-
-        /**
-         * getDetails http posts to api to fetch accounts details
-         * @data adminId
-         */
-        factory.getDetails = function () {
-
-            var req = {
-                method: 'POST',
-                url: factory.currentApiUrl + 'accounts/details',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                data: {
-                    "Data": {},
-                    "AuthenticationToken": factory.getAuthToken(),
-                    "Tags": null
-                }
-            };
-
-            $http(req
-            ).then(function successCallback(response) {
-                // this callback will be called asynchronously
-                // when the response is available
-                var data = response.data;
-                if (response.data.data.name != null) {
-                    username = response.data.data.name;
-                }
-
-            }, function errorCallback(response) {
-                // called asynchronously if an error occurs
-                // or server returns response with an error status.
-            });
         };
 
         factory.getUsername = function () {
-            if (username == null) {
-                username = JSON.parse(localStorage.getItem("userName"));
-            }
-            return username;
+            return userDetails.displayName;
         };
 
         factory.getAdminId = function () {
-            if (adminId === null) {
-                var refreshIds = factory.refreshIds();
-                refreshIds.then(function (response) {
-                    return adminId; //response.data.administratorId();
-                });
-            } else {
-                return adminId;
-            }
+            return userDetails.administratorId;
         };
 
         factory.getAccountId = function () {
-            if (accountId === null) {
-                var refreshIds = factory.refreshIds();
-                refreshIds.then(function (response) {
-                    return accountId; //factory.getAccountId();
-                });
-            } else {
-                return accountId;
-            }
+           return userDetails.accountId;
         };
 
         factory.getAuthToken = function () {
-            if (token == null) {
-                if (win.sessionStorage.accessToken != null) {
-                    token = win.sessionStorage.accessToken;
-                } else {
-                    token = JSON.parse(localStorage.getItem("authToken"));
-                }
-            }
-            return token;
+            return userDetails.token;
         };
 
         factory.getAppAuthToken = function () {
-            if (appToken == null) {
-                appToken = JSON.parse(localStorage.getItem("appAuthToken"));
-            }
-            return appToken;
+            return userDetails.token;
         };
 
         factory.getAppUserId = function () {
-
-            if (appUserId === null) {
-                var refreshIds = factory.refreshIds();
-                refreshIds.then(function (response) {
-                    return appUserId;
-                });
-            } else {
-                return appUserId;
-            }
-            return appUserId;
+            return userDetails.appUserId;
         };
 
         factory.getPushToken = function () {
@@ -385,12 +313,12 @@ angular.module('token', [])
                 pushToken = JSON.parse(localStorage.getItem("pushToken"));
             }
             return pushToken;
-        }
+        };
 
         factory.saveToDb = function (key, value) {
             var valueAsJson = JSON.stringify(value);
             localStorage.setItem(key, valueAsJson);
-        }
+        };
 
         /**
          * When the service is runned, depending on what url mobile response uses we set the api address differently
@@ -456,3 +384,198 @@ angular.module('token', [])
         return factory;
 
     }])
+
+
+
+
+
+
+///**
+// * Calls api /is-authenticated with data as token this call also refreshes the lifetime of the token
+// * @param data token
+// */
+//factory.abandonToken = function (data) {
+//    var req = {
+//        method: 'POST',
+//        url: factory.currentApiUrl + 'is-authenticated',
+//        headers: {
+//            'Content-Type': 'application/json'
+//        },
+//        data: {
+//            "Data": {},
+//            "AuthenticationToken": data,
+//            "Tags": null
+//        }
+//    };
+//
+//    $http(req
+//    ).then(function successCallback(response) {
+//        // this callback will be called asynchronously
+//        // when the response is available
+//
+//    }, function errorCallback(response) {
+//        // called asynchronously if an error occurs
+//        // or server returns response with an error status.
+//
+//        win.alert("error abandoning token");
+//    });
+//};
+
+
+
+
+///**
+// * getDetails http posts to api to fetch accounts details
+// * @data adminId
+// */
+//factory.getDetails = function () {
+//
+//    var req = {
+//        method: 'POST',
+//        url: factory.currentApiUrl + 'accounts/details',
+//        headers: {
+//            'Content-Type': 'application/json'
+//        },
+//        data: {
+//            "Data": {},
+//            "AuthenticationToken": factory.getAuthToken(),
+//            "Tags": null
+//        }
+//    };
+//
+//    $http(req
+//    ).then(function successCallback(response) {
+//        // this callback will be called asynchronously
+//        // when the response is available
+//        var data = response.data;
+//        if (response.data.data.name != null) {
+//            username = response.data.data.name;
+//        }
+//
+//    }, function errorCallback(response) {
+//        // called asynchronously if an error occurs
+//        // or server returns response with an error status.
+//    });
+//};
+
+
+
+
+//
+//
+//
+//factory.refreshIds = function () {
+//    var response = factory.isAuthenticated(win.sessionStorage.accessToken).then(function(response) {
+//        token = response.data.data.id;
+//        $rootScope.token = token;
+//        adminId = response.data.data.administratorId;
+//        accountId = response.data.data.accountId;
+//    });
+//    return response;
+//};
+//
+//factory.isAppAuthenticated = function (authenticationToken) {
+//    var req = {
+//        method: 'POST',
+//        ignoreLoadingBar: true,
+//        url: factory.currentAppApiUrl + 'app/is-token-valid',
+//        headers: {
+//            'Content-Type': 'application/json'
+//        },
+//        data: {
+//            Data: { AuthenticationToken: authenticationToken },
+//            AuthenticationToken: authenticationToken
+//        }
+//    };
+//
+//    return $http(req
+//    ).then(function successCallback(response) {
+//        // this callback will be called asynchronously
+//        // when the response is available
+//        appUserId = response.data.data.appUserId;
+//        appToken = response.data.data.id;
+//        factory.saveToDb("appUserId", appUserId);
+//        factory.saveToDb("appAuthToken", appToken);
+//        $rootScope.$broadcast("app-token-available");
+//    }, function errorCallback(response) {
+//        // called asynchronously if an error occurs
+//        // or server returns response with an error status.
+//    });
+//};
+//
+///**
+// * Calls api /is-authenticated with data as token this call also refreshes the lifetime of the token
+// * @param data token
+// */
+//factory.isAuthenticated = function (data) {
+//    token = data;
+//    var req = {
+//        method: 'POST',
+//        url: factory.currentApiUrl + 'is-authenticated',
+//        headers: {
+//            'Content-Type': 'application/json'
+//        },
+//        data: {
+//            "Data": {},
+//            "AuthenticationToken": data,
+//            "Tags": null
+//        }
+//    };
+//
+//    return $http(req
+//    ).then(function successCallback(response) {
+//        // this callback will be called asynchronously
+//        // when the response is available
+//        //things to fetch
+//        token = response.data.data.id;
+//        $rootScope.token = token;
+//        // this callback will be called asynchronously
+//        // when the response is available
+//
+//        //things to fetch
+//        token = response.data.data.id;
+//        $rootScope.token = token;
+//        adminId = response.data.data.administratorId;
+//        accountId = response.data.data.accountId;
+//
+//
+//        if (!aquiredUserName) {
+//            aquiredUserName = !aquiredUserName;
+//            factory.getDetails();
+//        }
+//        //start keepTokenAlive timer
+//        tokenTimer = setTimeout(function () { factory.keepTokenAlive }, interval);
+//        //store token in session
+//        win.sessionStorage.accessToken = token;
+//        //redirect to dashboard
+//        if ($state.includes('login')) {
+//            $state.go('home');
+//        }
+//
+//        factory.isAppAuthenticated(token);
+//
+//        return response;
+//
+//    }, function errorCallback(response) {
+//        // called asynchronously if an error occurs
+//        // or server returns response with an error status.
+//        //store token in session
+//        win.sessionStorage.accessToken = null;
+//        factory.saveToDb("authToken", null);
+//        factory.saveToDb("appAuthToken", null);
+//        factory.saveToDb("appUserId", null);
+//        factory.saveToDb("userName", null);
+//        //redirect to login
+//        //change to dashboard
+//
+//        if ($state.includes('login')) {
+//            $state.go('home');
+//        }
+//
+//
+//        $state.go('login');
+//        //we are logged in show navbar and redirect
+//        $('#template-2').hide();
+//    });
+//    return $q.reject(response);
+//};
