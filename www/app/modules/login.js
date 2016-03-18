@@ -18,6 +18,7 @@ angular.module('login', [])
             //if theres something in the input field try to authenticate
             if (!((data.username == "" || data.username == null) || (data.password == "" || data.password == null))) {
                 authenticate(data.username, data.password, (data.kli || false));
+                tokenService.authenticate(data.username,data.password);
             }
             //nothing in the inputfields use the hard coded user
             else {
