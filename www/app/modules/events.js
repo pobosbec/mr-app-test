@@ -12,6 +12,7 @@ angular.module('event', [])
 
         // Native
         document.addEventListener('deviceready', function (event, args) {
+            console.log('Contacts: ' + navigator.contacts);
             $rootScope.$broadcast('device-ready', args);
         }, false);
 

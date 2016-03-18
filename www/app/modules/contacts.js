@@ -2,16 +2,6 @@
  * Created by Kristofer on 2016-03-17.
  */
 angular.module('contacts', [])
-    .controller('contactsController', ['$scope', '$http', '$rootScope', 'communicationService', 'messageRepository','tokenService', '$cordovaContacts', function ($scope, $http, $rootScope, communicationService, messageRepository,tokenService, $cordovaContacts) {
+    .controller('contactsCtrl', ['$scope', function($scope) {
 
-        $scope.contacts = [];
-
-        function getContacts(){
-            $cordovaContacts.find().then(function(allContacts) { //omitting parameter to .find() causes all contacts to be returned
-                $scope.contacts = allContacts;
-            });
-        }
-
-        getContacts();
-
-    }]);
+    }])

@@ -88,14 +88,14 @@ angular.module('communication', [])
                 case 'download-whats-new':
                     console.log("communication-factory received broadcast: download-whats-new");
                     if (args != undefined) {
-                        console.log(args);
+                        console.log('Event received: ' + JSON.stringify(args));
                     }
                     factory.downloadWhatIsNew(args);
                     break;
                 case 'push-notification':
                     console.log("communication-factory received broadcast: push-notification");
                     if (args != undefined) {
-                        console.log(args);
+                        console.log('Event received: ' + JSON.stringify(args));
                     }
                     factory.downloadWhatIsNew(args);
                     break;
@@ -107,7 +107,6 @@ angular.module('communication', [])
         factory.downloadWhatIsNew = function downloadWhatsNew(){
             var appAuthToken = tokenService.getAppAuthToken();
             if (appAuthToken === null || appAuthToken === 'undefined' || appAuthToken === undefined) {
-                tokenService.isAppAuthenticated();
                 console.log('AppToken was null');
                 return;
             }
