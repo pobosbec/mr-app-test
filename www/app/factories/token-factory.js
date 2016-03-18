@@ -82,8 +82,6 @@ angular.module('token', [])
             });
         };
 
-
-
         //set user credentials
         function setCredentialsAndLogin(greeting) {
             console.log("setting credentials for following user:");
@@ -408,7 +406,7 @@ angular.module('token', [])
                 //return "http://api2.test.mobileresponse.se/";
                 return "https://api2.mobileresponse.se/";
             // in staging
-            return "https://api2.mobileresponse.se/";
+            return "http://api.mobileresponse.se/";
         };
 
         /**
