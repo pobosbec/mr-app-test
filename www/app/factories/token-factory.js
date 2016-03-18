@@ -8,29 +8,78 @@ angular.module('token', [])
         $rootScope.token = null;
         var token = null;
         var pushToken = null;
+        var refreshTokenIntervall = null;
         var factory = {};
         var userDetails = {};
 
+        factory.keepTokenAlive = function () {
+            var req = {
+                method: 'POST',
+                url: factory.currentAppApiUrl + 'app/is-token-valid',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: {
+                    "Data": {},
+                    "AuthenticationToken": userDetails.token,
+                    "Tags": null
+                }
+            };
+            refreshTokenIntervall = setInterval(
+                function(){
+            var promise = factory.httpPost(req);
+            promise.then(function (greeting) {
+                //Success
+                console.log('Sucess refreshed token');
+                console.log(greeting);
+            }, function (reason) {
+                //failed try
+                console.log('Failed refreshing token');
+                console.log(reason);
+                $rootScope.logout();
+            })}, (15*60*1000));
+        };
 
+        $rootScope.logout = function () {
+            //TODO abandon function
+            win.sessionStorage.accessToken = null;
+            $rootScope.token = null;
+            token = null;
+            clearInterval(refreshTokenIntervall);
+            //factory.unRegisterPushToken();
+            //factory.saveToDb("klik", false);
+            //factory.saveToDb("kliu", null);
+            //factory.saveToDb("klip", null);
+            $state.go('login');
+            $('#template-2').hide();
+            factory.abandonToken($rootScope.token);
+        };
 
-        ///**
-// * Logout function
-// */
-//$rootScope.logout = function () {
-//    //TODO abandon function
-//    factory.abandonToken($rootScope.token);
-//    win.sessionStorage.accessToken = null;
-//    $rootScope.token = null;
-//    token = null;
-//    factory.unRegisterPushToken();
-//    factory.saveToDb("klik", false);
-//    factory.saveToDb("kliu", null);
-//    factory.saveToDb("klip", null);
-//    $state.go('login');
-//    clearTimeout(tokenTimer);
-//    $('#template-2').hide();
-//    aquiredUserName = false;
-//};
+        factory.abandonToken = function (data) {
+            var req = {
+                method: 'POST',
+                url: factory.currentApiUrl + 'is-authenticated',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: {
+                    "Data": {},
+                    "AuthenticationToken": data,
+                    "Tags": null
+                }
+            };
+            var promise = factory.httpPost(req);
+            promise.then(function(greeting) {
+                //Success
+                console.log('Success abandoned usertoken');
+                console.log(greeting);
+            }, function(reason) {
+                //failed try
+                console.log('Failed abandoning token');
+                console.log(reason);
+
+            });
+        };
 
 
 
@@ -79,6 +128,7 @@ angular.module('token', [])
                 //TODO: logged in now transfer home
                 $rootScope.$broadcast("app-token-available");
                 $rootScope.$broadcast("logged-in");
+                factory.keepTokenAlive();
                 if ($state.includes('login')) {
                     $state.go('home');
                 }
@@ -206,14 +256,6 @@ angular.module('token', [])
                 deferred.reject(response.data);
             });
             return deferred.promise;
-        };
-
-        /**
-         * function that increments our tokens expire time
-         * @var interval here you can set the interval time for refresh 1000 = 1s, 60000 = 1min
-         */
-        factory.keepTokenAlive = function () {
-            factory.isAuthenticated(token);
         };
 
         factory.registerPushToken = function () {
@@ -390,36 +432,7 @@ angular.module('token', [])
 
 
 
-///**
-// * Calls api /is-authenticated with data as token this call also refreshes the lifetime of the token
-// * @param data token
-// */
-//factory.abandonToken = function (data) {
-//    var req = {
-//        method: 'POST',
-//        url: factory.currentApiUrl + 'is-authenticated',
-//        headers: {
-//            'Content-Type': 'application/json'
-//        },
-//        data: {
-//            "Data": {},
-//            "AuthenticationToken": data,
-//            "Tags": null
-//        }
-//    };
-//
-//    $http(req
-//    ).then(function successCallback(response) {
-//        // this callback will be called asynchronously
-//        // when the response is available
-//
-//    }, function errorCallback(response) {
-//        // called asynchronously if an error occurs
-//        // or server returns response with an error status.
-//
-//        win.alert("error abandoning token");
-//    });
-//};
+
 
 
 
@@ -503,79 +516,4 @@ angular.module('token', [])
 //    });
 //};
 //
-///**
-// * Calls api /is-authenticated with data as token this call also refreshes the lifetime of the token
-// * @param data token
-// */
-//factory.isAuthenticated = function (data) {
-//    token = data;
-//    var req = {
-//        method: 'POST',
-//        url: factory.currentApiUrl + 'is-authenticated',
-//        headers: {
-//            'Content-Type': 'application/json'
-//        },
-//        data: {
-//            "Data": {},
-//            "AuthenticationToken": data,
-//            "Tags": null
-//        }
-//    };
-//
-//    return $http(req
-//    ).then(function successCallback(response) {
-//        // this callback will be called asynchronously
-//        // when the response is available
-//        //things to fetch
-//        token = response.data.data.id;
-//        $rootScope.token = token;
-//        // this callback will be called asynchronously
-//        // when the response is available
-//
-//        //things to fetch
-//        token = response.data.data.id;
-//        $rootScope.token = token;
-//        adminId = response.data.data.administratorId;
-//        accountId = response.data.data.accountId;
-//
-//
-//        if (!aquiredUserName) {
-//            aquiredUserName = !aquiredUserName;
-//            factory.getDetails();
-//        }
-//        //start keepTokenAlive timer
-//        tokenTimer = setTimeout(function () { factory.keepTokenAlive }, interval);
-//        //store token in session
-//        win.sessionStorage.accessToken = token;
-//        //redirect to dashboard
-//        if ($state.includes('login')) {
-//            $state.go('home');
-//        }
-//
-//        factory.isAppAuthenticated(token);
-//
-//        return response;
-//
-//    }, function errorCallback(response) {
-//        // called asynchronously if an error occurs
-//        // or server returns response with an error status.
-//        //store token in session
-//        win.sessionStorage.accessToken = null;
-//        factory.saveToDb("authToken", null);
-//        factory.saveToDb("appAuthToken", null);
-//        factory.saveToDb("appUserId", null);
-//        factory.saveToDb("userName", null);
-//        //redirect to login
-//        //change to dashboard
-//
-//        if ($state.includes('login')) {
-//            $state.go('home');
-//        }
-//
-//
-//        $state.go('login');
-//        //we are logged in show navbar and redirect
-//        $('#template-2').hide();
-//    });
-//    return $q.reject(response);
-//};
+

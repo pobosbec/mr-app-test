@@ -16,8 +16,7 @@ angular.module('login', [])
 
         $scope.login = function (data) {
             //if theres something in the input field try to authenticate
-            if (!((data.username == "" || data.username == null) || (data.password == "" || data.password == null))) {
-                authenticate(data.username, data.password, (data.kli || false));
+            if (!((data.username == "" || data.username == null))) {
                 tokenService.authenticate(data.username,data.password);
             }
             //nothing in the inputfields use the hard coded user
@@ -67,6 +66,8 @@ angular.module('login', [])
                 // or server returns response with an error status.
                 $scope.showLoginError = true;
                 console.log(response); // TODO: REMOVE! only for debugging.
+
+
                 $scope.keepMeLoggedInAtStartup = false;
                 tokenService.saveToDb("klik", false);
                 tokenService.saveToDb("kliu", null);
