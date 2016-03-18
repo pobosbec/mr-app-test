@@ -17,7 +17,13 @@ angular.module('contacts', [])
                 function(){
                     console.log('Could not get contacts!')
                 }, options);
-        }
+        };
+
+        function getTempContacts(){
+           var contact = { displayName: "test", phoneNumbers: [{"id":"4","pref":false,"value":"0763793585","type":"mobile"}]};
+            $scope.contacts.push(contact);
+        };
 
         getAllContacts();
+        //getTempContacts();
     }])
