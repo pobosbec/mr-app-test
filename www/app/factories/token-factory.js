@@ -106,13 +106,11 @@ angular.module('token', [])
         };
 
         factory.refreshIds = function () {
-            var response = factory.isAuthenticated(win.sessionStorage.accessToken).then(function (response) {
+            var response = factory.isAuthenticated(win.sessionStorage.accessToken).then(function(response) {
                 token = response.data.data.id;
                 $rootScope.token = token;
                 adminId = response.data.data.administratorId;
                 accountId = response.data.data.accountId;
-            }).then(factory.isAppAuthenticated(factory.getAppAuthToken())).then(function (response) {
-                
             });
             return response;
         };
@@ -167,13 +165,13 @@ angular.module('token', [])
 
             return $http(req
             ).then(function successCallback(response) {
-                    // this callback will be called asynchronously
-                    // when the response is available
-                    //things to fetch
-                    token = response.data.data.id;
-                    $rootScope.token = token;
-                    adminId = response.data.data.administratorId;
-                    accountId = response.data.data.accountId;
+                // this callback will be called asynchronously
+                // when the response is available
+                //things to fetch
+                token = response.data.data.id;
+                $rootScope.token = token;
+                adminId = response.data.data.administratorId;
+                accountId = response.data.data.accountId;
                 // this callback will be called asynchronously
                 // when the response is available
 
@@ -221,6 +219,10 @@ angular.module('token', [])
 
 
         factory.registerPushToken = function () {
+            if (factory.getAppUserId() == null || factory.getAuthToken() == null) {
+                factory.refreshIds();
+            }
+
             var req = {
                 method: 'POST',
                 url: factory.currentAppApiUrl + 'app/users/update-device',
@@ -240,12 +242,14 @@ angular.module('token', [])
                     "Tags": null
                 }
             };
+
             return $http(req).then(function successCallback(response) {
+                console.log("registerPushToken update success");
                 return response;
             }, function errorCallback(response) {
 
-                console.log("registerPushToken update error");
-                console.log(response);
+                console.error("registerPushToken update error");
+                console.error(response);
 
                 return $q.reject(response);
             });
@@ -347,7 +351,11 @@ angular.module('token', [])
 
         factory.getAuthToken = function () {
             if (token == null) {
-                token = JSON.parse(localStorage.getItem("authToken"));
+                if (win.sessionStorage.accessToken != null) {
+                    token = win.sessionStorage.accessToken;
+                } else {
+                    token = JSON.parse(localStorage.getItem("authToken"));
+                }
             }
             return token;
         };
@@ -358,6 +366,7 @@ angular.module('token', [])
             }
             return appToken;
         };
+
         factory.getAppUserId = function () {
 
             if (appUserId === null) {
