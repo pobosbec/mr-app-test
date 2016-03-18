@@ -81,8 +81,6 @@ angular.module('token', [])
             });
         };
 
-
-
         //set user credentials
         function setCredentialsAndLogin(greeting) {
             console.log("setting credentials for following user:");

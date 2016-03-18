@@ -12,12 +12,6 @@ angular.module('event', [])
 
         // Native
         document.addEventListener('deviceready', function (event, args) {
-            
-            var options      = new ContactFindOptions();
-            options.multiple = true;
-            var fields       = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
-            navigator.contacts.find(fields, function(contacts){ console.log(JSON.stringify(contacts))}, function(){ console.log('could not get contacts!')}, options);
-
             $rootScope.$broadcast('device-ready', args);
         }, false);
 
