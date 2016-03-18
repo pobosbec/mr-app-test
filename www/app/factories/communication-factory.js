@@ -6,6 +6,7 @@ angular.module('communication', [])
 
         var factory = {};
         var latestUpdate;
+        var synchronizing = false;
 
         factory.init = function(){
             latestUpdate = factory.getLatestUpdate();
@@ -63,6 +64,7 @@ angular.module('communication', [])
                 factory.messagesDownloaded(data);
 
             }, function errorCallback(response) {
+                synchronizing = false;
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
             });
@@ -110,13 +112,15 @@ angular.module('communication', [])
             }
         }
 
-        factory.downloadWhatIsNew = function downloadWhatsNew(){
-            var appAuthToken = tokenService.getAppAuthToken();
-            if (appAuthToken === null || appAuthToken === 'undefined' || appAuthToken === undefined) {
-                console.log('AppToken was null');
-                return;
+        factory.downloadWhatIsNew = function downloadWhatsNew() {
+            if (!synchronizing) {
+                var appAuthToken = tokenService.getAppAuthToken();
+                if (appAuthToken === null || appAuthToken === 'undefined' || appAuthToken === undefined) {
+                    console.log('AppToken was null');
+                    return;
+                }
+                factory.synchronize(tokenService.getAppAuthToken());
             }
-            factory.synchronize(tokenService.getAppAuthToken());
         }
 
         function updateLastUpdated(){
@@ -124,6 +128,7 @@ angular.module('communication', [])
                 localStorage.setItem('latestWhatIsNewUpdate', latestUpdate);
             } else {
                 alert("ach nein! keiner storage!!!1");
+                alert("This is actually not a good thing.. We would like you (yes YOU) to contact us and tell us at Bosbec what platform you are running on.");
                 return;
             }
         };

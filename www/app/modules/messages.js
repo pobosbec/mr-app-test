@@ -10,7 +10,7 @@ angular.module('messages', [])
         $scope.messages = messageRepository.getMessages();
         $scope.conversations = [];
         messagesToConversations($scope.messages,$scope.conversations);
-        console.log($scope.conversations);
+        // console.log($scope.conversations);
         setInterval(function () {
             var args = { Sender : "messages", Event: 'interval' };
             $rootScope.$broadcast('download-whats-new', args);

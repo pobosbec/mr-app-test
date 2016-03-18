@@ -122,8 +122,7 @@ angular.module('event', [])
 
         $scope.$on('push-notification', function (event, args) {
             var title = args.notification.title;
-            var userData = args.notification.userdata;
-            alert(title + " > " + userData);
+            alert(title);
             console.log(args);
             communicationService.on(event, args);
         });

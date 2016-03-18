@@ -49,6 +49,7 @@ angular.module('token', [])
             clearInterval(refreshTokenIntervall);
             factory.unRegisterPushToken();
             factory.clearLoginCredentials();
+            factory.clearTokenData();
 
             $state.go('login');
 
@@ -124,6 +125,13 @@ angular.module('token', [])
                     userDetails.displayName = greeting.data.phoneNumber;
                 }
                 console.log(userDetails.displayName);
+                factory.saveToDb("authToken", userDetails.token);
+                factory.saveToDb("accountId", userDetails.accountId);
+                factory.saveToDb("administratorId", userDetails.administratorId);
+                factory.saveToDb("appUserId", userDetails.appUserId);
+                factory.saveToDb("displayName", userDetails.displayName);
+                factory.saveToDb("pushToken", factory.getPushToken());
+
                 //TODO: logged in now transfer home
                 $rootScope.$broadcast("app-token-available");
                 $rootScope.$broadcast("logged-in");
@@ -261,8 +269,7 @@ angular.module('token', [])
 
         factory.registerPushToken = function () {
 
-            deivceId = typeof device != 'undefined' ? device.uuid : null;
-            if (deivceId != null) {
+            if (factory.getDeviceId() != null) {
                 var req = {
                     method: 'POST',
                     url: factory.currentAppApiUrl + 'app/users/update-device',
@@ -273,7 +280,7 @@ angular.module('token', [])
                         "Data": {
                             InstanceName: "mobileresponse",
                             UserId: factory.getAppUserId(),
-                            HardwareId: device.uuid,
+                            HardwareId: factory.getDeviceId(),
                             PushToken: factory.getPushToken(),
                             DeviceType: window.deviceType,
                             MacAddress: null
@@ -296,12 +303,11 @@ angular.module('token', [])
                 });
 
                 return $q.reject(response);
-            }
+            };
         };
 
         factory.unRegisterPushToken = function () {
-            deivceId = typeof device != 'undefined' ? device.uuid : null;
-            if (deivceId != null) {
+            if (factory.getDeviceId() != null) {
                 var req = {
                     method: 'POST',
                     url: factory.currentAppApiUrl + 'app/users/unregister-device',
@@ -310,7 +316,7 @@ angular.module('token', [])
                     },
                     data: {
                         "Data": {
-                            HardwareId: device.uuid
+                            HardwareId: factory.getDeviceId()
                         },
                         "AuthenticationToken": factory.getAuthToken(),
                         "Tags": null
@@ -355,6 +361,10 @@ angular.module('token', [])
             return userDetails.appUserId;
         };
 
+        factory.getDeviceId = function () {
+            return typeof device != 'undefined' ? device.uuid : null;
+        }
+
         factory.getPushToken = function () {
             if (pushToken == null) {
                 pushToken = JSON.parse(localStorage.getItem("pushToken"));
@@ -375,13 +385,24 @@ angular.module('token', [])
             }
         }
 
-        factory.clearLoginCredentials = function() {
+        factory.clearLoginCredentials = function () {
             factory.saveToDb("keepLoggedIn", false);
             factory.saveToDb("keepLoggedInUser", null);
             factory.saveToDb("keepLoggedInPassword", null);
         }
 
-        factory.clearLocalStorage = function() {
+        factory.clearTokenData = function () {
+            factory.saveToDb("authToken", null);
+            factory.saveToDb("accountId", null);
+            factory.saveToDb("administratorId", null);
+            factory.saveToDb("appUserId", null);
+            factory.saveToDb("displayName", null);
+
+            //factory.saveToDb("deviceId", null); // Should we clear this as well?
+            //factory.saveToDb("pushToken", null); // Should we clear this as well?
+        }
+
+        factory.clearLocalStorage = function () {
             localStorage.clear();
         }
 
