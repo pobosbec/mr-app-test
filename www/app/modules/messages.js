@@ -53,6 +53,10 @@ angular.module('messages', [])
                     }
                 }
             }
+            //sort conversations
+            for(var conv in destination){
+
+            }
         }
 
         //function to find the index of an certain conversations

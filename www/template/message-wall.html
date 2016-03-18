@@ -33,7 +33,7 @@
 </div>
 
 <!-- Latest -->
-<div class="card" ng-repeat="conversation in conversations">
+<div class="card" ng-repeat="conversation in conversations |orderBy: conversation.messages.createdOn">
     <div class="card-header">
         <div class="media">
             <div class="pull-left">
