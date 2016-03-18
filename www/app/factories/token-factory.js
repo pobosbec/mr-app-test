@@ -381,8 +381,7 @@ angular.module('token', [])
             factory.saveToDb("keepLoggedInPassword", null);
         }
 
-        factory.clearLocalStorage()
-        {
+        factory.clearLocalStorage = function() {
             localStorage.clear();
         }
 
