@@ -1,12 +1,54 @@
-<section id="content" data-ng-controller="messagesController as msgCtrl">
-
-    <div class="container">
-
-        <div class="block-header" data-ng-include="'template/messages-header.html'"></div>
-
-        <!-- Recent Posts -->
-        <div ng-if="messageViewMode == 1" class="container" data-ng-include="'template/message-list.html'"></div>
-        <div ng-if="messageViewMode == 2" class="container" data-ng-include="'template/message-wall.html'"></div>
-
+<div class="card" ng-repeat="contact in contacts track by $index" data-ng-controller="contactsController as contactsCtrl">
+    <div class="card-header bgm-cyan">
+        <div class="media">
+            <div class="pull-left">
+                <img class="lv-img" ng-src="{{ message.AuthorAvatar || 'img/profile-pics/8.jpg' }}" alt="">
+            </div>
+            <div class="media-body m-t-5">
+                <h2>
+                    {{contact.DisplayName || 'Namn Namnsson' }}
+                    <small> {{ message.CreatedOn || 'yyyy-mm-dd hh:ii:ss' }}</small>
+                </h2>
+            </div>
+        </div>
+        <ul class="actions actions-alt">
+            <li class="dropdown" uib-dropdown="">
+                <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle" aria-haspopup="true">
+                    <i class="zmdi zmdi-more-vert"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li>
+                        <a href="">Something</a>
+                    </li>
+                    <li>
+                        <a href="">Something else</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
     </div>
-</section>
+    <div class="card-body card-padding">
+        {{ message.Content || 'Ett Meddelande' }}
+        <br /><br />
+        <a data-ng-click="msgctrl.toggleShowImage($event)" href="">
+            <img class="lv-img" ng-src="{{ message.metaData.thumbnail || 'https://s3-eu-west-1.amazonaws.com/mr-app-images/2016-03-07%2B15-08-18thumb.jpg' }}" alt="Attached image thumbnail">
+        </a>
+        <!--<img class="lv-img" ng-src="{{ 'https://s3-eu-west-1.amazonaws.com/mr-app-images/map-icon.png' }}" alt="Attached position">-->
+    </div>
+    <div ng-if="showAttachedImage == 1" class="container" data-ng-include="'template/image-view.html'" full-size-image-div=""></div>
+    <!-- Comment reply form -->
+    <!-- show if its not yourself -->
+    <div class="wcl-form card-padding card-body" ng-if="message.Author != id()">
+        <div class="wc-comment" >
+            <div class="wcc-inner">
+                <input class="wcci-text" ng-model="textArea"  ng-focus="focused = true" ng-blur="focused = false" data-auto-size placeholder="Write Something..." ng-keyup="$event.keyCode == 13 && reply(conversation.ConversationId,conversation.TextArea)">
+            </div>
+            <div class="m-t-15">
+                <button class="btn btn-sm btn-primary btnCancel" ng-click="reply(message.ConversationId,textArea);textArea = ''" ng-show="focused||mouseover" ng-mouseover="mouseover=true" ng-mouseleave="mouseover=false">Reply</button>
+                <button class="btn btn-sm btn-link" data-ng-click="textArea = ''" ng-show="focused||mouseover" ng-mouseover="mouseover=true" ng-mouseleave="mouseover=false">Cancel</button>
+            </div>
+        </div>
+    </div>
+    <!-- Comment reply form end here -->
+</div>
+<div ng-click="test()" class="row">&nbsp;</div>
