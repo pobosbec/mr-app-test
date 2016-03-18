@@ -150,13 +150,21 @@ angular.module('event', [])
 
         $scope.$on('logged-in', function(event, args) {
             //console.log("Logged in, time to bind push token to app token");
+            //if (window.isPhoneGap) {
+            console.log('logged-in');
             tokenService.registerPushToken();
+            //}
         });
 
         $scope.$on('app-token-available', function (event, args) {
+            console.log('app-token-available');
             $rootScope.$broadcast('download-whats-new', args);
         });
 
+
+        $scope.$on('push-token-registered', function (event, args) {
+            console.log('push-token-registered');
+        });
 
         // ------------------------------------
         // Factory-forwarded events 

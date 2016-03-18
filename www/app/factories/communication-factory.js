@@ -113,7 +113,7 @@ angular.module('communication', [])
         factory.downloadWhatIsNew = function downloadWhatsNew(){
             var appAuthToken = tokenService.getAppAuthToken();
             if (appAuthToken === null || appAuthToken === 'undefined' || appAuthToken === undefined) {
-                tokenService.isAppAuthenticated();
+                //tokenService.isAppAuthenticated();
                 console.log('AppToken was null');
                 return;
             }

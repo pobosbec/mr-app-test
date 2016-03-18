@@ -11,8 +11,8 @@ angular.module('login', [])
 
         $scope.showLoginError = false;
         $scope.errorMsg = "";
-        $scope.keepMeLoggedInAtStartup = JSON.parse(localStorage.getItem("klik"));
-        $scope.kli = JSON.parse(localStorage.getItem("klik"));
+        $scope.keepMeLoggedInAtStartup = JSON.parse(localStorage.getItem("keepLoggedIn"));
+        $scope.keepLoggedIn = JSON.parse(localStorage.getItem("keepLoggedIn"));
 
         $scope.login = function (data) {
             //if theres something in the input field try to authenticate
@@ -29,7 +29,7 @@ angular.module('login', [])
          * @param username
          * @param password
          */
-        function authenticate(username, password, kli) {
+        function authenticate(username, password, keepLoggedIn) {
 
             var req = {
                 method: 'POST',
@@ -55,10 +55,10 @@ angular.module('login', [])
                 tokenService.saveToDb("authToken", token);
                 $scope.showLoginError = false;
                 tokenService.isAuthenticated(token).then($rootScope.$broadcast("logged-in"));
-                if (kli) {
-                    tokenService.saveToDb("klik", true);
-                    tokenService.saveToDb("kliu", username);
-                    tokenService.saveToDb("klip", password);
+                if (keepLoggedIn) {
+                    tokenService.saveToDb("keepLoggedIn", true);
+                    tokenService.saveToDb("keepLoggedInUser", username);
+                    tokenService.saveToDb("keepLoggedInPassword", password);
                 }
 
             }, function errorCallback(response) {
@@ -69,9 +69,9 @@ angular.module('login', [])
 
 
                 $scope.keepMeLoggedInAtStartup = false;
-                tokenService.saveToDb("klik", false);
-                tokenService.saveToDb("kliu", null);
-                tokenService.saveToDb("klip", null);
+                tokenService.saveToDb("keepLoggedIn", false);
+                tokenService.saveToDb("keepLoggedInUser", null);
+                tokenService.saveToDb("keepLoggedInPassword", null);
 
                 if (response.data != null) {
                     if (response.data.errors[0].errorMessage.indexOf("AuthenticationToken") > -1) {
@@ -83,11 +83,11 @@ angular.module('login', [])
             });
         }
 
-        function kli() {
+        function keepLoggedInData() {
             var data = {
-                kli:        JSON.parse(localStorage.getItem("klik")),
-                username:   JSON.parse(localStorage.getItem("kliu")),
-                password:   JSON.parse(localStorage.getItem("klip"))
+                keepLoggedIn: JSON.parse(localStorage.getItem("keepLoggedIn")),
+                keepLoggedInUser: JSON.parse(localStorage.getItem("keepLoggedInUser")),
+                keepLoggedInPassword: JSON.parse(localStorage.getItem("keepLoggedInPassword"))
             }
             return data;
         }
@@ -134,7 +134,10 @@ angular.module('login', [])
 
         if ($scope.keepMeLoggedInAtStartup) {
             console.warn("auto-logging in");
-            $scope.login(kli());
+            $scope.login(keepLoggedIn());
+        } else {
+            // DIE!
+            tokenService.clearLocalStorage();
         }
 
     }]);
