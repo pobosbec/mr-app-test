@@ -412,7 +412,7 @@ angular.module('token', [])
                 //return "http://api2.test.mobileresponse.se/";
                 return "https://api2.mobileresponse.se/";
             // in staging
-            return "https://api2.mobileresponse.se/";
+            return "http://api.mobileresponse.se/";
         };
 
         /**

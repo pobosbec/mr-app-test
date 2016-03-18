@@ -62,12 +62,16 @@ angular.module('event', [])
         });
 
         $scope.$on('on-focus', function (event, args) {
+            args.Sender = 'events';
+            args.Event = 'on-focus';
             $rootScope.$broadcast('download-whats-new', args);
         });
 
         $scope.$on('on-blur', function (event, args) { });
 
         $scope.$on('online', function (event, args) {
+            args.Sender = 'events';
+            args.Event = 'online';
             $rootScope.$broadcast('download-whats-new', args);
         });
 
@@ -156,6 +160,11 @@ angular.module('event', [])
 
         $scope.$on('app-token-available', function (event, args) {
             tokenService.refreshIds();
+            if(args == null){
+                args = {};
+            }
+            args.Sender = 'events';
+            args.Event = 'app-token-available';
             $rootScope.$broadcast('download-whats-new', args);
         });
 
@@ -173,6 +182,7 @@ angular.module('event', [])
         });
 
         $scope.$on('download-whats-new', function (event, args) {
+            console.log(JSON.stringify(args));
             communicationService.on(event, args);
         });
 

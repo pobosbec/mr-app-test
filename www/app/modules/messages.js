@@ -12,7 +12,8 @@ angular.module('messages', [])
         messagesToConversations($scope.messages,$scope.conversations);
         console.log($scope.conversations);
         setInterval(function () {
-            $rootScope.$broadcast('download-whats-new');
+            var args = { Sender : "messages", Event: 'interval' };
+            $rootScope.$broadcast('download-whats-new', args);
         }, 10000);
 
         $scope.$on('messages-added', function (event, args) {
@@ -153,7 +154,8 @@ angular.module('messages', [])
                 console.log(data);
                 //TODO check if success
                 $scope.conversations[findConversation(conversationId)].TextArea = "";
-                $rootScope.$broadcast('download-whats-new');
+                var args = { Sender: "messages", Event: "Reply"}
+                $rootScope.$broadcast('download-whats-new', args);
             }, function errorCallback(response) {
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
