@@ -8,6 +8,7 @@ angular.module('contact', [])
         $scope.appUsers = [];
 
         function init(){
+            contactsService.init();
             $scope.appUsers = contactsService.getAppUsers();
             $scope.contacts = contactsService.getPhoneContacts();
         };
@@ -16,13 +17,8 @@ angular.module('contact', [])
             contactsService.findAppUsersFromAllContacts();
         };
 
-        $scope.GetToView = function() {
-            $scope.appUsers = contactsService.getAppUsers();
-            $scope.contacts = contactsService.getPhoneContacts();
-        };
-
-        $scope.notImplemented = function (){
-            alert('Not implemented!');
+        $scope.ListPhoneContacts = function (){
+            contactsService.retriveAllPhoneContacts();
         }
 
         init();

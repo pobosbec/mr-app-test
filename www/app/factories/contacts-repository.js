@@ -11,7 +11,7 @@ angular.module('contacts', [])
 
         factory.init = function init() {
 
-            retriveAllPhoneContacts();
+            factory.retriveAllPhoneContacts();
 
             var item = localStorage.getItem('appUsers');
 
@@ -90,6 +90,23 @@ angular.module('contacts', [])
             saveAppUsers();
         };
 
+        factory.retriveAllPhoneContacts = function () {
+            try {
+                var options      = new ContactFindOptions();
+                options.multiple = true;
+                var fields       = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
+                navigator.contacts.find(fields,
+                    function(phoneContacts){
+                        contacts = phoneContacts;
+                    },
+                    function(){
+                        console.log('Could not get contacts!')
+                    }, options);
+            } catch (error){
+                console.log('Could not get contacts from phone.')
+            }
+        };
+
         function saveAppUsers(){
             if (typeof (Storage) !== "undefined") {
                 localStorage.setItem('appUsers', JSON.stringify(appUsers));
@@ -97,19 +114,6 @@ angular.module('contacts', [])
                 alert("ach nein! keiner storage!!!1");
                 return;
             }
-        };
-
-        function retriveAllPhoneContacts() {
-            var options      = new ContactFindOptions();
-            options.multiple = true;
-            var fields       = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
-            navigator.contacts.find(fields,
-                function(phoneContacts){
-                    contacts = phoneContacts;
-                },
-                function(){
-                    console.log('Could not get contacts!')
-                }, options);
         };
 
         factory.init();
