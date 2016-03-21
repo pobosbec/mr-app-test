@@ -11,7 +11,6 @@ angular.module('token', [])
         var refreshTokenIntervall = null;
         var factory = {};
         var userDetails = {};
-
         factory.keepTokenAlive = function () {
             var req = {
                 method: 'POST',
@@ -25,6 +24,7 @@ angular.module('token', [])
                     "Tags": null
                 }
             };
+
             refreshTokenIntervall = setInterval(
                 function () {
                     var promise = factory.httpPost(req);
@@ -125,11 +125,7 @@ angular.module('token', [])
                     userDetails.displayName = greeting.data.phoneNumber;
                 }
                 console.log(userDetails.displayName);
-                factory.saveToDb("authToken", userDetails.token);
-                factory.saveToDb("accountId", userDetails.accountId);
-                factory.saveToDb("administratorId", userDetails.administratorId);
-                factory.saveToDb("appUserId", userDetails.appUserId);
-                factory.saveToDb("displayName", userDetails.displayName);
+                factory.saveToDb("userDetails", userDetails);
                 factory.saveToDb("pushToken", factory.getPushToken());
 
                 //TODO: logged in now transfer home
@@ -337,6 +333,40 @@ angular.module('token', [])
             }
         };
 
+        // Get
+        factory.keepLoggedInCredentialsFromDatabase = function() {
+            var data = {
+                keepLoggedIn: false,
+                username: "",
+                password:""
+            };
+            var keepLoggedInCredentials = JSON.parse(localStorage.getItem("keepLoggedInCredentials"));
+            if (typeof keepLoggedInCredentials !== "undefined" && keepLoggedInCredentials !== null) {
+                data = keepLoggedInCredentials;
+            }
+            return data;
+        }
+
+        factory.userDetailsFromDatabase = function () {
+            var data = {
+                displayName: "-",
+                administratorId: null,
+                accountId: null,
+                token: null,
+                appUserId: null
+
+            };
+            var userDetails = JSON.parse(localStorage.getItem("userDetails"));
+            if (typeof userDetails !== "undefined" && userDetails !== null) {
+                data = userDetails;
+            }
+            return data;
+        }
+
+        userDetails = factory.userDetailsFromDatabase();
+        console.log(userDetails);
+
+
         factory.getUsername = function () {
             return userDetails.displayName;
         };
@@ -372,6 +402,8 @@ angular.module('token', [])
             return pushToken;
         };
 
+        // Save
+
         factory.saveToDb = function (key, value) {
             var valueAsJson = JSON.stringify(value);
             localStorage.setItem(key, valueAsJson);
@@ -379,25 +411,38 @@ angular.module('token', [])
 
         factory.saveLoginCredentials = function (username, password, keepLoggedIn) {
             if (keepLoggedIn) {
-                factory.saveToDb("keepLoggedIn", true);
-                factory.saveToDb("keepLoggedInUser", username);
-                factory.saveToDb("keepLoggedInPassword", password);
+                var keepLoggedInCredentials = {
+                    keepLoggedIn: true,
+                    username: username,
+                    password: password
+                }
+                factory.saveToDb("keepLoggedInCredentials", keepLoggedInCredentials);
+            } else {
+                factory.saveToDb("keepLoggedInCredentials", null);
             }
         }
 
+        factory.saveLoginCredentials = function (username, password, keepLoggedIn) {
+            if (keepLoggedIn) {
+                var keepLoggedInCredentials = {
+                    keepLoggedIn: true,
+                    username: username,
+                    password: password
+                }
+                factory.saveToDb("keepLoggedInCredentials", keepLoggedInCredentials);
+            } else {
+                factory.saveToDb("keepLoggedInCredentials", null);
+            }
+        }
+
+        // Clear
+
         factory.clearLoginCredentials = function () {
-            factory.saveToDb("keepLoggedIn", false);
-            factory.saveToDb("keepLoggedInUser", null);
-            factory.saveToDb("keepLoggedInPassword", null);
+            factory.saveToDb("keepLoggedInCredentials", false);
         }
 
         factory.clearTokenData = function () {
-            factory.saveToDb("authToken", null);
-            factory.saveToDb("accountId", null);
-            factory.saveToDb("administratorId", null);
-            factory.saveToDb("appUserId", null);
-            factory.saveToDb("displayName", null);
-
+            factory.saveToDb("userDetails", null);
             //factory.saveToDb("deviceId", null); // Should we clear this as well?
             //factory.saveToDb("pushToken", null); // Should we clear this as well?
         }
@@ -470,94 +515,3 @@ angular.module('token', [])
         return factory;
 
     }])
-
-
-
-
-
-
-
-
-
-
-
-///**
-// * getDetails http posts to api to fetch accounts details
-// * @data adminId
-// */
-//factory.getDetails = function () {
-//
-//    var req = {
-//        method: 'POST',
-//        url: factory.currentApiUrl + 'accounts/details',
-//        headers: {
-//            'Content-Type': 'application/json'
-//        },
-//        data: {
-//            "Data": {},
-//            "AuthenticationToken": factory.getAuthToken(),
-//            "Tags": null
-//        }
-//    };
-//
-//    $http(req
-//    ).then(function successCallback(response) {
-//        // this callback will be called asynchronously
-//        // when the response is available
-//        var data = response.data;
-//        if (response.data.data.name != null) {
-//            username = response.data.data.name;
-//        }
-//
-//    }, function errorCallback(response) {
-//        // called asynchronously if an error occurs
-//        // or server returns response with an error status.
-//    });
-//};
-
-
-
-
-//
-//
-//
-//factory.refreshIds = function () {
-//    var response = factory.isAuthenticated(win.sessionStorage.accessToken).then(function(response) {
-//        token = response.data.data.id;
-//        $rootScope.token = token;
-//        adminId = response.data.data.administratorId;
-//        accountId = response.data.data.accountId;
-//    });
-//    return response;
-//};
-//
-//factory.isAppAuthenticated = function (authenticationToken) {
-//    var req = {
-//        method: 'POST',
-//        ignoreLoadingBar: true,
-//        url: factory.currentAppApiUrl + 'app/is-token-valid',
-//        headers: {
-//            'Content-Type': 'application/json'
-//        },
-//        data: {
-//            Data: { AuthenticationToken: authenticationToken },
-//            AuthenticationToken: authenticationToken
-//        }
-//    };
-//
-//    return $http(req
-//    ).then(function successCallback(response) {
-//        // this callback will be called asynchronously
-//        // when the response is available
-//        appUserId = response.data.data.appUserId;
-//        appToken = response.data.data.id;
-//        factory.saveToDb("appUserId", appUserId);
-//        factory.saveToDb("appAuthToken", appToken);
-//        $rootScope.$broadcast("app-token-available");
-//    }, function errorCallback(response) {
-//        // called asynchronously if an error occurs
-//        // or server returns response with an error status.
-//    });
-//};
-//
-
