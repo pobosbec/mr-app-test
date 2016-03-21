@@ -1,4 +1,4 @@
-<div class="card" ng-repeat="message in messages track by $index" data-ng-controller="messageCtrl as msgctrl">
+<div  class="card" ng-repeat="message in messages track by $index" data-ng-controller="messageCtrl as msgctrl" >
     <div class="card-header card-header-conversation bgm-cyan">
         <div class="media">
             <div class="pull-left">
@@ -7,7 +7,7 @@
             <div class="media-body m-t-5">
                 <h2>
                     {{message.AuthorDisplayName || 'Namn Namnsson' }}
-                    <small> {{ message.CreatedOn || 'yyyy-mm-dd hh:ii:ss' }}</small>
+                    <small>{{message.Content}} - {{ message.CreatedOn || 'yyyy-mm-dd hh:ii:ss' }}</small>
                 </h2>
             </div>
         </div>
@@ -27,7 +27,7 @@
             </li>
         </ul>
     </div>
-    <div class="card-body card-padding">
+    <div class="card-body card-padding" ng-if="focusedCard">
         {{ message.Content || 'Ett Meddelande' }}
         <br /><br />
         <a data-ng-click="msgctrl.toggleShowImage($event)" href="">
