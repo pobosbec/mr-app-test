@@ -28,15 +28,23 @@ angular.module('contacts', [])
         factory.findAppUsersFromAllContacts = function(){
             var query = ['+46704738757', 'bjorn@bosbec.se'];
 
+            if(contacts == null || contacts == undefined){
+                return;
+            }
+
             for(var i = 0; i < contacts.length; i++){
                 var contact = contacts[i];
 
-                for(var j = 0; j < contact.phoneNumbers.length; j++){
-                    query.push(contact.phoneNumbers[j].value);
+                if(contact.phoneNumbers != null || contact.phoneNumbers != undefined){
+                    for(var j = 0; j < contact.phoneNumbers.length; j++){
+                        query.push(contact.phoneNumbers[j].value);
+                    }
                 }
 
-                for(var k = 0; k < contact.emails.length; k++){
-                    query.push(contact.emails[k].value);
+                if(contact.emails != null || contact.emails != undefined){
+                    for(var k = 0; k < contact.emails.length; k++){
+                        query.push(contact.emails[k].value);
+                    }
                 }
             }
 
