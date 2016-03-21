@@ -30,8 +30,14 @@ angular.module('contacts', [])
 
             for(var i = 0; i < contacts.length; i++){
                 var contact = contacts[i];
-                query.push(contact.phoneNumer);
-                query.push(contact.emailAddress);
+
+                for(var j = 0; j < contact.phoneNumbers.length; j++){
+                    query.push(contact.phoneNumbers[j].value);
+                }
+
+                for(var k = 0; k < contact.emails.length; k++){
+                    query.push(contact.emails[k].value);
+                }
             }
 
             var req = {
