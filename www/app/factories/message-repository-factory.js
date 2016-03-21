@@ -92,6 +92,7 @@ angular.module('message', ['ngCordova'])
                   factory.messages.push(data);
                   factory.saveMessages();
                   factory.messageAdded(data);
+                  //throttle(factory.messageAdded(data), 5000);
               } else {
                   //This should not handle message after we go live..
                   //factory.messages.push(data);
@@ -107,6 +108,7 @@ angular.module('message', ['ngCordova'])
                   localStorage.setItem('messages', messages);
               } else {
                   alert("ach nein! keiner storage!!!1");
+                  alert("This is actually not a good thing.. We would like you (yes YOU) to contact us and tell us at Bosbec what platform you are running on.");
                   return;
               }
           };
@@ -119,6 +121,19 @@ angular.module('message', ['ngCordova'])
           }
           factory.messagesChanged = function (data) {
               $rootScope.$broadcast('messages-changed', data);
+          }
+
+          function throttle(callback, limit) {
+              var wait = false;                 // Initially, we're not waiting
+              return function () {              // We return a throttled function
+                  if (!wait) {                  // If we're not waiting
+                      callback.call();          // Execute users function
+                      wait = true;              // Prevent future invocations
+                      setTimeout(function () {  // After a period of time
+                          wait = false;         // And allow future invocations
+                      }, limit);
+                  }
+              }
           }
 
           factory.on = function (event, data) {

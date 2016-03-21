@@ -122,8 +122,7 @@ angular.module('event', [])
 
         $scope.$on('push-notification', function (event, args) {
             var title = args.notification.title;
-            var userData = args.notification.userdata;
-            alert(title + " > " + userData);
+            alert(title);
             console.log(args);
             communicationService.on(event, args);
         });
@@ -145,7 +144,7 @@ angular.module('event', [])
 
 
         // Wrapped
-        $scope.$on('load', function (event, args) { });
+        $scope.$on('load', function(event, args) { });
 
 
         // ------------------------------------
@@ -153,21 +152,17 @@ angular.module('event', [])
         // ------------------------------------
 
         $scope.$on('logged-in', function(event, args) {
-            console.log("Logged in, time to bind push token to app token");
-            tokenService.refreshIds();
             tokenService.registerPushToken();
         });
 
         $scope.$on('app-token-available', function (event, args) {
-            tokenService.refreshIds();
-            if(args == null){
-                args = {};
-            }
-            args.Sender = 'events';
-            args.Event = 'app-token-available';
             $rootScope.$broadcast('download-whats-new', args);
         });
 
+
+        $scope.$on('push-token-registered', function (event, args) {
+            console.log('push-token-registered');
+        });
 
         // ------------------------------------
         // Factory-forwarded events 

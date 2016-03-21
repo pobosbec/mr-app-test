@@ -11,87 +11,18 @@ angular.module('login', [])
 
         $scope.showLoginError = false;
         $scope.errorMsg = "";
-        $scope.keepMeLoggedInAtStartup = JSON.parse(localStorage.getItem("klik"));
-        $scope.kli = JSON.parse(localStorage.getItem("klik"));
+        $scope.keepLoggedIn = JSON.parse(localStorage.getItem("keepLoggedInCredentials"));
 
         $scope.login = function (data) {
             //if theres something in the input field try to authenticate
-            if (!((data.username == "" || data.username == null))) {
-                tokenService.authenticate(data.username,data.password);
+            if (!((data.username === "" || data.username === null))) {
+                tokenService.authenticate(data.username,data.password,data.keepLoggedIn);
             }
             //nothing in the inputfields use the hard coded user
             else {
             }
         };
-
-        /**
-         * Calls api for authentication call, sets token and admin id
-         * @param username
-         * @param password
-         */
-        function authenticate(username, password, kli) {
-
-            var req = {
-                method: 'POST',
-                url: tokenService.currentApiUrl + 'authenticate',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                data: {
-                    "Data": {
-                        "InstanceName": "mobileresponse",
-                        "Username": username,
-                        "Password": password
-                    },
-                    "Tags": null
-                }
-            };
-
-            $http(req
-            ).then(function successCallback(response) {
-                // this callback will be called asynchronously
-                // when the response is available
-                var token = response.data.data.id;
-                tokenService.saveToDb("authToken", token);
-                $scope.showLoginError = false;
-                tokenService.isAuthenticated(token).then($rootScope.$broadcast("logged-in"));
-                if (kli) {
-                    tokenService.saveToDb("klik", true);
-                    tokenService.saveToDb("kliu", username);
-                    tokenService.saveToDb("klip", password);
-                }
-
-            }, function errorCallback(response) {
-                // called asynchronously if an error occurs
-                // or server returns response with an error status.
-                $scope.showLoginError = true;
-                console.log(response); // TODO: REMOVE! only for debugging.
-
-
-                $scope.keepMeLoggedInAtStartup = false;
-                tokenService.saveToDb("klik", false);
-                tokenService.saveToDb("kliu", null);
-                tokenService.saveToDb("klip", null);
-
-                if (response.data != null) {
-                    if (response.data.errors[0].errorMessage.indexOf("AuthenticationToken") > -1) {
-                        $scope.errorMessage = "Wrong Username / Password";
-                    }
-                } else {
-                    $scope.errorMessage = "Error";
-                }
-            });
-        }
-
-        function kli() {
-            var data = {
-                kli:        JSON.parse(localStorage.getItem("klik")),
-                username:   JSON.parse(localStorage.getItem("kliu")),
-                password:   JSON.parse(localStorage.getItem("klip"))
-            }
-            return data;
-        }
-
+        
         /**
          * Used by login-forgot-password.html
          * used to reset password.
@@ -132,9 +63,12 @@ angular.module('login', [])
             });
         }
 
-        if ($scope.keepMeLoggedInAtStartup) {
+        if (tokenService.keepLoggedInCredentialsFromDatabase().keepLoggedIn) {
             console.warn("auto-logging in");
-            $scope.login(kli());
+            $scope.login(tokenService.keepLoggedInCredentialsFromDatabase());
+        } else {
+            // In non-keepLoggedIn MR-App, localStorage Clears YOU!
+            tokenService.clearLocalStorage();
         }
 
     }]);
