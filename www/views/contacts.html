@@ -45,8 +45,10 @@
                 </div>
                 <div class="media-body m-t-5">
                     <h2>
-                        {{contact.displayName || 'Namn Namnsson' }}
+                        {{contact.displayName || contact.givenName || Contact without name }}
                     </h2>
+                    <p class="m-t-5 m-b-0 ng-binding">{{ contact.phoneNumber }}</p>
+                    <p class="m-t-5 m-b-0 ng-binding">{{ contact.emailAddress }}</p>
                 </div>
             </div>
         </div>
