@@ -11,7 +11,7 @@ angular.module('login', [])
 
         $scope.showLoginError = false;
         $scope.errorMsg = "";
-        $scope.keepLoggedIn = JSON.parse(localStorage.getItem("keepLoggedIn"));
+        $scope.keepLoggedIn = JSON.parse(localStorage.getItem("keepLoggedInCredentials"));
 
         $scope.login = function (data) {
             //if theres something in the input field try to authenticate
@@ -67,7 +67,7 @@ angular.module('login', [])
             console.warn("auto-logging in");
             $scope.login(tokenService.keepLoggedInCredentialsFromDatabase());
         } else {
-            // DIE! In MR-App, localStorage Clears YOU!
+            // In non-keepLoggedIn MR-App, localStorage Clears YOU!
             tokenService.clearLocalStorage();
         }
 

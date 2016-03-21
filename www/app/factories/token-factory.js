@@ -14,6 +14,7 @@ angular.module('token', [])
         factory.keepTokenAlive = function () {
             var req = {
                 method: 'POST',
+                ignoreLoadingBar: true,
                 url: factory.currentAppApiUrl + 'app/is-token-valid',
                 headers: {
                     'Content-Type': 'application/json'
@@ -25,20 +26,29 @@ angular.module('token', [])
                 }
             };
 
-            refreshTokenIntervall = setInterval(
-                function () {
-                    var promise = factory.httpPost(req);
-                    promise.then(function (greeting) {
-                        //Success
-                        console.log('Sucess refreshed token');
-                        console.log(greeting);
-                    }, function (reason) {
-                        //failed try
-                        console.log('Failed refreshing token');
-                        console.log(reason);
+            var refreshTokenFunction = function () {
+                var promise = factory.httpPost(req);
+                promise.then(function (greeting) {
+                    //Success
+                    console.log('Sucess refreshing token');
+                    console.log(greeting);
+                }, function (reason) {
+                    //failed attempt
+                    console.log('Failed refreshing token');
+                    console.log(reason);
+
+                    var credentials = factory.keepLoggedInCredentialsFromDatabase();
+                    if (credentials.keepLoggedIn) {
+                        console.log("Keep Logged in is active, attempting to re-authenticate");
+                        factory.authenticate(credentials.username, credentials.password, credentials.keepLoggedIn);
+                    } else {
+                        console.log("Logging out");
                         $rootScope.logout();
-                    });
-                }, (15 * 60 * 1000));
+                    }
+                });
+            }
+            refreshTokenFunction();
+            refreshTokenIntervall = setInterval(refreshTokenFunction, (15 * 60 * 1000));
         };
 
         $rootScope.logout = function () {
@@ -148,6 +158,10 @@ angular.module('token', [])
         }
 
         factory.authenticate = function (username, password, keepLoggedIn) {
+            // the API gives a 200 response-code with Error-text if we pass null, but 400 if we pass empty string.
+            if (typeof username === "undefined" || username === null) { username = "" };
+            if (typeof password === "undefined" || password === null) { password = "" };
+
             var appAuthenticate = {
                 method: 'POST',
                 ignoreLoadingBar: true,
@@ -422,19 +436,6 @@ angular.module('token', [])
             }
         }
 
-        factory.saveLoginCredentials = function (username, password, keepLoggedIn) {
-            if (keepLoggedIn) {
-                var keepLoggedInCredentials = {
-                    keepLoggedIn: true,
-                    username: username,
-                    password: password
-                }
-                factory.saveToDb("keepLoggedInCredentials", keepLoggedInCredentials);
-            } else {
-                factory.saveToDb("keepLoggedInCredentials", null);
-            }
-        }
-
         // Clear
 
         factory.clearLoginCredentials = function () {
@@ -512,6 +513,9 @@ angular.module('token', [])
         factory.currentApiUrl = factory.getApiUrl(window.location);
         factory.currentDeviceServiceUrl = factory.getDeviceServiceUrl(window.location);
         factory.currentReservationServiceUrl = factory.getReservationServiceUrl(window.location);
+
+        factory.keepTokenAlive();
+
         return factory;
 
     }])

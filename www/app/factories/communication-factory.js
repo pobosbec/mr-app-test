@@ -49,7 +49,6 @@ angular.module('communication', [])
                 // this callback will be called asynchronously
                 // when the response is available
                 var data = response.data;
-
                 console.log('Success response from what-is-new. Setting last update to: ' + data.data.lastUpdate);
 
                 if(data.data.lastUpdate == null){
