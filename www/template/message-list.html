@@ -1,4 +1,4 @@
-<div class="card card-message" ng-repeat="message in messages track by $index" data-ng-controller="messageCtrl as msgctrl" ng-class="{'card-focused': focused}">
+<div class="card card-message" ng-repeat="message in messages track by $index" data-ng-controller="messageCtrl as msgctrl" ng-class="{'card-focused': focused||mouseover}">
     <div class="card-body">
         <div class="wall-comment-list">
             <!-- Comment Listing -->

@@ -10,16 +10,23 @@ angular.module('contacts', [])
         var inboxId = '8a0958a2-a163-4a20-8afa-e7315012e2d8';
 
         factory.init = function init() {
-            var readStorage = JSON.parse(localStorage.getItem('appUsers'));
-            if (readStorage && readStorage.constructor === Array) {
-                appUsers = readStorage;
+
+            factory.retriveAllPhoneContacts();
+
+            var item = localStorage.getItem('appUsers');
+
+            if(item == null || item === "" || item == undefined){
+                return;
             }
 
-            retriveAllPhoneContacts();
+            var readStorage = JSON.parse(item);
+            if (readStorage && readStorage.constructor === Array) {
+                factory.appUsers = readStorage;
+            }
         }
 
         factory.findAppUsersFromAllContacts = function(){
-            var query = ['p-o@bosbec.se', 'whitespacetest', '+46704738757'];
+            var query = ['+46704738757', 'bjorn@bosbec.se'];
 
             for(var i = 0; i < contacts.length; i++){
                 var contact = contacts[i];
@@ -46,11 +53,8 @@ angular.module('contacts', [])
             var promise = tokenService.httpPost(req);
 
             promise.then(function(success){
-                var foundAppUsers = [];
-
                 for(var i = 0; i < success.data.length; i++){
-                    var user = { UserId: success.data[i].userId, Username: success.data[i].username };
-                    appUsers.push(user);
+                    factory.addOrUpdateAppUser(success.data[i]);
                 }
             }, function(error){
                 console.log('found no app-users!')
@@ -65,27 +69,54 @@ angular.module('contacts', [])
             return contacts;
         }
 
+        factory.addOrUpdateAppUser = function(appUser){
+            var updated = false;
+
+            for(var i = 0; i < appUsers.length; i++){
+                var currentAppUser = appUsers[i];
+
+                if(currentAppUser.userId === appUser.userId){
+                    appUsers[i] = appUser;
+                    updated = true;
+                    console.log('Updated app-user.')
+                }
+            }
+
+            if(updated === false){
+                appUsers.push(appUser);
+                console.log('Added new app-user.')
+            }
+
+            saveAppUsers();
+        };
+
+        factory.retriveAllPhoneContacts = function () {
+            try {
+                var options      = new ContactFindOptions();
+                options.multiple = true;
+                var fields       = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
+                navigator.contacts.find(fields,
+                    function(phoneContacts){
+                        contacts = phoneContacts;
+                    },
+                    function(){
+                        console.log('Could not get contacts!')
+                    }, options);
+            } catch (error){
+                console.log('Could not get contacts from phone.')
+            }
+        };
+
         function saveAppUsers(){
             if (typeof (Storage) !== "undefined") {
-                localStorage.setItem('appUsers', appUsers);
+                localStorage.setItem('appUsers', JSON.stringify(appUsers));
             } else {
                 alert("ach nein! keiner storage!!!1");
                 return;
             }
         };
 
-        function retriveAllPhoneContacts() {
-            var options      = new ContactFindOptions();
-            options.multiple = true;
-            var fields       = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
-            navigator.contacts.find(fields,
-                function(phoneContacts){
-                    contacts = phoneContacts;
-                },
-                function(){
-                    console.log('Could not get contacts!')
-                }, options);
-        };
+        factory.init();
 
         return factory;
     }])
