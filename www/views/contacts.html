@@ -1,28 +1,42 @@
+<div class="container">
 <div data-ng-controller="contactsCtrl as contactCtrl">
-    Create new group conversation
-
-    App-Users
+    <!--<button ng-click="notImplemented()">Create new group conversation</button>-->
+    <div class="block-header">
+        <h2>Users</h2>
+    </div>
     <div ng-repeat="appUser in appUsers">
         <div class="card-header bgm-cyan">
             <div class="media">
                 <div class="pull-left">
-                    <img class="lv-img" ng-src="{{ message.AuthorAvatar || 'img/profile-pics/8.jpg' }}" alt="">
+                    <img class="lv-img" ng-src="{{ appUser.avatar || 'img/profile-pics/8.jpg' }}" alt="">
                 </div>
                 <div class="media-body m-t-5">
                     <h2>
-                        {{appUser.UserId || 'Namn Namnsson' }}
-                        {{appUser.UserName || 'Namn Namnsson' }}
-                        {{appUser.UserDisplayName || 'Namn Namnsson' }}
-                        {{appUser.PhoneNumber || 'Namn Namnsson' }}
-                        {{appUser.EmailAddress || 'Namn Namnsson' }}
+                        {{ appUser.userDisplayName }}
                     </h2>
-                    Start conversation
+                        <p class="m-t-5 m-b-0 ng-binding">{{ appUser.firstname }} {{ appUser.lastname }}</p>
+                        <p class="m-t-5 m-b-0 ng-binding">{{ appUser.phoneNumber }}</p>
+                        <p class="m-t-5 m-b-0 ng-binding">{{ appUser.emailAddress }}</p>
+
                 </div>
             </div>
+            <ul class="actions actions-alt">
+                <li class="dropdown" uib-dropdown="">
+                    <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle" aria-haspopup="true">
+                        <i class="zmdi zmdi-more-vert"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li>
+                            <a href="">Send message</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
         </div>
     </div>
-
-    Phone-contacts
+    <div class="block-header" style="margin-top: 15px">
+        <h2>Phone-contacts</h2>
+    </div>
     <div ng-repeat="contact in contacts">
         <div class="card-header bgm-cyan">
             <div class="media">
@@ -31,13 +45,15 @@
                 </div>
                 <div class="media-body m-t-5">
                     <h2>
-                        {{contact.displayName || 'Namn Namnsson' }}
+                        {{contact.displayName || contact.givenName || Contact without name }}
                     </h2>
+                    <p class="m-t-5 m-b-0 ng-binding">{{ contact.phoneNumber }}</p>
+                    <p class="m-t-5 m-b-0 ng-binding">{{ contact.emailAddress }}</p>
                 </div>
             </div>
         </div>
     </div>
-    Import app-users from contacts
-    <button ng-click="Sync()">Check for app-users in phonecontacts</button>
-    <button ng-click="GetToView()">Get app-users</button>
+    <button ng-click="Sync()" class="center-block">Search for app-users in contacts</button>
+    <button ng-click="ListPhoneContacts()" class="center-block">Log phonecontacts</button>
+</div>
 </div>

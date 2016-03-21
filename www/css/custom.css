@@ -127,3 +127,21 @@ and (orientation: portrait) {
         padding: 5px 5px 5px!important;
     }
 }
+
+.card-message{
+    width: 98% !important;
+    margin-bottom: 1px!important;
+    margin-left: auto !important;
+    margin-right:auto !important;
+}
+.card-focused{
+    margin-top: 30px!important;
+    margin-bottom: 30px!important;
+    margin-left: auto !important;
+    margin-right:auto !important;
+    width:100%!important;
+}
+
+#main{
+    padding-top: 80px !important;
+}

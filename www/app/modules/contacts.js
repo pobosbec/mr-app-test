@@ -7,13 +7,20 @@ angular.module('contact', [])
         $scope.contacts = [];
         $scope.appUsers = [];
 
+        function init(){
+            contactsService.init();
+            $scope.appUsers = contactsService.getAppUsers();
+            $scope.contacts = contactsService.getPhoneContacts();
+        };
+
         $scope.Sync = function(){
             contactsService.findAppUsersFromAllContacts();
         };
 
-        $scope.GetToView = function() {
-            $scope.appUsers = contactsService.getAppUsers();
-            $scope.contacts = contactsService.getPhoneContacts();
-        };
+        $scope.ListPhoneContacts = function (){
+            contactsService.retriveAllPhoneContacts();
+        }
+
+        init();
 
     }])
