@@ -11,7 +11,7 @@ mobileresponseWebbApp
         $scope.username = tokenService.getUsername; //passing getter to the view
 
         //message listing view
-        $scope.messageViewMode = 2;
+        $scope.messageViewMode = 1;
 
         this.changeMessageView = function(event) {
           $scope.messageViewMode = event.target.id;

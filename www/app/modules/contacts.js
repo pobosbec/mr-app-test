@@ -1,29 +1,19 @@
 /**
  * Created by Kristofer on 2016-03-17.
  */
-angular.module('contacts', [])
-    .controller('contactsCtrl', ['$scope', function($scope) {
+angular.module('contact', [])
+    .controller('contactsCtrl', ['$scope', '$http', 'tokenService', 'contactsService', function($scope, $http, tokenService, contactsService) {
 
         $scope.contacts = [];
+        $scope.appUsers = [];
 
-        function getAllContacts() {
-            var options      = new ContactFindOptions();
-            options.multiple = true;
-            var fields       = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
-            navigator.contacts.find(fields,
-                function(contacts){
-                    $scope.contacts = contacts;
-                },
-                function(){
-                    console.log('Could not get contacts!')
-                }, options);
+        $scope.Sync = function(){
+            contactsService.findAppUsersFromAllContacts();
         };
 
-        function getTempContacts(){
-           var contact = { displayName: "test", phoneNumbers: [{"id":"4","pref":false,"value":"0763793585","type":"mobile"}]};
-            $scope.contacts.push(contact);
+        $scope.GetToView = function() {
+            $scope.appUsers = contactsService.getAppUsers();
+            $scope.contacts = contactsService.getPhoneContacts();
         };
 
-        getAllContacts();
-        //getTempContacts();
     }])
