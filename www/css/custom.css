@@ -115,3 +115,15 @@ and (orientation: portrait) {
         padding-left: 0!important;
     }
 }
+/* -- card-header for messages in list --*/
+@media screen and (min-width: 768px) {
+    .card-header-conversation {
+        padding: 5px 5px!important;
+    }
+}
+
+@media screen and (max-width: 991px) {
+    .card-header-conversation {
+        padding: 5px 5px 5px!important;
+    }
+}
