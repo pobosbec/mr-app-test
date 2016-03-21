@@ -1,4 +1,20 @@
 <div data-ng-controller="contactsCtrl as contactCtrl">
+    Create new group conversation
+    <div ng-repeat="appUsers in appusers">
+        <div class="card-header bgm-cyan">
+            <div class="media">
+                <div class="pull-left">
+                    <img class="lv-img" ng-src="{{ message.AuthorAvatar || 'img/profile-pics/8.jpg' }}" alt="">
+                </div>
+                <div class="media-body m-t-5">
+                    <h2>
+                        {{contact.displayName || 'Namn Namnsson' }}
+                    </h2>
+                    Start conversation
+                </div>
+            </div>
+        </div>
+    </div>
     <div ng-repeat="contact in contacts">
         <div class="card-header bgm-cyan">
             <div class="media">
@@ -13,4 +29,7 @@
             </div>
         </div>
     </div>
+    Import app-users from contacts
+    <button ng-click="Sync()">Sync</button>
+    <button ng-click="GetToView()">GetToView</button>
 </div>
