@@ -10,6 +10,9 @@ angular.module('contacts', [])
         var inboxId = '8a0958a2-a163-4a20-8afa-e7315012e2d8';
 
         factory.init = function init() {
+
+            retriveAllPhoneContacts();
+
             var item = localStorage.getItem('appUsers');
 
             if(item == null || item === "" || item == undefined){
