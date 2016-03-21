@@ -10,7 +10,6 @@ angular.module('messages', [])
         $scope.messages = messageRepository.getMessages();
         $scope.conversations = [];
         messagesToConversations($scope.messages,$scope.conversations);
-        // console.log($scope.conversations);
         setInterval(function () {
             var args = { Sender : "messages", Event: 'interval' };
             $rootScope.$broadcast('download-whats-new', args);
@@ -20,7 +19,6 @@ angular.module('messages', [])
             $scope.messages = messageRepository.getMessages();
             $scope.conversations = [];
             messagesToConversations(messageRepository.getMessages(),$scope.conversations);
-            console.log($scope.conversations);
         });
 
         //converts a list of mesasges into conversations
@@ -154,8 +152,6 @@ angular.module('messages', [])
             ).then(function successCallback(response) {
                 // this callback will be called asynchronously
                 // when the response is available
-                var data = response.data;
-                console.log(data);
                 //TODO check if success
                 $scope.conversations[findConversation(conversationId)].TextArea = "";
                 var args = { Sender: "messages", Event: "Reply"}
