@@ -14,59 +14,8 @@ angular.module('contacts', [])
             if (readStorage && readStorage.constructor === Array) {
                 appUsers = readStorage;
             }
-        }
 
-        function getAllPhoneContacts() {
-            var options      = new ContactFindOptions();
-            options.multiple = true;
-            var fields       = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
-            navigator.contacts.find(fields,
-                function(phoneContacts){
-                    contacts = phoneContacts;
-                },
-                function(){
-                    console.log('Could not get contacts!')
-                }, options);
-        };
-
-        factory.searchForAppUser = function searchForAppUser(queries){
-
-            var req = {
-                method: 'POST',
-                ignoreLoadingBar: true,
-                url: tokenService.currentAppApiUrl + 'app/inboxes/search-multiple',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                data: {
-                    Data: {
-                        InboxId: inboxId,
-                        Queries: queries
-                    },
-                    AuthenticationToken: tokenService.getAppAuthToken()
-                }
-            };
-
-            $http(req
-            ).then(function successCallback(response) {
-                // this callback will be called asynchronously
-                // when the response is available
-                var data = response.data.data;
-
-                var foundAppUsers = [];
-
-                for(var i = 0; i < data.length; i++){
-                    var user = { UserId: data[i].userId, Username: data[i].username };
-                    foundAppUsers.push(user);
-                }
-
-                return foundAppUsers;
-
-            }, function errorCallback(response) {
-                // called asynchronously if an error occurs
-                // or server returns response with an error status.
-                return null;
-            });
+            retriveAllPhoneContacts();
         }
 
         factory.findAppUsersFromAllContacts = function(){
@@ -78,18 +27,43 @@ angular.module('contacts', [])
                 query.push(contact.emailAddress);
             }
 
-            var foundAppUsers = factory.searchForAppUser(query);
-
-            if(foundAppUsers.length > 0){
-                for(var i = 0; i < foundAppUsers.length; i++){
-                    appUsers.push(foundAppUsers);
+            var req = {
+                method: 'POST',
+                ignoreLoadingBar: true,
+                url: tokenService.currentAppApiUrl + 'app/inboxes/search-multiple',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: {
+                    Data: {
+                        InboxId: inboxId,
+                        Queries: query
+                    },
+                    AuthenticationToken: tokenService.getAppAuthToken()
                 }
-            }
+            };
+
+            var promise = tokenService.httpPost(req);
+
+            promise.then(function(success){
+                var foundAppUsers = [];
+
+                for(var i = 0; i < success.data.length; i++){
+                    var user = { UserId: success.data[i].userId, Username: success.data[i].username };
+                    appUsers.push(user);
+                }
+            }, function(error){
+                console.log('found no app-users!')
+            });
         }
 
         factory.getAppUsers = function(){
             return appUsers;
-        };
+        }
+
+        factory.getPhoneContacts = function(){
+            return contacts;
+        }
 
         function saveAppUsers(){
             if (typeof (Storage) !== "undefined") {
@@ -98,6 +72,19 @@ angular.module('contacts', [])
                 alert("ach nein! keiner storage!!!1");
                 return;
             }
+        };
+
+        function retriveAllPhoneContacts() {
+            var options      = new ContactFindOptions();
+            options.multiple = true;
+            var fields       = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
+            navigator.contacts.find(fields,
+                function(phoneContacts){
+                    contacts = phoneContacts;
+                },
+                function(){
+                    console.log('Could not get contacts!')
+                }, options);
         };
 
         return factory;

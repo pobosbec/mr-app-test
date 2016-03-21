@@ -13,6 +13,7 @@ angular.module('contact', [])
 
         $scope.GetToView = function() {
             $scope.appUsers = contactsService.getAppUsers();
+            $scope.contacts = contactsService.getPhoneContacts();
         };
 
     }])

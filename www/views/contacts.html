@@ -1,6 +1,8 @@
 <div data-ng-controller="contactsCtrl as contactCtrl">
     Create new group conversation
-    <div ng-repeat="appUsers in appusers">
+
+    App-Users
+    <div ng-repeat="appUser in appUsers">
         <div class="card-header bgm-cyan">
             <div class="media">
                 <div class="pull-left">
@@ -8,13 +10,19 @@
                 </div>
                 <div class="media-body m-t-5">
                     <h2>
-                        {{contact.displayName || 'Namn Namnsson' }}
+                        {{appUser.UserId || 'Namn Namnsson' }}
+                        {{appUser.UserName || 'Namn Namnsson' }}
+                        {{appUser.UserDisplayName || 'Namn Namnsson' }}
+                        {{appUser.PhoneNumber || 'Namn Namnsson' }}
+                        {{appUser.EmailAddress || 'Namn Namnsson' }}
                     </h2>
                     Start conversation
                 </div>
             </div>
         </div>
     </div>
+
+    Phone-contacts
     <div ng-repeat="contact in contacts">
         <div class="card-header bgm-cyan">
             <div class="media">
@@ -30,6 +38,6 @@
         </div>
     </div>
     Import app-users from contacts
-    <button ng-click="Sync()">Sync</button>
-    <button ng-click="GetToView()">GetToView</button>
+    <button ng-click="Sync()">Check for app-users in phonecontacts</button>
+    <button ng-click="GetToView()">Get app-users</button>
 </div>
