@@ -83,24 +83,69 @@
     }
 }
 
-@-o-keyframes fadeShow {
-    from {
-        z-index: 0;
-        opacity: 0;
-    }
+.text-mr-yellow {
+    color: #EEA32D !important;
+}
+.text-mr-red {
+    color: #D8695D !important;
+}
+.text-mr-green {
+    color: #6FB84F !important;
+}
+.text-mr-blue {
+    color: #23A6C6 !important;
+}
+.text-mr-black {
+    color: #4D4E4C !important;
+}
+.btnCancel {
+    -webkit-transition: all 2s ease;
+    transition: all 2s ease;
+}
 
-    to {
-        z-index: 1000;
-        opacity: 1;
+.small-cards-align-fix{
+    margin-left: -15px !important;
+}
+
+
+
+/* ------ other media related sizing css ---*/
+
+@media screen and (min-width: 768px) {
+    .twitter-header:not(.ch-alt) {
+        padding-top: 34px;
+        padding-bottom: 34px;
+        text-align: center !important;
+        margin-left: -15px !important;
+        margin-right: -15px!important;
+    }
+    .twitter-card {
+        padding-right:0!important;
+        padding-left:0!important;
     }
 }
 
-@keyframes fadeShow {
-    from {
-        opacity: 0;
+@media (min-width: 768px) {
+    .container {
+        width: 100%;
     }
-
-    to {
-        opacity: 1;
+}
+@media (min-width: 992px) {
+    .container {
+        width: 100%;
+    }
+}
+@media (min-width: 1200px) {
+    .container {
+        width: 1170px;
+        margin-left: 5% !important;
+        padding-left:0 !important;
+    }
+    .avatar {
+        margin-right: -10em;
+    }
+    .logo {
+        max-height: 4.000em !important;
+        margin-left: -3.0em !important;
     }
 }
