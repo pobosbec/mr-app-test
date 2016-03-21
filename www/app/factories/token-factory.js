@@ -237,7 +237,7 @@ angular.module('token', [])
 
                     }, function (reason) {
                         //failed try authenticate against admin->app
-                        console.log('Failed login admin->app');
+                        console.log('Failed login admin-> app');
                         console.log(reason);
                         //TODO:go back to login
                         $state.go('login');
