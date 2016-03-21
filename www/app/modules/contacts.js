@@ -7,6 +7,11 @@ angular.module('contact', [])
         $scope.contacts = [];
         $scope.appUsers = [];
 
+        function init(){
+            $scope.appUsers = contactsService.getAppUsers();
+            $scope.contacts = contactsService.getPhoneContacts();
+        };
+
         $scope.Sync = function(){
             contactsService.findAppUsersFromAllContacts();
         };
@@ -15,5 +20,11 @@ angular.module('contact', [])
             $scope.appUsers = contactsService.getAppUsers();
             $scope.contacts = contactsService.getPhoneContacts();
         };
+
+        $scope.notImplemented = function (){
+            alert('Not implemented!');
+        }
+
+        init();
 
     }])
