@@ -173,64 +173,6 @@ header {
 
 
 
-@media (min-width: 768px) {
-    .container {
-        width: 100%;
-    }
-}
-@media (min-width: 992px) {
-    .container {
-        width: 100%;
-    }
-}
-@media (min-width: 1200px) {
-
-    .container {
-        width: 1170px;
-        margin-left: 5% !important;
-        padding-left:0 !important;
-    }
-    .avatar {
-        margin-right: -10em;
-    }
-
-    .logo{
-
-        max-height:4.000em !important;
-        margin-left:-3.0em !important;
-    }
-
-}
-
-.small-cards-align-fix{
-margin-left: -15px !important;
-}
-
-
-
-
-@media screen and (min-width: 768px) {
-
-
-
-
-    .twitter-header:not(.ch-alt) {
-        padding-top: 34px;
-        padding-bottom: 34px;
-        text-align: center !important;
-        margin-left: -15px !important;
-        margin-right: -15px!important;
-    }
-    .twitter-card {
-        padding-right:15px!important;
-        padding-left:15px!important;
-
-    }
-}
-
-
-
-
 .card {
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.15) !important;
 }
@@ -269,4 +211,138 @@ margin-left: -15px !important;
 .btnCancel {
     -webkit-transition: all 2s ease;
     transition: all 2s ease;
+}
+
+.small-cards-align-fix{
+    margin-left: -15px !important;
+}
+
+/* ----------- iPhone 4 and 4S ----------- */
+
+/* Portrait */
+@media only screen
+and (min-device-width: 320px)
+and (max-device-width: 480px)
+and (-webkit-min-device-pixel-ratio: 2)
+and (orientation: portrait) {
+    .container {
+        padding-right: 0!important;
+        padding-left: 0!important;
+    }
+}
+/* ----------- iPhone 5 and 5S ----------- */
+/* Portrait */
+@media only screen
+and (min-device-width: 320px)
+and (max-device-width: 568px)
+and (-webkit-min-device-pixel-ratio: 2)
+and (orientation: portrait) {
+    .container {
+        padding-right: 0!important;
+        padding-left: 0!important;
+    }
+}
+/* ----------- iPhone 6 ----------- */
+/* Portrait */
+@media only screen
+and (min-device-width: 375px)
+and (max-device-width: 667px)
+and (-webkit-min-device-pixel-ratio: 2)
+and (orientation: portrait) {
+    .container {
+        padding-right: 0!important;
+        padding-left: 0!important;
+    }
+}
+
+/* ----------- iPhone 6 + ----------- */
+/* Portrait */
+@media only screen
+and (min-device-width: 414px)
+and (max-device-width: 736px)
+and (-webkit-min-device-pixel-ratio: 3)
+and (orientation: portrait) {
+    .container {
+        padding-right: 0!important;
+        padding-left: 0!important;
+    }
+}
+
+/* ----------- Galaxy S3 ----------- */
+/* Portrait */
+@media screen
+and (device-width: 320px)
+and (device-height: 640px)
+and (-webkit-device-pixel-ratio: 2)
+and (orientation: portrait) {
+    .container {
+        padding-right: 0!important;
+        padding-left: 0!important;
+    }
+}
+/* ----------- Galaxy S4 ----------- */
+/* Portrait */
+@media screen
+and (device-width: 320px)
+and (device-height: 640px)
+and (-webkit-device-pixel-ratio: 3)
+and (orientation: portrait) {
+    .container {
+        padding-right: 0!important;
+        padding-left: 0!important;
+    }
+
+}
+/* ----------- Galaxy S5 ----------- */
+/* Portrait */
+@media screen
+and (device-width: 360px)
+and (device-height: 640px)
+and (-webkit-device-pixel-ratio: 3)
+and (orientation: portrait) {
+    .container {
+        padding-right: 0!important;
+        padding-left: 0!important;
+    }
+}
+
+/* ------ other media related sizing css ---*/
+
+@media screen and (min-width: 768px) {
+    .twitter-header:not(.ch-alt) {
+        padding-top: 34px;
+        padding-bottom: 34px;
+        text-align: center !important;
+        margin-left: -15px !important;
+        margin-right: -15px!important;
+    }
+    .twitter-card {
+        padding-right:0!important;
+        padding-left:0!important;
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        width: 100%;
+    }
+}
+@media (min-width: 992px) {
+    .container {
+        width: 100%;
+    }
+}
+@media (min-width: 1200px) {
+    .container {
+        width: 1170px;
+        margin-left: 5% !important;
+        padding-left:0 !important;
+    }
+    .avatar {
+        margin-right: -10em;
+    }
+    .logo{
+        max-height:4.000em !important;
+        margin-left:-3.0em !important;
+    }
 }
