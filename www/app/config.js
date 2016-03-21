@@ -40,4 +40,8 @@ mobileresponseWebbApp
             url: '/messages',
             templateUrl: 'views/messages.html'
         })
+            .state ('pages.contacts', {
+                url: '/contacts',
+                templateUrl: 'views/contacts.html'
+            })
     });

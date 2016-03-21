@@ -26,20 +26,14 @@
     </div>
 
     <ul class="main-menu">
-        
         <li data-ui-sref-active="active">
             <a data-ui-sref="home" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-home"></i> Home</a>
         </li>
-
-
-
-
-
-
         <li class="sub-menu" data-ng-class="{ 'active toggled': mactrl.$state.includes('pages') }">
             <a href="" toggle-submenu><i class="zmdi zmdi-collection-item"></i> Sample Pages</a>
             <ul>
                 <li><a data-ui-sref-active="active" data-ui-sref="pages.messages" data-ng-click="mactrl.sidebarStat($event)">Messages</a></li>
+                <li><a data-ui-sref-active="active" data-ui-sref="pages.contacts" data-ng-click="mactrl.sidebarStat($event)">Contacts</a></li>
             </ul>
         </li>
         <li class="sub-menu">
@@ -47,6 +41,12 @@
             <ul>
                 <li style="cursor: pointer;"><a onClick="localStorage.clear(); console.log('[Debug] localStorage Cleared.');"><i class="zmdi zmdi-delete"></i> Empty localStorage</a></li>
                 <li style="cursor: pointer;"><a onClick="window.location.reload(); console.log('[Debug] Reloading page.');"><i class="zmdi zmdi-refresh"></i> Reload Page</a></li>
+                <li style="cursor: pointer;"><a onClick="alert(localStorage.getItem('deviceId'))"><i class="zmdi zmdi-card-sim"></i> Hardware Id</a></li>
+                <li style="cursor: pointer;"><a onClick="alert(localStorage.getItem('authToken'));"><i class="zmdi zmdi-tag"></i> Auth Token</a></li>
+                <li style="cursor: pointer;"><a onClick="alert(localStorage.getItem('appAuthToken'));"><i class="zmdi zmdi-tag"></i> App Auth Token</a></li>
+                <li style="cursor: pointer;"><a onClick="alert(localStorage.getItem('appUserId'));"><i class="zmdi zmdi-tag"></i> App User Id</a></li>
+                <li style="cursor: pointer;"><a onClick="alert(localStorage.getItem('administratorId'));"><i class="zmdi zmdi-tag"></i> Administrator Id</a></li>
+                <li style="cursor: pointer;"><a onClick="alert(localStorage.getItem('pushToken'));"><i class="zmdi zmdi-tag"></i> Pushwoosh Token</a></li>
             </ul>
         </li>
 

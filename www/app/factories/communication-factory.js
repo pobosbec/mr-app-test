@@ -6,20 +6,27 @@ angular.module('communication', [])
 
         var factory = {};
         var latestUpdate;
+        var synchronizing = false;
 
         factory.init = function(){
-            if (typeof (Storage) !== "undefined"){
-                latestUpdate = localStorage.getItem('latestWhatIsNewUpdate');
+            latestUpdate = factory.getLatestUpdate();
+        };
+
+        factory.getLatestUpdate = function() {
+            var latest = null;
+            if (typeof (Storage) !== "undefined") {
+                latest = localStorage.getItem('latestWhatIsNewUpdate');
             }
 
-            if (latestUpdate == null){
-                latestUpdate = "2016-01-01T00:00:00Z";
+            if (latest == null) {
+                latest = "2016-01-01T00:00:00Z";
             }
+            return latest;
         };
 
         factory.synchronize = function (appAuthToken) {
-
-            console.log('Making request to what-is-new. Last update: ' + latestUpdate);
+            var latest = factory.getLatestUpdate();
+            console.log('Making request to what-is-new. Last update: ' + latest);
 
             var req = {
                 method: 'POST',
@@ -30,7 +37,7 @@ angular.module('communication', [])
                 },
                 data: {
                     Data: {
-                        LastUpdate: latestUpdate,
+                        LastUpdate: latest,
                         DeviceId: "abc"
                     },
                     AuthenticationToken: appAuthToken
@@ -57,6 +64,7 @@ angular.module('communication', [])
                 factory.messagesDownloaded(data);
 
             }, function errorCallback(response) {
+                synchronizing = false;
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
             });
@@ -88,14 +96,14 @@ angular.module('communication', [])
                 case 'download-whats-new':
                     console.log("communication-factory received broadcast: download-whats-new");
                     if (args != undefined) {
-                        console.log(args);
+                        console.log('Event received: ' + JSON.stringify(args));
                     }
                     factory.downloadWhatIsNew(args);
                     break;
                 case 'push-notification':
                     console.log("communication-factory received broadcast: push-notification");
                     if (args != undefined) {
-                        console.log(args);
+                        console.log('Event received: ' + JSON.stringify(args));
                     }
                     factory.downloadWhatIsNew(args);
                     break;
@@ -104,14 +112,15 @@ angular.module('communication', [])
             }
         }
 
-        factory.downloadWhatIsNew = function downloadWhatsNew(){
-            var appAuthToken = tokenService.getAppAuthToken();
-            if (appAuthToken === null || appAuthToken === 'undefined' || appAuthToken === undefined) {
-                tokenService.isAppAuthenticated();
-                console.log('AppToken was null');
-                return;
+        factory.downloadWhatIsNew = function downloadWhatsNew() {
+            if (!synchronizing) {
+                var appAuthToken = tokenService.getAppAuthToken();
+                if (appAuthToken === null || appAuthToken === 'undefined' || appAuthToken === undefined) {
+                    console.log('AppToken was null');
+                    return;
+                }
+                factory.synchronize(tokenService.getAppAuthToken());
             }
-            factory.synchronize(tokenService.getAppAuthToken());
         }
 
         function updateLastUpdated(){
@@ -119,6 +128,7 @@ angular.module('communication', [])
                 localStorage.setItem('latestWhatIsNewUpdate', latestUpdate);
             } else {
                 alert("ach nein! keiner storage!!!1");
+                alert("This is actually not a good thing.. We would like you (yes YOU) to contact us and tell us at Bosbec what platform you are running on.");
                 return;
             }
         };

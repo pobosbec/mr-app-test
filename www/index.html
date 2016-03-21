@@ -16,6 +16,7 @@
     <!-- CSS -->
     <link href="css/app.min.1.css" rel="stylesheet" id="app-level">
     <link href="css/app.min.2.css" rel="stylesheet">
+    <link href="css/css-override.css" rel="stylesheet">
     <!-- <link href="css/demo.css" rel="stylesheet"> -->
     <link href="css/custom.css" rel="stylesheet">
 
@@ -34,7 +35,7 @@
 </head>
 <body ng-class="{'login-content': $state.includes('login')}" data-ng-controller="eventCtrl as ectrl">
 
-    <data ui-view></data>
+    <data ui-view ng-class="{'fadeShow':true}"></data>
 
     <!-- Jquery -->
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
@@ -77,6 +78,7 @@
     <script src="app/modules/ui.js"></script>
     <script src="app/modules/messages.js"></script>
     <script src="app/modules/login.js"></script>
+    <script src="app/modules/contacts.js"></script>
     <script src="app/factories/token-factory.js"></script>
     <script src="app/factories/message-repository-factory.js"></script>
     <script src="app/factories/communication-factory.js"></script>

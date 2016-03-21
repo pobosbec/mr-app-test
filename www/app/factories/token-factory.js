@@ -26,18 +26,19 @@ angular.module('token', [])
                 }
             };
             refreshTokenIntervall = setInterval(
-                function(){
-            var promise = factory.httpPost(req);
-            promise.then(function (greeting) {
-                //Success
-                console.log('Sucess refreshed token');
-                console.log(greeting);
-            }, function (reason) {
-                //failed try
-                console.log('Failed refreshing token');
-                console.log(reason);
-                $rootScope.logout();
-            })}, (15*60*1000));
+                function () {
+                    var promise = factory.httpPost(req);
+                    promise.then(function (greeting) {
+                        //Success
+                        console.log('Sucess refreshed token');
+                        console.log(greeting);
+                    }, function (reason) {
+                        //failed try
+                        console.log('Failed refreshing token');
+                        console.log(reason);
+                        $rootScope.logout();
+                    });
+                }, (15 * 60 * 1000));
         };
 
         $rootScope.logout = function () {
@@ -46,11 +47,12 @@ angular.module('token', [])
             $rootScope.token = null;
             token = null;
             clearInterval(refreshTokenIntervall);
-            //factory.unRegisterPushToken();
-            //factory.saveToDb("klik", false);
-            //factory.saveToDb("kliu", null);
-            //factory.saveToDb("klip", null);
+            factory.unRegisterPushToken();
+            factory.clearLoginCredentials();
+            factory.clearTokenData();
+
             $state.go('login');
+
             $('#template-2').hide();
             factory.abandonToken($rootScope.token);
         };
@@ -69,19 +71,17 @@ angular.module('token', [])
                 }
             };
             var promise = factory.httpPost(req);
-            promise.then(function(greeting) {
+            promise.then(function (greeting) {
                 //Success
                 console.log('Success abandoned usertoken');
                 console.log(greeting);
-            }, function(reason) {
+            }, function (reason) {
                 //failed try
                 console.log('Failed abandoning token');
                 console.log(reason);
 
             });
         };
-
-
 
         //set user credentials
         function setCredentialsAndLogin(greeting) {
@@ -91,7 +91,7 @@ angular.module('token', [])
             userDetails = {
                 token: greeting.data.id,
                 accountId: greeting.data.accountId,
-                administratorId:greeting.data.administratorId,
+                administratorId: greeting.data.administratorId,
                 appUserId: greeting.data.appUserId,
                 displayName: ""
             };
@@ -111,20 +111,27 @@ angular.module('token', [])
                 }
             };
             var promise = factory.httpPost(userDetailRequest);
-            promise.then(function(greeting) {
+            promise.then(function (greeting) {
                 //Success
                 console.log('Success fetched userdetails');
                 console.log(greeting);
-                if (userDetails.displayName != null){
-                userDetails.displayName = greeting.data.displayName;
+                if (userDetails.displayName != null) {
+                    userDetails.displayName = greeting.data.displayName;
                 }
-                else if(userDetails.firstName != null){
+                else if (userDetails.firstName != null) {
                     userDetails.displayName = greeting.data.firstName;
                 }
-                else if(userDetails.phoneNumber != null){
+                else if (userDetails.phoneNumber != null) {
                     userDetails.displayName = greeting.data.phoneNumber;
                 }
                 console.log(userDetails.displayName);
+                factory.saveToDb("authToken", userDetails.token);
+                factory.saveToDb("accountId", userDetails.accountId);
+                factory.saveToDb("administratorId", userDetails.administratorId);
+                factory.saveToDb("appUserId", userDetails.appUserId);
+                factory.saveToDb("displayName", userDetails.displayName);
+                factory.saveToDb("pushToken", factory.getPushToken());
+
                 //TODO: logged in now transfer home
                 $rootScope.$broadcast("app-token-available");
                 $rootScope.$broadcast("logged-in");
@@ -133,7 +140,7 @@ angular.module('token', [])
                     $state.go('home');
                 }
 
-            }, function(reason) {
+            }, function (reason) {
                 //failed try authenticate against admin->app
                 console.log('Failed getting userdetails');
                 console.log(reason);
@@ -144,8 +151,8 @@ angular.module('token', [])
             });
         }
 
-        factory.authenticate = function(username,password){
-           var appAuthenticate = {
+        factory.authenticate = function (username, password, keepLoggedIn) {
+            var appAuthenticate = {
                 method: 'POST',
                 ignoreLoadingBar: true,
                 url: factory.currentAppApiUrl + 'app/authenticate',
@@ -162,36 +169,37 @@ angular.module('token', [])
                 }
             };
 
-           var adminAuthenticate = {
-                    method: 'POST',
-                    ignoreLoadingBar: true,
-                    url: factory.currentApiUrl + 'authenticate',
-                    headers: {
-                        'Content-Type': 'application/json'
+            var adminAuthenticate = {
+                method: 'POST',
+                ignoreLoadingBar: true,
+                url: factory.currentApiUrl + 'authenticate',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: {
+                    "Data": {
+                        "InstanceName": "mobileresponse",
+                        "Username": username,
+                        "Password": password
                     },
-                    data: {
-                        "Data": {
-                            "InstanceName": "mobileresponse",
-                            "Username": username,
-                            "Password": password
-                        },
-                        "Tags": null
-                    }
-                };
+                    "Tags": null
+                }
+            };
 
             var promise = factory.httpPost(appAuthenticate);
-            promise.then(function(greeting) {
+            promise.then(function (greeting) {
                 //Success
                 console.log('Success appuser authentication');
                 console.log(greeting);
                 //TODO: logged in now
+                factory.saveLoginCredentials(username, password, keepLoggedIn);
                 setCredentialsAndLogin(greeting);
-            }, function(reason) {
+            }, function (reason) {
                 //failed try authenticate against admin
                 console.log('Failed App authentication, trying with admin');
                 console.log(reason);
                 promise = factory.httpPost(adminAuthenticate);
-                promise.then(function(greeting) {
+                promise.then(function (greeting) {
                     //Admin authenticate success
                     console.log('Success admin authenticate now authenticating towards app');
                     console.log(greeting);
@@ -209,14 +217,15 @@ angular.module('token', [])
                         }
                     };
                     promise = factory.httpPost(appTokenAuthentication);
-                    promise.then(function(greeting) {
+                    promise.then(function (greeting) {
                         //Success
                         console.log('Success admin-> app');
                         console.log(greeting);
                         //TODO: logged in now
+                        factory.saveLoginCredentials(username, password, keepLoggedIn);
                         setCredentialsAndLogin(greeting);
 
-                    }, function(reason) {
+                    }, function (reason) {
                         //failed try authenticate against admin->app
                         console.log('Failed login admin->app');
                         console.log(reason);
@@ -226,7 +235,7 @@ angular.module('token', [])
                         $('#template-2').hide();
                     });
 
-                }, function(reason) {
+                }, function (reason) {
                     //failed try authenticate against admin
                     console.log('Failed login admin');
                     console.log(reason);
@@ -239,7 +248,7 @@ angular.module('token', [])
             });
         };
 
-        factory.httpPost = function (req){
+        factory.httpPost = function (req) {
 
             var deferred = $q.defer();
 
@@ -259,71 +268,73 @@ angular.module('token', [])
         };
 
         factory.registerPushToken = function () {
-            if (factory.getAppUserId() == null || factory.getAuthToken() == null) {
-                factory.refreshIds();
-            }
 
-            var req = {
-                method: 'POST',
-                url: factory.currentAppApiUrl + 'app/users/update-device',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                data: {
-                    "Data": {
-                        InstanceName: "mobileresponse",
-                        UserId: factory.getAppUserId(),
-                        HardwareId: device.uuid,
-                        PushToken: factory.getPushToken(),
-                        DeviceType: window.deviceType,
-                        MacAddress: null
+            if (factory.getDeviceId() != null) {
+                var req = {
+                    method: 'POST',
+                    url: factory.currentAppApiUrl + 'app/users/update-device',
+                    headers: {
+                        'Content-Type': 'application/json'
                     },
-                    "AuthenticationToken": factory.getAuthToken(),
-                    "Tags": null
-                }
-            };
+                    data: {
+                        "Data": {
+                            InstanceName: "mobileresponse",
+                            UserId: factory.getAppUserId(),
+                            HardwareId: factory.getDeviceId(),
+                            PushToken: factory.getPushToken(),
+                            DeviceType: window.deviceType,
+                            MacAddress: null
+                        },
+                        "AuthenticationToken": factory.getAuthToken(),
+                        "Tags": null
+                    }
+                };
 
-            return $http(req).then(function successCallback(response) {
-                console.log("registerPushToken update success");
-                return response;
-            }, function errorCallback(response) {
+                return $http(req).then(function successCallback(response) {
+                    console.log("registerPushToken update success");
+                    $rootScope.$broadcast('push-token-registered', args);
+                    return response;
+                }, function errorCallback(response) {
 
-                console.error("registerPushToken update error");
-                console.error(response);
+                    console.error("registerPushToken update error");
+                    console.error(response);
+
+                    return $q.reject(response);
+                });
 
                 return $q.reject(response);
-            });
-
-            return $q.reject(response);
-        }
+            };
+        };
 
         factory.unRegisterPushToken = function () {
-            var req = {
-                method: 'POST',
-                url: factory.currentAppApiUrl + 'app/users/unregister-device',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                data: {
-                    "Data": {
-                        HardwareId: device.uuid
+            if (factory.getDeviceId() != null) {
+                var req = {
+                    method: 'POST',
+                    url: factory.currentAppApiUrl + 'app/users/unregister-device',
+                    headers: {
+                        'Content-Type': 'application/json'
                     },
-                    "AuthenticationToken": factory.getAuthToken(),
-                    "Tags": null
-                }
-            };
+                    data: {
+                        "Data": {
+                            HardwareId: factory.getDeviceId()
+                        },
+                        "AuthenticationToken": factory.getAuthToken(),
+                        "Tags": null
+                    }
+                };
 
-            return $http(req).then(function successCallback(response) {
-                return response;
-            }, function errorCallback(response) {
+                return $http(req).then(function successCallback(response) {
+                    return response;
+                }, function errorCallback(response) {
 
-                console.log("unRegisterPushToken error");
-                console.log(response);
+                    console.log("unRegisterPushToken error");
+                    console.log(response);
+
+                    return $q.reject(response);
+                });
 
                 return $q.reject(response);
-            });
-
-            return $q.reject(response);
+            }
         };
 
         factory.getUsername = function () {
@@ -335,7 +346,7 @@ angular.module('token', [])
         };
 
         factory.getAccountId = function () {
-           return userDetails.accountId;
+            return userDetails.accountId;
         };
 
         factory.getAuthToken = function () {
@@ -350,6 +361,10 @@ angular.module('token', [])
             return userDetails.appUserId;
         };
 
+        factory.getDeviceId = function () {
+            return typeof device != 'undefined' ? device.uuid : null;
+        }
+
         factory.getPushToken = function () {
             if (pushToken == null) {
                 pushToken = JSON.parse(localStorage.getItem("pushToken"));
@@ -361,6 +376,35 @@ angular.module('token', [])
             var valueAsJson = JSON.stringify(value);
             localStorage.setItem(key, valueAsJson);
         };
+
+        factory.saveLoginCredentials = function (username, password, keepLoggedIn) {
+            if (keepLoggedIn) {
+                factory.saveToDb("keepLoggedIn", true);
+                factory.saveToDb("keepLoggedInUser", username);
+                factory.saveToDb("keepLoggedInPassword", password);
+            }
+        }
+
+        factory.clearLoginCredentials = function () {
+            factory.saveToDb("keepLoggedIn", false);
+            factory.saveToDb("keepLoggedInUser", null);
+            factory.saveToDb("keepLoggedInPassword", null);
+        }
+
+        factory.clearTokenData = function () {
+            factory.saveToDb("authToken", null);
+            factory.saveToDb("accountId", null);
+            factory.saveToDb("administratorId", null);
+            factory.saveToDb("appUserId", null);
+            factory.saveToDb("displayName", null);
+
+            //factory.saveToDb("deviceId", null); // Should we clear this as well?
+            //factory.saveToDb("pushToken", null); // Should we clear this as well?
+        }
+
+        factory.clearLocalStorage = function () {
+            localStorage.clear();
+        }
 
         /**
          * When the service is runned, depending on what url mobile response uses we set the api address differently
@@ -382,7 +426,7 @@ angular.module('token', [])
                 //return "http://api2.test.mobileresponse.se/";
                 return "https://api2.mobileresponse.se/";
             // in staging
-            return "https://api2.mobileresponse.se/";
+            return "http://api.mobileresponse.se/";
         };
 
         /**

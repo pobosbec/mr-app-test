@@ -62,12 +62,16 @@ angular.module('event', [])
         });
 
         $scope.$on('on-focus', function (event, args) {
+            args.Sender = 'events';
+            args.Event = 'on-focus';
             $rootScope.$broadcast('download-whats-new', args);
         });
 
         $scope.$on('on-blur', function (event, args) { });
 
         $scope.$on('online', function (event, args) {
+            args.Sender = 'events';
+            args.Event = 'online';
             $rootScope.$broadcast('download-whats-new', args);
         });
 
@@ -118,8 +122,7 @@ angular.module('event', [])
 
         $scope.$on('push-notification', function (event, args) {
             var title = args.notification.title;
-            var userData = args.notification.userdata;
-            alert(title + " > " + userData);
+            alert(title);
             console.log(args);
             communicationService.on(event, args);
         });
@@ -141,7 +144,7 @@ angular.module('event', [])
 
 
         // Wrapped
-        $scope.$on('load', function (event, args) { });
+        $scope.$on('load', function(event, args) { });
 
 
         // ------------------------------------
@@ -149,7 +152,6 @@ angular.module('event', [])
         // ------------------------------------
 
         $scope.$on('logged-in', function(event, args) {
-            //console.log("Logged in, time to bind push token to app token");
             tokenService.registerPushToken();
         });
 
@@ -157,6 +159,10 @@ angular.module('event', [])
             $rootScope.$broadcast('download-whats-new', args);
         });
 
+
+        $scope.$on('push-token-registered', function (event, args) {
+            console.log('push-token-registered');
+        });
 
         // ------------------------------------
         // Factory-forwarded events 
@@ -171,6 +177,7 @@ angular.module('event', [])
         });
 
         $scope.$on('download-whats-new', function (event, args) {
+            console.log(JSON.stringify(args));
             communicationService.on(event, args);
         });
 
