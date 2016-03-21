@@ -196,6 +196,8 @@ angular.module('token', [])
                 }
             };
 
+            $rootScope.$broadcast('authenticating');
+
             var promise = factory.httpPost(appAuthenticate);
             promise.then(function (greeting) {
                 //Success
@@ -204,6 +206,7 @@ angular.module('token', [])
                 //TODO: logged in now
                 factory.saveLoginCredentials(username, password, keepLoggedIn);
                 setCredentialsAndLogin(greeting);
+                $rootScope.$broadcast('authentication-success');
             }, function (reason) {
                 //failed try authenticate against admin
                 console.log('Failed App authentication, trying with admin');
@@ -234,7 +237,7 @@ angular.module('token', [])
                         //TODO: logged in now
                         factory.saveLoginCredentials(username, password, keepLoggedIn);
                         setCredentialsAndLogin(greeting);
-
+                        $rootScope.$broadcast('authentication-success');
                     }, function (reason) {
                         //failed try authenticate against admin->app
                         console.log('Failed login admin-> app');
@@ -243,6 +246,7 @@ angular.module('token', [])
                         $state.go('login');
                         //we are logged in show navbar and redirect
                         $('#template-2').hide();
+                        $rootScope.$broadcast('authentication-failed');
                     });
 
                 }, function (reason) {
@@ -254,6 +258,7 @@ angular.module('token', [])
                     $state.go('login');
                     //we are logged in show navbar and redirect
                     $('#template-2').hide();
+                    $rootScope.$broadcast('authentication-failed');
                 });
             });
         };
@@ -302,7 +307,7 @@ angular.module('token', [])
 
                 return $http(req).then(function successCallback(response) {
                     console.log("registerPushToken update success");
-                    $rootScope.$broadcast('push-token-registered', args);
+                    $rootScope.$broadcast('push-token-registered',response);
                     return response;
                 }, function errorCallback(response) {
 

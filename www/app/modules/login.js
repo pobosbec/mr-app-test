@@ -11,17 +11,31 @@ angular.module('login', [])
 
         $scope.showLoginError = false;
         $scope.errorMsg = "";
-        $scope.keepLoggedIn = JSON.parse(localStorage.getItem("keepLoggedInCredentials"));
+        $scope.keepLoggedIn = tokenService.keepLoggedInCredentialsFromDatabase().keepLoggedIn;
+        $scope.loggingIn = false;
 
         $scope.login = function (data) {
             //if theres something in the input field try to authenticate
             if (!((data.username === "" || data.username === null))) {
-                tokenService.authenticate(data.username,data.password,data.keepLoggedIn);
+                $scope.loggingIn = true;
+                tokenService.authenticate(data.username, data.password, data.keepLoggedIn);
             }
             //nothing in the inputfields use the hard coded user
             else {
             }
         };
+
+        $scope.$on('authenticating', function (event, args) {
+            $scope.loggingIn = true;
+        });
+
+        $scope.$on('authentication-failed', function (event, args) {
+            $scope.loggingIn = false;
+        });
+
+        $scope.$on('authentication-success', function (event, args) {
+            //$scope.loggingIn = false;
+        });
         
         /**
          * Used by login-forgot-password.html
