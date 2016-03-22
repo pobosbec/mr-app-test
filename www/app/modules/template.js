@@ -102,7 +102,7 @@ mobileresponseWebbApp
                 //alert(theImageElement.attr('id'));
                 //alert(theImageElement.style.height);
                 //alert(theImageElement.prop('offsetHeight'));
-                alert($element.prop('offsetHeight')); //Works, but returns 0 immediately when the div is created (if set on the image div)
+                //alert($element.prop('offsetHeight')); //Works, but returns 0 immediately when the div is created (if set on the image div)
             }
         };
     })
