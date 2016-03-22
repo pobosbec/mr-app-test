@@ -8,7 +8,7 @@ angular.module('messages', [])
         $scope.Math = window.Math;
 
         $scope.loading = true;
-
+        setTimeout(function () { $scope.loading = false; }, 2000);
 
         $scope.messages = messageRepository.getMessages();
         $scope.conversations = [];
