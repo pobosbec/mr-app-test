@@ -61,11 +61,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="message-list.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="message-list.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/template/message-list.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-20.26923">
-              <caret line="31" column="109" selection-start-line="31" selection-start-column="109" selection-end-line="31" selection-end-column="109" />
+            <state vertical-scroll-proportion="0.0859454">
+              <caret line="5" column="35" selection-start-line="5" selection-start-column="35" selection-end-line="5" selection-end-column="35" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
               </folding>
@@ -73,10 +73,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="messages.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="messages.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/modules/messages.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.29655173">
+            <state vertical-scroll-proportion="0.0">
               <caret line="141" column="55" selection-start-line="141" selection-start-column="55" selection-end-line="141" selection-end-column="55" />
               <folding />
             </state>
@@ -136,8 +136,8 @@
         <option value="$PROJECT_DIR$/app/controllers/main.js" />
         <option value="$PROJECT_DIR$/css/custom.css" />
         <option value="$PROJECT_DIR$/app/modules/template.js" />
-        <option value="$PROJECT_DIR$/template/message-list.html" />
         <option value="$PROJECT_DIR$/app/modules/messages.js" />
+        <option value="$PROJECT_DIR$/template/message-list.html" />
       </list>
     </option>
   </component>
@@ -937,21 +937,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/template/message-list.html">
+    <entry file="file://$PROJECT_DIR$/app/modules/messages.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-20.26923">
-          <caret line="31" column="109" selection-start-line="31" selection-start-column="109" selection-end-line="31" selection-end-column="109" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.0">
+          <caret line="141" column="55" selection-start-line="141" selection-start-column="55" selection-end-line="141" selection-end-column="55" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/modules/messages.js">
+    <entry file="file://$PROJECT_DIR$/template/message-list.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.29655173">
-          <caret line="141" column="55" selection-start-line="141" selection-start-column="55" selection-end-line="141" selection-end-column="55" />
-          <folding />
+        <state vertical-scroll-proportion="0.0859454">
+          <caret line="5" column="35" selection-start-line="5" selection-start-column="35" selection-end-line="5" selection-end-column="35" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
