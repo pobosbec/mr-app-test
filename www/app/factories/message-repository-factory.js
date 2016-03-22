@@ -47,7 +47,7 @@ angular.module('message', ['ngCordova'])
                   for (var thisMessage in messages) {
                       if (messages.hasOwnProperty(thisMessage));
                       {
-                          var author = factory.authors.filter(function(v) {
+                          var author = factory.authors.filter(function (v) {
                               return v.Id === messages[thisMessage].Author;
                           })[0];
 
@@ -69,7 +69,7 @@ angular.module('message', ['ngCordova'])
               return messages;
           }
 
-          factory.getNewestMessage = function() {
+          factory.getNewestMessage = function () {
               return factory.getMessages()[0];
           }
 
@@ -79,7 +79,7 @@ angular.module('message', ['ngCordova'])
 
           factory.addMessage = function (data) {
               if (data.hasOwnProperty("MessageId")) {
-                  var oldMessagesWithId = factory.messages.filter(function(v) {
+                  var oldMessagesWithId = factory.messages.filter(function (v) {
                       return v.MessageId === data.MessageId;
                   });
                   if (oldMessagesWithId && oldMessagesWithId.constructor === Array && oldMessagesWithId.length > 0) {
@@ -91,7 +91,7 @@ angular.module('message', ['ngCordova'])
                   factory.saveMessages();
                   factory.messageAdded(data);
               } else if (data.hasOwnProperty("CreatedOn") && data.hasOwnProperty("Author")) {
-                  var oldMessagesWithCreatedOnAndAuthor = factory.messages.filter(function(v) {
+                  var oldMessagesWithCreatedOnAndAuthor = factory.messages.filter(function (v) {
                       return v.CreatedOn === data.CreatedOn && v.Author === data.Author;
                   });
                   if (oldMessagesWithCreatedOnAndAuthor && oldMessagesWithCreatedOnAndAuthor.constructor === Array && oldMessagesWithCreatedOnAndAuthor.length > 0) {
@@ -100,7 +100,6 @@ angular.module('message', ['ngCordova'])
                   factory.messages.push(data);
                   factory.saveMessages();
                   factory.messageAdded(data);
-                  //throttle(factory.messageAdded(data), 5000);
               } else {
                   console.log("Malformed message recieved. Ignoring.");
               }
@@ -132,33 +131,62 @@ angular.module('message', ['ngCordova'])
               $rootScope.$broadcast('messages-changed', data);
           }
 
-          function throttle(callback, limit) {
-              var wait = false;                 // Initially, we're not waiting
-              return function () {              // We return a throttled function
-                  if (!wait) {                  // If we're not waiting
-                      callback.call();          // Execute users function
-                      wait = true;              // Prevent future invocations
-                      setTimeout(function () {  // After a period of time
-                          wait = false;         // And allow future invocations
-                      }, limit);
+          var throttled = [];
+
+          function throttle(callback, interval) {
+              //console.log("throttle");
+              throttled.push({ callback: callback, interval: interval, executing: false });
+              if (throttled[0].hasOwnProperty("executing") && !throttled[0].executing) {
+                  //console.log("queued new!");
+                  throttled[0].executing = true;
+                  setTimeout(executeThrottled, throttled[0].interval);
+              }
+          }
+
+          function executeThrottled() {
+              //console.log("executeThrottled");
+              if (throttled[0]) {
+                  if (throttled[0].executing) {
+                      //console.log("execute!");
+                      throttled[0].callback();
+                      throttled.shift();
+                      if (throttled[0] && throttled[0].hasOwnProperty("executing") && !throttled[0].executing) {
+                          //console.log("queued new");
+                          throttled[0].executing = true;
+                          setTimeout(executeThrottled, throttled[0].interval);
+                      }
                   }
               }
           }
 
+
           factory.on = function (event, data) {
               switch (event.name) {
                   case 'updated-message':
-                      //console.log("updated-message");
                       break;
                   case 'new-messages':
-                      //console.log("new-messages");
                       if (data != null) {
-                          for (i = 0; i < data.length; i++) {
-                              factory.addMessage(data[i]);
-                          }
+                          for (var i = 0; i < data.length; i++) {
+                              var callback = function (thisElement) {
+                                  return function () {
+                                      factory.addMessage(thisElement);
+                                  }
+                              }(data[i]);
+                              throttle(callback, 10);
+                          };
                       }
                       break;
                   case 'device-ready':
+                      factory.messages = [];
+                      factory.init();
+                      break;
+                  case 'logged-out':
+                      throttled = [];
+                      factory.messages = [];
+                      localStorage.removeItem('messages');
+                      localStorage.removeItem('latestWhatIsNewUpdate');
+                      break;
+                  case 'logged-in':
                       factory.init();
                       break;
                   default:

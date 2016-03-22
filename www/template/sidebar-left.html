@@ -20,7 +20,7 @@
                 <a href=""><i class="zmdi zmdi-settings"></i> Settings</a>
             </li>
             <li>
-                <a href="" data-ng-click="logout()"><i class="zmdi zmdi-time-restore"></i> Logout</a>
+                <a href="" data-ng-click="mactrl.sidebarStat($event); logout()"><i class="zmdi zmdi-time-restore"></i> Logout</a>
             </li>
         </ul>
     </div>
@@ -40,8 +40,9 @@
             <a href="" toggle-submenu><i class="zmdi zmdi-bug"></i> Debugging</a>
             <ul>
                 <li style="cursor: pointer;"><a onClick="localStorage.clear(); console.log('[Debug] localStorage Cleared.');"><i class="zmdi zmdi-delete"></i> Clear localStorage (ALL)</a></li>
-                <li style="cursor: pointer;"><a onClick="localStorage.setItem('userDetails', null); console.log('[Debug] userDetails Cleared.');"><i class="zmdi zmdi-delete"></i> Clear tokens</a></li>
-                <li style="cursor: pointer;"><a onClick="localStorage.setItem('keepLoggedInCredentials', null); console.log('[Debug] keepLoggedInCredentials Cleared.');"><i class="zmdi zmdi-delete"></i> Clear credentials</a></li>
+                <li style="cursor: pointer;"><a onClick="localStorage.removeItem('userDetails'); console.log('[Debug] userDetails Cleared.');"><i class="zmdi zmdi-delete"></i> Clear tokens</a></li>
+                <li style="cursor: pointer;"><a onClick="localStorage.removeItem('messages'); localStorage.removeItem('latestWhatIsNewUpdate'); $root.$broadcast('messages-added'); console.log('[Debug] messages Cleared.');"><i class="zmdi zmdi-delete"></i> Clear messages</a></li>
+                <li style="cursor: pointer;"><a onClick="localStorage.removeItem('keepLoggedInCredentials'); console.log('[Debug] keepLoggedInCredentials Cleared.');"><i class="zmdi zmdi-delete"></i> Clear credentials</a></li>
                 <li style="cursor: pointer;"><a onClick="window.location.reload(); console.log('[Debug] Reloading page.');"><i class="zmdi zmdi-refresh"></i> Reload Page</a></li>
                 <li><hr /></li>
                 <li style="cursor: pointer;"><a onClick="alert(localStorage.getItem('deviceId'))"><i class="zmdi zmdi-card-sim"></i> Hardware Id</a></li>

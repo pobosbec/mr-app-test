@@ -1,22 +1,20 @@
 <header id="header" data-current-skin={{mactrl.currentSkin}} data-ng-include="'template/header.html'" data-ng-controller="headerCtrl as hctrl"></header>
+    <section id="main">
+        <aside id="sidebar" data-ng-include="'template/sidebar-left.html'" data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
 
-<section id="main">
-    <aside id="sidebar" data-ng-include="'template/sidebar-left.html'" data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
+        <aside id="chat" data-ng-include="'template/chat.html'" data-ng-class="{ 'toggled': mactrl.sidebarToggle.right === true }"></aside>
 
-    <aside id="chat" data-ng-include="'template/chat.html'" data-ng-class="{ 'toggled': mactrl.sidebarToggle.right === true }"></aside>
+        <section id="content" data-ng-controller="messagesController as msgCtrl">
 
-    <section id="content" data-ng-controller="messagesController as msgCtrl">
+            <div class="container" ng-class="{'fadeHide': loading,'fadeShow': !loading }">
 
-        <div class="container">
+                <!-- <div class="block-header" data-ng-include="'template/messages-header.html'"></div> -->
+                <!-- Recent Posts -->
+                <div ng-if="messageViewMode == 1" class="container" data-ng-include="'template/message-list.html'"></div>
+                <div ng-if="messageViewMode == 2" class="container" data-ng-include="'template/message-wall.html'"></div>
 
-           <!-- <div class="block-header" data-ng-include="'template/messages-header.html'"></div> -->
-
-            <!-- Recent Posts -->
-            <div ng-if="messageViewMode == 1" class="container" data-ng-include="'template/message-list.html'"></div>
-            <div ng-if="messageViewMode == 2" class="container" data-ng-include="'template/message-wall.html'"></div>
-
-        </div>
+            </div>
+        </section>
     </section>
-</section>
 
-<footer id="footer" data-ng-include="'template/footer.html'"></footer>
+    <footer id="footer" data-ng-include="'template/footer.html'"></footer>

@@ -151,8 +151,15 @@ angular.module('event', [])
         // Application events 
         // ------------------------------------
 
-        $scope.$on('logged-in', function(event, args) {
+        $scope.$on('logged-in', function (event, args) {
             tokenService.registerPushToken();
+            messageRepository.on(event, args);
+            communicationService.on(event, args);
+        });
+
+        $scope.$on('logged-out', function(event, args) {
+            messageRepository.on(event, args);
+            communicationService.on(event, args);
         });
 
         $scope.$on('app-token-available', function (event, args) {
@@ -177,7 +184,7 @@ angular.module('event', [])
         });
 
         $scope.$on('download-whats-new', function (event, args) {
-            console.log(JSON.stringify(args));
+            //console.log(JSON.stringify(args));
             communicationService.on(event, args);
         });
 

@@ -1,7 +1,7 @@
 ﻿.fadeHide {
     opacity: 0;
-    -webkit-animation: fadeOut 0.50s; /*Chrome, Safari, Opera*/
-    animation: fadeOut 0.50s;
+    -webkit-animation: fadeHide 0.50s; /*Chrome, Safari, Opera*/
+    animation: fadeHide 0.50s;
 }
 
 .fadeShow {
@@ -19,7 +19,7 @@
     }
 
     to {
-        z-index: 0;
+        /*z-index: 0;*/
         opacity: 0;
     }
 }
@@ -31,7 +31,7 @@
     }
 
     to {
-        z-index: 0;
+        /*z-index: 0;*/
         opacity: 0;
     }
 }
@@ -43,7 +43,7 @@
     }
 
     to {
-        z-index: 0;
+        /*z-index: 0;*/
         opacity: 0;
     }
 }
@@ -61,7 +61,7 @@
 /* Fade Show */
 @-webkit-keyframes fadeShow {
     from {
-        z-index: 0;
+        /*z-index: 0;*/
         opacity: 0;
     }
 
@@ -73,7 +73,7 @@
 
 @-moz-keyframes fadeShow {
     from {
-        z-index: 0;
+        /*z-index: 0;*/
         opacity: 0;
     }
 
@@ -85,7 +85,7 @@
 
 @-o-keyframes fadeShow {
     from {
-        z-index: 0;
+        /*z-index: 0;*/
         opacity: 0;
     }
 
