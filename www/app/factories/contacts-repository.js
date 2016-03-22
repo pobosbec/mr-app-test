@@ -75,6 +75,37 @@ angular.module('contacts', [])
             });
         }
 
+        factory.searchAppUser = function(query){
+
+            var deferred = $q.defer();
+
+            var req = {
+                method: 'POST',
+                ignoreLoadingBar: true,
+                url: tokenService.currentAppApiUrl + 'app/inboxes/search-multiple',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: {
+                    Data: {
+                        InboxId: inboxId,
+                        Queries: query
+                    },
+                    AuthenticationToken: tokenService.getAppAuthToken()
+                }
+            };
+
+            var promise = tokenService.httpPost(req);
+
+            promise.then(function(success){
+                deferred.resolve(success);
+            }, function(error){
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
+        }
+
         factory.getAppUsers = function(){
             return appUsers;
         }

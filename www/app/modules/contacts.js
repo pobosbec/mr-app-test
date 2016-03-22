@@ -6,6 +6,7 @@ angular.module('contact', [])
 
         $scope.contacts = [];
         $scope.appUsers = [];
+        $scope.foundAppUsers = [];
 
         function init(){
             contactsService.init();
@@ -17,8 +18,21 @@ angular.module('contact', [])
             contactsService.findAppUsersFromAllContacts();
         };
 
-        $scope.ListPhoneContacts = function (){
+        $scope.CheckForAppUsersAmongContacts = function (){
             contactsService.retriveAllPhoneContacts();
+        }
+
+        $scope.Search = function(query){
+                var queryArr = [];
+                queryArr.push(query);
+                var promise = contactsService.searchAppUser(queryArr);
+
+                promise.then(function(success){
+                    $scope.appUsers = success.data;
+                }, function(error){
+                });
+
+            $scope.$apply();
         }
 
         init();
