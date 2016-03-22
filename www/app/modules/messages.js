@@ -142,7 +142,10 @@ angular.module('messages', [])
         $scope.reply = function(conversationId, text) {
 
             var content = $scope.conversations[findConversation(conversationId)].TextArea;
-            if (content.length > 0 || text.length > 0) {
+            if(content == null){
+                content = {length:0}
+            }
+            if ((content.length >0) || text.length > 0) {
 
                 var req = {
                     method: 'POST',
