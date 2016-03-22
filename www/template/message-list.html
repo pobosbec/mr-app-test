@@ -27,24 +27,20 @@
                     </div>
 
                     <div class="media-body">
-                        <a href=""  class="a-title">{{message.AuthorDisplayName
-                            || 'Namn Namnsson' }}</a>
+                        <a href=""  class="a-title">{{message.AuthorDisplayName || 'Namn Namnsson' }}</a>
                         <small class="c-gray m-l-10">{{ message.CreatedOn || 'yyyy-mm-dd hh:ii:ss' }}</small>
                         <p class="m-t-5 m-b-0">{{message.Content}}</p>
                     </div>
                 </div>
             </div>
             <!-- Comment reply form -->
-            <div ng-if="message.Author != id()" class="wcl-form" ng-show="focused||mouseover"
-                 ng-mouseover="mouseover=true" ng-mouseleave="mouseover=false">
+            <div ng-if="message.Author != id()" class="wcl-form" ng-show="focused||mouseover" ng-mouseover="mouseover=true" ng-mouseleave="mouseover=false">
                 <div class="wc-comment">
                     <div class="wcc-inner">
-                        <textarea class="wcci-text" ng-model="TextArea" data-auto-size placeholder="Write Something..."
-                                  ng-keyup="$event.keyCode == 13 && reply(message.ConversationId,TextArea)"></textarea>
+                        <textarea class="wcci-text" ng-model="TextArea" data-auto-size placeholder="Write something..." ng-keyup="$event.keyCode == 13 && reply(message.ConversationId,TextArea)"></textarea>
                     </div>
                     <div class="m-t-15">
-                        <button class="btn btn-sm btn-primary btnCancel"
-                                ng-click="reply(message.ConversationId,TextArea)">Reply
+                        <button class="btn btn-sm btn-primary btnCancel" ng-click="reply(message.ConversationId,TextArea)">Reply
                         </button>
                         <button class="btn btn-sm btn-link" data-ng-click="textArea = ''">Cancel</button>
                     </div>
