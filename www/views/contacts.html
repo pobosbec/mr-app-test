@@ -21,6 +21,18 @@
                     <p class="m-t-5 m-b-0 ng-binding">{{ foundAppUser.emailAddress }}</p>
                 </div>
             </div>
+            <ul class="actions actions-alt">
+                <li class="dropdown" uib-dropdown="">
+                    <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle" aria-haspopup="true">
+                        <i class="zmdi zmdi-more-vert"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li>
+                            <a href="" class="center-block" data-ng-click="SendMessage(hello, foundAppUser.userId)">Send message</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
     </div>
     </div>
     <div ng-repeat="appUser in appUsers">

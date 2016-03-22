@@ -2,7 +2,7 @@
  * Created by Kristofer on 2016-03-17.
  */
 angular.module('contact', [])
-    .controller('contactsCtrl', ['$scope', '$http', 'tokenService', 'contactsService', function($scope, $http, tokenService, contactsService) {
+    .controller('contactsCtrl', ['$scope', '$http', 'tokenService', 'contactsService', 'communicationService', function($scope, $http, tokenService, contactsService, communicationService) {
 
         $scope.contacts = [];
         $scope.appUsers = [];
@@ -28,11 +28,18 @@ angular.module('contact', [])
                 var promise = contactsService.searchAppUser(queryArr);
 
                 promise.then(function(success){
-                    $scope.appUsers = success.data;
+                    $scope.foundAppUsers = success.data;
                 }, function(error){
                 });
 
             $scope.$apply();
+        }
+
+        $scope.SendMessage = function(message, users){
+            var usersToSendTo = [];
+            usersToSendTo.push(users);
+            usersToSendTo.push(tokenService.getAppUserId());
+            communicationService.sendMessage('hello from app!', usersToSendTo);
         }
 
         init();

@@ -7,6 +7,7 @@ angular.module('communication', [])
         var factory = {};
         var latestUpdate;
         var synchronizing = false;
+        var inboxId = '8a0958a2-a163-4a20-8afa-e7315012e2d8';
 
         factory.init = function(){
             latestUpdate = factory.getLatestUpdate();
@@ -19,7 +20,9 @@ angular.module('communication', [])
             }
 
             if (latest == null) {
-                latest = "2016-01-01T00:00:00Z";
+                var today = new Date();
+                today.setDate(today.getDate() - 7)
+                latest = today.toJSON();
             }
             return latest;
         };
@@ -123,6 +126,34 @@ angular.module('communication', [])
                 }
                 factory.synchronize(tokenService.getAppAuthToken());
             }
+        }
+
+        factory.sendMessage = function sendMessage(message, users, metadata){
+            var req = {
+                method: 'POST',
+                ignoreLoadingBar: true,
+                url: tokenService.currentAppApiUrl + 'app/conversations/create-message',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: {
+                    Data: {
+                        InstanceName: "mobileresponse",
+                        InboxId: inboxId,
+                        Participants: users,
+                        Message: message
+                        //MetaData: metadata
+                    },
+                    AuthenticationToken: tokenService.getAppAuthToken()
+                }
+            };
+
+            $http(req
+            ).then(function successCallback(response) {
+                alert('Message sent!');
+            }, function errorCallback(response) {
+                alert('Could not send message.')
+            });
         }
 
         function updateLastUpdated(){
