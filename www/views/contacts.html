@@ -1,8 +1,39 @@
 <div class="container">
 <div data-ng-controller="contactsCtrl as contactCtrl">
     <!--<button ng-click="notImplemented()">Create new group conversation</button>-->
+
+    Search: <input ng-model="search" ng-model-options="{ debounce: 1000 }" ng-change="Search(search)">
     <div class="block-header">
-        <h2>Users</h2>
+        <h2>Found</h2>
+    </div>
+    <div ng-repeat="foundAppUser in foundAppUsers">
+        <div class="card-header bgm-cyan">
+            <div class="media">
+                <div class="pull-left">
+                    <img class="lv-img" ng-src="{{ appUser.avatar || 'img/profile-pics/8.jpg' }}" alt="">
+                </div>
+                <div class="media-body m-t-5">
+                    <h2>
+                        {{ foundAppUser.userDisplayName }}
+                    </h2>
+                    <p class="m-t-5 m-b-0 ng-binding">{{ foundAppUser.firstname }} {{ foundAppUser.lastname }}</p>
+                    <p class="m-t-5 m-b-0 ng-binding">{{ foundAppUser.phoneNumber }}</p>
+                    <p class="m-t-5 m-b-0 ng-binding">{{ foundAppUser.emailAddress }}</p>
+                </div>
+            </div>
+            <ul class="actions actions-alt">
+                <li class="dropdown" uib-dropdown="">
+                    <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle" aria-haspopup="true">
+                        <i class="zmdi zmdi-more-vert"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li>
+                            <a href="" class="center-block" data-ng-click="SendMessage(hello, foundAppUser.userId)">Send message</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+    </div>
     </div>
     <div ng-repeat="appUser in appUsers">
         <div class="card-header bgm-cyan">
@@ -27,7 +58,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right">
                         <li>
-                            <a href="">Send message</a>
+                            <a href="" class="center-block">Send message</a>
                         </li>
                     </ul>
                 </li>
@@ -54,6 +85,6 @@
         </div>
     </div>
     <button ng-click="Sync()" class="center-block">Search for app-users in contacts</button>
-    <button ng-click="ListPhoneContacts()" class="center-block">Log phonecontacts</button>
+    <button ng-click="CheckForAppUsersAmongContacts()" class="center-block">Log phonecontacts</button>
 </div>
 </div>

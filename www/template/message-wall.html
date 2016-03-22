@@ -1,7 +1,7 @@
 <!-- Post -->
 <div class="card wall-posting card-padding" style="display: none" >
     <div class="card-body card-padding">
-        <textarea class="wp-text" data-auto-size="" placeholder="Write Something..." data-autosize-on="true"
+        <textarea class="wp-text" data-auto-size="" placeholder="Write something..." data-autosize-on="true"
                   style="overflow: hidden; word-wrap: break-word; height: 36px;"></textarea>
 
         <!-- ngIf: mactrl.wallImage -->
@@ -129,7 +129,7 @@
         <div class="wcl-form">
             <div class="wc-comment"  >
                 <div class="wcc-inner" >
-                    <textarea class="wcci-text" ng-model="conversation.TextArea"  ng-focus="focused = true" ng-blur="focused = false" data-auto-size placeholder="Write Something..." ng-keyup="$event.keyCode == 13 && reply(conversation.ConversationId,conversation.TextArea)"></textarea>
+                    <textarea class="wcci-text" ng-model="conversation.TextArea"  ng-focus="focused = true" ng-blur="focused = false" data-auto-size placeholder="Write something..." ng-keyup="$event.keyCode == 13 && reply(conversation.ConversationId,conversation.TextArea)"></textarea>
                 </div>
                 <div class="m-t-15">
                     <button class="btn btn-sm btn-primary btnCancel" ng-click="reply(conversation.ConversationId,conversation.TextArea)" ng-show="focused||mouseover" ng-mouseover="mouseover=true" ng-mouseleave="mouseover=false">Reply</button>
