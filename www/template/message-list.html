@@ -1,4 +1,4 @@
-<div class="card card-message" ng-repeat="message in messages track by $index" data-ng-controller="messageCtrl as msgctrl" ng-class="{'card-focused': focused||mouseover}">
+<div class="card card-message" onclick="" style="cursor: pointer;" ng-click="focused = !focused" ng-blur="focused = false" data-ui-event="{ blur : 'alert()'}" ng-repeat="message in messages track by $index" data-ng-controller="messageCtrl as msgctrl" ng-class="{'card-focused': focused||mouseover}">
     <div class="card-body">
         <div class="wall-comment-list">
             <!-- Comment Listing -->
@@ -27,7 +27,7 @@
                     </div>
 
                     <div class="media-body">
-                        <a href=""  ng-focus="focused = true" ng-blur="focused = false" class="a-title">{{message.AuthorDisplayName
+                        <a href=""  class="a-title">{{message.AuthorDisplayName
                             || 'Namn Namnsson' }}</a>
                         <small class="c-gray m-l-10">{{ message.CreatedOn || 'yyyy-mm-dd hh:ii:ss' }}</small>
                         <p class="m-t-5 m-b-0">{{message.Content}}</p>
