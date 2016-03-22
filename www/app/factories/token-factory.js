@@ -496,9 +496,9 @@ angular.module('token', [])
 
             // in localhost
             if (host.host.indexOf("localhost") > -1)
-                return "https://api.mobileresponse.se/";
+                return "http://api.test.mobileresponse.se/";
             // in staging
-            return "https://api.mobileresponse.se/";
+            return "http://api.test.mobileresponse.se/";
         };
 
         factory.getDeviceServiceUrl = function () {
