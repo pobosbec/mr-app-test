@@ -44,9 +44,14 @@
                     <div class="wcc-inner">
                         <textarea class="wcci-text" ng-model="TextArea" data-auto-size placeholder="Write something..." ng-keyup="$event.keyCode == 13 && reply(message.ConversationId,TextArea)"></textarea>
                     </div>
+                    <!-- Attach controls here -->
                     <div class="m-t-15">
-                        <button class="btn btn-sm btn-primary btnCancel" ng-click="reply(message.ConversationId,TextArea)">Reply
-                        </button>
+                        <button class="btn btn-sm btn-primary" ng-click="">Attach image</button>
+                        <button class="btn btn-sm btn-primary" ng-click="">Attach position</button>
+                    </div>
+                    <!-- Attach controls end here -->
+                    <div class="m-t-15">
+                        <button class="btn btn-sm btn-primary btnCancel" ng-click="reply(message.ConversationId,TextArea)">Reply</button>
                         <button class="btn btn-sm btn-link" data-ng-click="textArea = ''">Cancel</button>
                     </div>
                 </div>
