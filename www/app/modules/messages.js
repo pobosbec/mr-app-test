@@ -13,10 +13,16 @@ angular.module('messages', [])
         $scope.messages = messageRepository.getMessages();
         $scope.conversations = [];
         messagesToConversations($scope.messages, $scope.conversations);
-        setInterval(function() {
+        var fetchMessagesInterval = setInterval(function() {
             var args = { Sender: "messages", Event: 'interval' };
             $rootScope.$broadcast('download-whats-new', args);
         }, 10000);
+
+        $scope.$on('logged-out', function () {
+            clearInterval(fetchMessagesInterval);
+            $scope.messages = [];
+            $scope.conversations = [];
+        });
 
         $scope.$on('messages-added', function(event, args) {
             $scope.messages = messageRepository.getMessages();

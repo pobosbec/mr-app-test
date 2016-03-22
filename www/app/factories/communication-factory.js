@@ -2,7 +2,7 @@
  * Created by Kristofer on 2016-03-13.
  */
 angular.module('communication', [])
-    .factory('communicationService', ['$http', '$window', '$rootScope', '$location', '$q', '$state', 'tokenService', function ($http, win, $rootScope, $location, $q, $state, tokenService) {
+    .factory('communicationService', ['$http', '$window', '$rootScope', '$location', '$q', '$state', 'tokenService', 'messageRepository', function ($http, win, $rootScope, $location, $q, $state, tokenService, messageRepository) {
 
         var factory = {};
         var latestUpdate;
@@ -51,12 +51,12 @@ angular.module('communication', [])
                 var data = response.data;
                 console.log('Success response from what-is-new. Setting last update to: ' + data.data.lastUpdate);
 
-                if(data.data.lastUpdate == null){
-                    console.log('Could not find lastUpdate in what-is-new response.')
-                    return;
-                }
+                //if(data.data.lastUpdate == null) {
+                //    console.log('Could not find lastUpdate in what-is-new response.');
+                //    return;
+                //}
 
-                latestUpdate = data.data.lastUpdate;
+                //latestUpdate = data.data.lastUpdate;
 
                 updateLastUpdated();
 
@@ -106,6 +106,9 @@ angular.module('communication', [])
                     }
                     factory.downloadWhatIsNew(args);
                     break;
+                case 'logged-in':
+                    factory.init();
+                    break;
                 default:
                     break;
             }
@@ -124,6 +127,14 @@ angular.module('communication', [])
 
         function updateLastUpdated(){
             if (typeof (Storage) !== "undefined") {
+                //localStorage.setItem('latestWhatIsNewUpdate', latestUpdate);
+                var latestMessage = messageRepository.getNewestMessage();
+                console.log(latestMessage);
+                if (typeof latestMessage !== 'undefined' && latestMessage !== null && latestUpdate.hasOwnProperty("CreatedOn")) {
+                    console.log("--------  Using last message as reference --------");
+                    latestUpdate = latestUpdate.hasOwnProperty("CreatedOn");
+                }
+
                 localStorage.setItem('latestWhatIsNewUpdate', latestUpdate);
             } else {
                 alert("ach nein! keiner storage!!!1");

@@ -100,7 +100,6 @@ angular.module('message', ['ngCordova'])
                   factory.messages.push(data);
                   factory.saveMessages();
                   factory.messageAdded(data);
-                  factory.messageAdded(data);
               } else {
                   console.log("Malformed message recieved. Ignoring.");
               }
@@ -164,24 +163,30 @@ angular.module('message', ['ngCordova'])
           factory.on = function (event, data) {
               switch (event.name) {
                   case 'updated-message':
-                      //console.log("updated-message");
                       break;
                   case 'new-messages':
-                      //console.log("new-messages");
                       if (data != null) {
                           for (var i = 0; i < data.length; i++) {
                               var callback = function (thisElement) {
                                   return function () {
-                                      //console.log("callback");
                                       factory.addMessage(thisElement);
                                   }
                               }(data[i]);
-
-                              throttle(callback, 3);
+                              throttle(callback, 10);
                           };
                       }
                       break;
                   case 'device-ready':
+                      factory.messages = [];
+                      factory.init();
+                      break;
+                  case 'logged-out':
+                      throttled = [];
+                      factory.messages = [];
+                      localStorage.removeItem('messages');
+                      localStorage.removeItem('latestWhatIsNewUpdate');
+                      break;
+                  case 'logged-in':
                       factory.init();
                       break;
                   default:

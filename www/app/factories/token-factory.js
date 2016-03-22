@@ -53,6 +53,7 @@ angular.module('token', [])
 
         $rootScope.logout = function () {
             //TODO abandon function
+            $rootScope.$broadcast("logged-out");
             win.sessionStorage.accessToken = null;
             $rootScope.token = null;
             token = null;
@@ -60,7 +61,6 @@ angular.module('token', [])
             factory.unRegisterPushToken();
             factory.clearLoginCredentials();
             factory.clearTokenData();
-
             $state.go('login');
 
             $('#template-2').hide();
