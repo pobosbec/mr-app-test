@@ -465,7 +465,7 @@ angular.module('token', [])
         factory.getApiUrl = function (host) {
             // in test
             if (host.pathname.indexOf("/test") > -1)
-                return "http://api2.test.mobileresponse.se";
+                return "http://api2.test.mobileresponse.se/";
 
             // in production
             if (host.pathname.indexOf("/production") > -1)
@@ -475,9 +475,9 @@ angular.module('token', [])
             if (host.host.indexOf("localhost") > -1)
                 //return "http://10.100.126.80:8887/";
                 //return "http://api2.test.mobileresponse.se/";
-                return "https://api2.test.mobileresponse.se/";
+                return "http://api2.test.mobileresponse.se/";
             // in staging
-            return "http://api.test.mobileresponse.se/";
+            return "http://api2.test.mobileresponse.se/";
         };
 
         /**
@@ -488,7 +488,7 @@ angular.module('token', [])
         factory.getAppApiUrl = function (host) {
             // in test
             if (host.pathname.indexOf("/test") > -1)
-                return "http://api.test.mobileresponse.se";
+                return "http://api.test.mobileresponse.se/";
 
             // in production
             if (host.pathname.indexOf("/production") > -1)
