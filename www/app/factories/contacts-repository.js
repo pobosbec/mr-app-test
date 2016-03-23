@@ -10,16 +10,35 @@ angular.module('contacts', [])
         var inboxId = '8a0958a2-a163-4a20-8afa-e7315012e2d8';
 
         factory.init = function init() {
+            appUsers = getAppUsersFromLocalStorage();
 
+            if(appUsers == null){
+                appUsers = [];
+            }
+
+            var errorUsersIndexes = [];
+
+            for(var i = 0; i < appUsers.length; i++){
+                if(appUsers[i].userId == null || appUsers[i].userId == undefined){
+                    errorUsersIndexes.push(i);
+                }
+            }
+
+            for(var j = 0; j < errorUsersIndexes.length; j++){
+                appUsers.splice(j);
+            }
+        }
+
+        function getAppUsersFromLocalStorage(){
             var item = localStorage.getItem('appUsers');
 
             if(item == null || item === "" || item == undefined){
-                return;
+                return null;
             }
 
             var readStorage = JSON.parse(item);
             if (readStorage && readStorage.constructor === Array) {
-                factory.appUsers = readStorage;
+                return readStorage;
             }
         }
 
@@ -113,6 +132,24 @@ angular.module('contacts', [])
         }
 
         factory.getAppUsers = function(){
+            if(appUsers == null || appUsers == undefined){
+                appUsers = getAppUsersFromLocalStorage();
+                return appUsers;
+            }
+
+            if(appUsers.length == 0){
+                var found = getAppUsersFromLocalStorage();
+
+                if(found == null)
+                {
+                    return appUsers;
+                }
+
+                if(found.constructor === Array){
+                    appUsers.push(found);
+                }
+            }
+
             return appUsers;
         }
 
@@ -129,6 +166,12 @@ angular.module('contacts', [])
         }
 
         factory.addOrUpdateAppUser = function(appUser){
+
+            if(appUser.userId === null || appUser.userId === undefined){
+                console.log('Cannot add user without userId.');
+                return;
+            }
+
             var updated = false;
 
             for(var i = 0; i < appUsers.length; i++){
@@ -148,6 +191,26 @@ angular.module('contacts', [])
 
             saveAppUsers();
         };
+
+        factory.removeUser = function(user){
+            var foundIndex = -1;
+
+            for(var i = 0; i < appUsers.length; i++){
+                var currentAppUser = appUsers[i];
+
+                if(currentAppUser.userId === user.userId){
+                    foundIndex = i;
+                    console.log('Removed app-user.')
+                }
+            }
+
+            if(foundIndex > -1){
+                appUsers.splice(foundIndex, 1);
+                console.log('Added new app-user.')
+            }
+
+            saveAppUsers();
+        }
 
         factory.loadContacts = function () {
 
@@ -174,6 +237,11 @@ angular.module('contacts', [])
         };
 
         function saveAppUsers(){
+
+            if(appUsers.length < 0){
+                return;
+            }
+
             if (typeof (Storage) !== "undefined") {
                 localStorage.setItem('appUsers', JSON.stringify(appUsers));
             } else {

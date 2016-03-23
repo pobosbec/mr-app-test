@@ -36,8 +36,13 @@ angular.module('contact', [])
           contactsService.addOrUpdateAppUser(user);
         };
 
+        $scope.RemoveUser = function(user){
+            contactsService.removeUser(user);
+        };
+
         function init(){
-          $scope.appUsers = contactsService.getAppUsers();
+            $scope.appUsers = contactsService.getAppUsers();
+            $scope.contacts = contactsService.getPhoneContacts();
         };
 
         init();
