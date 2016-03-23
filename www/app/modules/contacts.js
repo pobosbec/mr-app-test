@@ -8,19 +8,9 @@ angular.module('contact', [])
         $scope.appUsers = [];
         $scope.foundAppUsers = [];
 
-        function init(){
-            contactsService.init();
-            $scope.appUsers = contactsService.getAppUsers();
-            $scope.contacts = contactsService.getPhoneContacts();
-        };
-
-        $scope.Sync = function(){
+        $scope.GetAppUsersFromPhoneContacts = function(){
             contactsService.findAppUsersFromAllContacts();
         };
-
-        $scope.CheckForAppUsersAmongContacts = function (){
-            contactsService.retriveAllPhoneContacts();
-        }
 
         $scope.Search = function(query){
                 var queryArr = [];
@@ -41,6 +31,14 @@ angular.module('contact', [])
             usersToSendTo.push(tokenService.getAppUserId());
             communicationService.sendMessage('hello from app!', usersToSendTo);
         }
+
+        $scope.AddUser = function(user){
+          contactsService.addOrUpdateAppUser(user);
+        };
+
+        function init(){
+          $scope.appUsers = contactsService.getAppUsers();
+        };
 
         init();
 

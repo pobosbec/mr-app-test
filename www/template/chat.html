@@ -1,94 +1,22 @@
-<div style="height:100%;">
+<div data-ng-controller="contactsCtrl as contactCtrl">
     <div class="chat-search">
         <div class="fg-line">
-            <input type="text" class="form-control" placeholder="Search People">
+            <input type="text" class="form-control" ng-model="search" ng-model-options="{ debounce: 1000 }" ng-change="Search(search)">
+            <!-- <input type="text" class="form-control" placeholder="Search People"> -->
         </div>
     </div>
 
-    <div class="listview">
+    <div class="listview" ng-repeat="foundAppUser in foundAppUsers">
         <a class="lv-item" href="">
             <div class="media">
                 <div class="pull-left p-relative">
-                    <img class="lv-img-sm" src="img/profile-pics/2.jpg" alt="">
+                    <img class="lv-img-sm" src="{{ foundAppUser.avatar }}" alt="">
                     <i class="chat-status-busy"></i>
                 </div>
                 <div class="media-body">
-                    <div class="lv-title">Jonathan Morris</div>
-                    <small class="lv-small">Available</small>
-                </div>
-            </div>
-        </a>
-
-        <a class="lv-item" href="">
-            <div class="media">
-                <div class="pull-left">
-                    <img class="lv-img-sm" src="img/profile-pics/1.jpg" alt="">
-                </div>
-                <div class="media-body">
-                    <div class="lv-title">David Belle</div>
-                    <small class="lv-small">Last seen 3 hours ago</small>
-                </div>
-            </div>
-        </a>
-
-        <a class="lv-item" href="">
-            <div class="media">
-                <div class="pull-left p-relative">
-                    <img class="lv-img-sm" src="img/profile-pics/3.jpg" alt="">
-                    <i class="chat-status-online"></i>
-                </div>
-                <div class="media-body">
-                    <div class="lv-title">Fredric Mitchell Jr.</div>
-                    <small class="lv-small">Availble</small>
-                </div>
-            </div>
-        </a>
-
-        <a class="lv-item" href="">
-            <div class="media">
-                <div class="pull-left p-relative">
-                    <img class="lv-img-sm" src="img/profile-pics/4.jpg" alt="">
-                    <i class="chat-status-online"></i>
-                </div>
-                <div class="media-body">
-                    <div class="lv-title">Glenn Jecobs</div>
-                    <small class="lv-small">Availble</small>
-                </div>
-            </div>
-        </a>
-
-        <a class="lv-item" href="">
-            <div class="media">
-                <div class="pull-left">
-                    <img class="lv-img-sm" src="img/profile-pics/5.jpg" alt="">
-                </div>
-                <div class="media-body">
-                    <div class="lv-title">Bill Phillips</div>
-                    <small class="lv-small">Last seen 3 days ago</small>
-                </div>
-            </div>
-        </a>
-
-        <a class="lv-item" href="">
-            <div class="media">
-                <div class="pull-left">
-                    <img class="lv-img-sm" src="img/profile-pics/6.jpg" alt="">
-                </div>
-                <div class="media-body">
-                    <div class="lv-title">Wendy Mitchell</div>
-                    <small class="lv-small">Last seen 2 minutes ago</small>
-                </div>
-            </div>
-        </a>
-        <a class="lv-item" href="">
-            <div class="media">
-                <div class="pull-left p-relative">
-                    <img class="lv-img-sm" src="img/profile-pics/7.jpg" alt="">
-                    <i class="chat-status-busy"></i>
-                </div>
-                <div class="media-body">
-                    <div class="lv-title">Teena Bell Ann</div>
-                    <small class="lv-small">Busy</small>
+                    <div class="lv-title">{{ foundAppUser.userName }}</div>
+                    <small class="lv-small">{{ foundAppUser.emailAddress }}</small>
+                    <button ng-click="AddUser(foundAppUser)" class="center-block">Add</button>
                 </div>
             </div>
         </a>

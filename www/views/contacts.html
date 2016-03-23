@@ -1,90 +1,115 @@
-<div class="container">
-<div data-ng-controller="contactsCtrl as contactCtrl">
-    <!--<button ng-click="notImplemented()">Create new group conversation</button>-->
+<section id="content" class="page-view ng-scope" data-ui-view="">
+    <div class="container ng-scope">
+        <div class="block-header">
+            <h2>Contacts<small>Manage your contact information</small></h2>
 
-    Search: <input ng-model="search" ng-model-options="{ debounce: 1000 }" ng-change="Search(search)">
-    <div class="block-header">
-        <h2>Found</h2>
-    </div>
-    <div ng-repeat="foundAppUser in foundAppUsers">
-        <div class="card-header bgm-cyan">
-            <div class="media">
-                <div class="pull-left">
-                    <img class="lv-img" ng-src="{{ appUser.avatar || 'img/profile-pics/8.jpg' }}" alt="">
-                </div>
-                <div class="media-body m-t-5">
-                    <h2>
-                        {{ foundAppUser.userDisplayName }}
-                    </h2>
-                    <p class="m-t-5 m-b-0 ng-binding">{{ foundAppUser.firstname }} {{ foundAppUser.lastname }}</p>
-                    <p class="m-t-5 m-b-0 ng-binding">{{ foundAppUser.phoneNumber }}</p>
-                    <p class="m-t-5 m-b-0 ng-binding">{{ foundAppUser.emailAddress }}</p>
-                </div>
-            </div>
-            <ul class="actions actions-alt">
+            <ul class="actions m-t-20 hidden-xs">
                 <li class="dropdown" uib-dropdown="">
-                    <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle" aria-haspopup="true">
+                    <a href="" uib-dropdown-toggle="" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
                         <i class="zmdi zmdi-more-vert"></i>
                     </a>
+
                     <ul class="dropdown-menu dropdown-menu-right">
                         <li>
-                            <a href="" class="center-block" data-ng-click="SendMessage(hello, foundAppUser.userId)">Send message</a>
+                            <a href="">Privacy Settings</a>
                         </li>
-                    </ul>
-                </li>
-            </ul>
-    </div>
-    </div>
-    <div ng-repeat="appUser in appUsers">
-        <div class="card-header bgm-cyan">
-            <div class="media">
-                <div class="pull-left">
-                    <img class="lv-img" ng-src="{{ appUser.avatar || 'img/profile-pics/8.jpg' }}" alt="">
-                </div>
-                <div class="media-body m-t-5">
-                    <h2>
-                        {{ appUser.userDisplayName }}
-                    </h2>
-                        <p class="m-t-5 m-b-0 ng-binding">{{ appUser.firstname }} {{ appUser.lastname }}</p>
-                        <p class="m-t-5 m-b-0 ng-binding">{{ appUser.phoneNumber }}</p>
-                        <p class="m-t-5 m-b-0 ng-binding">{{ appUser.emailAddress }}</p>
-
-                </div>
-            </div>
-            <ul class="actions actions-alt">
-                <li class="dropdown" uib-dropdown="">
-                    <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle" aria-haspopup="true">
-                        <i class="zmdi zmdi-more-vert"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-right">
                         <li>
-                            <a href="" class="center-block">Send message</a>
+                            <a href="">Account Settings</a>
+                        </li>
+                        <li>
+                            <a href="">Other Settings</a>
                         </li>
                     </ul>
                 </li>
             </ul>
         </div>
-    </div>
-    <div class="block-header" style="margin-top: 15px">
-        <h2>Phone-contacts</h2>
-    </div>
-    <div ng-repeat="contact in contacts">
-        <div class="card-header bgm-cyan">
-            <div class="media">
-                <div class="pull-left">
-                    <img class="lv-img" ng-src="{{ message.AuthorAvatar || 'img/profile-pics/8.jpg' }}" alt="">
-                </div>
-                <div class="media-body m-t-5">
-                    <h2>
-                        {{contact.displayName || contact.givenName || Contact without name }}
-                    </h2>
-                    <p class="m-t-5 m-b-0 ng-binding">{{ contact.phoneNumber }}</p>
-                    <p class="m-t-5 m-b-0 ng-binding">{{ contact.emailAddress }}</p>
+
+        <!-- Add button -->
+        <button class="btn btn-float btn-danger m-btn waves-effect waves-circle"><i class="zmdi zmdi-plus"></i></button>
+
+
+        <div class="card" data-ng-controller="contactsCtrl as contactsCtrl">
+            <div class="lv-header-alt clearfix m-b-5">
+                <h2 class="lvh-label hidden-xs">{{ $scope.appUsers }} Friends</h2>
+
+                <!-- ngIf: mactrl.listviewSearchStat -->
+
+                <ul class="lv-actions actions">
+                    <li>
+                        <a href="" data-ng-click="mactrl.listviewSearchStat = true">
+                            <i class="zmdi zmdi-search"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="">
+                            <i class="zmdi zmdi-time"></i>
+                        </a>
+                    </li>
+                    <li class="dropdown" uib-dropdown="">
+                        <a href="" uib-dropdown-toggle="" aria-expanded="false" aria-haspopup="true" class="dropdown-toggle">
+                            <i class="zmdi zmdi-sort"></i>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li>
+                                <a href="">Last Modified</a>
+                            </li>
+                            <li>
+                                <a href="">Last Edited</a>
+                            </li>
+                            <li>
+                                <a href="">Name</a>
+                            </li>
+                            <li>
+                                <a href="">Date</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="">
+                            <i class="zmdi zmdi-info"></i>
+                        </a>
+                    </li>
+                    <li class="dropdown" uib-dropdown="">
+                        <a href="" uib-dropdown-toggle="" aria-expanded="false" aria-haspopup="true" class="dropdown-toggle">
+                            <i class="zmdi zmdi-more-vert"></i>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li>
+                                <a href="">Refresh</a>
+                            </li>
+                            <li>
+                                <a href="">Settings</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body card-padding" ng-repeat="appUser in appUsers">
+                <div class="contacts clearfix row">
+                    <div class="col-md-2 col-sm-4 col-xs-6">
+                        <div class="c-item">
+                            <a href="" class="ci-avatar">
+                                <img src="{{ appUser.avatar }}" alt="">
+                            </a>
+
+                            <div class="c-info">
+                                <strong>{{ appUser.displayName }}</strong>
+                                <small>{{ appUser.emailAddress }}</small>
+                            </div>
+
+                            <div class="c-footer">
+                                <button class="waves-effect"><i class="zmdi zmdi-person-add"></i> Add</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <div class="load-more">
+                <a href=""><i class="zmdi zmdi-refresh-alt"></i> Load More...</a>
+            </div>
+
         </div>
     </div>
-    <button ng-click="Sync()" class="center-block">Search for app-users in contacts</button>
-    <button ng-click="CheckForAppUsersAmongContacts()" class="center-block">Log phonecontacts</button>
-</div>
-</div>
+</section>

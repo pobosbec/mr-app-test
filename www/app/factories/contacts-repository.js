@@ -11,8 +11,6 @@ angular.module('contacts', [])
 
         factory.init = function init() {
 
-            factory.retriveAllPhoneContacts();
-
             var item = localStorage.getItem('appUsers');
 
             if(item == null || item === "" || item == undefined){
@@ -32,46 +30,54 @@ angular.module('contacts', [])
                 return;
             }
 
-            for(var i = 0; i < contacts.length; i++){
-                var contact = contacts[i];
+            var promise = factory.loadContacts();
 
-                if(contact.phoneNumbers != null || contact.phoneNumbers != undefined){
-                    for(var j = 0; j < contact.phoneNumbers.length; j++){
-                        query.push(contact.phoneNumbers[j].value);
+            promise.then(
+                function(success){
+                for(var i = 0; i < contacts.length; i++){
+                    var contact = contacts[i];
+
+                    if(contact.phoneNumbers != null || contact.phoneNumbers != undefined){
+                        for(var j = 0; j < contact.phoneNumbers.length; j++){
+                            query.push(contact.phoneNumbers[j].value);
+                        }
+                    }
+
+                    if(contact.emails != null || contact.emails != undefined){
+                        for(var k = 0; k < contact.emails.length; k++){
+                            query.push(contact.emails[k].value);
+                        }
                     }
                 }
 
-                if(contact.emails != null || contact.emails != undefined){
-                    for(var k = 0; k < contact.emails.length; k++){
-                        query.push(contact.emails[k].value);
-                    }
-                }
-            }
-
-            var req = {
-                method: 'POST',
-                ignoreLoadingBar: true,
-                url: tokenService.currentAppApiUrl + 'app/inboxes/search-multiple',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                data: {
-                    Data: {
-                        InboxId: inboxId,
-                        Queries: query
+                var req = {
+                    method: 'POST',
+                    ignoreLoadingBar: true,
+                    url: tokenService.currentAppApiUrl + 'app/inboxes/search-multiple',
+                    headers: {
+                        'Content-Type': 'application/json'
                     },
-                    AuthenticationToken: tokenService.getAppAuthToken()
-                }
-            };
+                    data: {
+                        Data: {
+                            InboxId: inboxId,
+                            Queries: query
+                        },
+                        AuthenticationToken: tokenService.getAppAuthToken()
+                    }
+                };
 
-            var promise = tokenService.httpPost(req);
+                var promise = tokenService.httpPost(req);
 
-            promise.then(function(success){
-                for(var i = 0; i < success.data.length; i++){
-                    factory.addOrUpdateAppUser(success.data[i]);
-                }
-            }, function(error){
-                console.log('found no app-users!')
+                promise.then(function(success){
+                    for(var i = 0; i < success.data.length; i++){
+                        factory.addOrUpdateAppUser(success.data[i]);
+                    }
+                }, function(error){
+                    console.log('Could not get app-users.')
+                });
+            },
+                function(error){
+                console.log('Could not get phone contacts.')
             });
         }
 
@@ -111,7 +117,15 @@ angular.module('contacts', [])
         }
 
         factory.getPhoneContacts = function(){
-            return contacts;
+            var promise = factory.loadContacts();
+
+            promise.then(
+                function(success){
+                    return contacts;
+                },
+                function(error){
+                    console.log('Could not get phone contacts.')
+                });
         }
 
         factory.addOrUpdateAppUser = function(appUser){
@@ -135,7 +149,10 @@ angular.module('contacts', [])
             saveAppUsers();
         };
 
-        factory.retriveAllPhoneContacts = function () {
+        factory.loadContacts = function () {
+
+            var deferred = $q.defer();
+
             try {
                 var options      = new ContactFindOptions();
                 options.multiple = true;
@@ -147,9 +164,13 @@ angular.module('contacts', [])
                     function(){
                         console.log('Could not get contacts!')
                     }, options);
+                deferred.resolve("Success");
             } catch (error){
                 console.log('Could not get contacts from phone.')
+                deferred.reject("Fail");
             }
+
+            return deferred.promise;
         };
 
         function saveAppUsers(){
