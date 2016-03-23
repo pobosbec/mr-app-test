@@ -9,9 +9,15 @@ mobileresponseWebbApp
             link: function ($scope, $element, $attributes) {
                 var scopeExpression = $attributes.outsideClick,
                     onDocumentClick = function (event) {
+                        // For declaring elements that are treated as "inside" without actually being inside.
+                        var ignoreOutsideClick = false;
+                        if (event.target.dataset["treatAsChildWhenOutside"] === "true" || $(event.target).parents('*[data-treat-as-child-when-outside="true"]').length) {
+                            ignoreOutsideClick = true;
+                        }
+
                         var isChild = $element.find(event.target).length > 0;
 
-                        if (!isChild) {
+                        if (!ignoreOutsideClick && !isChild) {
                             $scope.$apply(scopeExpression);
                         }
                     };

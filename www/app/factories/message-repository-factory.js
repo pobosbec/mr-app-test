@@ -4,24 +4,38 @@
 
 angular.module('message', ['ngCordova'])
       .factory('messageRepository', ['$http', '$window', '$rootScope', '$location', '$q', '$state', 'tokenService', '$cordovaSQLite', function ($http, win, $rootScope, $location, $q, $state, tokenService, $cordovaSQLite) {
+
+          var db;
+
           var factory = {};
+
           factory.dabataseConfiguration = {
-              db: "bosbec1.db"
+              name: "bosbec-mr.db",
+              location: 1,
+              version: "1.0",
+              displayName: "Bosbec-Mr",
+              size: (5 * 1024 * 1024)
           }
 
           factory.messages = [];
 
           factory.init = function () {
+              var conf = factory.dabataseConfiguration;
+              if (window.isPhoneGap) {
+                  // Mobile Device
+                  db = window.sqlitePlugin.openDatabase({ name: conf.name, location: conf.location });
+              } else {
+                  // Browser
+                  db = window.openDatabase(conf.name, conf.version, conf.displayName, conf.size);
+              }
+              console.log(db);
               $rootScope.$broadcast('download-whats-new');
+
               var readStorage = JSON.parse(localStorage.getItem('messages'));
               if (readStorage && readStorage.constructor === Array) {
                   factory.messages = readStorage;
                   factory.messageAdded(factory.messages);
               }
-          }
-
-          factory.dabataseConnection = function () {
-              return "";
           }
 
           factory.authors = [{
