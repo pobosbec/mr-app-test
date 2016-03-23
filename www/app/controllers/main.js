@@ -17,21 +17,6 @@ mobileresponseWebbApp
             $scope.messageViewMode = event.target.id;
         };
 
-        this.clickHandler = function (event) {
-            var outsideSidebar = !$(event.target).is('#sidebar') && !$(event.target).parents("#sidebar").is("#sidebar");
-            var outsideHeader = !$(event.target).is('#header') && !$(event.target).parents("#header").is("#header");
-            var outsideChat = !$(event.target).is('#chat') && !$(event.target).parents("#chat").is("#chat");
-            console.log("Outside Header: " + outsideHeader + ", Ouside Sidebar: " + outsideSidebar + ", Outside Chat: " + outsideChat);
-
-            if (outsideHeader && outsideSidebar) {
-                this.sidebarToggle.left = false;
-            }
-
-            if (outsideHeader && outsideChat) {
-                this.sidebarToggle.right = false;
-            }
-        };
-        
         // Detect Mobile Browser
         if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
            angular.element('html').addClass('ismobile');
