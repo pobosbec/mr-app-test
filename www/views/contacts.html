@@ -126,18 +126,21 @@
             </div>
             <div class="card-body card-padding">
                 <div class="contacts clearfix row" >
-                    <div ng-repeat="contact in Contacts">
+                    <div ng-repeat="contact in contacts">
                         <div class="col-md-2 col-sm-4 col-xs-6">
                             <div class="c-item">
                                 <a href="" class="ci-avatar">
                                     <img ng-src="{{ contact.avatar || 'img/profile-pics/5.jpg' }}" alt="">
                                 </a>
-
                                 <div class="c-info">
                                     <strong>{{ contact.displayName }}</strong>
-                                    <small>{{ contact.emailAddress }}</small>
+                                    <div ng-repeat="emailAddress in contact.emails">
+                                        <small>{{ emailAddress.value }}</small>
+                                    </div>
+                                    <div ng-repeat="phoneNumber in contact.phoneNumbers">
+                                        <small>{{ phoneNumber.value }}</small>
+                                    </div>
                                 </div>
-
                                 <div class="c-footer">
                                     <button class="waves-effect"><i class="zmdi zmdi-person-add"></i> Add</button>
                                 </div>
