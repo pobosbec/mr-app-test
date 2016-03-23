@@ -27,10 +27,15 @@
                     </div>
 
                     <div class="media-body">
-                        <a href=""  class="a-title">{{message.AuthorDisplayName || 'Namn Namnsson' }}</a>
+                        <a href="" class="a-title">{{message.AuthorDisplayName || 'Namn Namnsson' }}</a>
                         <small class="c-gray m-l-10">{{ message.CreatedOn || 'yyyy-mm-dd hh:ii:ss' }}</small>
                         <p class="m-t-5 m-b-0">{{message.Content}}</p>
+                        <!--<a data-ng-click="msgctrl.toggleShowImage($event)" href="">
+                            <img class="lv-img" ng-src="{{ message.metaData.thumbnail || 'https://s3-eu-west-1.amazonaws.com/mr-app-images/2016-03-07%2B15-08-18thumb.jpg' }}" alt="Attached image thumbnail">
+                        </a>-->
+                        <!--<img class="lv-img" ng-src="{{ 'https://s3-eu-west-1.amazonaws.com/mr-app-images/map-icon.png' }}" alt="Attached position">-->
                     </div>
+                    <!--<div ng-if="showAttachedImage == 1" class="container" data-ng-include="'template/image-view.html'" full-size-image-div=""></div>-->
                 </div>
             </div>
             <!-- Comment reply form -->
@@ -39,9 +44,14 @@
                     <div class="wcc-inner">
                         <textarea class="wcci-text" ng-model="TextArea" data-auto-size placeholder="Write something..." ng-keyup="$event.keyCode == 13 && reply(message.ConversationId,TextArea)"></textarea>
                     </div>
+                    <!-- Attach controls here -->
                     <div class="m-t-15">
-                        <button class="btn btn-sm btn-primary btnCancel" ng-click="reply(message.ConversationId,TextArea)">Reply
-                        </button>
+                        <button class="btn btn-sm btn-primary" ng-click="">Attach image</button>
+                        <button class="btn btn-sm btn-primary" ng-click="">Attach position</button>
+                    </div>
+                    <!-- Attach controls end here -->
+                    <div class="m-t-15">
+                        <button class="btn btn-sm btn-primary btnCancel" ng-click="reply(message.ConversationId,TextArea)">Reply</button>
                         <button class="btn btn-sm btn-link" data-ng-click="textArea = ''">Cancel</button>
                     </div>
                 </div>

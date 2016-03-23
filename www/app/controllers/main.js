@@ -13,8 +13,23 @@ mobileresponseWebbApp
         //message listing view
         $scope.messageViewMode = 1;
 
-        this.changeMessageView = function(event) {
-          $scope.messageViewMode = event.target.id;
+        this.changeMessageView = function (event) {
+            $scope.messageViewMode = event.target.id;
+        };
+
+        this.clickHandler = function (event) {
+            var outsideSidebar = !$(event.target).is('#sidebar') && !$(event.target).parents("#sidebar").is("#sidebar");
+            var outsideHeader = !$(event.target).is('#header') && !$(event.target).parents("#header").is("#header");
+            var outsideChat = !$(event.target).is('#chat') && !$(event.target).parents("#chat").is("#chat");
+            console.log("Outside Header: " + outsideHeader + ", Ouside Sidebar: " + outsideSidebar + ", Outside Chat: " + outsideChat);
+
+            if (outsideHeader && outsideSidebar) {
+                this.sidebarToggle.left = false;
+            }
+
+            if (outsideHeader && outsideChat) {
+                this.sidebarToggle.right = false;
+            }
         };
         
         // Detect Mobile Browser
@@ -40,7 +55,7 @@ mobileresponseWebbApp
                 this.sidebarToggle.left = false;
             }
         };
-        
+
         //Listview menu toggle in small screens
         this.lvMenuStat = false;
 
