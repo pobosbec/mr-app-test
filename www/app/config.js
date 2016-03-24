@@ -38,9 +38,11 @@ mobileresponseWebbApp
             onEnter: function($rootScope) {
                 $rootScope.snapperControl.close();
                 $rootScope.snapperControl.disable();
+                $rootScope.header = false;
             },
             onExit: function($rootScope) {
                 $rootScope.snapperControl.enable();
+                $rootScope.header = true;
             }
         })
 

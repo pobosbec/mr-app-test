@@ -5,6 +5,7 @@ mobileresponseWebbApp
     .controller('materialadminCtrl', function($timeout, $state, $rootScope,tokenService, $scope, snapRemote){
 
 
+        $rootScope.header = false;
         //snapper
         snapRemote.getSnapper().then(function(snapper){
             $rootScope.snapperControl = snapper;

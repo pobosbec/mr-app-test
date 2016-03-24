@@ -143,8 +143,17 @@ and (orientation: portrait) {
 }
 
 #main{
-    padding-top: 80px !important;
+    padding-top: 15px !important;
 }
+
+.lc-block{
+    display: block !important;
+}
+
+
+
+/**Menu drawer bellow!! **/
+
 /* Show "Left" drawer for the "Right" drawer in the demo */
 .snapjs-right .snap-drawer-left {
     display: block;

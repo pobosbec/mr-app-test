@@ -56,14 +56,15 @@
 </head>
 <body  data-ng-controller="eventCtrl as ectrl">
 
-
 <div snap-drawer class="snap-drawer snap-drawer-left" >
     <div>
         <div data-ng-include="'template/sidebar-drawer.html'" ></div>
     </div>
 </div>
-<div id="content" snap-content class="snap-content" style="background-color: whitesmoke">
+<div id="content" snap-content class="snap-content">
+    <header id="header" ng-show="header" data-current-skin={{mactrl.currentSkin}} data-ng-include="'template/header.html'" style="position: static" data-ng-controller="headerCtrl as hctrl"></header>
     <data ui-view ></data>
+    <footer id="footer" data-ng-include="'template/footer.html'"></footer>
 </div>
 
 
