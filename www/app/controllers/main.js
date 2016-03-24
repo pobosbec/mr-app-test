@@ -4,6 +4,10 @@ mobileresponseWebbApp
     // =========================================================================
     .controller('materialadminCtrl', function($timeout, $state, $rootScope,tokenService, $scope){
 
+        var snapper = new Snap({
+            element: document.getElementById('content')
+        });
+
         //ui router
         $rootScope.$state = $state;
 
