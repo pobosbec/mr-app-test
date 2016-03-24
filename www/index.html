@@ -20,8 +20,8 @@
     <link href="css/app.min.2.css" rel="stylesheet">
     <link href="css/css-override.css" rel="stylesheet">
     <link href="css/custom.css" rel="stylesheet">
+    <link href="bower_components/snapjs/snap.css" rel="stylesheet">
     <link href="bower_components/angular-snap/angular-snap.css" rel="stylesheet">
-
 
     <link href="node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css" rel="stylesheet">
 
@@ -57,27 +57,14 @@
 <body  data-ng-controller="eventCtrl as ectrl">
 
 
-
-<snap-drawers>
-    <snap-drawer style="background-color: dimgray">
-        <p>Hello from drawer!</p>
-    </snap-drawer>
-
-    <div snap-drawer="right" style="background-color: dimgray">
-        <p>Hello from the right drawer!</p>
-        <div id="do-drag">Drag Handle</div>
+<div snap-drawer class="snap-drawer snap-drawer-left" >
+    <div>
+        <div data-ng-include="'template/sidebar-drawer.html'" ></div>
     </div>
-</snap-drawers>
-
-<snap-content style="background-color: whitesmoke">
-    <p>Hello {{name}}!</p>
-    <p>The demo shows how to work with both left and right side drawers</p>
-    <button snap-toggle>Toggle Left</button>
-    <button snap-toggle="right">Toggle Right</button>
+</div>
+<div id="content" snap-content class="snap-content" style="background-color: whitesmoke">
     <data ui-view ></data>
-
-</snap-content>
-
+</div>
 
 <!-- <data ui-view ng-class="{'fadeShow':true}"></data>
 

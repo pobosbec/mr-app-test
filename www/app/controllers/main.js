@@ -2,7 +2,14 @@ mobileresponseWebbApp
     // =========================================================================
     // Base controller for common functions
     // =========================================================================
-    .controller('materialadminCtrl', function($timeout, $state, $rootScope,tokenService, $scope){
+    .controller('materialadminCtrl', function($timeout, $state, $rootScope,tokenService, $scope, snapRemote){
+
+
+        //snapper
+        snapRemote.getSnapper().then(function(snapper){
+            $rootScope.snapperControl = snapper;
+
+        });
 
         //ui router
         $rootScope.$state = $state;
