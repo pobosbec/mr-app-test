@@ -1,5 +1,7 @@
 ﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" data-ng-app="administratorApp"  data-ng-controller="materialadminCtrl as mactrl" data-ng-click="mactrl.clickHandler($event)">
+
+<html xmlns="http://www.w3.org/1999/xhtml" data-ng-app="administratorApp"  data-ng-controller="materialadminCtrl as mactrl">
+<!--<html xmlns="http://www.w3.org/1999/xhtml" data-ng-app="administratorApp"  data-ng-controller="materialadminCtrl as mactrl" data-ng-click="mactrl.clickHandler($event)">-->
 
 <head>
     <meta charset="utf-8">
@@ -21,16 +23,22 @@
     <link href="bower_components/angular-snap/angular-snap.css" rel="stylesheet">
 
 
+    <link href="node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css" rel="stylesheet">
+
     <!-- in order not to get problems related to angular and jquery performance issue. loading order should be jQuery>jQueryMobile>Angularmin-->
     <!-- Jquery -->
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <!-- Angular -->
+    <script src="bower_components/snapjs/snap.js"></script>
     <script src="node_modules/angular/angular.min.js"></script>
+    <script src="bower_components/angular-snap/angular-snap.js"></script>
     <script src="node_modules/angular-resource/angular-resource.min.js"></script>
 
     <!--<link href="node_modules/angular-loading-bar/build/loading-bar.min.css" rel="stylesheet"/>-->
 
-    <link href="node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css" rel="stylesheet">
+
+
+
 
 
     <!-- Begin Cookie Consent plugin by Silktide - http://silktide.com/cookieconsent -->
@@ -44,13 +52,26 @@
 <body  data-ng-controller="eventCtrl as ectrl">
 
 
-<snap-drawer style="background-color: dimgrey">
-    <p>I'm a drawer! I maybe I've got some sweet navigation links.</p>
-</snap-drawer>
+<snap-drawers>
+    <snap-drawer style="background-color: dimgray">
+        <p>Hello from drawer!</p>
+    </snap-drawer>
+
+    <div snap-drawer="right" style="background-color: dimgray">
+        <p>Hello from the right drawer!</p>
+    </div>
+</snap-drawers>
+
 <snap-content style="background-color: whitesmoke">
-    <data ui-view ng-class="{'fadeShow':true}"></data>
-    <button snap-toggle >Toggle Snap</button>
+    <p>Hello {{name}}!</p>
+    <p>The demo shows how to work with both left and right side drawers</p>
+    <button snap-toggle>Toggle Left</button>
+    <button snap-toggle="right">Toggle Right</button>
 </snap-content>
+
+
+<!-- <data ui-view ng-class="{'fadeShow':true}"></data>
+
 
     <!-- bootstrap -->
     <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
@@ -58,7 +79,7 @@
     <script src="node_modules/angular-animate/angular-animate.min.js"></script>
     <script src="node_modules/angular-loading-bar/build/loading-bar.min.js"></script>
     <script src="node_modules/oclazyload/dist/ocLazyLoad.js"></script>
-    <script src="bower_components/snapjs/snap.js"></script>
+
 
     <!-- Angular ui router -->
     <script src="node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
@@ -90,7 +111,7 @@
     <script src="app/factories/communication-factory.js"></script>
     <script src="app/factories/contacts-repository.js"></script>
     <script src="app/filters.js"></script>
-    <script src="bower_components/angular-snap/angular-snap.js"></script>
+
 
     <!--    <script src="js/ng-cordova.js"></script>-->
     <!--<script type="text/javascript" src="js/PushwooshAndroid.js"></script>
