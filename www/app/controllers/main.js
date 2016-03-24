@@ -29,24 +29,24 @@ mobileresponseWebbApp
            angular.element('html').addClass('ismobile');
         }
 
-        // By default Sidbars are hidden in boxed layout and in wide layout only the right sidebar is hidden.
-        this.sidebarToggle = {
-            left: false,
-            right: false
-        };
+        //// By default Sidbars are hidden in boxed layout and in wide layout only the right sidebar is hidden.
+        //this.sidebarToggle = {
+        //    left: false,
+        //    right: false
+        //};
 
         // By default template has a boxed layout
         this.layoutType = localStorage.getItem('ma-layout-status');
         
         // For Mainmenu Active Class
         this.$state = $state;    
-        
-        //Close sidebar on click
-        this.sidebarStat = function(event) {
-            if (!angular.element(event.target).parent().hasClass('active')) {
-                this.sidebarToggle.left = false;
-            }
-        };
+        //
+        ////Close sidebar on click
+        //this.sidebarStat = function(event) {
+        //    if (!angular.element(event.target).parent().hasClass('active')) {
+        //        this.sidebarToggle.left = false;
+        //    }
+        //};
 
         //Listview menu toggle in small screens
         this.lvMenuStat = false;

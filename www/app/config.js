@@ -36,6 +36,7 @@ mobileresponseWebbApp
             templateUrl: 'views/login.html',
             controller: 'loginCtrl as lctrl',
             onEnter: function($rootScope) {
+                $rootScope.snapperControl.close();
                 $rootScope.snapperControl.disable();
             },
             onExit: function($rootScope) {
