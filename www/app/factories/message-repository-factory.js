@@ -3,13 +3,12 @@
  */
 
 angular.module('message', ['ngCordova'])
-      .factory('messageRepository', ['$http', '$window', '$rootScope', '$location', '$q', '$state', 'tokenService', '$cordovaSQLite', function ($http, win, $rootScope, $location, $q, $state, tokenService, $cordovaSQLite) {
-
+      .factory('messageRepository', ['$http', '$window', '$rootScope', '$location', '$q', '$state', 'tokenService', '$cordovaSQLite', function ($http, win, $rootScope, $location, $q, $state, tokenService, $cordovaSQLite, angularMoment) {
           var db;
 
           var factory = {};
 
-          factory.dabataseConfiguration = {
+          var dabataseConfiguration = {
               name: "bosbec-mr.db",
               location: 1,
               version: "1.0",
@@ -17,29 +16,79 @@ angular.module('message', ['ngCordova'])
               size: (5 * 1024 * 1024)
           }
 
+          var sqliteQueries = {
+              dropTable: 'DROP TABLE IF EXISTS Messages',
+              createTable: 'CREATE TABLE IF NOT EXISTS Messages (MessageId blob unique key, CreatedOn integer, ConversationId blob, Author blob, JSON blob)',
+              getAllMessages: 'SELECT * FROM Messages ORDER BY CreatedOn DESC',
+              getLatestMessages: 'SELECT * FROM Messages ORDER BY CreatedOn DESC LIMIT ?',
+              getAllMessagesFromAuthor: 'SELECT * FROM Messages WHERE Author=?',
+              getAllMessagesFromConversation: 'SELECT * FROM Messages WHERE ConversationId=?',
+              insertMessages: 'INSERT INTO Messages (MessageId, CreatedOn, ConversationId, Author, JSON) VALUES (?, ?, ?, ?, ?)'
+          }
+
+          var webSqlQueries = {
+              dropTable: 'DROP TABLE IF EXISTS Messages',
+              createTable: 'CREATE TABLE IF NOT EXISTS Messages (MessageId unique, CreatedOn, ConversationId, Author, JSON)',
+              getAllMessages: 'SELECT * FROM Messages ORDER BY CreatedOn DESC',
+              getLatestMessages: 'SELECT * FROM Messages ORDER BY CreatedOn DESC LIMIT ?',
+              getAllMessagesFromAuthor: 'SELECT * FROM Messages WHERE Author=?',
+              getAllMessagesFromConversation: 'SELECT * FROM Messages WHERE ConversationId=?',
+              insertMessages: 'INSERT INTO Messages (MessageId, CreatedOn, ConversationId, Author, JSON) VALUES (?, ?, ?, ?, ?)'
+          }
+
+          var queries = null;
+
           factory.messages = [];
 
           factory.init = function () {
-              var conf = factory.dabataseConfiguration;
+              var conf = dabataseConfiguration;
               if (window.isPhoneGap) {
                   // Mobile Device
                   db = window.sqlitePlugin.openDatabase({ name: conf.name, location: conf.location });
+                  queries = sqliteQueries;
               } else {
                   // Browser
                   db = window.openDatabase(conf.name, conf.version, conf.displayName, conf.size);
+                  queries = webSqlQueries;
               }
-              console.log(db);
-              $rootScope.$broadcast('download-whats-new');
 
-              var readStorage = JSON.parse(localStorage.getItem('messages'));
-              if (readStorage && readStorage.constructor === Array) {
-                  factory.messages = readStorage;
-                  factory.messageAdded(factory.messages);
-              }
+              //// IF WE WANT TO DROP TABLE BEFORE CREATE:
+
+              //console.log("Drop and create");
+              //db.transaction(function (tx) {
+              //    tx.executeSql(queries.dropTable, [], function () {
+              //        db.transaction(function (tx) {
+              //            tx.executeSql(queries.createTable, [], function (result, data) {
+              //                $rootScope.$broadcast('download-whats-new');
+              //            }, function (result) {
+              //                console.error(result);
+              //            });
+              //        });
+              //    });
+              //});
+
+              //// REGULAR CREATE TABLE WITH FETCH:
+
+              console.log("create");
+              db.transaction(function (tx) {
+                  tx.executeSql(queries.createTable, [], function (result, data) {
+                      tx.executeSql("SELECT * FROM Messages", [], function (result, resultData) {
+                          for (var i = 0; i < resultData.rows.length; i++) {
+                              var insertMessage = JSON.parse(resultData.rows[i].JSON);
+                              insertMessage.Content = "[LÄST FRÅN DB] "+insertMessage.Content;
+                              factory.messages.push(insertMessage);
+                          }
+                          factory.messageAdded(factory.messages);
+                      });
+                      $rootScope.$broadcast('download-whats-new');
+                  }, function (result) {
+                      console.error(result);
+                  });
+              });
           }
 
           factory.authors = [{
-              Id: "956EF224-E73B-453A-97BA-DDEBFAAA9D17",
+              Id: "956EF224-E73B-453A-97BA-DDEBFAA<A9D17",
               Avatar: "img/profile-pics/6.jpg",
               DisplayName: "Testa Testsson"
           },
@@ -92,50 +141,38 @@ angular.module('message', ['ngCordova'])
           }
 
           factory.addMessage = function (data) {
-              if (data.hasOwnProperty("MessageId")) {
-                  var oldMessagesWithId = factory.messages.filter(function (v) {
-                      return v.MessageId === data.MessageId;
+              db.transaction(function (tx) {
+                  tx.executeSql("SELECT * FROM Messages WHERE MessageId=?", [data.MessageId], function (result, resultData) {
+                      // Experimental merge to minimize ammounts of fired events.
+                      // Doesn't seem to help though...
+                      var addedMessages = [];
+                      if (resultData.rows.length === 0) {
+                          db.transaction(function (tx) {
+                              tx.executeSql(queries.insertMessages, [data.MessageId, moment(data.CreatedOn).unix(), data.ConversationId, data.Author, JSON.stringify(data)], function (result) {
+                                  //console.log("Inserting new; Success!");
+                                  factory.messages.push(data);
+                                  addedMessages.push(data);
+                                  //factory.messageAdded(data); // <- old usage
+                              }, function (err) {
+                                  console.error("Error when inserting message in Database:");
+                                  console.error(data);
+                              });
+                          });
+                      } else {
+                          // Message already present in DB.
+                      }
+                      // Experimental merge to minimize ammounts of fired events.
+                      // Doesn't seem to help though...
+                      factory.messageAdded(addedMessages); 
+
+                  }, function (err) {
+                      console.error("Error when inserting message in Database.");
                   });
-                  if (oldMessagesWithId && oldMessagesWithId.constructor === Array && oldMessagesWithId.length > 0) {
-                      //factory.messages.push(data); //<--- change!
-                      return;
-                  } else {
-                      factory.messages.push(data);
-                  }
-                  factory.saveMessages();
-                  factory.messageAdded(data);
-              } else if (data.hasOwnProperty("CreatedOn") && data.hasOwnProperty("Author")) {
-                  var oldMessagesWithCreatedOnAndAuthor = factory.messages.filter(function (v) {
-                      return v.CreatedOn === data.CreatedOn && v.Author === data.Author;
-                  });
-                  if (oldMessagesWithCreatedOnAndAuthor && oldMessagesWithCreatedOnAndAuthor.constructor === Array && oldMessagesWithCreatedOnAndAuthor.length > 0) {
-                      return;
-                  }
-                  factory.messages.push(data);
-                  factory.saveMessages();
-                  factory.messageAdded(data);
-              } else {
-                  console.log("Malformed message recieved. Ignoring.");
-              }
+              });
           }
 
-          factory.saveMessages = function () {
-              console.warn("Saving messages");
-              if (typeof (Storage) !== "undefined") {
-                  var messages = JSON.stringify(factory.messages);
-                  if (typeof messages === "undefined" || messages === null) {
-                      console.error("Messages was null when saving!! Not good, ignoring ignoring ignoring....");
-                  } else {
-                      localStorage.setItem('messages', messages);
-                  }
-              } else {
-                  alert("ach nein! keiner storage!!!1");
-                  alert("This is actually not a good thing.. We would like you (yes YOU) to contact us and tell us at Bosbec what platform you are running on.");
-                  return;
-              }
-          };
-
           factory.messageAdded = function (data) {
+              console.log("messages-added event");
               $rootScope.$broadcast('messages-added', data);
           }
           factory.messageUpdated = function (data) {
@@ -179,6 +216,7 @@ angular.module('message', ['ngCordova'])
                   case 'updated-message':
                       break;
                   case 'new-messages':
+                      console.log("NEW MESSAGES: " + data.length);
                       if (data != null) {
                           for (var i = 0; i < data.length; i++) {
                               var callback = function (thisElement) {
@@ -186,7 +224,9 @@ angular.module('message', ['ngCordova'])
                                       factory.addMessage(thisElement);
                                   }
                               }(data[i]);
+                              
                               throttle(callback, 10);
+                              //factory.addMessage(data[i]);
                           };
                       }
                       break;
@@ -199,8 +239,16 @@ angular.module('message', ['ngCordova'])
                       factory.messages = [];
                       localStorage.removeItem('messages');
                       localStorage.removeItem('latestWhatIsNewUpdate');
+                      // Clearing Table on logout, just to be sure
+                      db.transaction(function (tx) {
+                          tx.executeSql(queries.dropTable, [], function () {});
+                      });
                       break;
                   case 'logged-in':
+                      // Clearing Table on login, just to be sure
+                      db.transaction(function (tx) {
+                          tx.executeSql(queries.dropTable, [], function () { });
+                      });
                       factory.init();
                       break;
                   default:
