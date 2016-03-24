@@ -44,12 +44,12 @@
 <body  data-ng-controller="eventCtrl as ectrl">
 
 
-<div snap-drawer style="background-color: dimgrey">
+<div snap-drawer snap-id="mainmenu" style="background-color: dimgrey">
     <p>I'm a drawer! I maybe I've got some sweet navigation links.</p>
 </div>
 
-<div snap-content style="background-color: whitesmoke">
-    <button snap-toggle snap-unsafe="true">Toggle Snap</button>
+<div snap-content snap-id="maincontent" style="background-color: whitesmoke">
+    <button snap-toggle snap-id="mainmenu" snap-unsafe="true">Toggle Snap</button>
 
 <data ui-view ng-class="{'fadeShow':true}"></data>
 
