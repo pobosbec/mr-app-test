@@ -1,5 +1,12 @@
 mobileresponseWebbApp
 
+    .config(function(snapRemoteProvider) {
+        snapRemoteProvider.globalOptions = {
+            disable: 'right',
+            touchToDrag: true
+            // ... others options
+        };
+    })
     .config(function ($stateProvider, $urlRouterProvider){
         $urlRouterProvider.otherwise("/login");
         $stateProvider
@@ -9,7 +16,8 @@ mobileresponseWebbApp
         //------------------------------
         .state ('home', {
             url: '/home',
-            templateUrl: 'views/home.html'
+            templateUrl: 'views/home.html',
+
         })
 
         //------------------------------
@@ -26,8 +34,18 @@ mobileresponseWebbApp
         .state ('login', {
             url: '/login',
             templateUrl: 'views/login.html',
-            controller: 'loginCtrl as lctrl'
+            controller: 'loginCtrl as lctrl',
+            onEnter: function($rootScope) {
+                $rootScope.snapperControl.close();
+                $rootScope.snapperControl.disable();
+                $rootScope.header = false;
+            },
+            onExit: function($rootScope) {
+                $rootScope.snapperControl.enable();
+                $rootScope.header = true;
+            }
         })
+
 
         //------------------------------
         // PAGES

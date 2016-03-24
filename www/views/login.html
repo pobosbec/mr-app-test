@@ -1,9 +1,7 @@
+<section id="main">
+        <div class="container">
 
-
-    <!-- Login -->
-
-<span ng-class="{'fadeHide': loggingIn,'fadeShow': !loggingIn }">
-    <div class="lc-block" id="l-login" data-ng-class="{ 'toggled': lctrl.login === 1 }" data-ng-if="lctrl.login === 1">
+    <div class="lc-block" id="l-login" data-ng-class="{ 'toggled': lctrl.login === 1 }" data-ng-if="lctrl.login === 1" style="margin:0 auto !important;">
 
         <form role="form" class="ng-pristine ng-valid" ng-keyup="$event.keyCode == 13 && login(login)">
 
@@ -108,5 +106,6 @@
             </li>
         </ul>
     </div>
+        </div>
 
-</span>
+    </section>

@@ -1,5 +1,7 @@
 ﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" data-ng-app="administratorApp" ng-class="{'login-content': $state.includes('login')}" data-ng-controller="materialadminCtrl as mactrl" data-ng-click="mactrl.clickHandler($event)">
+
+<html xmlns="http://www.w3.org/1999/xhtml" data-ng-app="administratorApp"  data-ng-controller="materialadminCtrl as mactrl">
+<!--<html xmlns="http://www.w3.org/1999/xhtml" data-ng-app="administratorApp"  data-ng-controller="materialadminCtrl as mactrl" data-ng-click="mactrl.clickHandler($event)">-->
 
 <head>
     <meta charset="utf-8">
@@ -18,19 +20,31 @@
     <link href="css/app.min.2.css" rel="stylesheet">
     <link href="css/css-override.css" rel="stylesheet">
     <link href="css/custom.css" rel="stylesheet">
+    <link href="bower_components/snapjs/snap.css" rel="stylesheet">
+    <link href="bower_components/angular-snap/angular-snap.css" rel="stylesheet">
 
+    <link href="node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css" rel="stylesheet">
 
     <!-- in order not to get problems related to angular and jquery performance issue. loading order should be jQuery>jQueryMobile>Angularmin-->
     <!-- Jquery -->
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <!-- Angular -->
+    <script src="bower_components/snapjs/snap.js"></script>
     <script src="node_modules/angular/angular.min.js"></script>
+    <script src="bower_components/angular-snap/angular-snap.js"></script>
+    <script src="bower_components/angular-touch/angular-touch.js"></script>
     <script src="node_modules/angular-resource/angular-resource.min.js"></script>
 
     <!--<link href="node_modules/angular-loading-bar/build/loading-bar.min.css" rel="stylesheet"/>-->
 
-    <link href="node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css" rel="stylesheet">
-
+<script>
+    window.addEventListener("touchstart",function(event, arg){
+        console.log(event.type);
+    }, false);
+    window.addEventListener("mousedown",function(event, arg){
+        console.log(event.type);
+    }, false);
+</script>
 
     <!-- Begin Cookie Consent plugin by Silktide - http://silktide.com/cookieconsent -->
     <script type="text/javascript">
@@ -40,11 +54,18 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/1.0.9/cookieconsent.min.js"></script>
     <!-- End Cookie Consent plugin -->
 </head>
-<body ng-class="{'login-content': $state.includes('login')}" data-ng-controller="eventCtrl as ectrl">
+<body  data-ng-controller="eventCtrl as ectrl">
 
-
-    <data ui-view ng-class="{'fadeShow':true}"></data>
-
+<div snap-drawer class="snap-drawer snap-drawer-left" >
+    <div>
+        <div data-ng-include="'template/sidebar-drawer.html'" ></div>
+    </div>
+</div>
+<div id="content" snap-content class="snap-content">
+    <header id="header" ng-show="header" data-current-skin={{mactrl.currentSkin}} data-ng-include="'template/header.html'" style="position: static" data-ng-controller="headerCtrl as hctrl"></header>
+    <data ui-view ></data>
+    <footer id="footer" data-ng-include="'template/footer.html'"></footer>
+</div>
 
 
     <!-- bootstrap -->
@@ -53,6 +74,7 @@
     <script src="node_modules/angular-animate/angular-animate.min.js"></script>
     <script src="node_modules/angular-loading-bar/build/loading-bar.min.js"></script>
     <script src="node_modules/oclazyload/dist/ocLazyLoad.js"></script>
+
 
     <!-- Angular ui router -->
     <script src="node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
@@ -89,6 +111,7 @@
     <script src="app/factories/communication-factory.js"></script>
     <script src="app/factories/contacts-repository.js"></script>
     <script src="app/filters.js"></script>
+
 
     <!--    <script src="js/ng-cordova.js"></script>-->
     <!--<script type="text/javascript" src="js/PushwooshAndroid.js"></script>

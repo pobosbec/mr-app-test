@@ -1,24 +1,18 @@
-<div data-ng-controller="contactsCtrl as contactCtrl">
+
     <div class="chat-search">
         <div class="fg-line">
-            <input type="text" class="form-control" ng-model="search" ng-model-options="{ debounce: 1000 }" ng-change="Search(search)">
-            <!-- <input type="text" class="form-control" placeholder="Search People"> -->
+            <input type="text" class="form-control" placeholder="Search People">
         </div>
     </div>
-
-    <div class="listview" ng-repeat="foundAppUser in foundAppUsers">
         <a class="lv-item" href="">
             <div class="media">
                 <div class="pull-left p-relative">
-                    <img class="lv-img-sm" src="{{ foundAppUser.avatar }}" alt="">
+                    <img class="lv-img-sm" ng-src="{{ foundAppUser.avatar || 'img/profile-pics/5.jpg' }}" alt="">
                     <i class="chat-status-busy"></i>
                 </div>
                 <div class="media-body">
                     <div class="lv-title">{{ foundAppUser.userName }}</div>
                     <small class="lv-small">{{ foundAppUser.emailAddress }}</small>
-                    <button ng-click="AddUser(foundAppUser)" class="center-block">Add</button>
                 </div>
             </div>
         </a>
-    </div>
-</div>
