@@ -1,5 +1,12 @@
 mobileresponseWebbApp
 
+    .config(function(snapRemoteProvider) {
+        snapRemoteProvider.globalOptions = {
+            disable: 'none',
+            touchToDrag: true
+            // ... others options
+        };
+    })
     .config(function ($stateProvider, $urlRouterProvider){
         $urlRouterProvider.otherwise("/login");
         $stateProvider

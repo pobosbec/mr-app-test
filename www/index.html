@@ -32,14 +32,19 @@
     <script src="bower_components/snapjs/snap.js"></script>
     <script src="node_modules/angular/angular.min.js"></script>
     <script src="bower_components/angular-snap/angular-snap.js"></script>
+    <script src="bower_components/angular-touch/angular-touch.js"></script>
     <script src="node_modules/angular-resource/angular-resource.min.js"></script>
 
     <!--<link href="node_modules/angular-loading-bar/build/loading-bar.min.css" rel="stylesheet"/>-->
 
-
-
-
-
+<script>
+    window.addEventListener("touchstart",function(event, arg){
+        console.log(event.type);
+    }, false);
+    window.addEventListener("mousedown",function(event, arg){
+        console.log(event.type);
+    }, false);
+</script>
 
     <!-- Begin Cookie Consent plugin by Silktide - http://silktide.com/cookieconsent -->
     <script type="text/javascript">
@@ -59,6 +64,7 @@
 
     <div snap-drawer="right" style="background-color: dimgray">
         <p>Hello from the right drawer!</p>
+        <div id="do-drag">Drag Handle</div>
     </div>
 </snap-drawers>
 

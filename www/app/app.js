@@ -3,6 +3,7 @@
  */
 var mobileresponseWebbApp = angular.module('administratorApp', [
     'ngCordova',
+    'ngTouch',
     'snap',
     'angular-loading-bar',
     'ngAnimate',
