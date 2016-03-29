@@ -10,16 +10,19 @@ angular.module('login', [])
         $scope.forgotview = false;
 
         $scope.showRegister = function(){
+            $scope.message="";
             $scope.registerview = true;
             $scope.loginview = false;
             $scope.forgotview = false;
         };
         $scope.showLogin = function(){
+            $scope.message="";
             $scope.registerview = false;
             $scope.loginview = true;
             $scope.forgotview = false;
         };
         $scope.showForgot = function(){
+            $scope.message="";
             $scope.registerview = false;
             $scope.loginview = false;
             $scope.forgotview = true;
@@ -33,6 +36,7 @@ angular.module('login', [])
         $scope.loggingIn = false;
 
         $scope.login = function (data) {
+            $scope.message="";
             //if theres something in the input field try to authenticate
             if (!((data.username === "" || data.username === null))) {
                 $scope.loggingIn = true;
@@ -142,6 +146,7 @@ angular.module('login', [])
         });
 
         $scope.$on('authentication-failed', function (event, args) {
+            $scope.message = "Invalid username or password.";
             $scope.loggingIn = false;
         });
 

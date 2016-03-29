@@ -62,9 +62,8 @@
     </div>
 </div>
 <div id="content" snap-content class="snap-content">
-    <header id="header" ng-show="header" data-current-skin={{mactrl.currentSkin}} data-ng-include="'template/header.html'" style="position: static" data-ng-controller="headerCtrl as hctrl"></header>
+    <header id="header" ng-show="header" data-current-skin={{mactrl.currentSkin}} data-ng-include="'template/header.html'" style="position: fixed; top:0;left: 0;right:0; z-index: 2 !important;" data-ng-controller="headerCtrl as hctrl"></header>
     <data class="view" ui-view ></data>
-    <footer id="footer" data-ng-include="'template/footer.html'"></footer>
 </div>
 
 

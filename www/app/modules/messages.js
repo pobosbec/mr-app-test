@@ -4,6 +4,7 @@
 angular.module('messages', [])
     .controller('messagesController', ['$scope', '$http', '$rootScope', 'communicationService', 'messageRepository','tokenService', function($scope, $http, $rootScope, communicationService, messageRepository, tokenService) {
 
+
         $scope.id = tokenService.getAppUserId;
         $scope.Math = window.Math;
         var loadingTimer = null;
