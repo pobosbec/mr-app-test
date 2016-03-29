@@ -142,8 +142,10 @@ and (orientation: portrait) {
     width:100%!important;
 }
 
-#main{
-    padding-top: 15px !important;
+.login{
+    display: flex !important;
+    align-items: center!important;
+    height:100% !important;
 }
 
 .lc-block{
