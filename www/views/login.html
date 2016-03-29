@@ -36,10 +36,10 @@
         </form>
         <a ng-click="login(login)" class="btn btn-login btn-danger btn-float" value="login"><i class="zmdi zmdi-arrow-forward"></i></a>
 
-        <ul class="login-navigation">
-            <li data-block="#l-register" class="bgm-red" data-ng-click="showRegister()">Register
+        <ul class="login-navigations">
+            <li  class="bgm-red" data-ng-click="showRegister()">Register
             </li>
-            <li data-block="#l-forget-password" class="bgm-orange" data-ng-click="showForgot()">
+            <li class="bgm-orange" data-ng-click="showForgot()">
                 Forgot Password?
             </li>
         </ul>
@@ -103,7 +103,7 @@
         </form>
         <button ng-click="register(register)" ng-disabled="(!createAppUser.$valid) || !register.accept" class="btn btn-login btn-danger btn-float" ><i class="zmdi zmdi-arrow-forward"></i></button>
 
-        <ul class="login-navigation">
+        <ul class="login-navigations">
             <li data-block="#l-login" class="bgm-green" data-ng-click="showLogin()">Login</li>
             <li data-block="#l-forget-password" class="bgm-orange" data-ng-click="showForgot()">
                 Forgot Password?
@@ -128,7 +128,7 @@
 
         <button ng-click="forgot(forgotten)" class="btn btn-login btn-danger btn-float" ><i class="zmdi zmdi-arrow-forward"></i></button>
 
-        <ul class="login-navigation">
+        <ul class="login-navigations">
             <li data-block="#l-login" class="bgm-green" data-ng-click="showLogin()">Login</li>
             <li data-block="#l-register" class="bgm-red" data-ng-click="showRegister()">Register
             </li>
