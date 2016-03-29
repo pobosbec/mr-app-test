@@ -2,7 +2,7 @@
     <!---->
         <div class="container">
             <img class="login-logo" src="img/logorezise.png">
-    <div class="lc-block" id="l-login" data-ng-class="{ 'toggled': lctrl.login === 1 }" data-ng-if="lctrl.login === 1">
+    <div class="lc-block" id="l-login" data-ng-class="{'toggled': loginview }" data-ng-if="loginview">
 
 
         <form role="form" class="ng-pristine ng-valid" ng-keyup="$event.keyCode == 13 && login(login)">
@@ -20,7 +20,9 @@
                 <input type="password" class="form-control" placeholder="Password" name="password" ng-model="login.password">
             </div>
         </div>
-
+            <ul style="list-style-type: none" class="">
+                <li style="color:red; margin-left: 10px;">{{message}}</li>
+            </ul>
         <div class="clearfix"></div>
 
         <div class="checkbox">
@@ -35,74 +37,100 @@
         <a ng-click="login(login)" class="btn btn-login btn-danger btn-float" value="login"><i class="zmdi zmdi-arrow-forward"></i></a>
 
         <ul class="login-navigation">
-            <li data-block="#l-register" class="bgm-red" data-ng-click="lctrl.login = 0; lctrl.register = 1">Register
+            <li data-block="#l-register" class="bgm-red" data-ng-click="showRegister()">Register
             </li>
-            <li data-block="#l-forget-password" class="bgm-orange" data-ng-click="lctrl.login = 0; lctrl.forgot = 1">
+            <li data-block="#l-forget-password" class="bgm-orange" data-ng-click="showForgot()">
                 Forgot Password?
             </li>
         </ul>
     </div>
 
     <!-- Register -->
-<div class="lc-block" id="l-register" data-ng-class="{ 'toggled': lctrl.register === 1 }" data-ng-if="lctrl.register === 1">
+    <div class="lc-block" id="l-register" data-ng-class="{ 'toggled': registerview}" data-ng-if="registerview">
+        <form role="form" class="ng-pristine ng-valid" name="createAppUser" ng-keyup="$event.keyCode == 13 && register(register)">
+
         <div class="input-group m-b-20">
             <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
             <div class="fg-line">
-                <input type="text" class="form-control" placeholder="Username">
+                <input type="text" class="form-control" placeholder="Username" ng-model="register.username" username-validator="" required>
             </div>
         </div>
 
-        <div class="input-group m-b-20">
+  <!--      <div class="input-group m-b-20">
             <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
             <div class="fg-line">
-                <input type="text" class="form-control" placeholder="Email Address">
+                <input type="email" class="form-control" placeholder="Email Address" ng-model="register.email" required>
             </div>
-        </div>
+        </div>-->
 
         <div class="input-group m-b-20">
             <span class="input-group-addon"><i class="zmdi zmdi-male"></i></span>
             <div class="fg-line">
-                <input type="password" class="form-control" placeholder="Password">
+                <input type="password" class="form-control" placeholder="Password" ng-model="register.password" strong-password="" required>
             </div>
         </div>
-
+            <ul style="list-style-type: none" class="">
+                <li style="color:red; margin-left: 10px;">{{message}}</li>
+            </ul>
+        <ul class="" ng-messages="createAppUser.$error">
+            <li ng-message="numberValidator">Password has to contain at least 1 number</li>
+            <li ng-message="uppercaseValidator">Password has to contain at least 1 uppercase
+            </li>
+            <li ng-message="lowercaseValidator">Password has to contain at least 1 lowercase
+            </li>
+            <li ng-message="eightCharactersValidator">Password has to be at least 8 characters
+                long
+            </li>
+            <li ng-message="maxlengthCharactersValidator">Password has to be less than 25
+                characters long
+            </li>
+            <li ng-message="usernameMaxLengthValidator">Username has to be less than 25
+                characters long
+            </li>
+            <li ng-message="usernameMinLengthValidator">Username has to be at least 8 characters
+                long
+            </li>
+        </ul>
         <div class="clearfix"></div>
 
         <div class="checkbox">
             <label>
-                <input type="checkbox" value="">
+                <input type="checkbox" ng-model="register.accept" value="">
                 <i class="input-helper"></i>
-                Accept the license agreement
+                I agree to the <a target="_blank" href="http://mobileresponse.com/services/mobile-response-core/terms-and-conditions/">terms and conditions</a>
             </label>
         </div>
-
-        <a href="" class="btn btn-login btn-danger btn-float"><i class="zmdi zmdi-arrow-forward"></i></a>
+        </form>
+        <button ng-click="register(register)" ng-disabled="(!createAppUser.$valid) || !register.accept" class="btn btn-login btn-danger btn-float" ><i class="zmdi zmdi-arrow-forward"></i></button>
 
         <ul class="login-navigation">
-            <li data-block="#l-login" class="bgm-green" data-ng-click="lctrl.register = 0; lctrl.login = 1">Login</li>
-            <li data-block="#l-forget-password" class="bgm-orange" data-ng-click="lctrl.register = 0; lctrl.forgot = 1">
+            <li data-block="#l-login" class="bgm-green" data-ng-click="showLogin()">Login</li>
+            <li data-block="#l-forget-password" class="bgm-orange" data-ng-click="showForgot()">
                 Forgot Password?
             </li>
         </ul>
     </div>
 
     <!-- Forgot Password -->
-    <div class="lc-block" id="l-forget-password" data-ng-class="{ 'toggled': lctrl.forgot === 1 }" data-ng-if="lctrl.forgot === 1">
+    <div class="lc-block" id="l-forget-password" data-ng-class="{ 'toggled': forgotview}" data-ng-if="forgotview">
         <p class="text-left">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu risus. Curabitur commodo
             lorem fringilla enim feugiat commodo sed ac lacus.</p>
 
         <div class="input-group m-b-20">
             <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
             <div class="fg-line">
-                <input type="text" class="form-control" placeholder="Email Address">
+                <input type="email" ng-model="forgotten.email" class="form-control" placeholder="Email Address">
             </div>
         </div>
+        <ul style="list-style-type: none" class="">
+            <li style="color:red; margin-left: 10px;">{{message}}</li>
+        </ul>
 
-        <a href="" class="btn btn-login btn-danger btn-float"><i class="zmdi zmdi-arrow-forward"></i></a>
+        <button ng-click="forgot(forgotten)" class="btn btn-login btn-danger btn-float" ><i class="zmdi zmdi-arrow-forward"></i></button>
 
         <ul class="login-navigation">
-            <li data-block="#l-login" class="bgm-green" data-ng-click="lctrl.forgot = 0; lctrl.login = 1">Login</li>
-            <li data-block="#l-register" class="bgm-red" data-ng-click="lctrl.forgot = 0; lctrl.register = 1">Register
+            <li data-block="#l-login" class="bgm-green" data-ng-click="showLogin()">Login</li>
+            <li data-block="#l-register" class="bgm-red" data-ng-click="showRegister()">Register
             </li>
         </ul>
     </div>

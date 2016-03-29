@@ -136,8 +136,126 @@ mobileresponseWebbApp
                 });
             }
         }
-    });
+    })
 
+// =========================================================================
+// Strong password
+// =========================================================================
+.directive("strongPassword", function () {
+    return {
 
+        // limit usage to argument only
+        restrict: 'A',
 
+        // require NgModelController, i.e. require a controller of ngModel directive
+        require: "ngModel",
+
+        // create linking function and pass in our NgModelController as a 4th argument
+        link: function (scope, elem, attrs, ctrl) {
+
+            // please note you can name your function & argument anything you like
+            function customValidator(ngModelValue) {
+
+                // check if contains uppercase
+                // if it does contain uppercase, set our custom `uppercaseValidator` to valid/true
+                // otherwise set it to non-valid/false
+                if (/[A-Z]/.test(ngModelValue)) {
+                    ctrl.$setValidity('uppercaseValidator', true);
+                } else {
+                    ctrl.$setValidity('uppercaseValidator', false);
+                }
+
+                // check if contains lowercase
+                // if it does contain lowercase, set our custom `lowercaseValidator` to valid/true
+                // otherwise set it to non-valid/false
+                if (/[a-z]/.test(ngModelValue)) {
+                    ctrl.$setValidity('lowercaseValidator', true);
+                } else {
+                    ctrl.$setValidity('lowercaseValidator', false);
+                }
+
+                // check if contains number
+                // if it does contain number, set our custom `numberValidator`  to valid/true
+                // otherwise set it to non-valid/false
+                if (/[0-9]/.test(ngModelValue)) {
+                    ctrl.$setValidity('numberValidator', true);
+                } else {
+                    ctrl.$setValidity('numberValidator', false);
+                }
+
+                // check if the length of our input is atleast 8 characters
+                // if it is 8, set our custom `sixCharactersValidator` to valid/true
+                // othwise set it to non-valid/false
+                if (ngModelValue.length > 8) {
+                    ctrl.$setValidity('eightCharactersValidator', true);
+                } else {
+                    ctrl.$setValidity('eightCharactersValidator', false);
+                }
+
+                //check if the length of our input is atleast 8 characters
+                // if it is 8, set our custom `sixCharactersValidator` to valid/true
+                // othwise set it to non-valid/false
+                if (ngModelValue.length < 26) {
+                    ctrl.$setValidity('maxlengthCharactersValidator', true);
+                } else {
+                    ctrl.$setValidity('maxlengthCharactersValidator', false);
+                }
+                // we need to return our ngModelValue, to be displayed to the user(value of the input)
+                return ngModelValue;
+            }
+            // we need to add our customValidator function to an array of other(build-in or custom) functions
+            // I have not notice any performance issues, but it would be worth investigating how much
+            // effect does this have on the performance of the app
+            ctrl.$parsers.push(customValidator);
+        }
+    }
+})
+// =========================================================================
+// Username validator
+// =========================================================================
+
+    .directive("usernameValidator", function () {
+        return {
+
+            // limit usage to argument only
+            restrict: 'A',
+            // require NgModelController, i.e. require a controller of ngModel directive
+            require: "ngModel",
+
+            // create linking function and pass in our NgModelController as a 4th argument
+            link: function (scope, elem, attrs, ctrl) {
+
+                // please note you can name your function & argument anything you like
+                function customValidator(ngModelValue) {
+
+                    // check if the length of our input is atleast 8 characters
+                    // if it is 8, set our custom `sixCharactersValidator` to valid/true
+                    // othwise set it to non-valid/false
+                    if (ngModelValue.length > 8) {
+                        ctrl.$setValidity('usernameMinLengthValidator', true);
+                    } else {
+                        ctrl.$setValidity('usernameMinLengthValidator', false);
+                    }
+
+                    // check if the length of our input is less than 26 characters
+                    // if it is less than 26, set our custom `sixCharactersValidator` to valid/true
+                    // othwise set it to non-valid/false
+                    if (ngModelValue.length < 26) {
+                        ctrl.$setValidity('usernameMaxLengthValidator', true);
+                    } else {
+                        ctrl.$setValidity('usernameMaxLengthValidator', false);
+                    }
+
+                    // we need to return our ngModelValue, to be displayed to the user(value of the input)
+                    return ngModelValue;
+
+                }
+
+                // we need to add our customValidator function to an array of other(build-in or custom) functions
+                // I have not notice any performance issues, but it would be worth investigating how much
+                // effect does this have on the performance of the app
+                ctrl.$parsers.push(customValidator);
+            }
+        }
+    })
    

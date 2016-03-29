@@ -13,6 +13,7 @@ var mobileresponseWebbApp = angular.module('administratorApp', [
     'ui.bootstrap',
     'token',
     'messages',
+    'ngMessages',
     'event',
     'login',
     'communication',
