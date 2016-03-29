@@ -25,6 +25,21 @@ angular.module('login', [])
             }
         };
 
+        $scope.register = function (data) {
+            //if theres something in the input field try to authenticate
+            if (!((data.username === "" || data.username === null))) {
+                $scope.loggingIn = true;
+                tokenService.authenticate(data.username, data.password, data.keepLoggedIn);
+            }
+            //nothing in the inputfields use the hard coded user
+            else {
+            }
+        };
+
+
+
+
+
         $scope.$on('authenticating', function (event, args) {
             $scope.loggingIn = true;
         });
