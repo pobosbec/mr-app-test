@@ -131,6 +131,15 @@ angular.module('contacts', [])
             return deferred.promise;
         }
 
+        factory.getAppUser = function(appUserId){
+            for(var i = 0; i < appUsers.length; i++){
+                if(appUsers[i].userId === appUserId){
+                    return appUsers[i];
+                }
+            }
+            return null;
+        }
+
         factory.getAppUsers = function(){
             if(appUsers == null || appUsers == undefined){
                 appUsers = getAppUsersFromLocalStorage();
