@@ -2,13 +2,31 @@
  * Created by robinpipirs on 09/12/15.
  */
 angular.module('login', [])
-    .controller('loginCtrl', ['$scope', '$rootScope', '$http', 'tokenService', function ($scope, $rootScope, $http, tokenService) {
+    .controller('loginCtrl', ['$scope', '$rootScope', '$http', 'tokenService','$q','$state', function ($scope, $rootScope, $http, tokenService,$q,$state) {
 
         //taken from main.js
-        this.login = 1;
-        this.register = 0;
-        this.forgot = 0;
+        $scope.loginview = true;
+        $scope.registerview = false;
+        $scope.forgotview = false;
 
+        $scope.showRegister = function(){
+            $scope.registerview = true;
+            $scope.loginview = false;
+            $scope.forgotview = false;
+        };
+        $scope.showLogin = function(){
+            $scope.registerview = false;
+            $scope.loginview = true;
+            $scope.forgotview = false;
+        };
+        $scope.showForgot = function(){
+            $scope.registerview = false;
+            $scope.loginview = false;
+            $scope.forgotview = true;
+        };
+
+
+        $scope.message = "";
         $scope.showLoginError = false;
         $scope.errorMsg = "";
         $scope.keepLoggedIn = tokenService.keepLoggedInCredentialsFromDatabase().keepLoggedIn;
@@ -24,6 +42,100 @@ angular.module('login', [])
             else {
             }
         };
+
+
+        $scope.forgot = function (data) {
+            //if theres something in the input field try to authenticate
+            $scope.message = "";
+            var registerRequest = {
+                method: 'POST',
+                url: tokenService.currentAppApiUrl + 'app/users/request-change-forgotten-password-code',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: {
+                    "Data": {
+                        "InstanceName": "mobileresponse",
+                        "EmailAdress": data.email
+                    },
+                    "Tags": null
+                }
+            };
+            var promise = httpPost(registerRequest);
+            promise.then(function (greeting) {
+                //Success
+                console.log(greeting);
+                //TODO: wait and go login
+                setTimeout(function(){
+                    $scope.registerview = false;
+                    $scope.loginview = true;
+                    $scope.forgotview = false;
+                    window.location.reload();
+                }, 1500);
+            }, function (reason) {
+                console.log(reason);
+                $scope.message = reason.errors[0].errorMessage;
+                //failed try authenticate against admin->app
+                $scope.message = "Can't find a user connected to the email provided";
+            });
+        };
+
+        $scope.register = function (data) {
+            //if theres something in the input field try to authenticate
+            $scope.message = "";
+            var registerRequest = {
+                method: 'POST',
+                url: tokenService.currentAppApiUrl + 'app/users/register',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: {
+                    "Data": {
+                        "InstanceName": "mobileresponse",
+                        "Username": data.username,
+                        "Password": data.password
+                    },
+                    "Tags": null
+                }
+            };
+            var promise = httpPost(registerRequest);
+            promise.then(function (greeting) {
+                //Success
+                $scope.message = greeting.status;
+                //TODO: wait and go login
+                setTimeout(function(){
+                    $scope.registerview = false;
+                    $scope.loginview = true;
+                    $scope.forgotview = false;
+                    window.location.reload();
+                }, 1500);
+            }, function (reason) {
+                //failed try authenticate against admin->app
+                $scope.message = "Username already in use";
+            });
+        };
+
+         function httpPost  (req) {
+
+            var deferred = $q.defer();
+
+            $http(req
+            ).then(function successCallback(response) {
+                // this callback will be called asynchronously
+                // when the response is available
+                deferred.resolve(response.data);
+
+            }, function errorCallback(response) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+                console.log(response); // TODO: REMOVE! only for debugging.
+                deferred.reject(response.data);
+            });
+            return deferred.promise;
+        };
+
+
+
 
         $scope.$on('authenticating', function (event, args) {
             $scope.loggingIn = true;

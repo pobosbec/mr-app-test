@@ -6,9 +6,10 @@ angular.module('messages', [])
 
         $scope.id = tokenService.getAppUserId;
         $scope.Math = window.Math;
+        var loadingTimer = null;
 
         $scope.loading = true;
-        setTimeout(function () { $scope.loading = false; }, 2000);
+       loadingTimer = setTimeout(function () { $scope.loading = false; }, 300);
 
         $scope.messages = messageRepository.getMessages();
         $scope.conversations = [];
@@ -32,7 +33,7 @@ angular.module('messages', [])
         });
 
         $scope.$on('$stateChangeSuccess', function () {
-            setTimeout(function() { $scope.loading = false; }, 1000);
+        loadingTimer = setTimeout(function() { $scope.loading = false; }, 300);
         });
 
         $scope.$on('$stateChangeError', function () {
