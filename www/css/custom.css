@@ -166,6 +166,13 @@ and (orientation: portrait) {
     text-align: center;
     padding-bottom: 40px;
 }
+#main{
+    padding-bottom: 15px!important;
+    padding-top: 15px!important;
+}
+#footer {
+   /** position: static!important;*/
+}
 
 /**Menu drawer bellow!! **/
 
