@@ -14,6 +14,7 @@ angular.module('messages', [])
 
         $scope.messages = messageRepository.getMessages();
         $scope.conversations = [];
+
         messagesToConversations($scope.messages, $scope.conversations);
         var fetchMessagesInterval = setInterval(function() {
             var args = { Sender: "messages", Event: 'interval' };
@@ -73,10 +74,6 @@ angular.module('messages', [])
                         );
                     }
                 }
-            }
-            //sort conversations
-            for (var conv in destination) {
-
             }
         }
 
