@@ -7,31 +7,14 @@ angular.module('conversations', [])
         $scope.conversations = [];
         $scope.messages = [];
         $scope.currentConversation = { ConversationId: {}, Messages: [], AuthorDisplayNames: [], UserIds: [] };
-        
+        $scope.currentReplyMessage = "";
+
         $scope.doesConversationExist = function(users) {
             return communicationService.doesConversationExist(users);
         };
 
         $scope.selectConversation = function(conversation){
-            /*$scope.currentConversation.Messages = [];
-            $scope.currentConversation.AuthorDisplayNames = [];
-            $scope.currentConversation.UserIds = [];
-            $scope.currentConversation.ConversationId = conversationId;
-            console.log('Selected conversation: ' + conversationId);
-
-            for (var k = 0; k < $scope.messages.length; k++){
-                if($scope.messages[k].ConversationId === $scope.currentConversation.ConversationId){
-                    $scope.currentConversation.Messages.push($scope.messages[k]);
-
-                    if($scope.currentConversation.AuthorDisplayNames.indexOf($scope.messages[k].AuthorDisplayName) === -1){
-                        $scope.currentConversation.AuthorDisplayNames.push($scope.messages[k].AuthorDisplayName);
-                    }
-
-                    if($scope.currentConversation.UserIds.indexOf($scope.messages[k].Author) === -1){
-                        $scope.currentConversation.UserIds.push($scope.messages[k].Author);
-                    }
-                }
-            }*/
+            $scope.switchReplyMessage(conversation);
             for (var i = 0; i < $scope.conversations.length; i++){
                 if($scope.conversations[i].ConversationId === conversation.ConversationId){
                     $scope.currentConversation = $scope.conversations[i];
@@ -66,7 +49,9 @@ angular.module('conversations', [])
 
         $scope.reply = function(message, conversationId){
 
-            var newMessage = { Content: message, Status: 'pending'};
+            var newMessage = { Content: message, Status: 'pending', Id: 'test' };
+
+            $scope.messages.push(newMessage);
 
             var req = {
                 method: 'POST',
@@ -88,40 +73,69 @@ angular.module('conversations', [])
 
             promise.then(
                 function(success){
-                    console.log('Replied to conversation!')
-                    $scope.newMessage.status = 'success';
+                    // Remove temp message from messages array, use MessageId to get message from messageRepository
+
                 },
                 function(error){
                     console.log('Could not reply to conversation.')
-                    $scope.newMessage.status = 'failed';
+
                 });
         }
 
+        $scope.replyMessages = [];
+
+        $scope.clearReplyMessages = function(){
+            $scope.replyMessages = [];
+        }
+
+        $scope.switchReplyMessage = function(conversation){
+            for (var i = 0; i < $scope.replyMessages.length; i++){
+                if($scope.replyMessages[i].ConversationId === conversation.ConversationId){
+                    $scope.currentReplyMessage = $scope.replyMessages[i].ReplyMessage;
+                }
+            }
+        }
+
+        $scope.captureReplyMessageInput = function (conversationId, input) {
+            for (var i = 0; i < $scope.replyMessages.length; i++){
+                if($scope.replyMessages[i].ConversationId === conversationId){
+                    $scope.replyMessages[i].ReplyMessage = input;
+                }
+            }
+        }
+
         function init(){
-            /*for (var j = 0; j < $scope.appUsers.length; j++){
-                var promise = $scope.doesConversationExist(new Array($scope.appUsers[j].userId));
-
-                promise.then(function(success) {
-                    var conversationData = { ConversationId: success.data, Participants: $scope.appUsers[j].userId};
-                    $scope.conversations.push(conversationData);
-                }, function(reason) {
-                    alert('Failed: ' + reason);
-                });
-            }*/
-
             $scope.messages = messageRepository.getMessages();
+
+            if($scope.messages.length === 0){
+                return;
+            }
 
             var conversationsIds = [];
 
+            var latestActiveConversation = $scope.messages[0];
+
             for (var k = 0; k < $scope.messages.length; k++){
+
+                if($scope.messages[k].CreatedOn > latestActiveConversation.CreatedOn){
+                    latestActiveConversation = $scope.messages[k];
+                }
+
                 if(conversationsIds.indexOf($scope.messages[k].ConversationId) === -1){
                     conversationsIds.push($scope.messages[k].ConversationId);
                 }
             }
 
-            // now we have all the conversations ids
             for(var i = 0; i < conversationsIds.length; i++){
                 $scope.conversations.push($scope.orderConversation(conversationsIds[i]));
+                $scope.replyMessages.push({ ConversationId: conversationsIds[i], ReplyMessage: null});
+            }
+
+            for(var j = 0; j < $scope.conversations.length; j++){
+                if($scope.conversations[j].ConversationId === latestActiveConversation.ConversationId){
+                    $scope.selectConversation($scope.conversations[j]);
+                    j = $scope.conversations.length;
+                }
             }
         };
         init();
