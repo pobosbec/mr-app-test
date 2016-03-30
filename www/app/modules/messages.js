@@ -11,7 +11,18 @@ angular.module('messages', [])
         $scope.loading = true;
        loadingTimer = setTimeout(function () { $scope.loading = false; }, 300);
 
-        $scope.messages = messageRepository.getMessages();
+      //  $scope.messages = messageRepository.getMessages();
+
+        // NOTE: Here David has changed some to test with.
+        var promise = messageRepository.getMessagesByTime(0, 20);
+        promise.then(
+            function(messages){
+                $scope.messages = messages;
+            },
+            function(error){
+                console.log(error);
+            });
+
         $scope.conversations = [];
         messagesToConversations($scope.messages, $scope.conversations);
         var fetchMessagesInterval = setInterval(function() {
@@ -27,9 +38,20 @@ angular.module('messages', [])
         });
 
         $scope.$on('messages-added', function(event, args) {
-            $scope.messages = messageRepository.getMessages();
+         /*   $scope.messages = messageRepository.getMessages();
             $scope.conversations = [];
-            messagesToConversations(messageRepository.getMessages(), $scope.conversations);
+            messagesToConversations(messageRepository.getMessages(), $scope.conversations); */
+
+            // NOTE: Here David has changed some to test with.
+
+            var promise = messageRepository.getMessagesByTime(0, 20);
+            promise.then(
+                function(messages){
+                    $scope.messages = messages;
+                },
+                function(error){
+                    console.log(error);
+                });
         });
 
         $scope.$on('$stateChangeSuccess', function () {

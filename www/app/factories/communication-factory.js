@@ -76,7 +76,11 @@ angular.module('communication', [])
 
             var newMessages = [];
 
-            for(i = 0; i < data.data.messages.length; i++){
+            if(data.data.messages.length === 0){
+                return;
+            }
+            
+            for(var i = 0; i < data.data.messages.length; i++){
                 var msg = data.data.messages[i];
 
                 var newMessage = {};
