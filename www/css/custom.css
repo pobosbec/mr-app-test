@@ -149,7 +149,7 @@ and (orientation: portrait) {
 .login{
     display: flex !important;
     align-items: center!important;
-    height:100% !important;
+    height:90% !important;
     padding-bottom: 80px;
 }
 
@@ -337,6 +337,12 @@ and (orientation: portrait) {
 .login-menu ul{
     list-style-type: none !important;
     padding:0;
+}
+.login-menu li{
+    margin-top: 10px;
+}
+.login-checkbox {
+    margin-top: 15px!important;
 }
 
 .inputfield {
