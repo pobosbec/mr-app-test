@@ -276,7 +276,7 @@ angular.module('token', [])
             }, function errorCallback(response) {
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
-                console.log(response); // TODO: REMOVE! only for debugging.
+                //console.log(response); // TODO: REMOVE! only for debugging.
                 deferred.reject(response.data);
             });
             return deferred.promise;
