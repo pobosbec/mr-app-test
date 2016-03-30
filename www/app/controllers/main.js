@@ -2,7 +2,7 @@ mobileresponseWebbApp
     // =========================================================================
     // Base controller for common functions
     // =========================================================================
-    .controller('materialadminCtrl', function($timeout, $state, $rootScope,tokenService, $scope, snapRemote, $uibModal){
+    .controller('materialadminCtrl', function($timeout, $state, $rootScope,tokenService, $scope, snapRemote, $uibModal, $log){
 
         //////////////////////////
         /// Modal
