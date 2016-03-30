@@ -21,7 +21,7 @@ angular.module('communication', [])
 
             if (latest == null) {
                 var today = new Date();
-                today.setDate(today.getDate() - 7)
+                today.setDate(today.getDate() - 700); // MAGNUS; Used to be 7
                 latest = today.toJSON();
             }
             return latest;
@@ -59,7 +59,7 @@ angular.module('communication', [])
                 //    return;
                 //}
 
-                //latestUpdate = data.data.lastUpdate;
+                latestUpdate = data.data.lastUpdate;
 
                 updateLastUpdated();
 
@@ -76,7 +76,11 @@ angular.module('communication', [])
 
             var newMessages = [];
 
-            for(i = 0; i < data.data.messages.length; i++){
+            if(data.data.messages.length === 0){
+                return;
+            }
+            
+            for(var i = 0; i < data.data.messages.length; i++){
                 var msg = data.data.messages[i];
 
                 var newMessage = {};
@@ -152,20 +156,19 @@ angular.module('communication', [])
             ).then(function successCallback(response) {
                 alert('Message sent!');
             }, function errorCallback(response) {
-                alert('Could not send message.')
+                alert('Could not send message.');
             });
         }
 
         function updateLastUpdated(){
             if (typeof (Storage) !== "undefined") {
-                //localStorage.setItem('latestWhatIsNewUpdate', latestUpdate);
-                var latestMessage = messageRepository.getNewestMessage();
-                console.log(latestMessage);
-                if (typeof latestMessage !== 'undefined' && latestMessage !== null && latestUpdate.hasOwnProperty("CreatedOn")) {
-                    console.log("--------  Using last message as reference --------");
-                    latestUpdate = latestUpdate.hasOwnProperty("CreatedOn");
-                }
-
+                //var latestMessage = messageRepository.getNewestMessage();
+                //if (typeof latestMessage !== 'undefined' && latestMessage !== null && latestMessage.hasOwnProperty("CreatedOn")) {
+                //    latestUpdate = latestMessage.CreatedOn;
+                //} else {
+                //    latestUpdate = factory.getLatestUpdate();
+                //}
+                //console.warn(latestUpdate);
                 localStorage.setItem('latestWhatIsNewUpdate', latestUpdate);
             } else {
                 alert("ach nein! keiner storage!!!1");
