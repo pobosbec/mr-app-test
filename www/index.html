@@ -24,13 +24,13 @@
     <link href="bower_components/angular-snap/angular-snap.css" rel="stylesheet">
 
     <!-- in order not to get problems related to angular and jquery performance issue. loading order should be jQuery>jQueryMobile>Angularmin-->
+    <script type='application/javascript' src='node_modules/fastclick/lib/fastclick.js'></script>
     <!-- Jquery -->
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <!-- Angular -->
     <script src="bower_components/snapjs/snap.js"></script>
     <script src="node_modules/angular/angular.min.js"></script>
     <script src="bower_components/angular-snap/angular-snap.js"></script>
-    <script src="bower_components/angular-touch/angular-touch.js"></script>
     <script src="node_modules/angular-resource/angular-resource.min.js"></script>
 
     <!--<link href="node_modules/angular-loading-bar/build/loading-bar.min.css" rel="stylesheet"/>-->
@@ -113,6 +113,11 @@
 
     <script language="javascript">
 
+        if ('addEventListener' in document) {
+            document.addEventListener('DOMContentLoaded', function() {
+                FastClick.attach(document.body);
+            }, false);
+        }
 
         function isAndroid() {
             return navigator.userAgent.indexOf("Android") > 0;
