@@ -321,7 +321,36 @@ and (orientation: portrait) {
     top: 70px;
     padding: 20px;
     margin-bottom: 20px;
+}
+.button-list{
+    margin-top:10px;
+    padding:0 !important;
+}
+
+.login-buttons{
+    width:100%;
+}
+
+.login-menu{
+    bottom: 0 !important;
+}
+.login-menu ul{
+    list-style-type: none !important;
+    padding:0;
+}
+
+.inputfield {
+    width: 302px!important;
+    padding: 17px 17px 17px 40px;
+    text-align: center!important;
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+
+.login-form{
+    margin-top:-20px;
     text-align: center;
+    display:block;
 }
 
 /* Styles for expanding "Search" input in the "Expanding" demo */
