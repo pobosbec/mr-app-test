@@ -1,3 +1,4 @@
+/*Native feeling starts here */
 /*Native feel removal of text selection*/
 *
 {
@@ -32,7 +33,7 @@ input
     -ms-user-drag: none;
     user-drag: none;
 }
-
+/* native feel ends here */
 
 /*Image rotation*/
 
@@ -500,4 +501,8 @@ and (orientation: portrait) {
     opacity: 0.5;
     padding: 15px;
     font-size: 12px;
+}
+
+.modal{
+    margin-top: 20%!important;
 }

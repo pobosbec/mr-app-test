@@ -1,5 +1,6 @@
-<a ng-click="newMessage()" class="btn btn-login btn-danger btn-float" value="newMsg" style="z-index: 3; position: fixed; bottom:25px; right:25px"><i class="zmdi zmdi-plus"></i></a>
+
 <section id="main">
+
     <!--  <aside id="sidebar" data-ng-include="'template/sidebar-left.html'" data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>-->
 
         <aside id="chat" data-ng-include="'template/chat.html'" data-ng-class="{ 'toggled': mactrl.sidebarToggle.right === true }"></aside>
@@ -7,6 +8,9 @@
         <section id="content" data-ng-controller="messagesController as msgCtrl">
 
             <div class="container" ng-class="{'fadeHide': loading,'fadeShow': !loading }">
+
+
+
                 <!-- <div class="block-header" data-ng-include="'template/messages-header.html'"></div> -->
                 <!-- Recent Posts -->
                 <div ng-if="messageViewMode == 1" class="container" data-ng-include="'template/message-list.html'"></div>
@@ -15,4 +19,3 @@
             </div>
         </section>
     </section>
-

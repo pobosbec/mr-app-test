@@ -61,8 +61,30 @@
 </div>
 <div id="content" snap-content class="snap-content">
     <header id="header" ng-show="header" data-current-skin={{mactrl.currentSkin}} data-ng-include="'template/header.html'" style="position: fixed; top:0;left: 0;right:0; z-index: 2 !important;" data-ng-controller="headerCtrl as hctrl"></header>
-    <data class="view" ui-view ></data>
+    <a ng-click="open()" class="btn btn-login btn-danger btn-float" value="newMsg" style="z-index: 3; position: fixed; bottom:25px; right:25px"><i class="zmdi zmdi-plus"></i></a>
+    <data class="view" ui-view >
+    </data>
 </div>
+
+<!-- new message modal -->
+<script type="text/ng-template" id="myModalContent.html" >
+    <div class="modal-header">
+        <h3 class="modal-title">I'm a modal!</h3>
+    </div>
+    <div class="modal-body">
+        <ul>
+            <li ng-repeat="item in items">
+                <a href="#" ng-click="$event.preventDefault(); selected.item = item">{{ item }}</a>
+            </li>
+        </ul>
+        Selected: <b>{{ selected.item }}</b>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+<!-- new message modal end -->
 
 
     <!-- bootstrap -->
@@ -93,6 +115,7 @@
     <script src="app/directives.js"></script>
     <script src="app/modules/ui.js"></script>
     <script src="app/modules/messages.js"></script>
+    <script src="app/modules/modal.js"></script>
     <script src="app/modules/login.js"></script>
     <script src="app/modules/contacts.js"></script>
     <script src="app/factories/token-factory.js"></script>
