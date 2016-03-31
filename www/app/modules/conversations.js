@@ -2,12 +2,13 @@
  * Created by Kristofer on 2016-03-29.
  */
 angular.module('conversations', [])
-    .controller('conversationsCtrl', ['$scope', '$http', 'tokenService', 'contactsService', 'communicationService', 'messageRepository', function($scope, $http, tokenService, contactsService, communicationService, messageRepository) {
+    .controller('conversationsCtrl', ['$scope', '$http', '$rootScope', 'tokenService', 'contactsService', 'communicationService', 'messageRepository', function($scope, $http, $rootScope, tokenService, contactsService, communicationService, messageRepository) {
 
         $scope.conversations = [];
-        $scope.messages = [];
         $scope.currentConversation = { ConversationId: {}, Messages: [], AuthorDisplayNames: [], UserIds: [] };
         $scope.currentReplyMessage = "";
+        $scope.userId = null;
+        $scope.replyMessages = [];
 
         $scope.doesConversationExist = function(users) {
             return communicationService.doesConversationExist(users);
@@ -49,9 +50,9 @@ angular.module('conversations', [])
 
         $scope.reply = function(message, conversationId){
 
-            var newMessage = { Content: message, Status: 'pending', Id: 'test' };
+            $scope.currentReplyMessage = "";
 
-            $scope.messages.push(newMessage);
+            var newMessage = { Content: message, Status: 'pending', Id: 'test' };
 
             var req = {
                 method: 'POST',
@@ -82,10 +83,8 @@ angular.module('conversations', [])
                 });
         }
 
-        $scope.replyMessages = [];
-
         $scope.clearReplyMessages = function(){
-            $scope.replyMessages = [];
+            $scope.currentReplyMessage = "";
         }
 
         $scope.switchReplyMessage = function(conversation){
@@ -104,39 +103,87 @@ angular.module('conversations', [])
             }
         }
 
+        $scope.$on('messages-added', function(event, args) {
+
+            var promise = messageRepository.getMessagesByTime(1, 1);
+            promise.then(
+                function(messages){
+                    for (var i = 0; i < messages.length; i++){
+                        for (var j = 0; j < $scope.conversations.length; j++){
+                            if(messages[i].ConversationId === $scope.conversations[j].ConversationId){
+
+                                var found = false;
+
+                                for(var k = 0; k < $scope.conversations[j].Messages.length; k++){
+                                    if($scope.conversations[j].Messages[k].MessageId === messages[i].MessageId){
+                                        found = true;
+                                    }
+                                }
+
+                                if(!found){
+                                    $scope.conversations[j].Messages.push(messages[i]);
+                                }
+
+                            } else {
+                                // new conversation
+                                console.log('Message from new conversation!')
+                            }
+                        }
+                    }
+                },
+                function(error){
+                    console.log(error);
+                });
+        });
+
+        var fetchMessagesInterval = setInterval(function() {
+            var args = { Sender: "messages", Event: 'interval' };
+            $rootScope.$broadcast('download-whats-new', args);
+            console.log("10s whats-new");
+        }, 10000);
+
         function init(){
-            $scope.messages = messageRepository.getMessages();
+            $scope.userId = tokenService.getAppUserId();
+            var existingConversationsIdsPromise = messageRepository.getConversations(0, 100);
 
-            if($scope.messages.length === 0){
-                return;
-            }
+            existingConversationsIdsPromise.then(
+                function(existingConversationsSuccess){
+                    for(var i = 0; i < existingConversationsSuccess.length; i++){
 
-            var conversationsIds = [];
+                        setupConversation(existingConversationsSuccess[i]);
 
-            var latestActiveConversation = $scope.messages[0];
+                        function setupConversation(id) {
+                            var conversation = { ConversationId: id, Messages: [], AuthorDisplayNames: [], AuthorIds: [] };
 
-            for (var k = 0; k < $scope.messages.length; k++){
+                            var conversationMessagesPromise =
+                                messageRepository.getMessagesByConversation(conversation.ConversationId, 0, 5);
 
-                if($scope.messages[k].CreatedOn > latestActiveConversation.CreatedOn){
-                    latestActiveConversation = $scope.messages[k];
-                }
+                            conversationMessagesPromise.then(
+                                function (conversationMessagesSuccess){
+                                    conversation.Messages = conversationMessagesSuccess;
 
-                if(conversationsIds.indexOf($scope.messages[k].ConversationId) === -1){
-                    conversationsIds.push($scope.messages[k].ConversationId);
-                }
-            }
+                                    // Checks every message AuthorDisplayName & AuthorId, adds to conversation properties if does not already exist
+                                    for(var j = 0; j < conversation.Messages.length; j++){
+                                        if(conversation.AuthorDisplayNames.indexOf(conversation.Messages[j].AuthorDisplayName) === -1){
+                                            conversation.AuthorDisplayNames.push(conversation.Messages[j].AuthorDisplayName);
+                                        }
 
-            for(var i = 0; i < conversationsIds.length; i++){
-                $scope.conversations.push($scope.orderConversation(conversationsIds[i]));
-                $scope.replyMessages.push({ ConversationId: conversationsIds[i], ReplyMessage: null});
-            }
+                                        if(conversation.AuthorIds.indexOf(conversation.Messages[j].Author) === -1){
+                                            conversation.AuthorIds.push(conversation.Messages[j].Author);
+                                        }
+                                    }
 
-            for(var j = 0; j < $scope.conversations.length; j++){
-                if($scope.conversations[j].ConversationId === latestActiveConversation.ConversationId){
-                    $scope.selectConversation($scope.conversations[j]);
-                    j = $scope.conversations.length;
-                }
-            }
+                                    $scope.conversations.push(conversation);
+                                },
+                                function(error){
+                                    console.log('Could not get messages for conversation.')
+                                });
+                        }
+                    }
+                },
+                function(error){
+                    alert('Could not load conversations.')
+                });
         };
         init();
 

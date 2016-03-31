@@ -1,7 +1,6 @@
 <div class="container" data-ng-controller="conversationsCtrl as conversationsCtrl">
     <div class="card m-b-0" id="messages-main">
-        <div class="ms-menu" data-ng-class="{ 'toggled': mactrl.lvMenuStat }">
-
+        <div class="ms-menu" data-ng-class="{ 'toggled': mactrl.lvMenuStat }" style="overflow-y: scroll">
             <div class="listview lv-user m-t-20">
                 <div class="lv-item media" ng-repeat="conversation in conversations" ng-click="selectConversation(conversation)">
                     <div class="lv-avatar pull-left">
@@ -77,27 +76,23 @@
                         </li>
                     </ul>
                 </div>
-
-                <div class="lv-body">
-                    <div class="lv-item media" ng-repeat="message in currentConversation.Messages | orderBy:'CreatedOn'">
-                        <div class="lv-avatar pull-left">
-                            <img src="img/profile-pics/1.jpg" alt="">
+                <div class="lv-body" style="height: 400px; overflow-y: scroll">
+                    <div class="lv-item" ng-repeat="message in currentConversation.Messages | orderBy:'CreatedOn'" ng-class="message.Author === userId ? 'media right': 'media'">
+                        <div class="lv-avatar" ng-class="message.Author === userId ? 'pull-right': 'pull-left'">
+                            <img ng-src="{{ message.AuthorAvatar || 'img/profile-pics/5.jpg' }}" alt="">
                         </div>
                         <div class="media-body">
                             <div class="ms-item">
                                 {{ message.Content }}
                             </div>
                             <small class="ms-date"><i class="zmdi zmdi-time"></i> {{ message.CreatedOn }}</small>
-                            <div ng-if="message.status != null">Message is pending</div>
                         </div>
                     </div>
                 </div>
-
                 <div class="clearfix"></div>
-
                 <div class="lv-footer ms-reply">
-                    <textarea placeholder="Reply..." ng-model="currentReplyMessage" ng-change="captureReplyMessageInput(currentConversation.ConversationId, currentReplyMessage)" ng-model-options="{ debounce: 1000 }"></textarea>
-                    <button ng-click="reply(currentReplyMessage, currentConversation.ConversationId); clearReplyMessage()"><i class="zmdi zmdi-mail-send"></i></button>
+                    <textarea placeholder="Reply..." ng-model="currentReplyMessage" ng-change="captureReplyMessageInput(currentConversation.ConversationId, currentReplyMessage)" ng-model-options="{ debounce: 10 }"></textarea>
+                    <button ng-click="reply(currentReplyMessage, currentConversation.ConversationId);"><i class="zmdi zmdi-mail-send"></i></button>
                 </div>
             </div>
         </div>
