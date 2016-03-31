@@ -1,0 +1,19 @@
+<div class="modal-header">
+    <input type="text" class="" placeholder="Search for a user here" name="receiver" ng-model="create.receiver">
+</div>
+<div class="modal-body">
+    <div class="wcl-form">
+        <div class="wc-comment"  >
+            <div class="wcc-inner" >
+                <textarea class="wcci-text" ng-model="create.textarea"   data-auto-size placeholder="Write something..." ng-keyup="$event.keyCode == 13 && createMsg(create.receiver,create.textarea)"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-sm btn-primary btnCancel" ng-click="createMsg()">Send</button>
+    <button class="btn btn-sm btn-link" data-ng-click="cancel()">Cancel</button>
+
+    <!--<button class="btn btn-primary" type="button" ng-click="ok()">Send</button>
+    <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>-->
+</div>

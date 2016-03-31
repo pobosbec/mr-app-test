@@ -53,34 +53,8 @@
 <div id="content" snap-content class="snap-content">
     <header id="header" ng-show="header" data-current-skin={{mactrl.currentSkin}} data-ng-include="'template/header.html'" style="position: fixed; top:0;left: 0;right:0; z-index: 2 !important;" data-ng-controller="headerCtrl as hctrl"></header>
     <a ng-show="createButtonVisible" ng-click="open()" class="btn btn-login btn-danger btn-float" value="newMsg" style="z-index: 3; position: fixed; bottom:25px; right:25px"><i class="zmdi zmdi-plus"></i></a>
-    <data class="view" ui-view >
-    </data>
+    <data class="view" ui-view ></data>
 </div>
-
-<!-- create new message modal -->
-<script type="text/ng-template" id="myModalContent.html" >
-    <div class="modal-header">
-        <input type="text" class="" placeholder="Search for a user here" name="receiver" ng-model="create.receiver">
-    </div>
-    <div class="modal-body">
-        <div class="wcl-form">
-            <div class="wc-comment"  >
-                <div class="wcc-inner" >
-                    <textarea class="wcci-text" ng-model="create.textarea"   data-auto-size placeholder="Write something..." ng-keyup="$event.keyCode == 13 && createMsg(create.receiver,create.textarea)"></textarea>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-sm btn-primary btnCancel" ng-click="createMsg()">Send</button>
-        <button class="btn btn-sm btn-link" data-ng-click="cancel()">Cancel</button>
-
-        <!--<button class="btn btn-primary" type="button" ng-click="ok()">Send</button>
-        <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>-->
-    </div>
-</script>
-<!-- new message modal end -->
-
 
     <!-- bootstrap -->
     <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
