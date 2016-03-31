@@ -392,12 +392,24 @@ angular.module('message', ['ngCordova'])
          * @param {array[message]} The messages to add
          */
         factory.addMessages = function(messages){
+            if(messages.length === 0){
+                return;
+            }
+
+            var timer = new Date();
+
             var queryIn = [];
             for(var i = 0; i < messages.length; i++){
                 queryIn.push('\'' + messages[i].MessageId + '\'');
             }
 
+            console.log('queryIn took '+  (new Date() - timer) +'ms to create!');
+
+            timer = new Date();
+
             db.transaction(function(tx){
+                console.log('Transaction took '+  (new Date() - timer) +'ms to open!');
+
                 console.log('Checking if any of the ' + messages.length + ' exist');
                 tx.executeSql(queries.doMessagesExist + '(' + queryIn.join(',') + ')', [],
                     function(transaction, resultData){
@@ -408,7 +420,7 @@ angular.module('message', ['ngCordova'])
                         var inserted = 0;
                         var expected = 0;
 
-                        var timer = new Date();
+                        timer = new Date();
 
                         for(var j = 0; j < messages.length; j++) {
                             if(rows.find(function(a){
