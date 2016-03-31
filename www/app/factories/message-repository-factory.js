@@ -61,43 +61,14 @@ angular.module('message', ['ngCordova'])
                 queries = webSqlQueries;
             }
 
-            //// IF WE WANT TO DROP TABLE BEFORE CREATE:
-
-            //console.log("Drop and create");
-            //db.transaction(function (tx) {
-            //    tx.executeSql(queries.dropTable, [], function () {
-            //        db.transaction(function (tx) {
-            //            tx.executeSql(queries.createTable, [], function (result, data) {
-            //                $rootScope.$broadcast('download-whats-new');
-            //            }, function (result) {
-            //                console.error(result);
-            //            });
-            //        });
-            //    });
-            //});
-
-            //// REGULAR CREATE TABLE WITH FETCH:
-
-            console.log("Creating table");
-            db.transaction(function (tx) {
-                tx.executeSql(queries.createTable, [], function (transaction, result) {
-                    console.log('Table \'Messages\' is created');
-
-                    // Fetches messages in database
-                    /*      tx.executeSql("SELECT * FROM Messages", [], function (result, resultData) {
-                     for (var i = 0; i < resultData.rows.length; i++) {
-                     var insertMessage = JSON.parse(resultData.rows[i].JSON);
-                     insertMessage.Content = "[LÄST FRÅN DB] "+insertMessage.Content;
-                     factory.messages.push(insertMessage);
-                     }
-                     factory.messageAdded(factory.messages);
-                     }); */
-                    $rootScope.$broadcast('download-whats-new');
-                }, function (transaction, error) {
-                    console.error('Failed to create table \'Messages\'.\r\n' + error.message);
+            var promise = createDatabase();
+            promise.then(
+                function(){
+                    console.log('The database is successfully created.');
+                }, function(error){
+                    console.error('Failed to create the database.\r\n' + error.message);
                 });
-            });
-        }
+        };
 
         factory.authors = [{
             Id: "956EF224-E73B-453A-97BA-DDEBFAA<A9D17",
@@ -144,6 +115,20 @@ angular.module('message', ['ngCordova'])
             return messages;
         };
 */
+        function createDatabase(){
+            return $q(function(resolve, reject) {
+                db.transaction(function (tx) {
+                    tx.executeSql(queries.createTable, [], function (transaction, result) {
+                        console.log('Table \'Messages\' is created');
+                        console.log(result);
+
+                        resolve();
+                    }, function (transaction, error) {
+                        reject(error);
+                    });
+                });
+            });
+        }
 
         /**
          * Creates a promise for fetching messages descending with page index (0 and upwards) and a limit.
