@@ -2,8 +2,14 @@
     <div class="wcl-form">
         <div class="wc-comment" >
             <div class="m-b-15">
-            <input type="text" class="m-t-15" placeholder="Search for a user here" name="receiver" ng-model="create.receiver">
+
+
+            <input type="text" class="m-t-15" placeholder="Search for a user here" name="receiver" ng-model="searchText">
+                <button class="btn btn-sm btn-primary btnCancel" ng-click="find(create.receiver); create.receiver = ''">Find</button>
             </div>
+            <ul>
+               <li ng-repeat="usr in users | filter:searchText" > {{usr.userDisplayName}}</li>
+            </ul>
             <div class="wcc-inner" >
                 <textarea class="wcci-text" ng-model="create.textarea"   data-auto-size placeholder="Write something..." ng-keyup="$event.keyCode == 13 && createMsg(create.receiver,create.textarea)"></textarea>
             </div>
