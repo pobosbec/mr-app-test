@@ -19,7 +19,7 @@ angular.module('message', ['ngCordova'])
 
         var sqliteQueries = {
             dropTable: 'DROP TABLE IF EXISTS Messages',
-            createTable: 'CREATE TABLE IF NOT EXISTS Messages (MessageId blob unique key, CreatedOn integer, ConversationId blob, Author blob, JSON blob)',
+            createTable: 'CREATE TABLE IF NOT EXISTS Messages (MessageId text primary key, CreatedOn integer, ConversationId text, Author text, JSON text)',
             getMessagesByTime : 'SELECT MessageId, JSON FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
             getConversations : 'SELECT DISTINCT ConversationId FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
             getMessagesByConversation : 'SELECT MessageId, JSON FROM Messages WHERE ConversationId = ? ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
