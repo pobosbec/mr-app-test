@@ -7,9 +7,16 @@ angular.module('message', ['ngCordova'])
         var db;
 
         var factory = {};
+
+        // Indicates if messages are added but event isn't fired yet
         var evtMessagesAdded = false;
 
-        var dabataseConfiguration = {
+        // Indicates if the database is configured
+        var isConfigured = false;
+
+        var dbType = null;
+
+        var databaseConfiguration = {
             name: "bosbec-mr.db",
             location: 1,
             version: "1.0",
@@ -18,8 +25,8 @@ angular.module('message', ['ngCordova'])
         };
 
         var sqliteQueries = {
-            dropTable: 'DROP TABLE IF EXISTS Messages',
-            createTable: 'CREATE TABLE IF NOT EXISTS Messages (MessageId blob unique key, CreatedOn integer, ConversationId blob, Author blob, JSON blob)',
+            dropMessages: 'DROP TABLE IF EXISTS Messages',
+            createMessages: 'CREATE TABLE IF NOT EXISTS Messages (MessageId text primary key, CreatedOn integer, ConversationId text, Author text, JSON text)',
             getMessagesByTime : 'SELECT MessageId, JSON FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
             getConversations : 'SELECT DISTINCT ConversationId FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
             getMessagesByConversation : 'SELECT MessageId, JSON FROM Messages WHERE ConversationId = ? ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
@@ -28,12 +35,13 @@ angular.module('message', ['ngCordova'])
             /**/  getAllMessagesFromAuthor: 'SELECT * FROM Messages WHERE Author=?',
             /**/  getAllMessagesFromConversation: 'SELECT * FROM Messages WHERE ConversationId=?',
             insertMessage: 'INSERT INTO Messages (MessageId, CreatedOn, ConversationId, Author, JSON) VALUES (?, ?, ?, ?, ?)',
-            doesMessageExist : 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?'
+            doesMessageExist : 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?',
+            doMessagesExist : 'SELECT MessageId FROM Messages WHERE MessageId IN '
         };
 
         var webSqlQueries = {
-            dropTable: 'DROP TABLE IF EXISTS Messages',
-            createTable: 'CREATE TABLE IF NOT EXISTS Messages (MessageId unique, CreatedOn, ConversationId, Author, JSON)',
+            dropMessages: 'DROP TABLE IF EXISTS Messages',
+            createMessages: 'CREATE TABLE IF NOT EXISTS Messages (MessageId unique, CreatedOn, ConversationId, Author, JSON)',
             getMessagesByTime : 'SELECT MessageId, JSON FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
             getConversations : 'SELECT DISTINCT ConversationId FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
             /**/  getAllMessages: 'SELECT * FROM Messages ORDER BY CreatedOn DESC',
@@ -41,62 +49,21 @@ angular.module('message', ['ngCordova'])
             /**/  getAllMessagesFromAuthor: 'SELECT * FROM Messages WHERE Author=?',
             /**/  getAllMessagesFromConversation: 'SELECT * FROM Messages WHERE ConversationId=?',
             insertMessage: 'INSERT INTO Messages (MessageId, CreatedOn, ConversationId, Author, JSON) VALUES (?, ?, ?, ?, ?)',
-            doesMessageExist : 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?'
+            doesMessageExist : 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?',
+            doMessagesExist : 'SELECT MessageId FROM Messages WHERE MessageId IN '
         };
 
         var queries = null;
 
         factory.messages = [];
 
+        /**
+         * Initializes the factory.
+         */
         factory.init = function () {
-            var conf = dabataseConfiguration;
-            if (window.isPhoneGap) {
-                // Mobile Device
-                db = window.sqlitePlugin.openDatabase({ name: conf.name, location: conf.location });
-                queries = sqliteQueries;
-            } else {
-                // Browser
-                db = window.openDatabase(conf.name, conf.version, conf.displayName, conf.size);
-                queries = webSqlQueries;
-            }
-
-            //// IF WE WANT TO DROP TABLE BEFORE CREATE:
-
-            //console.log("Drop and create");
-            //db.transaction(function (tx) {
-            //    tx.executeSql(queries.dropTable, [], function () {
-            //        db.transaction(function (tx) {
-            //            tx.executeSql(queries.createTable, [], function (result, data) {
-            //                $rootScope.$broadcast('download-whats-new');
-            //            }, function (result) {
-            //                console.error(result);
-            //            });
-            //        });
-            //    });
-            //});
-
-            //// REGULAR CREATE TABLE WITH FETCH:
-
-            console.log("Creating table");
-            db.transaction(function (tx) {
-                tx.executeSql(queries.createTable, [], function (transaction, result) {
-                    console.log('Table \'Messages\' is created');
-
-                    // Fetches messages in database
-                    /*      tx.executeSql("SELECT * FROM Messages", [], function (result, resultData) {
-                     for (var i = 0; i < resultData.rows.length; i++) {
-                     var insertMessage = JSON.parse(resultData.rows[i].JSON);
-                     insertMessage.Content = "[LÄST FRÅN DB] "+insertMessage.Content;
-                     factory.messages.push(insertMessage);
-                     }
-                     factory.messageAdded(factory.messages);
-                     }); */
-                    $rootScope.$broadcast('download-whats-new');
-                }, function (transaction, error) {
-                    console.error('Failed to create table \'Messages\'.\r\n' + error.message);
-                });
-            });
-        }
+            console.log('Factory.init() was called in message repository.')
+           configureDatabase();
+        };
 
         factory.authors = [{
             Id: "956EF224-E73B-453A-97BA-DDEBFAA<A9D17",
@@ -143,6 +110,90 @@ angular.module('message', ['ngCordova'])
             return messages;
         };
 */
+        /**
+         * Configures the database, sets up the db object and creates tables if needed.
+         */
+        function configureDatabase(){
+            if(isConfigured){
+                return;
+            }
+
+            console.log('Going to configure the database');
+            isConfigured = true;
+
+            var conf = databaseConfiguration;
+            if (window.isPhoneGap) {
+                // Mobile Device
+                db = window.sqlitePlugin.openDatabase({ name: conf.name, location: conf.location });
+                queries = sqliteQueries;
+                dbType = 'sqlite';
+                console.log('Opened up sqlite connection');
+            } else {
+                // Browser
+                db = window.openDatabase(conf.name, conf.version, conf.displayName, conf.size);
+                queries = webSqlQueries;
+                dbType = 'webSQL';
+                console.log('Opened up web SQL connection');
+            }
+
+            createDatabase()
+                .then(
+                    function(){
+                        console.log('The database is successfully created.');
+                    }, function(error){
+                        console.error('Failed to create the database.\r\n' + error.message);
+                    });
+        }
+
+        /**
+         * Creates a promise for creating the database tables.
+         */
+        function createDatabase(){
+            return $q(function(resolve, reject) {
+                db.transaction(function (tx) {
+                    tx.executeSql(queries.createMessages, [], function () {
+                        resolve();
+                    }, function (transaction, error) {
+                        reject(error);
+                    });
+                });
+            });
+        }
+
+        /**
+         * Gets the rows from a sql query result and returns them as an array
+         * @param {sqlResult} the result from a sql query
+         */
+        function getRows(result){
+            var rows = [];
+
+            if(dbType === 'webSQL'){
+                for (var i = 0; i < result.rows.length; i++) {
+                    rows.push(result.rows[i]);
+                }
+            }
+            else {
+                for (var i = 0; i < result.rows.length; i++) {
+                    rows.push(result.rows.item(i));
+                }
+            }
+            return rows;
+        }
+
+        /**
+         * Creates a promise for dropping the database tables.
+         */
+        function dropDatabase(){
+            return $q(function(resolve, reject) {
+                db.transaction(function (tx) {
+                    tx.executeSql(queries.dropMessages, [], function () {
+                        resolve();
+                    }, function (transaction, error) {
+                        reject(error);
+                    });
+                });
+            });
+        }
 
         /**
          * Creates a promise for fetching messages descending with page index (0 and upwards) and a limit.
@@ -165,7 +216,7 @@ angular.module('message', ['ngCordova'])
                     tx.executeSql(queries.getMessagesByTime, [size, offset],
                         function(trans, result){
                             var messages = [];
-                            var rows = result.rows;
+                            var rows = getRows(result);
 
                             for(var i = 0; i < rows.length; i++){
                                 var row = rows[i];
@@ -238,7 +289,7 @@ angular.module('message', ['ngCordova'])
                     tx.executeSql(queries.getMessagesByConversation, [conversationId, size, offset],
                         function(trans, result){
                             var messages = [];
-                            var rows = result.rows;
+                            var rows = getRows(result);
 
                             for(var i = 0; i < rows.length; i++){
                                 var row = rows[i];
@@ -274,7 +325,7 @@ angular.module('message', ['ngCordova'])
                     tx.executeSql(queries.getConversations, [size, offset],
                         function(trans, result){
                             var ids = [];
-                            var rows = result.rows;
+                            var rows = getRows(result);
 
                             for(var i = 0; i < rows.length; i++){
                                 var row = rows[i];
@@ -301,43 +352,132 @@ angular.module('message', ['ngCordova'])
         };
 */
 
-        factory.addMessage = function (data) {
+
+        // TODO: Make to promise
+        /**
+         * Adds a message to the database
+         * @param {message} the message to add
+         */
+        factory.addMessage = function (message) {
             db.transaction(function (tx) {
-                console.log('Checking if message message with id \'' + data.MessageId + '\' exists.');
-                tx.executeSql(queries.doesMessageExist, [data.MessageId], function (transaction, resultData) {
-                    var rows = resultData.rows;
+                console.log('Checking if message message with id \'' + message.MessageId + '\' exists.');
+                tx.executeSql(queries.doesMessageExist, [message.MessageId], function (transaction, resultData) {
+                    var rows = getRows(resultData);
                     if(rows.length !== 1){
                         console.error('Unexpected number of rows returned (' + rows.length + '). Check sql statement!');
                         return;
                     }
 
                     if(rows[0]['cnt'] !== 0){
-                        console.log('Message width id \'' + data.MessageId + '\' exists, won\'t insert.');
+                        console.log('Message width id \'' + message.MessageId + '\' exists, won\'t insert.');
                         return;
                     }
 
-                    tx.executeSql(
-                        queries.insertMessage,
-                        [
-                            data.MessageId,
-                            moment(data.CreatedOn).unix(),
-                            data.ConversationId,
-                            data.Author,
-                            JSON.stringify(data)],
-                        function (trans, result) {
-                            if(result.rowsAffected !== 1) {
-                                console.error('The message width id \'' + data.MessageId + '\' doesn\'t seem to be added properly');
-                                return;
-                            }
-
-                            console.log('Added message with id \'' + data.MessageId + '\'');
+                    insertMessage(message)
+                        .then(function(){
                             factory.messageAdded();
-                        },
-                        function(t, error){
-                            console.error('Error while inserting message with id \'' + data.MessageId + '\'.\r\n' + error.message);
+                            console.log('Added message with id \'' + message.MessageId + '\'');
+                        }, function(error){
+                            console.error('Error while inserting message with id \'' + message.MessageId + '\'.\r\n' + error.message);
                         });
                 }, function (t, error) {
                     console.error("Error while checking if message exists.\r\n" + error.message);
+                });
+            });
+        };
+
+        // TODO: Make to promise
+        /**
+         * Adds a number of messages to the database
+         * @param {array[message]} The messages to add
+         */
+        factory.addMessages = function(messages){
+            if(messages.length === 0){
+                return;
+            }
+
+            var timer = new Date();
+
+            var queryIn = [];
+            for(var i = 0; i < messages.length; i++){
+                queryIn.push('\'' + messages[i].MessageId + '\'');
+            }
+
+            console.log('queryIn took '+  (new Date() - timer) +'ms to create!');
+
+            timer = new Date();
+
+            db.transaction(function(tx){
+                console.log('Transaction took '+  (new Date() - timer) +'ms to open!');
+
+                console.log('Checking if any of the ' + messages.length + ' exist');
+                tx.executeSql(queries.doMessagesExist + '(' + queryIn.join(',') + ')', [],
+                    function(transaction, resultData){
+                        var rows = getRows(resultData);
+
+                        console.log('Found '+ rows.length +' messages already in db');
+
+                        var inserted = 0;
+                        var expected = 0;
+
+                        timer = new Date();
+
+                        for(var j = 0; j < messages.length; j++) {
+                            if(rows.find(function(a){
+                                return a['MessageId'] === messages[j].MessageId;
+                                })){
+                                continue;
+                            }
+
+                            expected++;
+
+                            insertMessage(messages[j]).then(function () {
+                                inserted++;
+                                if(inserted === expected){
+                                    console.log('All messages are added in '+  (new Date() - timer) +'ms!');
+                                    factory.messageAdded();
+                                }
+                            }, function (error) {
+                                console.error('Error while saving message.\r\n' + error.message);
+                            });
+                        }
+                    },
+                    function(transaction, error){
+                        console.log('Error while checking if messages exist.\r\n' + error.message);
+                    });
+            });
+        };
+
+        // TODO: Move to better location
+        /**
+         * Inserts the message to the database
+         * @param message to insert
+         * @returns {promise} returns a promise
+         */
+        function insertMessage(message){
+            return $q(function(resolve, reject) {
+                db.transaction(function (tx) {
+                    tx.executeSql(
+                        queries.insertMessage,
+                        [
+                            message.MessageId,
+                            moment(message.CreatedOn).unix(),
+                            message.ConversationId,
+                            message.Author,
+                            JSON.stringify(message)],
+                        function (trans, result) {
+                            if (result.rowsAffected !== 1) {
+                                console.error('');
+                                reject(new {
+                                    message : 'The message width id \'' + message.MessageId + '\' doesn\'t seem to be added properly'});
+                                return;
+                            }
+
+                            resolve();
+                        },
+                        function (t, error) {
+                            reject(error);
+                        });
                 });
             });
         }
@@ -355,14 +495,15 @@ angular.module('message', ['ngCordova'])
                     evtMessagesAdded = false;
                 },
                 200);
-        }
+        };
 
         factory.messageUpdated = function (data) {
             $rootScope.$broadcast('message-updated', data);
-        }
+        };
+
         factory.messagesChanged = function (data) {
             $rootScope.$broadcast('messages-changed', data);
-        }
+        };
 
         factory.on = function (event, data) {
             switch (event.name) {
@@ -371,34 +512,40 @@ angular.module('message', ['ngCordova'])
                 case 'new-messages':
                     if (data != null) {
                         console.log("Received new messages: " + data.length);
-                        for (var i = 0; i < data.length; i++) {
+                        factory.addMessages(data);
+
+                      /*  for (var i = 0; i < data.length; i++) {
                             factory.addMessage(data[i]);
-                        }
+                        }  */
                     }
                     break;
                 case 'device-ready':
-                    factory.init();
                     break;
                 case 'logged-out':
                     localStorage.removeItem('latestWhatIsNewUpdate');
                     // Clearing Table on logout, just to be sure
-                    // TODO: Should this really be done here, like this?!?
-                    db.transaction(function (tx) {
-                        tx.executeSql(queries.dropTable, [], function () {});
-                    });
+                    dropDatabase().then(
+                        function(){
+                            console.log('Dropped database');
+                        },
+                        function(error){
+                            console.error('Failed to drop database.\r\n' + error.message);
+                        });
                     break;
                 case 'logged-in':
-                    // Clearing Table on login, just to be sure
-                    // TODO: Should this really be done here, like this?!?
-                  /*  db.transaction(function (tx) {
-                        tx.executeSql(queries.dropTable, [], function () {});
-                    }); */
-                    factory.init();
+                    createDatabase().then(
+                        function(){
+                            console.log('Created database after login');
+                        },
+                        function(error){
+                            console.error('Failed to create database after login.\r\n' + error.message);
+                        });
                     break;
                 default:
                     break;
             }
-        }
+        };
+
         factory.init();
         return factory;
-    }])
+    }]);
