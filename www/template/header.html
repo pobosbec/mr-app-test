@@ -8,7 +8,8 @@
     </li>
 
     <li class="logo hidden-xs">
-        <a data-ui-sref="home" data-ng-click="mactrl.sidebarStat($event)">Mobile Response</a>
+        <a href="index.html" class="m-l-10" data-ng-click="mactrl.sidebarStat($event)"><img class="header-logo" src="img/logo.png" alt=""></a>
+    <!--    <a data-ui-sref="home" data-ng-click="mactrl.sidebarStat($event)">Mobile Response</a>-->
     </li>
 
     <li class="pull-right">
@@ -16,7 +17,7 @@
 
             <li class="dropdown" uib-dropdown>
                 <a uib-dropdown-toggle href="">
-                    <i ng-if="messageViewMode == 1" class="tm-icon zmdi zmdi-menu"></i>
+                    <i ng-if="messageViewMode == 1" class="tm-icon zmdi zmdi-comment-outline"></i>
                     <i ng-if="messageViewMode == 2" class="tm-icon zmdi zmdi-comment-alt-text"></i>
                     <i ng-if="messageViewMode == 3" class="tm-icon zmdi zmdi-widgets"></i>
                 </a>
@@ -26,7 +27,7 @@
                         Conversation Layout
                     </div>
                     <li ng-class="{'active' : messageViewMode == 1}">
-                        <a id="1" data-ng-click="mactrl.changeMessageView($event)" href=""><i class="zmdi zmdi-menu"></i> List Layout</a>
+                        <a id="1" data-ng-click="mactrl.changeMessageView($event)" href=""><i class="zmdi zmdi-comment-outline"></i> List Layout</a>
                     </li>
                     <li ng-class="{'active' : messageViewMode == 2}">
                         <a id="2" data-ng-click="mactrl.changeMessageView($event)" href=""><i class="tm-icon zmdi zmdi-comment-alt-text"></i>Conversation Layout</a>

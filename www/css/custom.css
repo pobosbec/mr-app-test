@@ -1,3 +1,40 @@
+/*Native feeling starts here */
+/*Native feel removal of text selection*/
+*
+{
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+input
+{
+    -webkit-user-select: auto !important;
+    -khtml-user-select: auto !important;
+    -moz-user-select: auto !important;
+    -ms-user-select: auto !important;
+    user-select: auto !important;
+}
+
+/* anchor element popout */
+*
+{
+    -webkit-touch-callout: none;
+    -moz-touch-callout: none;
+    -ms-touch-callout: none;
+    touch-callout: none;
+}
+/* dragging of elements disable */
+*{
+    -webkit-user-drag: none;
+    -moz-user-drag: none;
+    -ms-user-drag: none;
+    user-drag: none;
+}
+/* native feel ends here */
+
 /*Image rotation*/
 
 .fullSize {
@@ -149,7 +186,7 @@ and (orientation: portrait) {
 .login{
     display: flex !important;
     align-items: center!important;
-    height:100% !important;
+    height:90% !important;
     padding-bottom: 80px;
 }
 
@@ -165,6 +202,75 @@ and (orientation: portrait) {
     margin: 0 auto !important;
     text-align: center;
     padding-bottom: 40px;
+}
+.header-logo {
+    height: 50%;
+    width: 50%;
+}
+#main{
+    padding-top: 15px!important;
+    width:100%;
+    height:100%;
+    margin-top:70px;
+    position: fixed;
+    overflow: auto;
+
+}
+.login-navigations {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    left: 0%;
+    bottom: -45px;
+}
+
+.login-navigations >li {
+    display: inline-block;
+    margin: 0 2px;
+    -webkit-transition: all;
+    -o-transition: all;
+    transition: all;
+    -webkit-transition-duration: 150ms;
+    transition-duration: 150ms;
+    cursor: pointer;
+    vertical-align: top;
+    color: #fff;
+    line-height: 16px;
+    min-width: 16px;
+    min-height: 16px;
+    text-transform: uppercase;
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 10px!important;
+    padding: 0 5px!important;
+    font-size: 8px!important;
+}
+.login-navigations {
+    opacity: 1;
+    filter: alpha(opacity=100);
+}
+
+.view {
+    min-height: 100%;
+    /* equal to footer height */
+    margin-bottom: -10px;
+}
+
+.view:after {
+    content: "";
+    display: block;
+}
+#footer, .view:after {
+    height: 10px;
+}
+#footer {
+    position: static;
+    padding-bottom: 35px!important;
+    padding-top: 15px!important;
 }
 
 /**Menu drawer bellow!! **/
@@ -252,7 +358,42 @@ and (orientation: portrait) {
     top: 70px;
     padding: 20px;
     margin-bottom: 20px;
+}
+.button-list{
+    margin-top:10px;
+    padding:0 !important;
+}
+
+.login-buttons{
+    width:100%;
+}
+
+.login-menu{
+    bottom: 0 !important;
+}
+.login-menu ul{
+    list-style-type: none !important;
+    padding:0;
+}
+.login-menu li{
+    margin-top: 10px;
+}
+.login-checkbox {
+    margin-top: 15px!important;
+}
+
+.inputfield {
+    width: 302px!important;
+    padding: 17px 17px 17px 40px;
+    text-align: center!important;
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+
+.login-form{
+    margin-top:-20px;
     text-align: center;
+    display:block;
 }
 
 /* Styles for expanding "Search" input in the "Expanding" demo */
@@ -360,4 +501,8 @@ and (orientation: portrait) {
     opacity: 0.5;
     padding: 15px;
     font-size: 12px;
+}
+
+.modal{
+    margin-top: 20%!important;
 }
