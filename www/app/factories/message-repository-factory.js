@@ -35,7 +35,8 @@ angular.module('message', ['ngCordova'])
             /**/  getAllMessagesFromAuthor: 'SELECT * FROM Messages WHERE Author=?',
             /**/  getAllMessagesFromConversation: 'SELECT * FROM Messages WHERE ConversationId=?',
             insertMessage: 'INSERT INTO Messages (MessageId, CreatedOn, ConversationId, Author, JSON) VALUES (?, ?, ?, ?, ?)',
-            doesMessageExist : 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?'
+            doesMessageExist : 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?',
+            doMessagesExist : 'SELECT MessageId FROM Messages WHERE MessageId IN '
         };
 
         var webSqlQueries = {
@@ -48,7 +49,8 @@ angular.module('message', ['ngCordova'])
             /**/  getAllMessagesFromAuthor: 'SELECT * FROM Messages WHERE Author=?',
             /**/  getAllMessagesFromConversation: 'SELECT * FROM Messages WHERE ConversationId=?',
             insertMessage: 'INSERT INTO Messages (MessageId, CreatedOn, ConversationId, Author, JSON) VALUES (?, ?, ?, ?, ?)',
-            doesMessageExist : 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?'
+            doesMessageExist : 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?',
+            doMessagesExist : 'SELECT MessageId FROM Messages WHERE MessageId IN '
         };
 
         var queries = null;
@@ -163,15 +165,18 @@ angular.module('message', ['ngCordova'])
          * @param {sqlResult} the result from a sql query
          */
         function getRows(result){
-            if(dbType === 'webSQL'){
-                return result.rows;
-            }
-
             var rows = [];
-            for(var i = 0; i < result.rows.length; i++){
-                rows.push(result.rows.item(i));
-            }
 
+            if(dbType === 'webSQL'){
+                for (var i = 0; i < result.rows.length; i++) {
+                    rows.push(result.rows[i]);
+                }
+            }
+            else {
+                for (var i = 0; i < result.rows.length; i++) {
+                    rows.push(result.rows.item(i));
+                }
+            }
             return rows;
         }
 
@@ -347,10 +352,16 @@ angular.module('message', ['ngCordova'])
         };
 */
 
-        factory.addMessage = function (data) {
+
+        // TODO: Make to promise
+        /**
+         * Adds a message to the database
+         * @param {message} the message to add
+         */
+        factory.addMessage = function (message) {
             db.transaction(function (tx) {
-                console.log('Checking if message message with id \'' + data.MessageId + '\' exists.');
-                tx.executeSql(queries.doesMessageExist, [data.MessageId], function (transaction, resultData) {
+                console.log('Checking if message message with id \'' + message.MessageId + '\' exists.');
+                tx.executeSql(queries.doesMessageExist, [message.MessageId], function (transaction, resultData) {
                     var rows = getRows(resultData);
                     if(rows.length !== 1){
                         console.error('Unexpected number of rows returned (' + rows.length + '). Check sql statement!');
@@ -358,35 +369,106 @@ angular.module('message', ['ngCordova'])
                     }
 
                     if(rows[0]['cnt'] !== 0){
-                        console.log('Message width id \'' + data.MessageId + '\' exists, won\'t insert.');
+                        console.log('Message width id \'' + message.MessageId + '\' exists, won\'t insert.');
                         return;
                     }
 
-                    tx.executeSql(
-                        queries.insertMessage,
-                        [
-                            data.MessageId,
-                            moment(data.CreatedOn).unix(),
-                            data.ConversationId,
-                            data.Author,
-                            JSON.stringify(data)],
-                        function (trans, result) {
-                            if(result.rowsAffected !== 1) {
-                                console.error('The message width id \'' + data.MessageId + '\' doesn\'t seem to be added properly');
-                                return;
-                            }
-
-                            console.log('Added message with id \'' + data.MessageId + '\'');
+                    insertMessage(message)
+                        .then(function(){
                             factory.messageAdded();
-                        },
-                        function(t, error){
-                            console.error('Error while inserting message with id \'' + data.MessageId + '\'.\r\n' + error.message);
+                            console.log('Added message with id \'' + message.MessageId + '\'');
+                        }, function(error){
+                            console.error('Error while inserting message with id \'' + message.MessageId + '\'.\r\n' + error.message);
                         });
                 }, function (t, error) {
                     console.error("Error while checking if message exists.\r\n" + error.message);
                 });
             });
         };
+
+        // TODO: Make to promise
+        /**
+         * Adds a number of messages to the database
+         * @param {array[message]} The messages to add
+         */
+        factory.addMessages = function(messages){
+            var queryIn = [];
+            for(var i = 0; i < messages.length; i++){
+                queryIn.push('\'' + messages[i].MessageId + '\'');
+            }
+
+            db.transaction(function(tx){
+                console.log('Checking if any of the ' + messages.length + ' exist');
+                tx.executeSql(queries.doMessagesExist + '(' + queryIn.join(',') + ')', [],
+                    function(transaction, resultData){
+                        var rows = getRows(resultData);
+
+                        console.log('Found '+ rows.length +' messages already in db');
+
+                        var inserted = 0;
+                        var expected = 0;
+
+                        var timer = new Date();
+
+                        for(var j = 0; j < messages.length; j++) {
+                            if(rows.find(function(a){
+                                return a['MessageId'] === messages[j].MessageId;
+                                })){
+                                continue;
+                            }
+
+                            expected++;
+
+                            insertMessage(messages[j]).then(function () {
+                                inserted++;
+                                if(inserted === expected){
+                                    console.log('All messages are added in '+  (new Date() - timer) +'ms!');
+                                    factory.messageAdded();
+                                }
+                            }, function (error) {
+                                console.error('Error while saving message.\r\n' + error.message);
+                            });
+                        }
+                    },
+                    function(transaction, error){
+                        console.log('Error while checking if messages exist.\r\n' + error.message);
+                    });
+            });
+        };
+
+        // TODO: Move to better location
+        /**
+         * Inserts the message to the database
+         * @param message to insert
+         * @returns {promise} returns a promise
+         */
+        function insertMessage(message){
+            return $q(function(resolve, reject) {
+                db.transaction(function (tx) {
+                    tx.executeSql(
+                        queries.insertMessage,
+                        [
+                            message.MessageId,
+                            moment(message.CreatedOn).unix(),
+                            message.ConversationId,
+                            message.Author,
+                            JSON.stringify(message)],
+                        function (trans, result) {
+                            if (result.rowsAffected !== 1) {
+                                console.error('');
+                                reject(new {
+                                    message : 'The message width id \'' + message.MessageId + '\' doesn\'t seem to be added properly'});
+                                return;
+                            }
+
+                            resolve();
+                        },
+                        function (t, error) {
+                            reject(error);
+                        });
+                });
+            });
+        }
 
         factory.messageAdded = function () {
             if (evtMessagesAdded) {
@@ -418,9 +500,11 @@ angular.module('message', ['ngCordova'])
                 case 'new-messages':
                     if (data != null) {
                         console.log("Received new messages: " + data.length);
-                        for (var i = 0; i < data.length; i++) {
+                        factory.addMessages(data);
+
+                      /*  for (var i = 0; i < data.length; i++) {
                             factory.addMessage(data[i]);
-                        }
+                        }  */
                     }
                     break;
                 case 'device-ready':
