@@ -57,7 +57,7 @@ angular.module('message', ['ngCordova'])
 
 
                 /**test*/
-                window.sqlitePlugin.openDatabase({ name: 'hello-world.db' }, function (db) {
+                window.sqlitePlugin.openDatabase({ name: conf.name, location: conf.location }, function (db) {
                     db.executeSql("select length('tenletters') as stringlength", [], function (res) {
                         var stringlength = res.rows.item(0).stringlength;
                         console.log('got stringlength: ' + stringlength);
