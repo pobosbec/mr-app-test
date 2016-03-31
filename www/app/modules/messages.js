@@ -19,14 +19,14 @@ angular.module('messages', [])
         promise.then(
             function(messages){
                 $scope.messages = messages;
+                $scope.conversations = [];
+
+                messagesToConversations($scope.messages, $scope.conversations);
             },
             function(error){
                 console.log(error);
             });
 
-        $scope.conversations = [];
-
-        messagesToConversations($scope.messages, $scope.conversations);
         var fetchMessagesInterval = setInterval(function() {
             var args = { Sender: "messages", Event: 'interval' };
             $rootScope.$broadcast('download-whats-new', args);

@@ -15,31 +15,34 @@ angular.module('message', ['ngCordova'])
             version: "1.0",
             displayName: "Bosbec-Mr",
             size: (5 * 1024 * 1024)
-        }
+        };
 
         var sqliteQueries = {
             dropTable: 'DROP TABLE IF EXISTS Messages',
             createTable: 'CREATE TABLE IF NOT EXISTS Messages (MessageId blob unique key, CreatedOn integer, ConversationId blob, Author blob, JSON blob)',
             getMessagesByTime : 'SELECT MessageId, JSON FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
-            getAllMessages: 'SELECT * FROM Messages ORDER BY CreatedOn DESC',
-            getLatestMessages: 'SELECT * FROM Messages ORDER BY CreatedOn DESC LIMIT ?',
-            getAllMessagesFromAuthor: 'SELECT * FROM Messages WHERE Author=?',
-            getAllMessagesFromConversation: 'SELECT * FROM Messages WHERE ConversationId=?',
+            getConversations : 'SELECT DISTINCT ConversationId FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
+            getMessagesByConversation : 'SELECT MessageId, JSON FROM Messages WHERE ConversationId = ? ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
+            /**/  getAllMessages: 'SELECT * FROM Messages ORDER BY CreatedOn DESC',
+            /**/  getLatestMessages: 'SELECT * FROM Messages ORDER BY CreatedOn DESC LIMIT ?',
+            /**/  getAllMessagesFromAuthor: 'SELECT * FROM Messages WHERE Author=?',
+            /**/  getAllMessagesFromConversation: 'SELECT * FROM Messages WHERE ConversationId=?',
             insertMessage: 'INSERT INTO Messages (MessageId, CreatedOn, ConversationId, Author, JSON) VALUES (?, ?, ?, ?, ?)',
             doesMessageExist : 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?'
-        }
+        };
 
         var webSqlQueries = {
             dropTable: 'DROP TABLE IF EXISTS Messages',
             createTable: 'CREATE TABLE IF NOT EXISTS Messages (MessageId unique, CreatedOn, ConversationId, Author, JSON)',
             getMessagesByTime : 'SELECT MessageId, JSON FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
-            getAllMessages: 'SELECT * FROM Messages ORDER BY CreatedOn DESC',
-            getLatestMessages: 'SELECT * FROM Messages ORDER BY CreatedOn DESC LIMIT ?',
-            getAllMessagesFromAuthor: 'SELECT * FROM Messages WHERE Author=?',
-            getAllMessagesFromConversation: 'SELECT * FROM Messages WHERE ConversationId=?',
+            getConversations : 'SELECT DISTINCT ConversationId FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
+            /**/  getAllMessages: 'SELECT * FROM Messages ORDER BY CreatedOn DESC',
+            /**/  getLatestMessages: 'SELECT * FROM Messages ORDER BY CreatedOn DESC LIMIT ?',
+            /**/  getAllMessagesFromAuthor: 'SELECT * FROM Messages WHERE Author=?',
+            /**/  getAllMessagesFromConversation: 'SELECT * FROM Messages WHERE ConversationId=?',
             insertMessage: 'INSERT INTO Messages (MessageId, CreatedOn, ConversationId, Author, JSON) VALUES (?, ?, ?, ?, ?)',
             doesMessageExist : 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?'
-        }
+        };
 
         var queries = null;
 
@@ -185,27 +188,110 @@ angular.module('message', ['ngCordova'])
 
         /**
          * Creates a promise for getting latest conversations and maximum 5 messages for each conversation descending with page index (0 and upwards) and a limit.
-         * @param {number} conversationId - The conversation id to fetch.
+         * @param {string} conversationId - The conversation id to fetch.
          * @param {number} itemsPerConversation - The maximum number of items per conversation.
          * @param {number} pageIndex - The page index to fetch.
          * @param {number} size - The number of items per page.
          */
-        factory.getConversationsByTime = function(conversationId, itemsPerConversation, pageIndex, limit) {
+        factory.getConversationsByTime = function(conversationId, itemsPerConversation, pageIndex, size) {
+            if(typeof (conversationId) !== 'string'){
+                return $q(function(resolve, reject){ reject('Invalid conversation id');});
+            }
 
+            itemsPerConversation = typeof (itemsPerConversation) !== 'number' ? 0 : itemsPerConversation;
+            pageIndex = typeof (pageIndex) !== 'number' ? 0 : pageIndex;
+            size = typeof (size) !== 'number' ? 20 : size;
+
+            return $q(function(resolve, reject){
+                var promise = getConversations(pageIndex, size);
+
+                promise.then(function(conversations){
+                    var result = [];
+                    for (var i = 0; i < conversations.length; i++){
+
+                    }
+                }, function(error){
+                    reject(error);
+                });
+            });
         };
 
-        // Create a promise. Gets messages for a specific conversation
-        factory.getMessagesByConversation = function(conversationId, pageIndex, limit) {
+        /**
+         * Creates a promise for fetching messages in a conversation descending with page index (0 and upwards) and a limit.
+         * @param {string} conversationId - The conversation id to fetch.
+         * @param {number} pageIndex - The page index to fetch.
+         * @param {number} size - The number of items per page.
+         */
+        factory.getMessagesByConversation = function(conversationId, pageIndex, size) {
+            if(typeof (conversationId) !== 'string'){
+                return $q(function(resolve, reject){ reject('Invalid conversation id');});
+            }
 
+            // SELECT DISTINCT m.ConversationId FROM Messages as m INNER JOIN Messages as m2 ON m.MessageId = m2.MessageId ORDER BY m.CreatedOn DESC LIMIT 5
+
+            pageIndex = typeof (pageIndex) !== 'number' ? 0 : pageIndex;
+            size = typeof (size) !== 'number' ? 20 : size;
+            var offset = pageIndex * size;
+
+            return $q(function(resolve, reject){
+                db.transaction(function (tx) {
+                    tx.executeSql(queries.getMessagesByConversation, [conversationId, size, offset],
+                        function(trans, result){
+                            var messages = [];
+                            var rows = result.rows;
+
+                            for(var i = 0; i < rows.length; i++){
+                                var row = rows[i];
+                                try{
+                                    messages.push(JSON.parse(row['JSON']));
+                                }
+                                catch(err){
+                                    console.error('Failed to parse message \'' + row['MessageId'] + '\'.\r\n' + err);
+                                }
+                            }
+
+                            resolve(messages);
+                        }, function(trans, error){
+                            console.error('Error while fetching messages from database.\r\n' + error.message);
+                            reject(error);
+                        });
+                });
+            });
         };
 
-        // Create a promise, Gets conversation ids
-        factory.getConversations = function(pageIndex, limit) {
+        /**
+         * Creates a promise for fetching conversations descending with page index (0 and upwards) and a limit.
+         * @param {number} pageIndex - The page index to fetch.
+         * @param {number} size - The number of items per page.
+         */
+        factory.getConversations = function(pageIndex, size) {
+            pageIndex = typeof (pageIndex) !== 'number' ? 0 : pageIndex;
+            size = typeof (size) !== 'number' ? 20 : size;
+            var offset = pageIndex * size;
 
+            return $q(function(resolve, reject){
+                db.transaction(function (tx) {
+                    tx.executeSql(queries.getConversations, [size, offset],
+                        function(trans, result){
+                            var ids = [];
+                            var rows = result.rows;
+
+                            for(var i = 0; i < rows.length; i++){
+                                var row = rows[i];
+                                ids.push(row['ConversationId']);
+                            }
+
+                            resolve(ids);
+                        }, function(trans, error){
+                            console.error('Error while fetching messages from database.\r\n' + error.message);
+                            reject(error);
+                        });
+                });
+            });
         };
 
 
-
+        /*
         factory.getNewestMessage = function () {
             return factory.getMessages()[0];
         };
@@ -213,6 +299,7 @@ angular.module('message', ['ngCordova'])
         factory.getOldestMessage = function () {
             return factory.getMessages().reverse()[0];
         };
+*/
 
         factory.addMessage = function (data) {
             db.transaction(function (tx) {
@@ -303,9 +390,9 @@ angular.module('message', ['ngCordova'])
                 case 'logged-in':
                     // Clearing Table on login, just to be sure
                     // TODO: Should this really be done here, like this?!?
-                    db.transaction(function (tx) {
+                  /*  db.transaction(function (tx) {
                         tx.executeSql(queries.dropTable, [], function () {});
-                    });
+                    }); */
                     factory.init();
                     break;
                 default:
