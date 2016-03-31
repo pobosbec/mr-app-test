@@ -206,7 +206,7 @@ angular.module('message', ['ngCordova'])
                 pageIndex = 0;
             }
 
-            if(typeof (limit) !== 'number'){
+            if(typeof (size) !== 'number'){
                 size = 20;
             }
 
