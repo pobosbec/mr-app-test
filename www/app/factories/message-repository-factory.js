@@ -61,6 +61,7 @@ angular.module('message', ['ngCordova'])
                     db.executeSql("select length('tenletters') as stringlength", [], function (res) {
                         var stringlength = res.rows.item(0).stringlength;
                         console.log('got stringlength: ' + stringlength);
+                        alert('got stringlength: '+stringlength);
                         document.getElementById('deviceready').querySelector('.received').innerHTML = 'stringlength: ' + stringlength;
                     });
                 });
