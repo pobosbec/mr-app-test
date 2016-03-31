@@ -54,6 +54,17 @@ angular.module('message', ['ngCordova'])
                 // Mobile Device
                 db = window.sqlitePlugin.openDatabase({ name: conf.name, location: conf.location });
                 queries = sqliteQueries;
+
+
+                /**test*/
+                window.sqlitePlugin.openDatabase({ name: 'hello-world.db' }, function (db) {
+                    db.executeSql("select length('tenletters') as stringlength", [], function (res) {
+                        var stringlength = res.rows.item(0).stringlength;
+                        console.log('got stringlength: ' + stringlength);
+                        document.getElementById('deviceready').querySelector('.received').innerHTML = 'stringlength: ' + stringlength;
+                    });
+                });
+
             } else {
                 // Browser
                 db = window.openDatabase(conf.name, conf.version, conf.displayName, conf.size);
