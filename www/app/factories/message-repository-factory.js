@@ -23,8 +23,8 @@ angular.module('message', ['ngCordova'])
         };
 
         var sqliteQueries = {
-            dropTable: 'DROP TABLE IF EXISTS Messages',
-            createTable: 'CREATE TABLE IF NOT EXISTS Messages (MessageId text primary key, CreatedOn integer, ConversationId text, Author text, JSON text)',
+            dropMessages: 'DROP TABLE IF EXISTS Messages',
+            createMessages: 'CREATE TABLE IF NOT EXISTS Messages (MessageId text primary key, CreatedOn integer, ConversationId text, Author text, JSON text)',
             getMessagesByTime : 'SELECT MessageId, JSON FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
             getConversations : 'SELECT DISTINCT ConversationId FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
             getMessagesByConversation : 'SELECT MessageId, JSON FROM Messages WHERE ConversationId = ? ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
@@ -37,8 +37,8 @@ angular.module('message', ['ngCordova'])
         };
 
         var webSqlQueries = {
-            dropTable: 'DROP TABLE IF EXISTS Messages',
-            createTable: 'CREATE TABLE IF NOT EXISTS Messages (MessageId unique, CreatedOn, ConversationId, Author, JSON)',
+            dropMessages: 'DROP TABLE IF EXISTS Messages',
+            createMessages: 'CREATE TABLE IF NOT EXISTS Messages (MessageId unique, CreatedOn, ConversationId, Author, JSON)',
             getMessagesByTime : 'SELECT MessageId, JSON FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
             getConversations : 'SELECT DISTINCT ConversationId FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
             /**/  getAllMessages: 'SELECT * FROM Messages ORDER BY CreatedOn DESC',
@@ -145,10 +145,22 @@ angular.module('message', ['ngCordova'])
         function createDatabase(){
             return $q(function(resolve, reject) {
                 db.transaction(function (tx) {
-                    tx.executeSql(queries.createTable, [], function (transaction, result) {
-                        console.log('Table \'Messages\' is created');
-                        console.log(result);
+                    tx.executeSql(queries.createMessages, [], function () {
+                        resolve();
+                    }, function (transaction, error) {
+                        reject(error);
+                    });
+                });
+            });
+        }
 
+        /**
+         * Creates a promise for dropping the database tables.
+         */
+        function dropDatabase(){
+            return $q(function(resolve, reject) {
+                db.transaction(function (tx) {
+                    tx.executeSql(queries.dropMessages, [], function () {
                         resolve();
                     }, function (transaction, error) {
                         reject(error);
@@ -395,10 +407,13 @@ angular.module('message', ['ngCordova'])
                 case 'logged-out':
                     localStorage.removeItem('latestWhatIsNewUpdate');
                     // Clearing Table on logout, just to be sure
-                    // TODO: Should this really be done here, like this?!?
-                    db.transaction(function (tx) {
-                        tx.executeSql(queries.dropTable, [], function () {});
-                    });
+                    dropDatabase().then(
+                        function(){
+                            console.log('Dropped database');
+                        },
+                        function(error){
+                            console.error('Failed to drop database.\r\n' + error.message);
+                        });
                     break;
                 case 'logged-in':
                     break;
@@ -406,7 +421,7 @@ angular.module('message', ['ngCordova'])
                     break;
             }
         };
-        
+
         factory.init();
         return factory;
     }]);
