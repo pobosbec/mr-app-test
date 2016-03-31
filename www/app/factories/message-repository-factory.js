@@ -14,6 +14,8 @@ angular.module('message', ['ngCordova'])
         // Indicates if the database is configured
         var isConfigured = false;
 
+        var dbType = null;
+
         var databaseConfiguration = {
             name: "bosbec-mr.db",
             location: 1,
@@ -122,11 +124,13 @@ angular.module('message', ['ngCordova'])
                 // Mobile Device
                 db = window.sqlitePlugin.openDatabase({ name: conf.name, location: conf.location });
                 queries = sqliteQueries;
+                dbType = 'sqlite';
                 console.log('Opened up sqlite connection');
             } else {
                 // Browser
                 db = window.openDatabase(conf.name, conf.version, conf.displayName, conf.size);
                 queries = webSqlQueries;
+                dbType = 'webSQL';
                 console.log('Opened up web SQL connection');
             }
 
@@ -152,6 +156,23 @@ angular.module('message', ['ngCordova'])
                     });
                 });
             });
+        }
+
+        /**
+         * Gets the rows from a sql query result and returns them as an array
+         * @param {sqlResult} the result from a sql query
+         */
+        function getRows(result){
+            if(dbType === 'webSQL'){
+                return result.rows;
+            }
+
+            var rows = [];
+            for(var i = 0; i < result.rows.length; i++){
+                rows.push(result.rows.item(i));
+            }
+
+            return rows;
         }
 
         /**
@@ -190,7 +211,7 @@ angular.module('message', ['ngCordova'])
                     tx.executeSql(queries.getMessagesByTime, [size, offset],
                         function(trans, result){
                             var messages = [];
-                            var rows = result.rows;
+                            var rows = getRows(result);
 
                             for(var i = 0; i < rows.length; i++){
                                 var row = rows[i];
@@ -263,7 +284,7 @@ angular.module('message', ['ngCordova'])
                     tx.executeSql(queries.getMessagesByConversation, [conversationId, size, offset],
                         function(trans, result){
                             var messages = [];
-                            var rows = result.rows;
+                            var rows = getRows(result);
 
                             for(var i = 0; i < rows.length; i++){
                                 var row = rows[i];
@@ -299,7 +320,7 @@ angular.module('message', ['ngCordova'])
                     tx.executeSql(queries.getConversations, [size, offset],
                         function(trans, result){
                             var ids = [];
-                            var rows = result.rows;
+                            var rows = getRows(result);
 
                             for(var i = 0; i < rows.length; i++){
                                 var row = rows[i];
@@ -330,7 +351,7 @@ angular.module('message', ['ngCordova'])
             db.transaction(function (tx) {
                 console.log('Checking if message message with id \'' + data.MessageId + '\' exists.');
                 tx.executeSql(queries.doesMessageExist, [data.MessageId], function (transaction, resultData) {
-                    var rows = resultData.rows;
+                    var rows = getRows(resultData);
                     if(rows.length !== 1){
                         console.error('Unexpected number of rows returned (' + rows.length + '). Check sql statement!');
                         return;

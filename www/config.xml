@@ -128,6 +128,10 @@ version   = "0.2.0">
     <string>100</string>
   </gap:config-file>
 
+  <gap:config-file platform="android" parent="/manifest">
+    <application android:debuggable="true" />
+  </gap:config-file>
+
   <!--
     Define access to external domains.
     <access />            - a blank access tag denies access to all external resources.
@@ -157,9 +161,6 @@ version   = "0.2.0">
     <allow-intent href="itms-apps:*" />
   </platform>
 
-  <gap:config-file platform="android" parent="/manifest">
-    <application android:debuggable="true" />
-  </gap:config-file>
 
   <!--
         <access origin="http://phonegap.com" />                    - allow any secure requests to http://phonegap.com/
