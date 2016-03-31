@@ -7,9 +7,14 @@ angular.module('message', ['ngCordova'])
         var db;
 
         var factory = {};
+
+        // Indicates if messages are added but event isn't fired yet
         var evtMessagesAdded = false;
 
-        var dabataseConfiguration = {
+        // Indicates if the database is configured
+        var isConfigured = false;
+
+        var databaseConfiguration = {
             name: "bosbec-mr.db",
             location: 1,
             version: "1.0",
@@ -48,26 +53,12 @@ angular.module('message', ['ngCordova'])
 
         factory.messages = [];
 
+        /**
+         * Initializes the factory.
+         */
         factory.init = function () {
-            var conf = dabataseConfiguration;
-            if (window.isPhoneGap) {
-                // Mobile Device
-                db = window.sqlitePlugin.openDatabase({ name: conf.name, location: conf.location });
-                queries = sqliteQueries;
-
-            } else {
-                // Browser
-                db = window.openDatabase(conf.name, conf.version, conf.displayName, conf.size);
-                queries = webSqlQueries;
-            }
-
-            var promise = createDatabase();
-            promise.then(
-                function(){
-                    console.log('The database is successfully created.');
-                }, function(error){
-                    console.error('Failed to create the database.\r\n' + error.message);
-                });
+            console.log('Factory.init() was called in message repository.')
+           configureDatabase();
         };
 
         factory.authors = [{
@@ -115,6 +106,42 @@ angular.module('message', ['ngCordova'])
             return messages;
         };
 */
+        /**
+         * Configures the database, sets up the db object and creates tables if needed.
+         */
+        function configureDatabase(){
+            if(isConfigured){
+                return;
+            }
+
+            console.log('Going to configure the database');
+            isConfigured = true;
+
+            var conf = databaseConfiguration;
+            if (window.isPhoneGap) {
+                // Mobile Device
+                db = window.sqlitePlugin.openDatabase({ name: conf.name, location: conf.location });
+                queries = sqliteQueries;
+                console.log('Opened up sqlite connection');
+            } else {
+                // Browser
+                db = window.openDatabase(conf.name, conf.version, conf.displayName, conf.size);
+                queries = webSqlQueries;
+                console.log('Opened up web SQL connection');
+            }
+
+            createDatabase()
+                .then(
+                    function(){
+                        console.log('The database is successfully created.');
+                    }, function(error){
+                        console.error('Failed to create the database.\r\n' + error.message);
+                    });
+        }
+
+        /**
+         * Creates a promise for creating the database tables.
+         */
         function createDatabase(){
             return $q(function(resolve, reject) {
                 db.transaction(function (tx) {
@@ -326,7 +353,7 @@ angular.module('message', ['ngCordova'])
                     console.error("Error while checking if message exists.\r\n" + error.message);
                 });
             });
-        }
+        };
 
         factory.messageAdded = function () {
             if (evtMessagesAdded) {
@@ -341,14 +368,15 @@ angular.module('message', ['ngCordova'])
                     evtMessagesAdded = false;
                 },
                 200);
-        }
+        };
 
         factory.messageUpdated = function (data) {
             $rootScope.$broadcast('message-updated', data);
-        }
+        };
+
         factory.messagesChanged = function (data) {
             $rootScope.$broadcast('messages-changed', data);
-        }
+        };
 
         factory.on = function (event, data) {
             switch (event.name) {
@@ -363,7 +391,6 @@ angular.module('message', ['ngCordova'])
                     }
                     break;
                 case 'device-ready':
-                    factory.init();
                     break;
                 case 'logged-out':
                     localStorage.removeItem('latestWhatIsNewUpdate');
@@ -374,17 +401,12 @@ angular.module('message', ['ngCordova'])
                     });
                     break;
                 case 'logged-in':
-                    // Clearing Table on login, just to be sure
-                    // TODO: Should this really be done here, like this?!?
-                  /*  db.transaction(function (tx) {
-                        tx.executeSql(queries.dropTable, [], function () {});
-                    }); */
-                    factory.init();
                     break;
                 default:
                     break;
             }
-        }
+        };
+        
         factory.init();
         return factory;
-    }])
+    }]);
