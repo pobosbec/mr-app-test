@@ -416,6 +416,13 @@ angular.module('message', ['ngCordova'])
                         });
                     break;
                 case 'logged-in':
+                    createDatabase().then(
+                        function(){
+                            console.log('Created database after login');
+                        },
+                        function(error){
+                            console.error('Failed to create database after login.\r\n' + error.message);
+                        });
                     break;
                 default:
                     break;
