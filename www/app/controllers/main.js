@@ -8,11 +8,8 @@ mobileresponseWebbApp
         /// Modal
         ///////////////////////////
         $scope.items = ['item1', 'item2', 'item3'];
-
         $scope.animationsEnabled = true;
-
         $scope.open = function (size) {
-
             var modalInstance = $uibModal.open({
                 animation: $scope.animationsEnabled,
                 templateUrl: 'myModalContent.html',
@@ -24,7 +21,6 @@ mobileresponseWebbApp
                     }
                 }
             });
-
             modalInstance.result.then(function (selectedItem) {
                 $scope.selected = selectedItem;
             }, function () {
@@ -42,8 +38,6 @@ mobileresponseWebbApp
         $scope.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
-
-
 
         $rootScope.header = false;
         //snapper

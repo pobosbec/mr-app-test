@@ -17,7 +17,12 @@ mobileresponseWebbApp
         .state ('home', {
             url: '/home',
             templateUrl: 'views/home.html',
-
+            onEnter: function($rootScope) {
+                $rootScope.createButtonVisible = true;
+            },
+            onExit: function($rootScope) {
+                $rootScope.createButtonVisible = false;
+            }
         })
 
         //------------------------------

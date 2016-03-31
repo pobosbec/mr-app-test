@@ -8,7 +8,8 @@ angular.module('modalcontroll',[])
         item: $scope.items[0]
     };
 
-    $scope.ok = function () {
+    $scope.createMsg = function () {
+        alert('noothing');
         $uibModalInstance.close($scope.selected.item);
     };
 
