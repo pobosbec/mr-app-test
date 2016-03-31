@@ -44,6 +44,7 @@ angular.module('message', ['ngCordova'])
             createMessages: 'CREATE TABLE IF NOT EXISTS Messages (MessageId unique, CreatedOn, ConversationId, Author, JSON)',
             getMessagesByTime : 'SELECT MessageId, JSON FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
             getConversations : 'SELECT DISTINCT ConversationId FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
+            getMessagesByConversation : 'SELECT MessageId, JSON FROM Messages WHERE ConversationId = ? ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
             /**/  getAllMessages: 'SELECT * FROM Messages ORDER BY CreatedOn DESC',
             /**/  getLatestMessages: 'SELECT * FROM Messages ORDER BY CreatedOn DESC LIMIT ?',
             /**/  getAllMessagesFromAuthor: 'SELECT * FROM Messages WHERE Author=?',

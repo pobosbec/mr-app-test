@@ -67,4 +67,8 @@ mobileresponseWebbApp
                 url: '/contacts',
                 templateUrl: 'views/contacts.html'
             })
+            .state ('pages.conversations', {
+                url: '/conversations',
+                templateUrl: 'views/conversations.html'
+            })
     });
