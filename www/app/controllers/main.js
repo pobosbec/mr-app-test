@@ -5,7 +5,7 @@ mobileresponseWebbApp
     .controller('materialadminCtrl', function($timeout, $state, $rootScope,tokenService, $scope, snapRemote, $uibModal){
 
 
-        $rootScope.createButtonVisible = true;
+        $rootScope.createButtonVisible = false;
 
         //////////////////////////
         /// Modal
