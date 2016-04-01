@@ -8,7 +8,6 @@
     -ms-user-select: none;
     user-select: none;
 }
-
 input
 {
     -webkit-user-select: auto !important;
