@@ -2,7 +2,7 @@
     <div class="card m-b-0" id="messages-main">
         <div class="ms-menu" data-ng-class="{ 'toggled': mactrl.lvMenuStat }" style="overflow-y: scroll">
             <div class="listview lv-user m-t-20">
-                <div class="lv-item media" ng-repeat="conversation in conversations" ng-click="selectConversation(conversation)">
+                <div class="lv-item media" ng-repeat="conversation in conversations track by conversation.ConversationId" ng-click="selectConversation(conversation)">
                     <div class="lv-avatar pull-left">
                         <img src="img/profile-pics/1.jpg" alt="">
                     </div>
@@ -77,7 +77,10 @@
                     </ul>
                 </div>
                 <div class="lv-body" style="height: 400px; overflow-y: scroll">
-                    <div class="lv-item" ng-repeat="message in currentConversation.Messages | orderBy:'CreatedOn'" ng-class="message.Author === userId ? 'media right': 'media'">
+                    <div class="load-more">
+                        <a href="" ng-click="loadMoreForConversation(currentConversation.ConversationId)"><i class="zmdi zmdi-refresh-alt"></i> Load More...</a>
+                    </div>
+                    <div class="lv-item" ng-repeat="message in currentConversation.Messages track by message.MessageId | orderBy:'CreatedOn'" ng-class="message.Author === userId ? 'media right': 'media'">
                         <div class="lv-avatar" ng-class="message.Author === userId ? 'pull-right': 'pull-left'">
                             <img ng-src="{{ message.AuthorAvatar || 'img/profile-pics/5.jpg' }}" alt="">
                         </div>
