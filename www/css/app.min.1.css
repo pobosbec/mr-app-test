@@ -10178,7 +10178,7 @@ h6 small,
 }
 
 /*
- * Common template classes & IDs
+ * Common header classes & IDs
  * Do not remove this
  */
 
@@ -10416,11 +10416,11 @@ h6 small,
   display: none;
 }
 
-/* ----------------------------- End common template classes and IDs------------------------------------- */
+/* ----------------------------- End common header classes and IDs------------------------------------- */
 
 /*
- * For template type 1 only
- * You may remove these if you opt template 2
+ * For header type 1 only
+ * You may remove these if you opt header 2
  */
 
 #header {
@@ -10565,11 +10565,11 @@ h6 small,
   display: none;
 }
 
-/* ----------------------------- End template type 1 ------------------------------------- */
+/* ----------------------------- End header type 1 ------------------------------------- */
 
 /*
  * For Header type 2 only
- * You may remove these if you opt template 1
+ * You may remove these if you opt header 1
  */
 
 #header-2 {
