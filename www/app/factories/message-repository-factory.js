@@ -548,8 +548,8 @@ angular.module('message', ['ngCordova'])
         };
 
 
+        //TODO: ful fix
         if (!window.isPhoneGap) {
-            alert("is not phonegap");
             factory.init();
         }
         return factory;
