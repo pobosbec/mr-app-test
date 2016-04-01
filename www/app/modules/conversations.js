@@ -10,6 +10,16 @@ angular.module('conversations', [])
         $scope.userId = null;
         $scope.replyMessages = [];
 
+        $scope.findConversationIndex = function(conversationId){
+            for(var i = 0; i < $scope.conversations.length; i++){
+                if($scope.conversations[i].ConversationId === conversationId){
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
         $scope.doesConversationExist = function(users) {
             return communicationService.doesConversationExist(users);
         };
@@ -103,6 +113,24 @@ angular.module('conversations', [])
             }
         }
 
+        $scope.loadMoreForConversation = function(conversationId){
+
+            var index = $scope.findConversationIndex(conversationId);
+
+            var promise = messageRepository.getMessagesByConversation(
+                conversationId,
+                $scope.conversations[index].Messages.length,
+                3);
+
+            promise.then(
+                function(success){
+                    $scope.conversations[$scope.findConversationIndex(conversationId)].Messages.push(success);
+                },
+                function(error){
+
+                });
+        }
+
         $scope.$on('messages-added', function(event, args) {
 
             var promise = messageRepository.getMessagesByTime(1, 1);
@@ -140,7 +168,7 @@ angular.module('conversations', [])
             var args = { Sender: "messages", Event: 'interval' };
             $rootScope.$broadcast('download-whats-new', args);
             console.log("10s whats-new");
-        }, 10000);
+        }, 20000);
 
         function init(){
             $scope.userId = tokenService.getAppUserId();
