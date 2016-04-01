@@ -547,6 +547,7 @@ angular.module('message', ['ngCordova'])
             }
         };
 
+        alert("init db");
         factory.init();
         return factory;
     }]);
