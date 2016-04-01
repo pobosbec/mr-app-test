@@ -21,7 +21,6 @@ mobileresponseWebbApp
             });
         };
 
-
         $scope.toggleAnimation = function () {
             $scope.animationsEnabled = !$scope.animationsEnabled;
         };

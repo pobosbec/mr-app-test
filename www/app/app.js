@@ -8,7 +8,6 @@ var mobileresponseWebbApp = angular.module('administratorApp', [
     'ngAnimate',
     'ngResource',
     'ui.router',
-    'oc.lazyLoad',
     'ui.bootstrap',
     'angularMoment',
     'token',
