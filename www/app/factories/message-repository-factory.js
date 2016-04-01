@@ -547,6 +547,10 @@ angular.module('message', ['ngCordova'])
             }
         };
 
-        factory.init();
+
+        //TODO: ful fix
+        if (!window.isPhoneGap) {
+            factory.init();
+        }
         return factory;
     }]);

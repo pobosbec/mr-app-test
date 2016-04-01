@@ -12,6 +12,7 @@ angular.module('event', [])
 
         // Native
         document.addEventListener('deviceready', function (event, args) {
+            messageRepository.init();
             $rootScope.$broadcast('device-ready', args);
         }, false);
 
