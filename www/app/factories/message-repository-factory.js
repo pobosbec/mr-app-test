@@ -547,7 +547,10 @@ angular.module('message', ['ngCordova'])
             }
         };
 
-        alert("init db");
-        factory.init();
+
+        if (!window.isPhoneGap) {
+            alert("is not phonegap");
+            factory.init();
+        }
         return factory;
     }]);
