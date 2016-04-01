@@ -3,12 +3,11 @@
         <div class="wc-comment" >
             <div class="m-b-15">
                 <pre>Model: {{selected | json}}</pre>
+                <div class="select">
                 <input type="text" ng-model="selected" uib-typeahead="user as user.userDisplayName for user in users | filter:{userDisplayName:$viewValue}" class="form-control m-t-15">
+                </div>
           <!--  <input type="text" class="m-t-15" placeholder="Search for a user here" name="receiver" ng-model="searchText">-->
             </div>
-            <ul>
-               <li ng-repeat="usr in users " > {{usr.userDisplayName}}</li>
-            </ul>
             <div class="wcc-inner" >
                 <textarea class="wcci-text" ng-model="create.textarea"   data-auto-size placeholder="Write something..." ng-keyup="$event.keyCode == 13 && createMsg(create.receiver,create.textarea)"></textarea>
             </div>

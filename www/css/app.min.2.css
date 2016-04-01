@@ -2188,8 +2188,8 @@ body.login-content:before {
 }
 
 /*
- * For template type 1 only
- * You may remove these if you opt template 2
+ * For header type 1 only
+ * You may remove these if you opt header 2
  */
 
 #header .skin-switch {
@@ -2206,11 +2206,11 @@ body.login-content:before {
   margin: 2px 5px;
 }
 
-/* ----------------------------- End template type 1 ------------------------------------- */
+/* ----------------------------- End header type 1 ------------------------------------- */
 
 /*
- * For template type 2 only
- * You may remove these if you opt template 1
+ * For header type 2 only
+ * You may remove these if you opt header 1
  */
 
 #header-2 .skin-switch {
@@ -2304,7 +2304,7 @@ body.login-content:before {
   transform: scale(1) rotate(0deg);
 }
 
-/* ----------------------------- End template type 2 ------------------------------------- */
+/* ----------------------------- End header type 2 ------------------------------------- */
 
 /*
  * Do not remove these
