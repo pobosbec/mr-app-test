@@ -118,11 +118,12 @@
             return (navigator.userAgent.indexOf("iPhone") > 0 || navigator.userAgent.indexOf("iPad") > 0 || navigator.userAgent.indexOf("iPod") > 0);
         }
 
-        function deviceReady() {
+        deviceReady = function() {
             angular.bootstrap(document, ['administratorApp']);
             app.initialize();
             alert("phoneReady!");
-        }
+        };
+        
         (function loadCordova() {
             window.deviceType = 0;
             var CORDOVA_EDITION = null;
