@@ -119,7 +119,7 @@ angular.module('conversations', [])
 
         function init(){
             $scope.userId = tokenService.getAppUserId();
-            $scope.appUsers = contactsService.getAppUsers();
+
             var existingConversationsIdsPromise = messageRepository.getConversations(0, 100);
 
             existingConversationsIdsPromise.then(
@@ -301,7 +301,7 @@ angular.module('conversations', [])
             var args = { Sender: "messages", Event: 'interval' };
             $rootScope.$broadcast('download-whats-new', args);
             console.log("10s whats-new");
-        }, 20000);
+        }, 30000);
 
         function init(){
             $scope.userId = tokenService.getAppUserId();

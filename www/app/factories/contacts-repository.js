@@ -181,9 +181,20 @@ angular.module('contacts', [])
                 db.transaction(function (tx) {
                     tx.executeSql(queries.getAppUsers, [],
                         function(trans, result){
+                            var appUsers = [];
                             var rows = getRows(result);
 
-                            resolve(rows);
+                            for(var i = 0; i < rows.length; i++){
+                                var row = rows[i];
+                                try{
+                                    appUsers.push(JSON.parse(row['JSON']));
+                                }
+                                catch(err){
+                                    console.error('Failed to parse appUser \'' + row[i].userId + '\'.\r\n' + err);
+                                }
+                            }
+
+                            resolve(appUsers);
                         }, function(trans, error){
                             console.error('Error while fetching appUsers from database.\r\n' + error.message);
                             reject(error);
@@ -322,8 +333,8 @@ angular.module('contacts', [])
                     tx.executeSql(
                         queries.insertAppUser,
                         [
-                            appUser.UserId,
-                            appUser.DisplayName,
+                            appUser.userId,
+                            appUser.userDisplayName,
                             JSON.stringify(appUser)],
                         function (trans, result) {
                             if (result.rowsAffected !== 1) {

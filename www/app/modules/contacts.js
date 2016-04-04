@@ -7,6 +7,7 @@ angular.module('contact', [])
         $scope.contacts = [];
         $scope.appUsers = [];
         $scope.foundAppUsers = [];
+        $scope.appUserTest = { Test: "Hello"};
 
         $scope.GetAppUsersFromPhoneContacts = function(){
             contactsService.findAppUsersFromAllContacts();
@@ -45,10 +46,13 @@ angular.module('contact', [])
 
             promise.then(
                 function(success){
-                    $scope.appUsers = success;
+                    for (var i = 0; i < success.length; i++){
+                        $scope.appUsers.push(success[i]);
+                    }
+
                 },
                 function(error){
-
+                    console.log('Could not get appUsers!')
                 }
             );
 

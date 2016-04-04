@@ -41,7 +41,7 @@ angular.module('communication', [])
                 data: {
                     Data: {
                         LastUpdate: latest,
-                        DeviceId: "abc"
+                        DeviceId: tokenService.getDeviceId()
                     },
                     AuthenticationToken: appAuthToken
                 }

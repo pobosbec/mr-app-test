@@ -1,157 +1,155 @@
-<section id="content" class="page-view ng-scope" data-ui-view="">
-    <div class="container ng-scope">
-        <div class="block-header">
-            <h2>Contacts<small>Manage your contact information</small></h2>
+<div class="container ng-scope">
+    <div class="block-header">
+        <h2>Contacts<small>Manage your contact information</small></h2>
+    </div>
+    <div class="card">
+        <div class="lv-header-alt clearfix m-b-5">
+            <h2 class="lvh-label hidden-xs">{{ $scope.appUsers.length }} Friends</h2>
+            <ul class="lv-actions actions">
+                <li>
+
+                </li>
+                <li class="dropdown" uib-dropdown="">
+                    <a href="" uib-dropdown-toggle="" aria-expanded="false" aria-haspopup="true" class="dropdown-toggle">
+                        <i class="zmdi zmdi-more-vert"></i>
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li>
+                            <a href="">Refresh</a>
+                        </li>
+                        <li>
+                            <a href="">Settings</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
         </div>
-        <div class="card">
-            <div class="lv-header-alt clearfix m-b-5">
-                <h2 class="lvh-label hidden-xs">{{ $scope.appUsers }} Friends</h2>
-                <ul class="lv-actions actions">
-                    <li>
-
-                    </li>
-                    <li class="dropdown" uib-dropdown="">
-                        <a href="" uib-dropdown-toggle="" aria-expanded="false" aria-haspopup="true" class="dropdown-toggle">
-                            <i class="zmdi zmdi-more-vert"></i>
-                        </a>
-
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <li>
-                                <a href="">Refresh</a>
-                            </li>
-                            <li>
-                                <a href="">Settings</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-            <div class="card-body card-padding">
-                <div class="contacts clearfix row" >
-                    <div ng-repeat="appUser in appUsers">
-                        <div class="col-md-2 col-sm-4 col-xs-6">
-                            <div class="c-item">
-                                <a href="" class="ci-avatar">
-                                    <img ng-src="{{ appUser.avatar || 'img/profile-pics/5.jpg' }}" alt="">
-                                </a>
-                                <div class="c-info">
-                                    <strong>{{ appUser.userDisplayName }}</strong>
-                                    <small>{{ appUser.emailAddress }}</small>
-                                    <small>{{ appUser.phoneNumber }}</small>
-                                </div>
-                                <div class="c-footer">
-                                    <button class="waves-effect" ng-click="RemoveUser(appUser)"><i class="zmdi zmdi-person-remove"></i> Remove</button>
-                                </div>
+        <div class="card-body card-padding">
+            <div class="contacts clearfix row" >
+                <div ng-repeat="appUser in appUsers">
+                    <div class="col-md-2 col-sm-4 col-xs-6">
+                        <div class="c-item">
+                            <a href="" class="ci-avatar">
+                                <img ng-src="{{ appUser.avatar || 'img/profile-pics/5.jpg' }}" alt="">
+                            </a>
+                            <div class="c-info">
+                                <strong>{{ appUser.userDisplayName }}</strong>
+                                <small>{{ appUser.emailAddress }}</small>
+                                <small>{{ appUser.phoneNumber }}</small>
+                            </div>
+                            <div class="c-footer">
+                                <button class="waves-effect" ng-click="RemoveUser(appUser)"><i class="zmdi zmdi-person-remove"></i> Remove</button>
                             </div>
                         </div>
                     </div>
-                    <!--<div class="load-more">
-                        <a href=""><i class="zmdi zmdi-refresh-alt"></i> Load More...</a>
-                    </div>-->
                 </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="lv-header-alt clearfix m-b-5">
-                <h2 class="lvh-label hidden-xs">{{ $scope.foundAppUsers }} Search</h2>
-                <ul class="lv-actions actions">
-                    <li>
-                        <input type="text" class="form-control" ng-model="search" ng-model-options="{ debounce: 1000 }" ng-change="Search(search)">
-                    </li>
-                    <li class="dropdown" uib-dropdown="">
-                        <a href="" uib-dropdown-toggle="" aria-expanded="false" aria-haspopup="true" class="dropdown-toggle">
-                            <i class="zmdi zmdi-more-vert"></i>
-                        </a>
-
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <li>
-                                <a href="">Refresh</a>
-                            </li>
-                            <li>
-                                <a href="">Settings</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-            <div class="card-body card-padding">
-                <div class="contacts clearfix row" >
-                    <div ng-repeat="foundAppUser in foundAppUsers">
-                        <div class="col-md-2 col-sm-4 col-xs-6">
-                            <div class="c-item">
-                                <a href="" class="ci-avatar">
-                                    <img ng-src="{{ foundAppUser.avatar || 'img/profile-pics/1.jpg' }}" alt="">
-                                </a>
-
-                                <div class="c-info">
-                                    <strong>{{ foundAppUser.userDisplayName }}</strong>
-                                    <small>{{ foundAppUser.emailAddress }}</small>
-                                    <small>{{ foundAppUser.phoneNumber }}</small>
-                                </div>
-
-                                <div class="c-footer">
-                                    <button class="waves-effect" ng-click="AddUser(foundAppUser)"><i class="zmdi zmdi-person-add"></i> Add</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--<div class="load-more">
-                        <a href=""><i class="zmdi zmdi-refresh-alt"></i> Load More...</a>
-                    </div>-->
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="lv-header-alt clearfix m-b-5">
-                <h2 class="lvh-label hidden-xs">{{ $scope.contacts }} Contacts</h2>
-                <ul class="lv-actions actions">
-                    <li>
-
-                    </li>
-                    <li class="dropdown" uib-dropdown="">
-                        <a href="" uib-dropdown-toggle="" aria-expanded="false" aria-haspopup="true" class="dropdown-toggle">
-                            <i class="zmdi zmdi-more-vert"></i>
-                        </a>
-
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <li>
-                                <a href="">Refresh</a>
-                            </li>
-                            <li>
-                                <a href="">Settings</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-            <div class="card-body card-padding">
-                <div class="contacts clearfix row" >
-                    <div ng-repeat="contact in contacts">
-                        <div class="col-md-2 col-sm-4 col-xs-6">
-                            <div class="c-item">
-                                <a href="" class="ci-avatar">
-                                    <img ng-src="{{ contact.avatar || 'img/profile-pics/5.jpg' }}" alt="">
-                                </a>
-                                <div class="c-info">
-                                    <strong>{{ contact.displayName }}</strong>
-                                    <div ng-repeat="emailAddress in contact.emails">
-                                        <small>{{ emailAddress.value }}</small>
-                                    </div>
-                                    <div ng-repeat="phoneNumber in contact.phoneNumbers">
-                                        <small>{{ phoneNumber.value }}</small>
-                                    </div>
-                                </div>
-                                <div class="c-footer">
-                                    <button class="waves-effect"><i class="zmdi zmdi-person-add"></i> Add</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--<div class="load-more">
-                        <a href=""><i class="zmdi zmdi-refresh-alt"></i> Load More...</a>
-                    </div>-->
-                </div>
+                <!--<div class="load-more">
+                    <a href=""><i class="zmdi zmdi-refresh-alt"></i> Load More...</a>
+                </div>-->
             </div>
         </div>
     </div>
-</section>
+    <div class="card">
+        <div class="lv-header-alt clearfix m-b-5">
+            <h2 class="lvh-label hidden-xs">{{ $scope.foundAppUsers }} Search</h2>
+            <ul class="lv-actions actions">
+                <li>
+                    <input type="text" class="form-control" ng-model="search" ng-model-options="{ debounce: 1000 }" ng-change="Search(search)">
+                </li>
+                <li class="dropdown" uib-dropdown="">
+                    <a href="" uib-dropdown-toggle="" aria-expanded="false" aria-haspopup="true" class="dropdown-toggle">
+                        <i class="zmdi zmdi-more-vert"></i>
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li>
+                            <a href="">Refresh</a>
+                        </li>
+                        <li>
+                            <a href="">Settings</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body card-padding">
+            <div class="contacts clearfix row" >
+                <div ng-repeat="foundAppUser in foundAppUsers">
+                    <div class="col-md-2 col-sm-4 col-xs-6">
+                        <div class="c-item">
+                            <a href="" class="ci-avatar">
+                                <img ng-src="{{ foundAppUser.avatar || 'img/profile-pics/1.jpg' }}" alt="">
+                            </a>
+
+                            <div class="c-info">
+                                <strong>{{ foundAppUser.userDisplayName }}</strong>
+                                <small>{{ foundAppUser.emailAddress }}</small>
+                                <small>{{ foundAppUser.phoneNumber }}</small>
+                            </div>
+
+                            <div class="c-footer">
+                                <button class="waves-effect" ng-click="AddUser(foundAppUser)"><i class="zmdi zmdi-person-add"></i> Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="load-more">
+                    <a href=""><i class="zmdi zmdi-refresh-alt"></i> Load More...</a>
+                </div>-->
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="lv-header-alt clearfix m-b-5">
+            <h2 class="lvh-label hidden-xs">{{ $scope.contacts }} Contacts</h2>
+            <ul class="lv-actions actions">
+                <li>
+
+                </li>
+                <li class="dropdown" uib-dropdown="">
+                    <a href="" uib-dropdown-toggle="" aria-expanded="false" aria-haspopup="true" class="dropdown-toggle">
+                        <i class="zmdi zmdi-more-vert"></i>
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li>
+                            <a href="">Refresh</a>
+                        </li>
+                        <li>
+                            <a href="">Settings</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body card-padding">
+            <div class="contacts clearfix row" >
+                <div ng-repeat="contact in contacts">
+                    <div class="col-md-2 col-sm-4 col-xs-6">
+                        <div class="c-item">
+                            <a href="" class="ci-avatar">
+                                <img ng-src="{{ contact.avatar || 'img/profile-pics/5.jpg' }}" alt="">
+                            </a>
+                            <div class="c-info">
+                                <strong>{{ contact.displayName }}</strong>
+                                <div ng-repeat="emailAddress in contact.emails">
+                                    <small>{{ emailAddress.value }}</small>
+                                </div>
+                                <div ng-repeat="phoneNumber in contact.phoneNumbers">
+                                    <small>{{ phoneNumber.value }}</small>
+                                </div>
+                            </div>
+                            <div class="c-footer">
+                                <button class="waves-effect"><i class="zmdi zmdi-person-add"></i> Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="load-more">
+                    <a href=""><i class="zmdi zmdi-refresh-alt"></i> Load More...</a>
+                </div>-->
+            </div>
+        </div>
+    </div>
+</div>
