@@ -119,11 +119,13 @@
         }
 
         deviceReady = function() {
+            alert("phoneReady!");
             angular.bootstrap(document, ['administratorApp']);
             app.initialize();
-            alert("phoneReady!");
+
         };
-        
+
+
         (function loadCordova() {
             window.deviceType = 0;
             var CORDOVA_EDITION = null;
@@ -150,7 +152,6 @@
                     document.write('<script type="text/javascript" src="js/PushwooshAndroid.js"><\/script>');
                 }
                 window.addEventListener('deviceready', deviceReady, false);
-                alert("phone!");
             } else {
                 angular.bootstrap(document, ['administratorApp']);
             }
