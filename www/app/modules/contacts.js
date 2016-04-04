@@ -2,7 +2,7 @@
  * Created by Kristofer on 2016-03-17.
  */
 angular.module('contact', [])
-    .controller('contactsCtrl', ['$scope', '$http', 'tokenService', 'contactsService', 'communicationService', function($scope, $http, tokenService, contactsService, communicationService) {
+    .controller('contactsCtrl', ['$scope', '$http', 'tokenService', 'contactsService', 'communicationService', '$cordovaSQLite', function($scope, $http, tokenService, contactsService, communicationService) {
 
         $scope.contacts = [];
         $scope.appUsers = [];
@@ -33,7 +33,7 @@ angular.module('contact', [])
         }
 
         $scope.AddUser = function(user){
-          contactsService.addOrUpdateAppUser(user);
+          contactsService.insertAppUser(user);
         };
 
         $scope.RemoveUser = function(user){
@@ -41,7 +41,17 @@ angular.module('contact', [])
         };
 
         function init(){
-            $scope.appUsers = contactsService.getAppUsers();
+            var promise =  contactsService.getAppUsers();
+
+            promise.then(
+                function(success){
+                    $scope.appUsers = success;
+                },
+                function(error){
+
+                }
+            );
+
             $scope.contacts = contactsService.getPhoneContacts();
         };
 

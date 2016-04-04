@@ -63,12 +63,19 @@ mobileresponseWebbApp
         })
             .state ('pages.contacts', {
                 url: '/contacts',
-                templateUrl: 'views/contacts.html'
+                templateUrl: 'views/contacts.html',
+                controller: 'contactsCtrl as contactsCtrl'
             })
             .state ('pages.conversations', {
                 url: '/conversations',
                 templateUrl: 'views/conversations.html',
-                controller: 'conversationsCtrl as conversationsCtrl'
+                controller: 'conversationsCtrl as conversationsCtrl',
+                onEnter: function($rootScope) {
+                    $rootScope.createButtonVisible = true;
+                },
+                onExit: function($rootScope) {
+                    $rootScope.createButtonVisible = false;
+                }
             })
             .state ('conversation', {
                 url: '/conversation/:conversationId',

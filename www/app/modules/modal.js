@@ -3,22 +3,29 @@
 angular.module('modalcontroll',[])
     .controller('createMessageCtrl', function ($scope, $uibModalInstance, contactsService) {
 
-        $scope.users = contactsService.getAppUsers();
-        console.log($scope.users);
-        $scope.createMsg = function () {
-        alert('noothing');
-        $uibModalInstance.close();
-        };
+            $scope.users = [];
 
-        $scope.find = function (data) {
-            alert(data);
-            console.log(contactsService.getAppUsers());
-        };
+            $scope.getUsers = function(){
+              $scope.users = contactsService.getAppUsers();
+            };
 
-        $scope.cancel = function () {
-        $uibModalInstance.dismiss('cancel');
+            $scope.getUsers();
 
-        };
-});/**
+            console.log($scope.users);
+            $scope.createMsg = function () {
+                    alert('noothing');
+                    $uibModalInstance.close();
+            };
+
+            $scope.find = function (data) {
+                    alert(data);
+                    console.log(contactsService.getAppUsers());
+            };
+
+            $scope.cancel = function () {
+                    $uibModalInstance.dismiss('cancel');
+
+            };
+    });/**
  * Created by Robin Jobb on 2016-03-30.
  */

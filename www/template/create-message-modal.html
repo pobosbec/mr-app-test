@@ -1,6 +1,32 @@
 <div class="modal-body">
     <div class="wcl-form">
         <div class="wc-comment" >
+            <div class="lv-item media" ng-repeat="user in users">
+                <div class="checkbox pull-left">
+                    <label>
+                        <input type="checkbox" value="">
+                        <i class="input-helper"></i>
+                    </label>
+                </div>
+                <div class="media-body">
+                    <div class="lv-title">{{ user.userDisplayName }}</div>
+
+                    <div class="lv-actions actions dropdown" uib-dropdown="">
+                        <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle" aria-haspopup="true">
+                            <i class="zmdi zmdi-more-vert"></i>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li>
+                                <a href="">Edit</a>
+                            </li>
+                            <li>
+                                <a href="">Delete</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
             <div class="m-b-15">
                 <pre>Model: {{selected | json}}</pre>
                 <div class="select">

@@ -2,44 +2,65 @@
  * Created by Kristofer on 2016-03-21.
  */
 angular.module('contacts', [])
-    .factory('contactsService', ['$http', '$rootScope', '$q', 'tokenService', function ($http, $rootScope, $q, tokenService) {
+    .factory('contactsService', ['$http', '$rootScope', '$q', 'tokenService', '$cordovaSQLite', function ($http, $rootScope, $q, tokenService, $cordovaSQLite) {
 
+        var db;
         var factory = {};
-        var appUsers = [];
-        var contacts = [];
-        var inboxId = '8a0958a2-a163-4a20-8afa-e7315012e2d8';
+        var dbType = null;
+        var queries = null;
+
+        factory.appUsers = [];
+        factory.contacts = [];
+        factory.inboxId = '8a0958a2-a163-4a20-8afa-e7315012e2d8';
+
+        // Indicates if appUsers are added but event isn't fired yet
+        var evtappUsersAdded = false;
+
+        // Indicates if the database is configured
+        var isConfigured = false;
+
+        var databaseConfiguration = {
+            name: "bosbec-mr.db",
+            location: 1,
+            version: "1.0",
+            displayName: "Bosbec-Mr",
+            size: (5 * 1024 * 1024)
+        };
+
+        var sqliteQueries = {
+            dropAppUsers: 'DROP TABLE IF EXISTS AppUsers',
+            createAppUsers: 'CREATE TABLE IF NOT EXISTS AppUsers (AppUserId text primary key, DisplayName text, JSON text)',
+            getAppUsers: 'SELECT * FROM AppUsers',
+            //getMessagesByTime : 'SELECT MessageId, JSON FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
+            //getConversations : 'SELECT DISTINCT ConversationId FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
+            //getMessagesByConversation : 'SELECT MessageId, JSON FROM Messages WHERE ConversationId = ? ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
+            /**/  //getAllMessages: 'SELECT * FROM Messages ORDER BY CreatedOn DESC',
+            /**/  //getLatestMessages: 'SELECT * FROM Messages ORDER BY CreatedOn DESC LIMIT ?',
+            /**/  //getAllMessagesFromAuthor: 'SELECT * FROM Messages WHERE Author=?',
+            /**/  //getAllMessagesFromConversation: 'SELECT * FROM Messages WHERE ConversationId=?',
+            insertAppUser: 'INSERT INTO AppUsers (AppUserId, DisplayName, JSON) VALUES (?, ?, ?)',
+            //doesMessageExist : 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?',
+            //doMessagesExist : 'SELECT MessageId FROM Messages WHERE MessageId IN '
+        };
+
+        var webSqlQueries = {
+            dropAppUsers: 'DROP TABLE IF EXISTS AppUsers',
+            createAppUsers: 'CREATE TABLE IF NOT EXISTS AppUsers (AppUserId text primary key, DisplayName text, JSON text)',
+            getAppUsers: 'SELECT * FROM AppUsers',
+            //getMessagesByTime : 'SELECT MessageId, JSON FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
+            //getConversations : 'SELECT DISTINCT ConversationId FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
+            //getMessagesByConversation : 'SELECT MessageId, JSON FROM Messages WHERE ConversationId = ? ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
+            /**/  //getAllMessages: 'SELECT * FROM Messages ORDER BY CreatedOn DESC',
+            /**/  //getLatestMessages: 'SELECT * FROM Messages ORDER BY CreatedOn DESC LIMIT ?',
+            /**/  //getAllMessagesFromAuthor: 'SELECT * FROM Messages WHERE Author=?',
+            /**/  //getAllMessagesFromConversation: 'SELECT * FROM Messages WHERE ConversationId=?',
+            insertAppUser: 'INSERT INTO AppUsers (AppUserId, DisplayName, JSON) VALUES (?, ?, ?)',
+            //doesMessageExist : 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?',
+            //doMessagesExist : 'SELECT MessageId FROM Messages WHERE MessageId IN '
+        };
 
         factory.init = function init() {
-            appUsers = getAppUsersFromLocalStorage();
-
-            if(appUsers == null){
-                appUsers = [];
-            }
-
-            var errorUsersIndexes = [];
-
-            for(var i = 0; i < appUsers.length; i++){
-                if(appUsers[i].userId == null || appUsers[i].userId == undefined){
-                    errorUsersIndexes.push(i);
-                }
-            }
-
-            for(var j = 0; j < errorUsersIndexes.length; j++){
-                appUsers.splice(j);
-            }
-        }
-
-        function getAppUsersFromLocalStorage(){
-            var item = localStorage.getItem('appUsers');
-
-            if(item == null || item === "" || item == undefined){
-                return null;
-            }
-
-            var readStorage = JSON.parse(item);
-            if (readStorage && readStorage.constructor === Array) {
-                return readStorage;
-            }
+            configureDatabase();
         }
 
         factory.findAppUsersFromAllContacts = function(){
@@ -113,7 +134,7 @@ angular.module('contacts', [])
                 },
                 data: {
                     Data: {
-                        InboxId: inboxId,
+                        InboxId: factory.inboxId,
                         Queries: query
                     },
                     AuthenticationToken: tokenService.getAppAuthToken()
@@ -131,97 +152,7 @@ angular.module('contacts', [])
             return deferred.promise;
         }
 
-        factory.getAppUser = function(appUserId){
-            for(var i = 0; i < appUsers.length; i++){
-                if(appUsers[i].userId === appUserId){
-                    return appUsers[i];
-                }
-            }
-            return null;
-        }
-
-        factory.getAppUsers = function(){
-            if(appUsers == null || appUsers == undefined){
-                appUsers = getAppUsersFromLocalStorage();
-                return appUsers;
-            }
-
-            if(appUsers.length == 0){
-                var found = getAppUsersFromLocalStorage();
-
-                if(found == null)
-                {
-                    return appUsers;
-                }
-
-                if(found.constructor === Array){
-                    appUsers.push(found);
-                }
-            }
-
-            return appUsers;
-        }
-
-        factory.getPhoneContacts = function(){
-            var promise = factory.loadContacts();
-
-            promise.then(
-                function(success){
-                    return contacts;
-                },
-                function(error){
-                    console.log('Could not get phone contacts.')
-                });
-        }
-
-        factory.addOrUpdateAppUser = function(appUser){
-
-            if(appUser.userId === null || appUser.userId === undefined){
-                console.log('Cannot add user without userId.');
-                return;
-            }
-
-            var updated = false;
-
-            for(var i = 0; i < appUsers.length; i++){
-                var currentAppUser = appUsers[i];
-
-                if(currentAppUser.userId === appUser.userId){
-                    appUsers[i] = appUser;
-                    updated = true;
-                    console.log('Updated app-user.')
-                }
-            }
-
-            if(updated === false){
-                appUsers.push(appUser);
-                console.log('Added new app-user.')
-            }
-
-            saveAppUsers();
-        };
-
-        factory.removeUser = function(user){
-            var foundIndex = -1;
-
-            for(var i = 0; i < appUsers.length; i++){
-                var currentAppUser = appUsers[i];
-
-                if(currentAppUser.userId === user.userId){
-                    foundIndex = i;
-                    console.log('Removed app-user.')
-                }
-            }
-
-            if(foundIndex > -1){
-                appUsers.splice(foundIndex, 1);
-                console.log('Added new app-user.')
-            }
-
-            saveAppUsers();
-        }
-
-        factory.loadContacts = function () {
+        factory.getPhoneContacts = function () {
 
             var deferred = $q.defer();
 
@@ -245,19 +176,171 @@ angular.module('contacts', [])
             return deferred.promise;
         };
 
-        function saveAppUsers(){
+        factory.getAppUsers = function() {
+            return $q(function(resolve, reject){
+                db.transaction(function (tx) {
+                    tx.executeSql(queries.getAppUsers, [],
+                        function(trans, result){
+                            var rows = getRows(result);
 
-            if(appUsers.length < 0){
-                return;
-            }
+                            resolve(rows);
+                        }, function(trans, error){
+                            console.error('Error while fetching appUsers from database.\r\n' + error.message);
+                            reject(error);
+                        });
+                });
+            });
+        }
 
-            if (typeof (Storage) !== "undefined") {
-                localStorage.setItem('appUsers', JSON.stringify(appUsers));
-            } else {
-                alert("ach nein! keiner storage!!!1");
-                return;
-            }
+        // TODO: Make to promise
+        /**
+         * Adds an appUser to the database
+         * @param {appUser} the appUser to add
+         */
+        factory.addAppUser = function (appUser) {
+            db.transaction(function (tx) {
+                console.log('Checking if app-user with id \'' + appUser.UserId + '\' exists.');
+                tx.executeSql(queries.doesAppUserExist, [appUser.UserId], function (transaction, resultData) {
+                    var rows = getRows(resultData);
+                    if(rows.length !== 1){
+                        console.error('Unexpected number of rows returned (' + rows.length + '). Check sql statement!');
+                        return;
+                    }
+
+                    if(rows[0]['cnt'] !== 0){
+                        console.log('AppUser width id \'' + appUser.UserId + '\' exists, won\'t insert.');
+                        return;
+                    }
+
+                    insertAppUser(appUser)
+                        .then(function(){
+                            factory.appUserAdded();
+                            console.log('Added appUser with id \'' + appUser.UserId + '\'');
+                        }, function(error){
+                            console.error('Error while inserting appUser with id \'' + appUser.UserId + '\'.\r\n' + error.message);
+                        });
+                }, function (t, error) {
+                    console.error("Error while checking if appUser exists.\r\n" + error.message);
+                });
+            });
         };
+
+        /**
+         * Configures the database, sets up the db object and creates tables if needed.
+         */
+        function configureDatabase(){
+            if(isConfigured){
+                return;
+            }
+
+            console.log('Going to configure the database');
+            isConfigured = true;
+
+            var conf = databaseConfiguration;
+            if (window.isPhoneGap) {
+                // Mobile Device
+                db = window.sqlitePlugin.openDatabase({ name: conf.name, location: conf.location });
+                queries = sqliteQueries;
+                dbType = 'sqlite';
+                console.log('Opened up sqlite connection');
+            } else {
+                // Browser
+                db = window.openDatabase(conf.name, conf.version, conf.displayName, conf.size);
+                queries = webSqlQueries;
+                dbType = 'webSQL';
+                console.log('Opened up web SQL connection');
+            }
+
+            createDatabase()
+                .then(
+                    function(){
+                        console.log('The database is successfully created.');
+                    }, function(error){
+                        console.error('Failed to create the database.\r\n' + error.message);
+                    });
+        }
+
+        /**
+         * Creates a promise for creating the database tables.
+         */
+        function createDatabase(){
+            return $q(function(resolve, reject) {
+                db.transaction(function (tx) {
+                    tx.executeSql(queries.createAppUsers, [], function () {
+                        resolve();
+                    }, function (transaction, error) {
+                        reject(error);
+                    });
+                });
+            });
+        }
+
+        /**
+         * Gets the rows from a sql query result and returns them as an array
+         * @param {sqlResult} the result from a sql query
+         */
+        function getRows(result){
+            var rows = [];
+
+            if(dbType === 'webSQL'){
+                for (var i = 0; i < result.rows.length; i++) {
+                    rows.push(result.rows[i]);
+                }
+            }
+            else {
+                for (var i = 0; i < result.rows.length; i++) {
+                    rows.push(result.rows.item(i));
+                }
+            }
+            return rows;
+        }
+
+        /**
+         * Creates a promise for dropping the database tables.
+         */
+        function dropDatabase(){
+            return $q(function(resolve, reject) {
+                db.transaction(function (tx) {
+                    tx.executeSql(queries.dropContacts, [], function () {
+                        resolve();
+                    }, function (transaction, error) {
+                        reject(error);
+                    });
+                });
+            });
+        }
+
+        // TODO: Move to better location
+        /**
+         * Inserts the appUser to the database
+         * @param appUser to insert
+         * @returns {promise} returns a promise
+         */
+        factory.insertAppUser = function (appUser){
+            return $q(function(resolve, reject) {
+                db.transaction(function (tx) {
+                    tx.executeSql(
+                        queries.insertAppUser,
+                        [
+                            appUser.UserId,
+                            appUser.DisplayName,
+                            JSON.stringify(appUser)],
+                        function (trans, result) {
+                            if (result.rowsAffected !== 1) {
+                                console.error('');
+                                reject(new {
+                                    message : 'The appUser width id \'' + appUser.UserId + '\' doesn\'t seem to be added properly'});
+                                return;
+                            }
+
+                            resolve();
+                        },
+                        function (t, error) {
+                            reject(error);
+                        });
+                });
+            });
+        }
 
         factory.init();
 
