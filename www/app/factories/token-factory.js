@@ -523,8 +523,6 @@ angular.module('token', [])
         factory.currentReservationServiceUrl = factory.getReservationServiceUrl(window.location);
 
         factory.keepTokenAlive();
-        $rootScope.deviceId = factory.getDeviceId();
-
 
         return factory;
 

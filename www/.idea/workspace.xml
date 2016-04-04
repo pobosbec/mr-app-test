@@ -24,8 +24,18 @@
       <file leaf-file-name="sidebar-drawer.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/template/sidebar-drawer.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-11.461538">
-              <caret line="40" column="16" selection-start-line="40" selection-start-column="16" selection-end-line="40" selection-end-column="16" />
+            <state vertical-scroll-proportion="-12.769231">
+              <caret line="42" column="81" selection-start-line="42" selection-start-column="81" selection-end-line="42" selection-end-column="81" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.6969206">
+              <caret line="151" column="32" selection-start-line="151" selection-start-column="32" selection-end-line="151" selection-end-column="32" />
               <folding />
             </state>
           </provider>
@@ -34,11 +44,21 @@
       <file leaf-file-name="message-repository-factory.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/factories/message-repository-factory.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-7.37931">
-              <caret line="203" column="19" selection-start-line="203" selection-start-column="16" selection-end-line="203" selection-end-column="19" />
+            <state vertical-scroll-proportion="-8.551724">
+              <caret line="205" column="30" selection-start-line="205" selection-start-column="30" selection-end-line="205" selection-end-column="30" />
               <folding>
                 <marker date="1459768866832" expanded="true" signature="22182:22204" placeholder="{...}" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/app.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="10" column="18" selection-start-line="10" selection-start-column="18" selection-end-line="10" selection-end-column="18" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -53,11 +73,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="token-factory.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="token-factory.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/factories/token-factory.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7356143">
-              <caret line="525" column="52" selection-start-line="525" selection-start-column="52" selection-end-line="525" selection-end-column="52" />
+            <state vertical-scroll-proportion="-16.310345">
+              <caret line="423" column="29" selection-start-line="423" selection-start-column="29" selection-end-line="423" selection-end-column="29" />
               <folding />
             </state>
           </provider>
@@ -120,9 +140,10 @@
         <option value="$PROJECT_DIR$/css/custom.css" />
         <option value="$PROJECT_DIR$/app/controllers/main.js" />
         <option value="$PROJECT_DIR$/app/app.js" />
-        <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/template/sidebar-drawer.html" />
         <option value="$PROJECT_DIR$/app/factories/token-factory.js" />
+        <option value="$PROJECT_DIR$/app/appbrowser.js" />
+        <option value="$PROJECT_DIR$/index.html" />
       </list>
     </option>
   </component>
@@ -191,6 +212,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="template" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mobileresponsewebbapp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="www" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -279,18 +314,18 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Robin Jobb\Documents\GitHub\mr-app-test\www\app" />
+      <recent name="C:\Users\Robin Jobb\Documents\GitHub\mr-app-test\www\css" />
+      <recent name="C:\Users\Robin Jobb\Documents\GitHub\mr-app-test\www\res" />
+      <recent name="C:\Users\Robin Jobb\Documents\GitHub\mr-app-test\www" />
+      <recent name="C:\Users\Robin Jobb\Documents\GitHub\mr-app-test\www\app\modules" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Robin Jobb\Documents\GitHub\mr-app-test\www\app" />
       <recent name="C:\Users\Robin Jobb\Documents\GitHub\mr-app-test\www\img" />
       <recent name="C:\Users\Robin Jobb\Documents\GitHub\mr-app-test\www\res" />
       <recent name="C:\Users\Robin Jobb\Documents\GitHub\mr-app-test\www\tests" />
-      <recent name="C:\Users\Robin Jobb\Documents\GitHub\mr-app-test\www\template" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Robin Jobb\Documents\GitHub\mr-app-test\www\css" />
-      <recent name="C:\Users\Robin Jobb\Documents\GitHub\mr-app-test\www\res" />
-      <recent name="C:\Users\Robin Jobb\Documents\GitHub\mr-app-test\www" />
-      <recent name="C:\Users\Robin Jobb\Documents\GitHub\mr-app-test\www\app\modules" />
       <recent name="C:\Users\Robin Jobb\Documents\GitHub\mr-app-test\www\template" />
     </key>
   </component>
@@ -455,14 +490,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/views/home.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tests/login-logout.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -714,6 +741,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.94736844">
           <caret line="36" column="1" selection-start-line="36" selection-start-column="1" selection-end-line="36" selection-end-column="1" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -722,16 +750,6 @@
         <state vertical-scroll-proportion="6.602679">
           <caret line="261" column="0" selection-start-line="261" selection-start-column="0" selection-end-line="261" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6577381">
-          <caret line="26" column="19" selection-start-line="26" selection-start-column="19" selection-end-line="26" selection-end-column="19" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -782,18 +800,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/app.js">
+    <entry file="file://$PROJECT_DIR$/app/factories/token-factory.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.22767857">
-          <caret line="9" column="16" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.15634675">
-          <caret line="27" column="21" selection-start-line="27" selection-start-column="21" selection-end-line="27" selection-end-column="21" />
+        <state vertical-scroll-proportion="-16.310345">
+          <caret line="423" column="29" selection-start-line="423" selection-start-column="29" selection-end-line="423" selection-end-column="29" />
           <folding />
         </state>
       </provider>
@@ -806,28 +816,44 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/template/sidebar-drawer.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-11.461538">
-          <caret line="40" column="16" selection-start-line="40" selection-start-column="16" selection-end-line="40" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/factories/message-repository-factory.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.37931">
-          <caret line="203" column="19" selection-start-line="203" selection-start-column="16" selection-end-line="203" selection-end-column="19" />
+        <state vertical-scroll-proportion="-8.551724">
+          <caret line="205" column="30" selection-start-line="205" selection-start-column="30" selection-end-line="205" selection-end-column="30" />
           <folding>
             <marker date="1459768866832" expanded="true" signature="22182:22204" placeholder="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/factories/token-factory.js">
+    <entry file="file://$PROJECT_DIR$/template/sidebar-drawer.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7356143">
-          <caret line="525" column="52" selection-start-line="525" selection-start-column="52" selection-end-line="525" selection-end-column="52" />
+        <state vertical-scroll-proportion="-12.769231">
+          <caret line="42" column="81" selection-start-line="42" selection-start-column="81" selection-end-line="42" selection-end-column="81" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.23958333">
+          <caret line="26" column="19" selection-start-line="26" selection-start-column="19" selection-end-line="26" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="18" selection-start-line="10" selection-start-column="18" selection-end-line="10" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6969206">
+          <caret line="151" column="32" selection-start-line="151" selection-start-column="32" selection-end-line="151" selection-end-column="32" />
           <folding />
         </state>
       </provider>
