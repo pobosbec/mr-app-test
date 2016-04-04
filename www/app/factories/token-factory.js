@@ -6,6 +6,7 @@
 angular.module('token', [])
     .factory('tokenService', ['$http', '$window', '$rootScope', '$location', '$q', '$state', function ($http, win, $rootScope, $location, $q, $state) {
         $rootScope.token = null;
+
         var token = null;
         var pushToken = null;
         var refreshTokenIntervall = null;
@@ -411,8 +412,10 @@ angular.module('token', [])
         };
 
         factory.getDeviceId = function () {
-            return typeof device != 'undefined' ? device.uuid : null;
-        }
+            var deviceId = typeof device != 'undefined' ? device.uuid : null;
+            factory.saveToDb('deviceId', deviceId);
+            return deviceId;
+        };
 
         factory.getPushToken = function () {
             if (pushToken == null) {
@@ -522,5 +525,7 @@ angular.module('token', [])
         factory.keepTokenAlive();
 
         return factory;
+
+
 
     }])

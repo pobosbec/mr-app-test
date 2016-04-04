@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" data-ng-app="administratorApp"  data-ng-controller="materialadminCtrl as mactrl">
+<html xmlns="http://www.w3.org/1999/xhtml" ng-controller="materialadminCtrl as mactrl">
 <!--<html xmlns="http://www.w3.org/1999/xhtml" data-ng-app="administratorApp"  data-ng-controller="materialadminCtrl as mactrl" data-ng-click="mactrl.clickHandler($event)">-->
 
 <head>
@@ -31,6 +31,7 @@
     <script src="node_modules/angular/angular.min.js"></script>
     <script src="bower_components/angular-snap/angular-snap.js"></script>
     <script src="node_modules/angular-resource/angular-resource.min.js"></script>
+    <script src="js/ng-cordova.js"></script>
 
     <!--<link href="node_modules/angular-loading-bar/build/loading-bar.min.css" rel="stylesheet"/>-->
 
@@ -61,7 +62,6 @@
     <script src="node_modules/angular-messages/angular-messages.js"></script>
     <script src="node_modules/angular-animate/angular-animate.min.js"></script>
     <script src="node_modules/angular-loading-bar/build/loading-bar.min.js"></script>
-    <script src="node_modules/oclazyload/dist/ocLazyLoad.js"></script>
 
 
     <!-- Angular ui router -->
@@ -110,7 +110,6 @@
 
     <script language="javascript">
 
-
         function isAndroid() {
             return navigator.userAgent.indexOf("Android") > 0;
         }
@@ -119,6 +118,12 @@
             return (navigator.userAgent.indexOf("iPhone") > 0 || navigator.userAgent.indexOf("iPad") > 0 || navigator.userAgent.indexOf("iPod") > 0);
         }
 
+        deviceReady = function() {
+            angular.bootstrap(document, ['administratorApp']);
+            app.initialize();
+            alert("phoneReady!");
+        };
+        
         (function loadCordova() {
             window.deviceType = 0;
             var CORDOVA_EDITION = null;
@@ -130,13 +135,11 @@
                 window.deviceType = 1;
             }
             window.isPhoneGap = (CORDOVA_EDITION != null); //document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
-
-            document.write('<script src="js/ng-cordova.js"><\/script>');
+           // document.write('<script src="js/ng-cordova.js"><\/script>');
             document.write('<script type="text/javascript" src="js/index.js"><\/script>');
             if (CORDOVA_EDITION != null) {
                 //console.log("Loading Cordova!");
                 document.write('<script type="text/javascript" src="cordova.js"><\/script>');
-
                 // now add plugins
                 if (isIOS()) {
                     //console.log("Loading Cordova IOS-Plugins!");
@@ -146,11 +149,10 @@
                     //console.log("Loading Cordova Android-Plugins!");
                     document.write('<script type="text/javascript" src="js/PushwooshAndroid.js"><\/script>');
                 }
-
-                app.initialize();
-
+                window.addEventListener('deviceready', deviceReady, false);
+                alert("phone!");
             } else {
-                //console.log("Ignoring Cordova!");
+                angular.bootstrap(document, ['administratorApp']);
             }
         })();
     </script>

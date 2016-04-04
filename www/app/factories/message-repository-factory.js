@@ -62,8 +62,8 @@ angular.module('message', ['ngCordova'])
          * Initializes the factory.
          */
         factory.init = function () {
-            console.log('Factory.init() was called in message repository.')
-           configureDatabase();
+            console.log('Factory.init() was called in message repository.');
+            configureDatabase();
         };
 
         factory.authors = [{
@@ -163,18 +163,18 @@ angular.module('message', ['ngCordova'])
 
         /**
          * Gets the rows from a sql query result and returns them as an array
-         * @param {sqlResult} the result from a sql query
+         * @param {object} result - The result from a sql query
          */
         function getRows(result){
-            var rows = [];
+            var rows = [], i = 0;
 
             if(dbType === 'webSQL'){
-                for (var i = 0; i < result.rows.length; i++) {
+                for (i = 0; i < result.rows.length; i++) {
                     rows.push(result.rows[i]);
                 }
             }
             else {
-                for (var i = 0; i < result.rows.length; i++) {
+                for (i = 0; i < result.rows.length; i++) {
                     rows.push(result.rows.item(i));
                 }
             }
@@ -279,8 +279,6 @@ angular.module('message', ['ngCordova'])
                 return $q(function(resolve, reject){ reject('Invalid conversation id');});
             }
 
-            // SELECT DISTINCT m.ConversationId FROM Messages as m INNER JOIN Messages as m2 ON m.MessageId = m2.MessageId ORDER BY m.CreatedOn DESC LIMIT 5
-
             pageIndex = typeof (pageIndex) !== 'number' ? 0 : pageIndex;
             size = typeof (size) !== 'number' ? 20 : size;
             var offset = pageIndex * size;
@@ -342,114 +340,119 @@ angular.module('message', ['ngCordova'])
             });
         };
 
-
-        /*
-        factory.getNewestMessage = function () {
-            return factory.getMessages()[0];
-        };
-
-        factory.getOldestMessage = function () {
-            return factory.getMessages().reverse()[0];
-        };
-*/
-
-
-        // TODO: Make to promise
         /**
-         * Adds a message to the database
-         * @param {message} the message to add
+         * Creates a promise for adding a message to the database
+         * @param {object} message - the message to add
          */
         factory.addMessage = function (message) {
-            db.transaction(function (tx) {
-                console.log('Checking if message message with id \'' + message.MessageId + '\' exists.');
-                tx.executeSql(queries.doesMessageExist, [message.MessageId], function (transaction, resultData) {
-                    var rows = getRows(resultData);
-                    if(rows.length !== 1){
-                        console.error('Unexpected number of rows returned (' + rows.length + '). Check sql statement!');
-                        return;
-                    }
+            return $q(function(resolve, reject){
+                db.transaction(function (tx) {
+                    var error;
+                    console.log('Checking if message message with id \'' + message.MessageId + '\' exists.');
+                    tx.executeSql(queries.doesMessageExist, [message.MessageId], function (transaction, resultData) {
+                        var rows = getRows(resultData);
+                        if(rows.length !== 1){
+                            error = 'Unexpected number of rows returned (' + rows.length + '). Check sql statement!';
+                            console.error(error);
+                            reject(error);
+                            return;
+                        }
 
-                    if(rows[0]['cnt'] !== 0){
-                        console.log('Message width id \'' + message.MessageId + '\' exists, won\'t insert.');
-                        return;
-                    }
+                        if(rows[0]['cnt'] !== 0){
+                            // console.log('Message width id \'' + message.MessageId + '\' exists, won\'t insert.');
+                            return;
+                        }
 
-                    insertMessage(message)
-                        .then(function(){
-                            factory.messageAdded();
-                            console.log('Added message with id \'' + message.MessageId + '\'');
-                        }, function(error){
-                            console.error('Error while inserting message with id \'' + message.MessageId + '\'.\r\n' + error.message);
-                        });
-                }, function (t, error) {
-                    console.error("Error while checking if message exists.\r\n" + error.message);
+                        insertMessage(message)
+                            .then(function(){
+                                factory.messageAdded();
+                                // console.log('Added message with id \'' + message.MessageId + '\'');
+                                resolve();
+                            }, function(error){
+                                error = 'Error while inserting message with id \'' + message.MessageId + '\'.\r\n' + error.message;
+                                console.error(error);
+                                reject(error);
+                            });
+                    }, function (t, error) {
+                        error = 'Error while checking if message exists.\r\n' + error.message;
+                        console.error(error);
+                        reject(error);
+                    });
                 });
             });
         };
 
-        // TODO: Make to promise
         /**
-         * Adds a number of messages to the database
-         * @param {array[message]} The messages to add
+         * Creates a promise that adds a number of messages to the database
+         * @param {object|Array} messages - The messages to add
          */
         factory.addMessages = function(messages){
-            if(messages.length === 0){
-                return;
-            }
+            return $q(function(resolve, reject){
+                if(messages.length === 0){
+                    resolve();
+                    return;
+                }
 
-            var timer = new Date();
+                var timer = new Date();
+                var errorMsg;
 
-            var queryIn = [];
-            for(var i = 0; i < messages.length; i++){
-                queryIn.push('\'' + messages[i].MessageId + '\'');
-            }
+                var queryIn = [];
+                for(var i = 0; i < messages.length; i++){
+                    queryIn.push('\'' + messages[i].MessageId + '\'');
+                }
 
-            console.log('queryIn took '+  (new Date() - timer) +'ms to create!');
+                console.log('queryIn took '+  (new Date() - timer) +'ms to create!');
 
-            timer = new Date();
+                timer = new Date();
 
-            db.transaction(function(tx){
-                console.log('Transaction took '+  (new Date() - timer) +'ms to open!');
+                db.transaction(function(tx){
+                    console.log('Transaction took '+  (new Date() - timer) +'ms to open!');
 
-                console.log('Checking if any of the ' + messages.length + ' exist');
-                tx.executeSql(queries.doMessagesExist + '(' + queryIn.join(',') + ')', [],
-                    function(transaction, resultData){
-                        var rows = getRows(resultData);
+                    console.log('Checking if any of the ' + messages.length + ' exist');
+                    tx.executeSql(queries.doMessagesExist + '(' + queryIn.join(',') + ')', [],
+                        function(transaction, resultData){
+                            var rows = getRows(resultData);
 
-                        console.log('Found '+ rows.length +' messages already in db');
+                            console.log('Found '+ rows.length +' messages already in db');
 
-                        var inserted = 0;
-                        var expected = 0;
+                            var inserted = 0;
+                            var expected = 0;
 
-                        timer = new Date();
+                            timer = new Date();
 
-                        for(var j = 0; j < messages.length; j++) {
-                            if(rows.find(function(a){
-                                return a['MessageId'] === messages[j].MessageId;
-                                })){
-                                continue;
-                            }
-
-                            expected++;
-
-                            insertMessage(messages[j]).then(function () {
-                                inserted++;
-                                if(inserted === expected){
-                                    console.log('All messages are added in '+  (new Date() - timer) +'ms!');
-                                    factory.messageAdded();
+                            for(var j = 0; j < messages.length; j++) {
+                                var msg = messages[j];
+                                if(rows.find(function(a){
+                                        return a['MessageId'] === msg.MessageId;
+                                    })){
+                                    continue;
                                 }
-                            }, function (error) {
-                                console.error('Error while saving message.\r\n' + error.message);
-                            });
-                        }
-                    },
-                    function(transaction, error){
-                        console.log('Error while checking if messages exist.\r\n' + error.message);
-                    });
+
+                                expected++;
+
+                                insertMessage(msg).then(function () {
+                                    inserted++;
+                                    if(inserted === expected){
+                                        console.log('All messages are added in '+  (new Date() - timer) +'ms!');
+                                        factory.messageAdded();
+                                        resolve();
+                                    }
+                                }, function (error) {
+                                    errorMsg = 'Error while saving message.\r\n' + error.message;
+                                    console.error(errorMsg);
+                                    reject(errorMsg);
+                                });
+                            }
+                        },
+                        function(transaction, error){
+                            errorMsg = 'Error while checking if messages exist.\r\n' + error.message;
+                            console.error(errorMsg);
+                            reject(errorMsg);
+                        });
+                });
             });
         };
 
-        // TODO: Move to better location
         /**
          * Inserts the message to the database
          * @param message to insert
@@ -514,10 +517,6 @@ angular.module('message', ['ngCordova'])
                     if (data != null) {
                         console.log("Received new messages: " + data.length);
                         factory.addMessages(data);
-
-                      /*  for (var i = 0; i < data.length; i++) {
-                            factory.addMessage(data[i]);
-                        }  */
                     }
                     break;
                 case 'device-ready':
