@@ -45,7 +45,7 @@
                 <li style="cursor: pointer;"><a onClick="localStorage.removeItem('keepLoggedInCredentials'); console.log('[Debug] keepLoggedInCredentials Cleared.');"><i class="zmdi zmdi-delete"></i> Clear credentials</a></li>
                 <li style="cursor: pointer;"><a onClick="window.location.reload(); console.log('[Debug] Reloading page.');"><i class="zmdi zmdi-refresh"></i> Reload Page</a></li>
                 <li><hr /></li>
-                <li style="cursor: pointer;"><a onClick="alert(localStorage.getItem('deviceId'))"><i class="zmdi zmdi-card-sim"></i> Hardware Id</a></li>
+                <li style="cursor: pointer;"><a onClick="alert(deviceId)"><i class="zmdi zmdi-card-sim"></i> Hardware Id</a></li>
                 <li style="cursor: pointer;"><a onClick="alert(JSON.parse(localStorage.getItem('userDetails')).token);"><i class="zmdi zmdi-tag"></i> Auth Token</a></li>
                 <li style="cursor: pointer;"><a onClick="alert(JSON.parse(localStorage.getItem('userDetails')).appUserId);"><i class="zmdi zmdi-tag"></i> App User Id</a></li>
                 <li style="cursor: pointer;"><a onClick="alert(JSON.parse(localStorage.getItem('userDetails')).administratorId);"><i class="zmdi zmdi-tag"></i> Administrator Id</a></li>
