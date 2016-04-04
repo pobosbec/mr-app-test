@@ -10,7 +10,6 @@ mobileresponseWebbApp
     .config(function ($stateProvider, $urlRouterProvider){
         $urlRouterProvider.otherwise("/login");
         $stateProvider
-
         //------------------------------
         // HOME
         //------------------------------
@@ -51,7 +50,6 @@ mobileresponseWebbApp
             }
         })
 
-
         //------------------------------
         // PAGES
         //------------------------------
@@ -69,6 +67,12 @@ mobileresponseWebbApp
             })
             .state ('pages.conversations', {
                 url: '/conversations',
-                templateUrl: 'views/conversations.html'
+                templateUrl: 'views/conversations.html',
+                controller: 'conversationsCtrl as conversationsCtrl'
+            })
+            .state ('conversation', {
+                url: '/conversation/:conversationId',
+                templateUrl: 'template/conversation.html',
+                controller: 'conversationCtrl as conversationCtrl'
             })
     });

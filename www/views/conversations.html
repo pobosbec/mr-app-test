@@ -1,103 +1,89 @@
-<div class="container" data-ng-controller="conversationsCtrl as conversationsCtrl">
-    <div class="card m-b-0" id="messages-main">
-        <div class="ms-menu" data-ng-class="{ 'toggled': mactrl.lvMenuStat }" style="overflow-y: scroll">
-            <div class="listview lv-user m-t-20">
-                <div class="lv-item media" ng-repeat="conversation in conversations track by conversation.ConversationId" ng-click="selectConversation(conversation)">
-                    <div class="lv-avatar pull-left">
-                        <img src="img/profile-pics/1.jpg" alt="">
-                    </div>
-                    <div class="media-body">
-                        <div class="lv-title" ng-repeat="authorName in conversation.AuthorDisplayNames">{{ authorName }} {{$last ? '' : ', '}}</div>
+<div class="listview lv-bordered lv-lg">
+    <div class="lv-header-alt clearfix">
+        <h2 class="lvh-label hidden-xs">Conversations</h2>
+
+        <!-- ngIf: mactrl.listviewSearchStat -->
+
+        <ul class="lv-actions actions">
+            <li>
+                <a href="" data-ng-click="mactrl.listviewSearchStat = true">
+                    <i class="zmdi zmdi-search"></i>
+                </a>
+            </li>
+            <li>
+                <a href="">
+                    <i class="zmdi zmdi-time"></i>
+                </a>
+            </li>
+            <li class="dropdown" uib-dropdown="">
+                <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle" aria-haspopup="true">
+                    <i class="zmdi zmdi-sort"></i>
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li>
+                        <a href="">Last Modified</a>
+                    </li>
+                    <li>
+                        <a href="">Last Edited</a>
+                    </li>
+                    <li>
+                        <a href="">Name</a>
+                    </li>
+                    <li>
+                        <a href="">Date</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="">
+                    <i class="zmdi zmdi-info"></i>
+                </a>
+            </li>
+            <li class="dropdown" uib-dropdown="">
+                <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle" aria-haspopup="true">
+                    <i class="zmdi zmdi-more-vert"></i>
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li>
+                        <a href="">Refresh</a>
+                    </li>
+                    <li>
+                        <a href="">Listview Settings</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="lv-body">
+        <div class="lv-item media" ng-repeat="conversation in conversations">
+            <a ui-sref="conversation({conversationId: conversation.ConversationId})">
+                <div class="checkbox pull-left">
+                    <label>
+                        <input type="checkbox" value="">
+                        <i class="input-helper"></i>
+                    </label>
+                </div>
+                <div class="media-body">
+                    <div class="lv-title" ng-repeat="authorName in conversation.AuthorDisplayNames">{{ authorName }} {{$last ? '' : ', '}}</div>
+                    <div class="lv-actions actions dropdown" uib-dropdown="">
+                        <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle" aria-haspopup="true">
+                            <i class="zmdi zmdi-more-vert"></i>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li>
+                                <a href="">Edit</a>
+                            </li>
+                            <li>
+                                <a href="">Delete</a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="ms-body">
-            <div class="listview lv-message">
-                <div class="lv-header-alt clearfix">
-                    <div id="ms-menu-trigger"  data-ng-class="{ 'open': mactrl.lvMenuStat }" data-ng-click="mactrl.lvMenuStat = (mactrl.lvMenuStat===true ? false : true )">
-                        <div class="line-wrap">
-                            <div class="line top"></div>
-                            <div class="line center"></div>
-                            <div class="line bottom"></div>
-                        </div>
-                    </div>
-
-                    <div class="lvh-label hidden-xs">
-                        <div class="lv-avatar pull-left">
-                            <img src="img/profile-pics/1.jpg" alt="">
-                        </div>
-                        <span class="c-black" ng-repeat="authorName in currentConversation.AuthorDisplayNames">{{ authorName }} {{$last ? '' : ', '}}</span>
-                    </div>
-
-                    <ul class="lv-actions actions">
-                        <li>
-                            <a href="">
-                                <i class="zmdi zmdi-delete"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="">
-                                <i class="zmdi zmdi-check"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="">
-                                <i class="zmdi zmdi-time"></i>
-                            </a>
-                        </li>
-                        <li class="dropdown" uib-dropdown>
-                            <a href="" uib-dropdown-toggle aria-expanded="true">
-                                <i class="zmdi zmdi-sort"></i>
-                            </a>
-
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li>
-                                    <a href="">Latest</a>
-                                </li>
-                                <li>
-                                    <a href="">Oldest</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="dropdown" uib-dropdown>
-                            <a href="" uib-dropdown-toggle aria-expanded="true">
-                                <i class="zmdi zmdi-more-vert"></i>
-                            </a>
-
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li>
-                                    <a href="">Refresh</a>
-                                </li>
-                                <li>
-                                    <a href="">Message Settings</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                <div class="lv-body" style="height: 400px; overflow-y: scroll">
-                    <div class="load-more">
-                        <a href="" ng-click="loadMoreForConversation(currentConversation.ConversationId)"><i class="zmdi zmdi-refresh-alt"></i> Load More...</a>
-                    </div>
-                    <div class="lv-item" ng-repeat="message in currentConversation.Messages track by message.MessageId | orderBy:'CreatedOn'" ng-class="message.Author === userId ? 'media right': 'media'">
-                        <div class="lv-avatar" ng-class="message.Author === userId ? 'pull-right': 'pull-left'">
-                            <img ng-src="{{ message.AuthorAvatar || 'img/profile-pics/5.jpg' }}" alt="">
-                        </div>
-                        <div class="media-body">
-                            <div class="ms-item">
-                                {{ message.Content }}
-                            </div>
-                            <small class="ms-date"><i class="zmdi zmdi-time"></i> {{ message.CreatedOn }}</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="clearfix"></div>
-                <div class="lv-footer ms-reply">
-                    <textarea placeholder="Reply..." ng-model="currentReplyMessage" ng-change="captureReplyMessageInput(currentConversation.ConversationId, currentReplyMessage)" ng-model-options="{ debounce: 10 }"></textarea>
-                    <button ng-click="reply(currentReplyMessage, currentConversation.ConversationId);"><i class="zmdi zmdi-mail-send"></i></button>
-                </div>
-            </div>
+            </a>
         </div>
     </div>
 </div>
