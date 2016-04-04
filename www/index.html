@@ -119,14 +119,11 @@
         }
 
         deviceReady = function() {
-            alert("phoneReady!");
             angular.bootstrap(document, ['administratorApp']);
             app.initialize();
 
         };
-        document.addEventListener('deviceready', function () {
-         deviceReady();
-        }, false);
+
        // window.addEventListener('deviceready', deviceReady, false);
 
 
@@ -155,6 +152,9 @@
                     //console.log("Loading Cordova Android-Plugins!");
                     document.write('<script type="text/javascript" src="js/PushwooshAndroid.js"><\/script>');
                 }
+                document.addEventListener('deviceready', function () {
+                    deviceReady();
+                }, false);
 
             } else {
                 angular.bootstrap(document, ['administratorApp']);
