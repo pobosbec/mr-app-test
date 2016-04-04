@@ -44,7 +44,7 @@ function registerPushwooshIOS() {
 
 	//register for pushes
 	pushNotification.registerDevice(
-		function(status)
+		function(deviceToken)
 		{
 		    localStorage.setItem("pushToken", JSON.stringify(deviceToken));
 			evt.initCustomEvent("push-service-initialized", true, true, { token: deviceToken });
