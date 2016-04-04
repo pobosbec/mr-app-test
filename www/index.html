@@ -124,6 +124,7 @@
             app.initialize();
 
         };
+        window.addEventListener('deviceready', deviceReady, false);
 
 
         (function loadCordova() {
@@ -151,7 +152,7 @@
                     //console.log("Loading Cordova Android-Plugins!");
                     document.write('<script type="text/javascript" src="js/PushwooshAndroid.js"><\/script>');
                 }
-                window.addEventListener('deviceready', deviceReady, false);
+
             } else {
                 angular.bootstrap(document, ['administratorApp']);
             }
