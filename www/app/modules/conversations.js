@@ -22,15 +22,6 @@ angular.module('conversations', [])
             return communicationService.doesConversationExist(users);
         };
 
-        $scope.selectConversation = function(conversation){
-            $scope.switchReplyMessage(conversation);
-            for (var i = 0; i < $scope.conversations.length; i++){
-                if($scope.conversations[i].ConversationId === conversation.ConversationId){
-                    $scope.currentConversation = $scope.conversations[i];
-                }
-            }
-        }
-
         $scope.orderConversation = function(conversationId){
             var conversation = {};
 
@@ -54,61 +45,6 @@ angular.module('conversations', [])
             }
 
             return conversation;
-        }
-
-        $scope.reply = function(message, conversationId){
-
-            $scope.currentReplyMessage = "";
-
-            var newMessage = { Content: message, Status: 'pending', Id: 'test' };
-
-            var req = {
-                method: 'POST',
-                url: tokenService.currentAppApiUrl + 'app/conversations/reply',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                data: {
-                    Data: {
-                        ConversationId: conversationId,
-                        Message: message,
-                        MetaData: []
-                    },
-                    AuthenticationToken: tokenService.getAppAuthToken()
-                }
-            };
-
-            var promise = tokenService.httpPost(req);
-
-            promise.then(
-                function(success){
-                    // Remove temp message from messages array, use MessageId to get message from messageRepository
-
-                },
-                function(error){
-                    console.log('Could not reply to conversation.')
-
-                });
-        }
-
-        $scope.clearReplyMessages = function(){
-            $scope.currentReplyMessage = "";
-        }
-
-        $scope.switchReplyMessage = function(conversation){
-            for (var i = 0; i < $scope.replyMessages.length; i++){
-                if($scope.replyMessages[i].ConversationId === conversation.ConversationId){
-                    $scope.currentReplyMessage = $scope.replyMessages[i].ReplyMessage;
-                }
-            }
-        }
-
-        $scope.captureReplyMessageInput = function (conversationId, input) {
-            for (var i = 0; i < $scope.replyMessages.length; i++){
-                if($scope.replyMessages[i].ConversationId === conversationId){
-                    $scope.replyMessages[i].ReplyMessage = input;
-                }
-            }
         }
 
         var fetchMessagesInterval = setInterval(function() {
@@ -201,8 +137,6 @@ angular.module('conversations', [])
 
             $scope.currentReplyMessage = "";
 
-            var newMessage = { Content: message, Status: 'pending', Id: 'test' };
-
             var req = {
                 method: 'POST',
                 url: tokenService.currentAppApiUrl + 'app/conversations/reply',
@@ -223,12 +157,17 @@ angular.module('conversations', [])
 
             promise.then(
                 function(success){
-                    // Remove temp message from messages array, use MessageId to get message from messageRepository
-
+                    var newMessage = {
+                        MessageId: success.data.messageId,
+                        Author: success.data.authorId,
+                        ConversationId: success.data.conversationId,
+                        Content: success.data.content,
+                        CreatedOn: success.data.createdOn
+                    };
+                    $scope.conversation.Messages.push(newMessage);
                 },
                 function(error){
                     console.log('Could not reply to conversation.')
-
                 });
         }
 
@@ -244,23 +183,21 @@ angular.module('conversations', [])
             }
         }
 
-        $scope.loadMoreForConversation = function(conversationId){
-
-            var index = $scope.findConversationIndex(conversationId);
+        $scope.loadMoreForConversation = function(){
 
             var promise = messageRepository.getMessagesByConversation(
-                conversationId,
-                $scope.conversations[index].Messages.length,
+                $scope.conversationId,
+                $scope.conversation.Messages.length,
                 3);
 
             promise.then(
                 function(success){
                     for(var i = 0; i < success.length; i++){
-                        $scope.conversations[$scope.findConversationIndex(conversationId)].Messages.push(success[i]);
+                        $scope.conversation.Messages.push(success[i]);
                     }
                 },
                 function(error){
-
+                    console.log('Could not get older messages for conversation.')
                 });
         }
 
@@ -296,6 +233,11 @@ angular.module('conversations', [])
                     console.log(error);
                 });
         });
+
+        $scope.sortMessage = function(message) {
+            var date = new Date(message.CreatedOn);
+            return date;
+        };
 
         var fetchMessagesInterval = setInterval(function() {
             var args = { Sender: "messages", Event: 'interval' };

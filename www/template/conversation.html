@@ -12,7 +12,7 @@
                                 </div>-->
                             </div>
                         <a ui-sref="pages.conversations">
-                            <i id="top-search-close" class="zmdi zmdi-arrow-left"></i>
+                            <i id="top-search-close" class="zmdi zmdi-arrow-left zmdi-hc-fw"></i>
                         </a>
                         <div class="lvh-label">
                             <div class="lv-avatar pull-left">
@@ -25,7 +25,7 @@
                         <div class="load-more">
                             <a href="" ng-click="loadMoreForConversation(conversation.ConversationId)"><i class="zmdi zmdi-refresh-alt"></i> Load More...</a>
                         </div>
-                        <div class="lv-item" ng-repeat="message in conversation.Messages | orderBy:'CreatedOn'" ng-class="message.Author === userId ? 'media right': 'media'" my-post-repeat-directive>
+                        <div class="lv-item" ng-repeat="message in conversation.Messages | orderBy: sortMessage: false" ng-class="message.Author === userId ? 'media right': 'media'" my-post-repeat-directive>
                             <div class="lv-avatar" ng-class="message.Author === userId ? 'pull-right': 'pull-left'">
                                 <img ng-src="{{ message.AuthorAvatar || 'img/profile-pics/5.jpg' }}" alt="">
                             </div>
