@@ -124,7 +124,10 @@
             app.initialize();
 
         };
-        window.addEventListener('deviceready', deviceReady, false);
+        document.addEventListener('deviceready', function () {
+         deviceReady();
+        }, false);
+       // window.addEventListener('deviceready', deviceReady, false);
 
 
         (function loadCordova() {
