@@ -13,8 +13,9 @@
 
                 <!-- <div class="block-header" data-ng-include="'template/messages-header.html'"></div> -->
                 <!-- Recent Posts -->
-                <div ng-if="messageViewMode == 1" class="container" data-ng-include="'template/message-list.html'"></div>
+                <div ng-if="messageViewMode == 1" class="container" data-ng-include="'views/conversations.html'"></div>
                 <div ng-if="messageViewMode == 2" class="container" data-ng-include="'template/message-wall.html'"></div>
+                <div ng-if="messageViewMode == 3" class="container" data-ng-include="'template/message-wall.html'"></div>
               <!--  <footer id="footer" data-ng-include="'template/footer.html'"></footer>-->
             </div>
         </section>

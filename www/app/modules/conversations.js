@@ -8,53 +8,42 @@ angular.module('conversations', [])
         $scope.userId = null;
         $scope.appUsers = [];
 
-        $scope.findConversationIndex = function(conversationId){
-            for(var i = 0; i < $scope.conversations.length; i++){
-                if($scope.conversations[i].ConversationId === conversationId){
-                    return i;
-                }
-            }
-
-            return -1;
-        }
-
         $scope.doesConversationExist = function(users) {
             return communicationService.doesConversationExist(users);
         };
 
-        $scope.orderConversation = function(conversationId){
-            var conversation = {};
+        $scope.sync = function(from, to){
+          communicationService.syncPeriodMessages(from.toJSON(), to.toJSON(), 0, 50);
+        };
 
-            conversation.Messages = [];
-            conversation.AuthorDisplayNames = [];
-            conversation.UserIds = [];
-            conversation.ConversationId = conversationId;
+        $scope.getAvatar = function(appUserId) {
 
-            for (var k = 0; k < $scope.messages.length; k++){
-                if($scope.messages[k].ConversationId === conversation.ConversationId){
-                    conversation.Messages.push($scope.messages[k]);
+            var found = null;
 
-                    if(conversation.AuthorDisplayNames.indexOf($scope.messages[k].AuthorDisplayName) === -1){
-                        conversation.AuthorDisplayNames.push($scope.messages[k].AuthorDisplayName);
-                    }
+            for(var i = 0; i < $scope.appUsers.length; i++){
+                var appUser = $scope.appUsers[i];
 
-                    if(conversation.UserIds.indexOf($scope.messages[k].Author) === -1){
-                        conversation.UserIds.push($scope.messages[k].Author);
-                    }
+                if(appUser.userId === appUserId){
+                    found =  $scope.appUsers[i].avatar;
                 }
             }
 
-            return conversation;
-        }
-
-        var fetchMessagesInterval = setInterval(function() {
-            var args = { Sender: "messages", Event: 'interval' };
-            $rootScope.$broadcast('download-whats-new', args);
-            console.log("10s whats-new");
-        }, 20000);
+            if(found != null){
+                return found;
+            }
+        };
 
         function init(){
             $scope.userId = tokenService.getAppUserId();
+            var appUsersPromise = contactsService.getAppUsers();
+
+            appUsersPromise.then(
+                function(success){
+                    $scope.appUsers = success;
+                },
+                function(error){
+                    console.log(JSON.stringify(error));
+                });
 
             var existingConversationsIdsPromise = messageRepository.getConversations(0, 100);
 
@@ -68,7 +57,7 @@ angular.module('conversations', [])
                             var conversation = { ConversationId: id, Messages: [], AuthorDisplayNames: [], AuthorIds: [] };
 
                             var conversationMessagesPromise =
-                                messageRepository.getMessagesByConversation(conversation.ConversationId, 0, 5);
+                                messageRepository.getMessagesByConversation(conversation.ConversationId, 0, 500);
 
                             conversationMessagesPromise.then(
                                 function (conversationMessagesSuccess){
@@ -185,7 +174,7 @@ angular.module('conversations', [])
 
         $scope.loadMoreForConversation = function(){
 
-            var promise = messageRepository.getMessagesByConversation(
+            var promise = messageRepository.getMessagesForConversation(
                 $scope.conversationId,
                 $scope.conversation.Messages.length,
                 3);
@@ -240,10 +229,11 @@ angular.module('conversations', [])
         };
 
         var fetchMessagesInterval = setInterval(function() {
-            var args = { Sender: "messages", Event: 'interval' };
-            $rootScope.$broadcast('download-whats-new', args);
-            console.log("10s whats-new");
-        }, 30000);
+            var oneMinuteAgo = new Date();
+            oneMinuteAgo.setMinutes(oneMinuteAgo.getMinutes() - 1);
+            var args = { Sender: "conversations", Event: 'sync last minute', PeriodStart: oneMinuteAgo.toJSON(), PeriodEnd: new Date().toJSON(), Index: 0, Size: 50 };
+            $rootScope.$broadcast('download-messages', args);
+        }, 50000);
 
         function init(){
             $scope.userId = tokenService.getAppUserId();

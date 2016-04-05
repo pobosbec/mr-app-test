@@ -8,80 +8,40 @@ angular.module('communication', [])
         var latestUpdate;
         var synchronizing = false;
         var inboxId = '8a0958a2-a163-4a20-8afa-e7315012e2d8';
+        var pageSize = 50;
 
-        factory.init = function(){
-            latestUpdate = factory.getLatestUpdate();
-        };
-
-        factory.getLatestUpdate = function() {
-            var latest = null;
-            if (typeof (Storage) !== "undefined") {
-                latest = localStorage.getItem('latestWhatIsNewUpdate');
-            }
-
-            if (latest == null) {
-                var today = new Date();
-                today.setDate(today.getDate() - 700); // MAGNUS; Used to be 7
-                latest = today.toJSON();
-            }
-            return latest;
-        };
-
-        factory.synchronize = function (appAuthToken) {
-            var latest = factory.getLatestUpdate();
-            console.log('Making request to what-is-new. Last update: ' + latest);
-
+        var downloadMessages = function(periodStart, periodEnd, pageIndex, pageSize) {
             var req = {
                 method: 'POST',
                 ignoreLoadingBar: true,
-                url: tokenService.currentAppApiUrl + 'app/conversations/what-is-new',
+                url: tokenService.currentAppApiUrl + 'app/users/list-messages',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 data: {
                     Data: {
-                        LastUpdate: latest,
-                        DeviceId: tokenService.getDeviceId()
+                        PeriodStart: periodStart,
+                        PeriodEnd: periodEnd,
+                        PageIndex: pageIndex,
+                        PageSize: pageSize
                     },
-                    AuthenticationToken: appAuthToken
+                    AuthenticationToken: tokenService.getAppAuthToken()
                 }
             };
 
-            $http(req
-            ).then(function successCallback(response) {
-                // this callback will be called asynchronously
-                // when the response is available
-                var data = response.data;
-                console.log('Success response from what-is-new. Setting last update to: ' + data.data.lastUpdate);
-
-                //if(data.data.lastUpdate == null) {
-                //    console.log('Could not find lastUpdate in what-is-new response.');
-                //    return;
-                //}
-
-                latestUpdate = data.data.lastUpdate;
-
-                updateLastUpdated();
-
-                factory.messagesDownloaded(data);
-
-            }, function errorCallback(response) {
-                synchronizing = false;
-                // called asynchronously if an error occurs
-                // or server returns response with an error status.
-            });
-        }
+            return tokenService.httpPost(req);
+        };
 
         factory.messagesDownloaded = function (data){
 
             var newMessages = [];
 
-            if(data.data.messages.length === 0){
+            if(data.length === 0){
                 return;
             }
             
-            for(var i = 0; i < data.data.messages.length; i++){
-                var msg = data.data.messages[i];
+            for(var i = 0; i < data.length; i++){
+                var msg = data[i];
 
                 var newMessage = {};
                 newMessage.MessageId = msg.messageId;
@@ -100,11 +60,10 @@ angular.module('communication', [])
         factory.on = function (event, args) {
             switch (event.name) {
                 case 'download-whats-new':
-                    console.log("communication-factory received broadcast: download-whats-new");
-                    if (args != undefined) {
-                        console.log('Event received: ' + JSON.stringify(args));
-                    }
-                    factory.downloadWhatIsNew(args);
+                    console.log('This event is deprecated!');
+                    break;
+                case 'download-messages':
+                    factory.syncPeriodMessages(args.PeriodStart, args.PeriodEnd, args.Index, args.Size);
                     break;
                 case 'push-notification':
                     console.log("communication-factory received broadcast: push-notification");
@@ -113,23 +72,28 @@ angular.module('communication', [])
                     }
                     factory.downloadWhatIsNew(args);
                     break;
-                case 'logged-in':
-                    factory.init();
-                    break;
                 default:
                     break;
             }
         }
 
-        factory.downloadWhatIsNew = function downloadWhatsNew() {
-            if (!synchronizing) {
-                var appAuthToken = tokenService.getAppAuthToken();
-                if (appAuthToken === null || appAuthToken === 'undefined' || appAuthToken === undefined) {
-                    console.log('AppToken was null');
-                    return;
-                }
-                factory.synchronize(tokenService.getAppAuthToken());
-            }
+        factory.syncPeriodMessages = function downloadWhatsNew(periodStart, periodEnd, currentIndex, size) {
+            var promise = downloadMessages(periodStart, periodEnd, currentIndex, size);
+
+            promise.then(
+                function(success){
+                    if(success.data.count > 0){
+                        factory.messagesDownloaded(success.data.items);
+                        currentIndex++;
+                        factory.syncPeriodMessages(periodStart, periodEnd, currentIndex, size);
+                    }
+                    else {
+                        console.log('Sync between' + periodStart + ' and ' + periodEnd + ' is complete.')
+                    }
+                },
+                function(error){
+                    console.log('Error when making request to list-messages.')
+                });
         }
 
         factory.sendMessage = function sendMessage(message, users, metadata){
@@ -159,25 +123,6 @@ angular.module('communication', [])
                 alert('Could not send message.');
             });
         }
-
-        function updateLastUpdated(){
-            if (typeof (Storage) !== "undefined") {
-                //var latestMessage = messageRepository.getNewestMessage();
-                //if (typeof latestMessage !== 'undefined' && latestMessage !== null && latestMessage.hasOwnProperty("CreatedOn")) {
-                //    latestUpdate = latestMessage.CreatedOn;
-                //} else {
-                //    latestUpdate = factory.getLatestUpdate();
-                //}
-                //console.warn(latestUpdate);
-                localStorage.setItem('latestWhatIsNewUpdate', latestUpdate);
-            } else {
-                alert("ach nein! keiner storage!!!1");
-                alert("This is actually not a good thing.. We would like you (yes YOU) to contact us and tell us at Bosbec what platform you are running on.");
-                return;
-            }
-        };
-
-        factory.init();
 
         return factory;
     }])

@@ -310,6 +310,46 @@ angular.module('message', ['ngCordova'])
         };
 
         /**
+         * Creates a promise for fetching messages in a conversation descending with page index (0 and upwards) and a limit.
+         * @param {string} conversationId - The conversation id to fetch.
+         * @param {number} pageIndex - The page index to fetch.
+         * @param {number} size - The number of items per page.
+         */
+        factory.getMessagesForConversation = function(conversationId, pageIndex, size) {
+            if(typeof (conversationId) !== 'string'){
+                return $q(function(resolve, reject){ reject('Invalid conversation id');});
+            }
+
+            pageIndex = typeof (pageIndex) !== 'number' ? 0 : pageIndex;
+            size = typeof (size) !== 'number' ? 20 : size;
+
+            return $q(function(resolve, reject){
+                db.transaction(function (tx) {
+                    tx.executeSql(queries.getMessagesByConversation, [conversationId, size, pageIndex],
+                        function(trans, result){
+                            var messages = [];
+                            var rows = getRows(result);
+
+                            for(var i = 0; i < rows.length; i++){
+                                var row = rows[i];
+                                try{
+                                    messages.push(JSON.parse(row['JSON']));
+                                }
+                                catch(err){
+                                    console.error('Failed to parse message \'' + row['MessageId'] + '\'.\r\n' + err);
+                                }
+                            }
+
+                            resolve(messages);
+                        }, function(trans, error){
+                            console.error('Error while fetching messages from database.\r\n' + error.message);
+                            reject(error);
+                        });
+                });
+            });
+        };
+
+        /**
          * Creates a promise for fetching conversations descending with page index (0 and upwards) and a limit.
          * @param {number} pageIndex - The page index to fetch.
          * @param {number} size - The number of items per page.

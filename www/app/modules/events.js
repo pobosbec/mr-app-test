@@ -185,9 +185,10 @@ angular.module('event', [])
         });
 
         $scope.$on('download-whats-new', function (event, args) {
-            //console.log(JSON.stringify(args));
-            communicationService.on(event, args);
+            console.log('download-whats-new event is deprecated. See communicationService.')
         });
 
-
+        $scope.$on('download-messages', function (event, args) {
+            communicationService.on(event, args);
+        });
     }]);

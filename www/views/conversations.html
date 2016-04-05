@@ -1,81 +1,20 @@
-<div class="listview lv-bordered lv-lg">
-    <div class="lv-header-alt clearfix">
-        <h2 class="lvh-label hidden-xs">Conversations</h2>
-
-        <!-- ngIf: mactrl.listviewSearchStat -->
-
-        <ul class="lv-actions actions">
-            <li>
-                <a href="" data-ng-click="mactrl.listviewSearchStat = true">
-                    <i class="zmdi zmdi-search"></i>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <i class="zmdi zmdi-time"></i>
-                </a>
-            </li>
-            <li class="dropdown" uib-dropdown="">
-                <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle" aria-haspopup="true">
-                    <i class="zmdi zmdi-sort"></i>
-                </a>
-
-                <ul class="dropdown-menu dropdown-menu-right">
-                    <li>
-                        <a href="">Last Modified</a>
-                    </li>
-                    <li>
-                        <a href="">Last Edited</a>
-                    </li>
-                    <li>
-                        <a href="">Name</a>
-                    </li>
-                    <li>
-                        <a href="">Date</a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a href="">
-                    <i class="zmdi zmdi-info"></i>
-                </a>
-            </li>
-            <li class="dropdown" uib-dropdown="">
-                <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle" aria-haspopup="true">
-                    <i class="zmdi zmdi-more-vert"></i>
-                </a>
-
-                <ul class="dropdown-menu dropdown-menu-right">
-                    <li>
-                        <a href="">Refresh</a>
-                    </li>
-                    <li>
-                        <a href="">Listview Settings</a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-
+<div class="listview lv-bordered lv-lg" data-ng-controller="conversationsCtrl as conversationsCtrl">
+    <h2 class="lvh-label hidden-xs">Conversations</h2>
+    <!--<br>Sync messages
+    <br>
+    <input type="date" ng-model="sync.From" placeholder="From..">
+    <br>
+    <input type="date" ng-model="sync.To" placeholder="Too..">
+    <br>
+    <button ng-click="sync(sync.From, sync.To)">Sync</button>-->
     <div class="lv-body">
         <div class="lv-item media" ng-repeat="conversation in conversations">
             <a ui-sref="conversation({conversationId: conversation.ConversationId})">
                 <div class="media-body">
-                    <div class="lv-title" ng-repeat="authorName in conversation.AuthorDisplayNames">{{ authorName }} {{$last ? '' : ', '}}</div>
-                    <div class="lv-actions actions dropdown" uib-dropdown="">
-                        <a href="" uib-dropdown-toggle="" aria-expanded="false" class="dropdown-toggle" aria-haspopup="true">
-                            <i class="zmdi zmdi-more-vert"></i>
-                        </a>
-
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <li>
-                                <a href="">Edit</a>
-                            </li>
-                            <li>
-                                <a href="">Delete</a>
-                            </li>
-                        </ul>
+                    <!--<div class="lv-title" ng-repeat="authorName in conversation.AuthorDisplayNames">{{ authorName || Namn namnson }} {{$last ? '' : ', '}}</div>-->
+                    <div class="lv-title" ng-repeat="authorId in conversation.AuthorIds">
                     </div>
+                        <img class="lv-img-sm" style="margin-right: 10px" ng-repeat="authorId in conversation.AuthorIds" ng-src="{{ getAvatar(authorId) || 'img/profile-pics/5.jpg' }}" alt="">
                 </div>
             </a>
         </div>
