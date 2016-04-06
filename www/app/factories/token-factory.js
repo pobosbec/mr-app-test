@@ -137,7 +137,7 @@ angular.module('token', [])
                 }
                 console.log(userDetails.displayName);
                 factory.saveToDb("userDetails", userDetails);
-                factory.saveToDb("pushToken", factory.getPushToken());
+              //  factory.saveToDb("pushToken", factory.getPushToken());
 
                 //TODO: logged in now transfer home
                 $rootScope.$broadcast("app-token-available");
@@ -284,7 +284,6 @@ angular.module('token', [])
         };
 
         factory.registerPushToken = function () {
-
             if (factory.getDeviceId() != null) {
                 var req = {
                     method: 'POST',
@@ -421,7 +420,7 @@ angular.module('token', [])
             if (pushToken == null) {
                 pushToken = JSON.parse(localStorage.getItem("pushToken"));
             }
-            return pushToken;
+            return pushToken.deviceToken;
         };
 
         // Save
