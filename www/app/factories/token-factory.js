@@ -285,6 +285,7 @@ angular.module('token', [])
 
         factory.registerPushToken = function () {
 
+            alert("deviceId: "+factory.getDeviceId()+" pushtoken: "+ factory.getPushToken());
             if (factory.getDeviceId() != null) {
                 var req = {
                     method: 'POST',
