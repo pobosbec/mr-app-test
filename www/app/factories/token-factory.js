@@ -192,11 +192,6 @@ angular.module('token', [])
                 if (greeting.data.displayName != null) {
                     userDetails.displayName = greeting.data.displayName;
                 }
-                else {
-                    if (greeting.data.firstName != null) {
-                        userDetails.displayName = greeting.data.firstName;
-                    }
-                }
                 if (greeting.data.firstName != null) {
                     userDetails.firstName = greeting.data.firstName;
                 }
@@ -213,7 +208,7 @@ angular.module('token', [])
                 console.log('Failed getting userdetails');
                 console.log(reason);
             });
-        }
+        };
 
         factory.authenticate = function (username, password, keepLoggedIn) {
             // the API gives a 200 response-code with Error-text if we pass null, but 400 if we pass empty string.

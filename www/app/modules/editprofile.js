@@ -8,6 +8,11 @@ angular.module('profile',[])
         $scope.lastName = tokenService.getLastName();
 
 
+        $scope.$watch( function () { return tokenService.getUsername(); }, function ( displayName ) {
+            // handle it here. e.g.:
+            $scope.displayName = displayName;
+        });
+
 
         $scope.save = function (firstName, lastName) {
             //if theres something in the input field try to authenticate
@@ -34,7 +39,9 @@ angular.module('profile',[])
             promise.then(function (greeting) {
                 //Success
                 $scope.message = greeting.status;
-                console.log(greeting)
+                console.log(greeting);
+                tokenService.refreshUserDetails();
+        
             }, function (reason) {
                 //failed updating information
                 $scope.message = "Error updating information";
