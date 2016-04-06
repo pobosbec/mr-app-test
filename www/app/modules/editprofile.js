@@ -38,14 +38,11 @@ angular.module('profile',[])
             promise.then(function (greeting) {
                 //Success
                 $scope.verifyMessage = "To verify your new email please click the verification link that was sent to your email.";
-                $scope.message = greeting.status;
-                console.log(greeting);
                 //tokenService.refreshUserDetails();
 
             }, function (reason) {
                 //failed updating information
                 $scope.verifyMessage = "Error updating email";
-                console.log(reason)
             });
         };
         $scope.save = function (firstName, lastName) {
@@ -73,13 +70,11 @@ angular.module('profile',[])
             promise.then(function (greeting) {
                 //Success
                 $scope.message = greeting.status;
-                console.log(greeting);
                 tokenService.refreshUserDetails();
 
             }, function (reason) {
                 //failed updating information
                 $scope.message = "Error updating information";
-                console.log(reason)
             });
         };
 
@@ -97,7 +92,6 @@ angular.module('profile',[])
             }, function errorCallback(response) {
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
-                console.log(response); // TODO: REMOVE! only for debugging.
                 deferred.reject(response.data);
             });
             return deferred.promise;
