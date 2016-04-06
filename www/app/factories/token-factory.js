@@ -126,14 +126,22 @@ angular.module('token', [])
                 //Success
                 console.log('Success fetched userdetails');
                 console.log(greeting);
-                if (userDetails.displayName != null) {
+                if (greeting.data.displayName != null) {
                     userDetails.displayName = greeting.data.displayName;
                 }
-                else if (userDetails.firstName != null) {
-                    userDetails.displayName = greeting.data.firstName;
+                else {
+                    if (greeting.data.firstName != null) {
+                        userDetails.displayName = greeting.data.firstName;
+                    }
                 }
-                else if (userDetails.phoneNumber != null) {
-                    userDetails.displayName = greeting.data.phoneNumber;
+                if (greeting.data.firstName != null) {
+                    userDetails.firstName = greeting.data.firstName;
+                }
+                if (greeting.data.lastName != null) {
+                    userDetails.lastName = greeting.data.lastName;
+                }
+                if (greeting.data.phoneNumber != null) {
+                    userDetails.phoneNumber = greeting.data.phoneNumber;
                 }
                 console.log(userDetails.displayName);
                 factory.saveToDb("userDetails", userDetails);
@@ -389,6 +397,15 @@ angular.module('token', [])
         factory.getUsername = function () {
             return userDetails.displayName;
         };
+
+        factory.getFirstName = function () {
+            return userDetails.firstName;
+        };
+
+        factory.getLastName = function () {
+            return userDetails.lastName;
+        };
+
 
         factory.getAdminId = function () {
             return userDetails.administratorId;
