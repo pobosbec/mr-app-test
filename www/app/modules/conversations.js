@@ -8,14 +8,21 @@ angular.module('conversations', [])
         $scope.userId = null;
         $scope.appUsers = [];
 
+        /* Make a request to the api to check if a conversation exists
+         */
         $scope.doesConversationExist = function(users) {
             return communicationService.doesConversationExist(users);
         };
 
+        /* Makes a request to the api to get messages between two dateTimes. Could be used in a syncing service
+         * if the user has dropped the local database.
+         */
         $scope.sync = function(from, to){
-          communicationService.syncPeriodMessages(from.toJSON(), to.toJSON(), 0, 50);
+            communicationService.syncPeriodMessages(from.toJSON(), to.toJSON(), 0, 50);
         };
 
+        /* Gets the url for a user. Used in an ng-repeat to display the avatar.
+         */
         $scope.getAvatar = function(appUserId) {
 
             var found = null;
@@ -32,6 +39,58 @@ angular.module('conversations', [])
                 return found;
             }
         };
+
+        // The purpose of fetching messages in this controller is to be able to display that a new conversation has been started
+        var fetchMessagesInterval = setInterval(function() {
+            var oneMinuteAgo = new Date();
+            oneMinuteAgo.setMinutes(oneMinuteAgo.getMinutes() - 1);
+            communicationService.syncOnce(oneMinuteAgo.toJSON(), new Date().toJSON(), 0, 50);
+        }, 50000);
+
+        // The events that this view reacts on
+        $scope.$on('messages-added', function(event, args) {
+
+            var promise = messageRepository.getMessagesByTime(1, 5);
+            promise.then(
+                function(messages){
+                    for (var i = 0; i < messages.length; i++){
+
+                        var newConversation = true;
+
+                        for (var j = 0; j < $scope.conversations.length; j++){
+                            if(messages[i].ConversationId === $scope.conversations[j].ConversationId){
+
+                                newConversation = false;
+                                var found = false;
+
+                                for(var k = 0; k < $scope.conversations[j].Messages.length; k++){
+                                    if($scope.conversations[j].Messages[k].MessageId === messages[i].MessageId){
+                                        found = true;
+                                    }
+                                }
+
+                                if(!found){
+                                    $scope.conversations[j].Messages.push(messages[i]);
+                                }
+                            }
+                        }
+
+                        if(newConversation === true){
+                            var conversation = {
+                                ConversationId: messages[i].conversationId,
+                                Messages: [messages[i]],
+                                AuthorDisplayNames: [messages[i]].authorDisplayName,
+                                AuthorIds: [messages[i].author]
+                            };
+
+                            $scope.conversations.push(conversation);
+                        }
+                    }
+                },
+                function(error){
+                    console.log(error);
+                });
+        });
 
         function init(){
             $scope.userId = tokenService.getAppUserId();
@@ -87,41 +146,16 @@ angular.module('conversations', [])
                 });
         };
         init();
-
     }])
 
     .controller('conversationCtrl', ['$scope', '$http', '$rootScope', 'tokenService', 'contactsService', 'communicationService', 'messageRepository','$stateParams', function($scope, $http, $rootScope, tokenService, contactsService, communicationService, messageRepository, $stateParams) {
 
         $scope.conversationId = $stateParams.conversationId;
-        $scope.currentReplyMessage = "";
         $scope.userId = null;
         $scope.conversation = [];
 
-        $scope.orderConversation = function(conversationId){
-            var conversation = {};
-
-            conversation.Messages = [];
-            conversation.AuthorDisplayNames = [];
-            conversation.UserIds = [];
-            conversation.ConversationId = conversationId;
-
-            for (var k = 0; k < $scope.messages.length; k++){
-                if($scope.messages[k].ConversationId === conversation.ConversationId){
-                    conversation.Messages.push($scope.messages[k]);
-
-                    if(conversation.AuthorDisplayNames.indexOf($scope.messages[k].AuthorDisplayName) === -1){
-                        conversation.AuthorDisplayNames.push($scope.messages[k].AuthorDisplayName);
-                    }
-
-                    if(conversation.UserIds.indexOf($scope.messages[k].Author) === -1){
-                        conversation.UserIds.push($scope.messages[k].Author);
-                    }
-                }
-            }
-
-            return conversation;
-        }
-
+        /* Reply to the current conversation
+         */
         $scope.reply = function(message, conversationId){
 
             $scope.currentReplyMessage = "";
@@ -160,18 +194,8 @@ angular.module('conversations', [])
                 });
         }
 
-        $scope.clearReplyMessages = function(){
-            $scope.currentReplyMessage = "";
-        }
-
-        $scope.captureReplyMessageInput = function (conversationId, input) {
-            for (var i = 0; i < $scope.replyMessages.length; i++){
-                if($scope.replyMessages[i].ConversationId === conversationId){
-                    $scope.replyMessages[i].ReplyMessage = input;
-                }
-            }
-        }
-
+        /* Gets more messages for the current conversation
+         */
         $scope.loadMoreForConversation = function(){
 
             var promise = messageRepository.getMessagesForConversation(
@@ -190,6 +214,7 @@ angular.module('conversations', [])
                 });
         }
 
+        // The events that this view reacts on
         $scope.$on('messages-added', function(event, args) {
 
             var promise = messageRepository.getMessagesByTime(1, 1);
@@ -223,18 +248,29 @@ angular.module('conversations', [])
                 });
         });
 
+        // This is required for ng-repeat order by date
         $scope.sortMessage = function(message) {
             var date = new Date(message.CreatedOn);
             return date;
         };
 
+        // The purpose of fetching messages in this controller is to be able to display that a new conversation has been started
         var fetchMessagesInterval = setInterval(function() {
             var oneMinuteAgo = new Date();
             oneMinuteAgo.setMinutes(oneMinuteAgo.getMinutes() - 1);
-            var args = { Sender: "conversations", Event: 'sync last minute', PeriodStart: oneMinuteAgo.toJSON(), PeriodEnd: new Date().toJSON(), Index: 0, Size: 50 };
-            $rootScope.$broadcast('download-messages', args);
+            communicationService.syncOnce(oneMinuteAgo.toJSON(), new Date().toJSON(), 0, 50);
         }, 50000);
 
+        /*
+         var fetchMessagesInterval = setInterval(function() {
+         var oneMinuteAgo = new Date();
+         oneMinuteAgo.setMinutes(oneMinuteAgo.getMinutes() - 1);
+         var args = { Sender: "conversations", Event: 'sync last minute', PeriodStart: oneMinuteAgo.toJSON(), PeriodEnd: new Date().toJSON(), Index: 0, Size: 50 };
+         $rootScope.$broadcast('download-messages', args);
+         }, 50000);
+         */
+        /* Sets initial values and fetches a limited number of messages for the current conversation
+         */
         function init(){
             $scope.userId = tokenService.getAppUserId();
             $scope.appUsers = contactsService.getAppUsers();
@@ -249,7 +285,6 @@ angular.module('conversations', [])
                     function (conversationMessagesSuccess){
                         conversation.Messages = conversationMessagesSuccess;
 
-                        // Checks every message AuthorDisplayName & AuthorId, adds to conversation properties if does not already exist
                         for(var j = 0; j < conversation.Messages.length; j++){
                             if(conversation.AuthorDisplayNames.indexOf(conversation.Messages[j].AuthorDisplayName) === -1){
                                 conversation.AuthorDisplayNames.push(conversation.Messages[j].AuthorDisplayName);

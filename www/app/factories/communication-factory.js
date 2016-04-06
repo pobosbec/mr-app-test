@@ -77,6 +77,23 @@ angular.module('communication', [])
             }
         }
 
+        factory.syncOnce = function(periodStart, periodEnd, currentIndex, size){
+            var promise = downloadMessages(periodStart, periodEnd, currentIndex, size);
+
+            promise.then(
+                function(success){
+                    if(success.data.count > 0){
+                        factory.messagesDownloaded(success.data.items);
+                    }
+                    else {
+                        console.log('Sync between' + periodStart + ' and ' + periodEnd + ' is complete.')
+                    }
+                },
+                function(error){
+                    console.log('Error when making request to list-messages.')
+                });
+        }
+
         factory.syncPeriodMessages = function downloadWhatsNew(periodStart, periodEnd, currentIndex, size) {
             var promise = downloadMessages(periodStart, periodEnd, currentIndex, size);
 
@@ -116,11 +133,13 @@ angular.module('communication', [])
                 }
             };
 
+            // TODO: return promise instead?
+
             $http(req
             ).then(function successCallback(response) {
-                alert('Message sent!');
+                console.log('Message sent.')
             }, function errorCallback(response) {
-                alert('Could not send message.');
+                console.log('Message could not be sent.');
             });
         }
 

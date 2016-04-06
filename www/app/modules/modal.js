@@ -1,7 +1,7 @@
 // Please note that $uibModalInstance represents a modal window (instance) dependency.
 // It is not the same as the $uibModal service used above.
 angular.module('modalcontroll',[])
-    .controller('createMessageCtrl', function ($scope, $uibModalInstance, contactsService, communicationService) {
+    .controller('createMessageCtrl', function ($scope, $uibModalInstance, contactsService, communicationService, tokenService) {
 
         $scope.users = [];
         $scope.selectedUsers = [];
@@ -20,13 +20,13 @@ angular.module('modalcontroll',[])
         };
 
         $scope.sendMessage = function(message) {
-            var userIds = [];
+            var userIds = [tokenService.getAppUserId()];
             for(var i = 0; i < $scope.selectedUsers.length; i++){
                 userIds.push($scope.selectedUsers[i].userId);
             }
             communicationService.sendMessage(message, userIds);
             $uibModalInstance.close();
-        }
+        };
 
         $scope.find = function (data) {
             alert(data);

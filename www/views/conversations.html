@@ -1,5 +1,5 @@
 <div class="listview lv-bordered lv-lg" data-ng-controller="conversationsCtrl as conversationsCtrl">
-    <h2 class="lvh-label hidden-xs">Conversations</h2>
+    <h2 class="lvh-label">Conversations</h2>
     <!--<br>Sync messages
     <br>
     <input type="date" ng-model="sync.From" placeholder="From..">
@@ -12,8 +12,8 @@
             <a ui-sref="conversation({conversationId: conversation.ConversationId})">
                 <div class="media-body">
                     <!--<div class="lv-title" ng-repeat="authorName in conversation.AuthorDisplayNames">{{ authorName || Namn namnson }} {{$last ? '' : ', '}}</div>-->
-                    <div class="lv-title" ng-repeat="authorId in conversation.AuthorIds">
-                    </div>
+                    <!--<div class="lv-title" ng-repeat="authorId in conversation.AuthorIds">
+                    </div>-->
                         <img class="lv-img-sm" style="margin-right: 10px" ng-repeat="authorId in conversation.AuthorIds" ng-src="{{ getAvatar(authorId) || 'img/profile-pics/5.jpg' }}" alt="">
                 </div>
             </a>
