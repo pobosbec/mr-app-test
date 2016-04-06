@@ -3,5 +3,7 @@
  */
 angular.module('settings',[])
     .controller('settingsCtrl', function ($scope) {
-
+        $scope.sync = function () {
+            alert("Syncing from contacts not implemented");
+        };
     });
