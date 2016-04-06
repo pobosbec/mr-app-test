@@ -193,7 +193,6 @@ angular.module('contacts', [])
                                     console.error('Failed to parse appUser \'' + row[i].userId + '\'.\r\n' + err);
                                 }
                             }
-
                             resolve(appUsers);
                         }, function(trans, error){
                             console.error('Error while fetching appUsers from database.\r\n' + error.message);
