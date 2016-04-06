@@ -29,7 +29,20 @@
                         <li style="color:red; margin-left: 10px; margin-top: 15px;">{{message}}</li>
                     </ul>
 
+                    <div class="input-group m-t-30">
+                        <div class="fg-line">
+                            <input type="text" class="form-control inputfield" placeholder="email" name="email" ng-model="email">
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <ul class="button-list" style="list-style-type: none">
+                        <li  class="btn btn-sm btn-primary login-buttons" data-ng-click="verify(email)">Change
+                        </li>
+                    </ul>
                 </form>
+                <ul class="button-list" style="list-style-type: none">
+                    <li style="color:red; margin-left: 10px; margin-top: 15px;">{{verifyMessage}}</li>
+                </ul>
             </div>
             </div>
 

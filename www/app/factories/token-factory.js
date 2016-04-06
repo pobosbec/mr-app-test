@@ -143,6 +143,10 @@ angular.module('token', [])
                 if (greeting.data.phoneNumber != null) {
                     userDetails.phoneNumber = greeting.data.phoneNumber;
                 }
+                if (greeting.data.emailAddress != null) {
+                    userDetails.emailAddress = greeting.data.emailAddress;
+                }
+
                 console.log(userDetails.displayName);
                 factory.saveToDb("userDetails", userDetails);
               //  factory.saveToDb("pushToken", factory.getPushToken());
@@ -469,6 +473,9 @@ angular.module('token', [])
 
         factory.getAppUserId = function () {
             return userDetails.appUserId;
+        };
+        factory.getEmailAddress = function () {
+            return userDetails.emailAddress;
         };
 
         factory.getDeviceId = function () {
