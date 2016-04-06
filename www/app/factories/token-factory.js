@@ -420,7 +420,10 @@ angular.module('token', [])
         factory.getPushToken = function () {
             if (pushToken == null) {
                 pushToken = JSON.parse(localStorage.getItem("pushToken"));
+                return pushToken;
+                alert("aa");
             }
+            else
             return pushToken.deviceToken;
         };
 
