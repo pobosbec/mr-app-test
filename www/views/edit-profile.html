@@ -21,17 +21,16 @@
                             <input type="text" class="form-control inputfield" placeholder="lastname" name="lastname" ng-model="lastName">
                         </div>
                     </div>
-                    <ul style="list-style-type: none" class="">
-                        <li style="color:red; margin-left: 10px;">{{message}}</li>
-                    </ul>
+
                     <div class="clearfix"></div>
-                    <ul class="button-list">
+                    <ul class="button-list" style="list-style-type: none">
                         <li  class="btn btn-sm btn-primary login-buttons" data-ng-click="save(firstName,lastName)">Save
                         </li>
-
+                        <li style="color:red; margin-left: 10px; margin-top: 15px;">{{message}}</li>
                     </ul>
 
                 </form>
+            </div>
             </div>
 
 
