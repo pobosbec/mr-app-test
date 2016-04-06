@@ -1,7 +1,7 @@
 {
-  "name": "angular",
+  "name": "angular-touch",
   "version": "1.5.3",
-  "description": "HTML enhanced for web apps",
+  "description": "AngularJS module for touch events and helpers for touch-enabled devices",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,6 +14,7 @@
     "angular",
     "framework",
     "browser",
+    "touch",
     "client-side"
   ],
   "author": "Angular Core Team <angular-core+npm@google.com>",

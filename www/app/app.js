@@ -21,7 +21,7 @@ var mobileresponseWebbApp = angular.module('administratorApp', [
     'contact',
     'conversations',
     'modalcontroll',
-    'ng-fastclick',
+    'ngTouch',
     'profile',
     'settings'
     ]);
