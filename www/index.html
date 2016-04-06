@@ -22,14 +22,13 @@
     <link href="bower_components/snapjs/snap.css" rel="stylesheet">
     <link href="bower_components/angular-snap/angular-snap.css" rel="stylesheet">
 
-
+    <script src="node_modules/fastclick/lib/fastclick.js"></script>
     <!-- in order not to get problems related to angular and jquery performance issue. loading order should be jQuery>jQueryMobile>Angularmin-->
     <!-- Jquery -->
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <!-- Angular -->
     <script src="bower_components/snapjs/snap.js"></script>
     <script src="node_modules/angular/angular.min.js"></script>
-    <script src="bower_components/angular-touch/angular-touch.js"></script>
     <script src="bower_components/angular-snap/angular-snap.js"></script>
     <script src="node_modules/angular-resource/angular-resource.min.js"></script>
     <script src="js/ng-cordova.js"></script>
@@ -158,6 +157,10 @@
                 }
                 document.addEventListener('deviceready', function () {
                     deviceReady();
+                }, false);
+
+                document.addEventListener('DOMContentLoaded', function() {
+                    FastClick.attach(document.body);
                 }, false);
 
             } else {
