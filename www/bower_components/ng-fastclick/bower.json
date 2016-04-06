@@ -1,0 +1,25 @@
+{
+  "name": "ng-fastclick",
+  "main": "dist/index.min.js",
+  "version": "1.0.1",
+  "authors": [
+    "Paul Sweeney <paul@fullscreen.net>"
+  ],
+  "moduleType": [
+    "globals"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "docs",
+    "node_modules",
+    "bower_components",
+    "src",
+    "test",
+    "tests",
+    "gulpfile.js"
+  ],
+  "dependencies": {
+    "angular": ">1.3.0"
+  }
+}
