@@ -284,8 +284,6 @@ angular.module('token', [])
         };
 
         factory.registerPushToken = function () {
-
-            alert("pushtoken: "+factory.getPushToken());
             if (factory.getDeviceId() != null) {
                 var req = {
                     method: 'POST',

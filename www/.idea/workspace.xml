@@ -44,8 +44,8 @@
       <file leaf-file-name="token-factory.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/factories/token-factory.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.2534992">
-              <caret line="287" column="56" selection-start-line="287" selection-start-column="56" selection-end-line="287" selection-end-column="56" />
+            <state vertical-scroll-proportion="0.20062208">
+              <caret line="285" column="49" selection-start-line="285" selection-start-column="49" selection-end-line="285" selection-end-column="49" />
               <folding />
             </state>
           </provider>
@@ -844,8 +844,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/factories/token-factory.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2534992">
-          <caret line="287" column="56" selection-start-line="287" selection-start-column="56" selection-end-line="287" selection-end-column="56" />
+        <state vertical-scroll-proportion="0.20062208">
+          <caret line="285" column="49" selection-start-line="285" selection-start-column="49" selection-end-line="285" selection-end-column="49" />
           <folding />
         </state>
       </provider>
