@@ -34,6 +34,15 @@ mobileresponseWebbApp
             })
 
             //------------------------------
+            // SETTINGS
+            //------------------------------
+            .state ('settings', {
+                url: '/settings',
+                templateUrl: 'views/settings.html',
+                controller: 'settingsCtrl'
+            })
+
+            //------------------------------
             // HEADERS
             //------------------------------
             .state ('headers', {
