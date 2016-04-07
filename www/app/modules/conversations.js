@@ -40,58 +40,6 @@ angular.module('conversations', [])
             }
         };
 
-        // The purpose of fetching messages in this controller is to be able to display that a new conversation has been started
-        var fetchMessagesInterval = setInterval(function() {
-            var oneMinuteAgo = new Date();
-            oneMinuteAgo.setMinutes(oneMinuteAgo.getMinutes() - 1);
-            communicationService.syncOnce(oneMinuteAgo.toJSON(), new Date().toJSON(), 0, 50);
-        }, 50000);
-
-        // The events that this view reacts on
-        $scope.$on('messages-added', function(event, args) {
-
-            var promise = messageRepository.getMessagesByTime(1, 5);
-            promise.then(
-                function(messages){
-                    for (var i = 0; i < messages.length; i++){
-
-                        var newConversation = true;
-
-                        for (var j = 0; j < $scope.conversations.length; j++){
-                            if(messages[i].ConversationId === $scope.conversations[j].ConversationId){
-
-                                newConversation = false;
-                                var found = false;
-
-                                for(var k = 0; k < $scope.conversations[j].Messages.length; k++){
-                                    if($scope.conversations[j].Messages[k].MessageId === messages[i].MessageId){
-                                        found = true;
-                                    }
-                                }
-
-                                if(!found){
-                                    $scope.conversations[j].Messages.push(messages[i]);
-                                }
-                            }
-                        }
-
-                        if(newConversation === true){
-                            var conversation = {
-                                ConversationId: messages[i].conversationId,
-                                Messages: [messages[i]],
-                                AuthorDisplayNames: [messages[i]].authorDisplayName,
-                                AuthorIds: [messages[i].author]
-                            };
-
-                            $scope.conversations.push(conversation);
-                        }
-                    }
-                },
-                function(error){
-                    console.log(error);
-                });
-        });
-
         /* Sets initial values.
          */
         function init(){
@@ -242,6 +190,23 @@ angular.module('conversations', [])
 
                 if(appUser.id === appUserId){
                     found =  $scope.appUsers[i].avatar;
+                }
+            }
+
+            if(found != null){
+                return found;
+            }
+        };
+
+        $scope.getUsername = function(appUserId) {
+
+            var found = null;
+
+            for(var i = 0; i < $scope.appUsers.length; i++){
+                var appUser = $scope.appUsers[i];
+
+                if(appUser.id === appUserId){
+                    found =  $scope.appUsers[i].Username;
                 }
             }
 
