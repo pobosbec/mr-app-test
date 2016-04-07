@@ -295,7 +295,12 @@ angular.module('conversations', [])
             $scope.appUsers = contactsService.getAppUsers();
 
             function setupConversation(id) {
-                var conversation = { ConversationId: id, Messages: [], AuthorDisplayNames: [], AuthorIds: [] };
+                var conversation = {
+                    ConversationId: id,
+                    Messages: [],
+                    AuthorDisplayNames: [],
+                    Participants: []
+                };
 
                 var conversationMessagesPromise =
                     messageRepository.getMessagesByConversation(conversation.ConversationId, 0, 5);
