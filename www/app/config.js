@@ -25,6 +25,24 @@ mobileresponseWebbApp
             })
 
             //------------------------------
+            // EDIT PROFILE
+            //------------------------------
+            .state ('profile', {
+                url: '/profile',
+                templateUrl: 'views/edit-profile.html',
+                controller: 'editProfileCtrl as profileCtrl'
+            })
+
+            //------------------------------
+            // SETTINGS
+            //------------------------------
+            .state ('settings', {
+                url: '/settings',
+                templateUrl: 'views/settings.html',
+                controller: 'settingsCtrl'
+            })
+
+            //------------------------------
             // HEADERS
             //------------------------------
             .state ('headers', {

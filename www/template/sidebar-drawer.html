@@ -1,43 +1,29 @@
 
     <div class="profile-menu">
-        <a href="" id="toggle-menu" toggle-submenu>
+        <a href="" id="toggle-menu">
             <div class="profile-pic">
                 <img src="img/profile-pics/1.jpg" alt="">
             </div>
 
             <div class="profile-info">
                 {{username()}}
-                <i class="zmdi zmdi-caret-down"></i>
             </div>
         </a>
-
-        <ul class="main-menu">
-            <li>
-                <a data-ui-sref="pages.profile.profile-about" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-account"></i> View Profile</a>
-            </li>
-            <li>
-                <a href=""><i class="zmdi zmdi-settings"></i> Settings</a>
-            </li>
-            <li>
-                <a href="" data-ng-click="mactrl.sidebarStat($event); logout()"><i class="zmdi zmdi-time-restore"></i> Logout</a>
-            </li>
-        </ul>
     </div>
 
     <ul class="main-menu">
         <li data-ui-sref-active="active">
-            <a data-ui-sref="home" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-home"></i> Home</a>
+            <a data-ui-sref="home" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-home"></i> Inbox</a>
         </li>
-        <li data-ui-sref-active="active">
-            <a data-ui-sref-active="active" data-ui-sref="pages.conversations" data-ng-click="mactrl.sidebarStat($event)">Conversations</a>
-        </li>
-        <li class="sub-menu" data-ng-class="{ 'active toggled': mactrl.$state.includes('pages') }">
-            <a href="" toggle-submenu><i class="zmdi zmdi-collection-item"></i> Sample Pages</a>
-            <ul>
-                <li><a data-ui-sref-active="active" data-ui-sref="pages.messages" data-ng-click="mactrl.sidebarStat($event)">Messages</a></li>
-                <li><a data-ui-sref-active="active" data-ui-sref="pages.contacts" data-ng-click="mactrl.sidebarStat($event)">Contacts</a></li>
-                <li><a data-ui-sref-active="active" data-ui-sref="pages.conversations" data-ng-click="mactrl.sidebarStat($event)">Conversations</a></li>
-            </ul>
+            <li>
+                <a data-ui-sref="profile" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-account"></i> Edit Profile</a>
+            </li>
+            <li>
+                <a data-ui-sref="settings" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-settings"></i> Settings</a>
+            </li>
+        <li><a data-ui-sref-active="active" data-ui-sref="pages.contacts" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-account"></i> Contacts</a></li>
+        <li>
+            <a href="" data-ng-click="mactrl.sidebarStat($event); logoutConfirm()"><i class="zmdi zmdi-time-restore"></i> Logout</a>
         </li>
         <li class="sub-menu">
             <a href="" toggle-submenu><i class="zmdi zmdi-bug"></i> Debugging</a>

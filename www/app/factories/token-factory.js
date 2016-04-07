@@ -126,15 +126,27 @@ angular.module('token', [])
                 //Success
                 console.log('Success fetched userdetails');
                 console.log(greeting);
-                if (userDetails.displayName != null) {
+                if (greeting.data.displayName != null) {
                     userDetails.displayName = greeting.data.displayName;
                 }
-                else if (userDetails.firstName != null) {
-                    userDetails.displayName = greeting.data.firstName;
+                else {
+                    if (greeting.data.firstName != null) {
+                        userDetails.displayName = greeting.data.firstName;
+                    }
                 }
-                else if (userDetails.phoneNumber != null) {
-                    userDetails.displayName = greeting.data.phoneNumber;
+                if (greeting.data.firstName != null) {
+                    userDetails.firstName = greeting.data.firstName;
                 }
+                if (greeting.data.lastName != null) {
+                    userDetails.lastName = greeting.data.lastName;
+                }
+                if (greeting.data.phoneNumber != null) {
+                    userDetails.phoneNumber = greeting.data.phoneNumber;
+                }
+                if (greeting.data.emailAddress != null) {
+                    userDetails.emailAddress = greeting.data.emailAddress;
+                }
+
                 console.log(userDetails.displayName);
                 factory.saveToDb("userDetails", userDetails);
               //  factory.saveToDb("pushToken", factory.getPushToken());
@@ -157,6 +169,50 @@ angular.module('token', [])
                 $('#template-2').hide();
             });
         }
+
+
+        //set user credentials
+        factory.refreshUserDetails = function () {
+
+            var userDetailRequest = {
+                method: 'POST',
+                url: factory.currentAppApiUrl + 'app/users/details',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: {
+                    "Data": {
+                        "InstanceName": "mobileresponse"
+                    },
+                    "AuthenticationToken": factory.getAuthToken(),
+                    "Tags": null
+                }
+            };
+            var promise = factory.httpPost(userDetailRequest);
+            promise.then(function (greeting) {
+                //Success
+                console.log('Success fetched userdetails');
+                console.log(greeting);
+                if (greeting.data.displayName != null) {
+                    userDetails.displayName = greeting.data.displayName;
+                }
+                if (greeting.data.firstName != null) {
+                    userDetails.firstName = greeting.data.firstName;
+                }
+                if (greeting.data.lastName != null) {
+                    userDetails.lastName = greeting.data.lastName;
+                }
+                if (greeting.data.phoneNumber != null) {
+                    userDetails.phoneNumber = greeting.data.phoneNumber;
+                }
+                console.log(userDetails.displayName);
+                factory.saveToDb("userDetails", userDetails);
+            }, function (reason) {
+                //failed try authenticate against admin->app
+                console.log('Failed getting userdetails');
+                console.log(reason);
+            });
+        };
 
         factory.authenticate = function (username, password, keepLoggedIn) {
             // the API gives a 200 response-code with Error-text if we pass null, but 400 if we pass empty string.
@@ -390,6 +446,15 @@ angular.module('token', [])
             return userDetails.displayName;
         };
 
+        factory.getFirstName = function () {
+            return userDetails.firstName;
+        };
+
+        factory.getLastName = function () {
+            return userDetails.lastName;
+        };
+
+
         factory.getAdminId = function () {
             return userDetails.administratorId;
         };
@@ -408,6 +473,9 @@ angular.module('token', [])
 
         factory.getAppUserId = function () {
             return userDetails.appUserId;
+        };
+        factory.getEmailAddress = function () {
+            return userDetails.emailAddress;
         };
 
         factory.getDeviceId = function () {

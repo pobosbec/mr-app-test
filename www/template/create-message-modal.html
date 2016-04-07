@@ -1,4 +1,4 @@
-<div class="modal-body">
+<div class="modal-body" style="padding-top: 15px!important;">
     <div class="wcl-form">
         <div class="wc-comment" >
             <div class="m-b-15">
@@ -16,7 +16,7 @@
                     </div>
                 </div>
                 <div class="select">
-                    <input type="text" ng-model="selected" uib-typeahead="user as user.userDisplayName for user in users | filter:{userDisplayName:$viewValue}" typeahead-on-select="onSelect($item, $model, $label)" class="form-control m-t-15" placeholder="Search users..">
+                    <input type="text" ng-model="selected" uib-typeahead="user as user.userDisplayName for user in users | filter:{userDisplayName:$viewValue}" typeahead-on-select="onSelect($item, $model, $label)" class="form-control" placeholder="Search users..">
                 </div>
             </div>
             <div class="wcc-inner" >
