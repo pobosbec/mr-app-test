@@ -13,5 +13,17 @@ if (typeof version === 'undefined') {
     version.remote.minor = 2;
     version.remote.fullVersion = version.remote.major + "." + version.remote.minor;
     version.upToDate = version.local.fullVersion === version.remote.fullVersion;
-    // Here we should dispatch an event. i think...
+
+    // Here we should dispatch an event.
+    var versionEvent = document.createEvent('CustomEvent');
+    versionEvent.initCustomEvent('version-information', true, true, version);
+
+    window.addEventListener("load", function load(event) {
+        document.dispatchEvent(versionEvent);
+    }, false);
+;
+
+    document.addEventListener('deviceready', function (event, args) {
+        document.dispatchEvent(versionEvent);
+    }, false);
 }

@@ -135,14 +135,16 @@ angular.module('event', [])
         // Native
 
         document.addEventListener('version-information', function (event, args) {
-            alert("Version native");
             $rootScope.$broadcast('version-information', event);
         }, false);
 
         // Wrapped
 
-        $scope.$on('version-information', function(event, args) {
-            alert("Version wrapped");
+        $scope.$on('version-information', function (event, args) {
+            var version = args.detail;
+            if (!version.upToDate) {
+                console.warn("\n    A newer version of mr-app is available, please update. ("+version.local.fullVersion+" > "+version.remote.fullVersion+") \n ");
+            }
         });
 
         // ------------------------------------
