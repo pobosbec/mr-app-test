@@ -32,6 +32,27 @@ angular.module('communication', [])
             return tokenService.httpPost(req);
         };
 
+        factory.getAllConversations = function() {
+
+            var conv = [];
+            var req = {
+                method: 'POST',
+                ignoreLoadingBar: true,
+                url: tokenService.currentAppApiUrl + 'app/conversations/get-users-in-conversation',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: {
+                    Data: {
+                        ConversationIds: null
+                    },
+                    AuthenticationToken: tokenService.getAppAuthToken()
+                }
+            };
+
+            return tokenService.httpPost(req);
+        }
+
         factory.messagesDownloaded = function (data){
 
             var newMessages = [];
@@ -39,7 +60,7 @@ angular.module('communication', [])
             if(data.length === 0){
                 return;
             }
-            
+
             for(var i = 0; i < data.length; i++){
                 var msg = data[i];
 
@@ -99,13 +120,18 @@ angular.module('communication', [])
 
             promise.then(
                 function(success){
-                    if(success.data.count > 0){
+                    if(success.data.pageIndex < success.data.maxPages){
+                        // more pages to get
                         factory.messagesDownloaded(success.data.items);
                         currentIndex++;
                         factory.syncPeriodMessages(periodStart, periodEnd, currentIndex, size);
                     }
-                    else {
+                    else if(success.data.pageIndex === success.data.maxPages){
+                        factory.messagesDownloaded(success.data.items);
                         console.log('Sync between' + periodStart + ' and ' + periodEnd + ' is complete.')
+                    }
+                    else if(success.data.pageIndex > success.data.maxPages){
+                        console.error('Tried to list messages with pageIndex higher than maxPages.')
                     }
                 },
                 function(error){

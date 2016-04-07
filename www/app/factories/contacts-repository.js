@@ -41,6 +41,7 @@ angular.module('contacts', [])
             insertAppUser: 'INSERT INTO AppUsers (AppUserId, DisplayName, JSON) VALUES (?, ?, ?)',
             //doesMessageExist : 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?',
             //doMessagesExist : 'SELECT MessageId FROM Messages WHERE MessageId IN '
+            updateAppUser: 'UPDATE AppUsers SET JSON=? WHERE AppUserId =?'
         };
 
         var webSqlQueries = {
@@ -57,6 +58,7 @@ angular.module('contacts', [])
             insertAppUser: 'INSERT INTO AppUsers (AppUserId, DisplayName, JSON) VALUES (?, ?, ?)',
             //doesMessageExist : 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?',
             //doMessagesExist : 'SELECT MessageId FROM Messages WHERE MessageId IN '
+            updateAppUser: 'UPDATE AppUsers SET JSON=? WHERE AppUserId=?'
         };
 
         factory.init = function init() {
@@ -152,6 +154,26 @@ angular.module('contacts', [])
             return deferred.promise;
         }
 
+        factory.appUserDetails = function (userId) {
+            var req = {
+                method: 'POST',
+                ignoreLoadingBar: true,
+                url: tokenService.currentAppApiUrl + 'app/users/details-for-user',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: {
+                    Data: {
+                        UserId: userId,
+                        AuthenticationToken: tokenService.getAppAuthToken()
+                    },
+                    AuthenticationToken: tokenService.getAppAuthToken()
+                }
+            };
+
+            return tokenService.httpPost(req);
+        }
+
         factory.getPhoneContacts = function () {
 
             var deferred = $q.defer();
@@ -202,6 +224,32 @@ angular.module('contacts', [])
             });
         }
 
+        factory.dropUsersTable = function() {
+            dropDatabase();
+        }
+
+        factory.on = function (event, args) {
+            switch (event.name) {
+                case 'logged-in':
+                    //factory.updateAppuser(args.AppUser);
+                    break;
+                case 'logged-out':
+                    // localStorage.removeItem('latestWhatIsNewUpdate');
+                    // Clearing Table on logout, just to be sure
+                    dropDatabase().then(
+
+                        function(){
+                            console.log('Dropped appUsers database');
+                        },
+                        function(error){
+                            console.error('Failed to drop database.\r\n' + error.message);
+                        });
+                    break;
+                default:
+                    break;
+            }
+        }
+
         // TODO: Make to promise
         /**
          * Adds an appUser to the database
@@ -217,6 +265,7 @@ angular.module('contacts', [])
                         return;
                     }
 
+                    // TODO: update user instead?
                     if(rows[0]['cnt'] !== 0){
                         console.log('AppUser width id \'' + appUser.UserId + '\' exists, won\'t insert.');
                         return;
@@ -311,7 +360,7 @@ angular.module('contacts', [])
         function dropDatabase(){
             return $q(function(resolve, reject) {
                 db.transaction(function (tx) {
-                    tx.executeSql(queries.dropContacts, [], function () {
+                    tx.executeSql(queries.dropAppUsers, [], function () {
                         resolve();
                     }, function (transaction, error) {
                         reject(error);
