@@ -30,7 +30,7 @@ angular.module('conversations', [])
             for(var i = 0; i < $scope.appUsers.length; i++){
                 var appUser = $scope.appUsers[i];
 
-                if(appUser.userId === appUserId){
+                if(appUser.id === appUserId){
                     found =  $scope.appUsers[i].avatar;
                 }
             }
@@ -115,17 +115,14 @@ angular.module('conversations', [])
                 function(conversationsPromiseSuccess){
 
                     // for each conversation, create and add to $scope.conversation. Check if all Authors are available as appUsers. If not, make details call and add to $scope.appusers + save to db
-                    for(var i = 0; i < conversationsPromiseSuccess.data.usersInConversations.length; i++){
-
-                        var fetchedConversation = conversationsPromiseSuccess.data.usersInConversations[i];
-
-                        syncConversationParticipants(fetchedConversation);
-
+                    for(var convo in conversationsPromiseSuccess.data.usersInConversations){
                         var conversation = {
-                            ConversationId: fetchedConversation.ConversationId,
+                            ConversationId: convo,
                             Messages: [],
-                            Participants: fetchedConversation.Participants
+                            Participants: conversationsPromiseSuccess.data.usersInConversations[convo]
                         };
+
+                        syncConversationParticipants(conversation);
 
                         $scope.conversations.push(conversation);
                     }
@@ -143,24 +140,24 @@ angular.module('conversations', [])
                     }
 
                     function syncConversationParticipants(conversation){
-                        for(var i = 0; i < conversation.participants.length; i++){
-                            if(isParticipantAppUser(conversation.participants[i]) === false){
-                                var promise = syncAppUserParticipant(conversation.participants[i])
+                        for(var i = 0; i < conversation.Participants.length; i++){
+                            if(isParticipantAppUser(conversation.Participants[i]) === false){
+                                var promise = syncAppUserParticipant(conversation.Participants[i])
 
                                 promise.then(
                                     function(success){
-                                        $scope.appUsers(success.data);
-                                        contactsService.addAppUser(success.data);
+                                            $scope.appUsers.push(success.data.items[0]);
+                                            contactsService.addAppUser(success.data.items[0]);
                                     },
                                     function(error){
-                                        console.error('Could not sync user: ' + conversation.participants[i]);
+                                        console.error('Could not sync user: ' + conversation.Participants[i]);
                                     });
                             }
                         }
                     }
 
                     function syncAppUserParticipant(participantId){
-                        return contactsService.findUser(participantId);
+                        return contactsService.searchAppUser(participantId);
                     }
                 },
                 function(conversationsPromiseError){

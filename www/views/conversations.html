@@ -15,7 +15,7 @@
                     <!--<div class="lv-title" ng-repeat="authorName in conversation.AuthorDisplayNames">{{ authorName || Namn namnson }} {{$last ? '' : ', '}}</div>-->
                     <!--<div class="lv-title" ng-repeat="authorId in conversation.AuthorIds">
                     </div>-->
-                        <img class="lv-img-sm" style="margin-right: 10px" ng-repeat="authorId in conversation.AuthorIds" ng-src="{{ getAvatar(authorId) || 'img/profile-pics/5.jpg' }}" alt="">
+                        <img class="lv-img-sm" style="margin-right: 10px" ng-repeat="participant in conversation.Participants" ng-src="{{ getAvatar(participant) || 'img/profile-pics/5.jpg' }}" alt="">
                 </div>
             </a>
         </div>

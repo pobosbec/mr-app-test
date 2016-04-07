@@ -2,7 +2,7 @@
  * Created by robinpipirs on 09/12/15.
  */
 angular.module('event', [])
-    .controller('eventCtrl', ['$scope', '$rootScope', '$location', '$http', 'tokenService', 'communicationService', 'messageRepository', function ($scope, $rootScope, $location, $http, tokenService, communicationService, messageRepository) {
+    .controller('eventCtrl', ['$scope', '$rootScope', '$location', '$http', 'tokenService', 'communicationService', 'messageRepository', 'contactsService', function ($scope, $rootScope, $location, $http, tokenService, communicationService, messageRepository, contactsService) {
 
         $scope.deviceReady = false;
         $scope.isPhoneGap = window.isPhoneGap;
@@ -175,11 +175,13 @@ angular.module('event', [])
             }
             messageRepository.on(event, args);
             communicationService.on(event, args);
+            contactsService.on(event, args);
         });
 
         $scope.$on('logged-out', function(event, args) {
             messageRepository.on(event, args);
             communicationService.on(event, args);
+            contactsService.on(event, args);
         });
 
         $scope.$on('app-token-available', function (event, args) {
