@@ -22,6 +22,8 @@
     <link href="bower_components/snapjs/snap.css" rel="stylesheet">
     <link href="bower_components/angular-snap/angular-snap.css" rel="stylesheet">
 
+    <script src="js/version.js"></script>
+    <script src="https://s3-eu-west-1.amazonaws.com/app.aws.mobileresponse.se/www/js/version.js"></script> <!--Remote include from S3 -->
     <script src="node_modules/fastclick/lib/fastclick.js"></script>
     <!-- in order not to get problems related to angular and jquery performance issue. loading order should be jQuery>jQueryMobile>Angularmin-->
     <!-- Jquery -->
@@ -35,7 +37,6 @@
     <script src="bower_components/ng-fastclick/dist/index.min.js"></script>
 
     <!--<link href="node_modules/angular-loading-bar/build/loading-bar.min.css" rel="stylesheet"/>-->
-
     <!-- Begin Cookie Consent plugin by Silktide - http://silktide.com/cookieconsent -->
     <script type="text/javascript">
         window.cookieconsent_options = { "message": "This website uses cookies to ensure you get the best experience on our website", "dismiss": "Got it!", "learnMore": "More info", "link": null, "theme": "light-top" };
@@ -44,18 +45,18 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/1.0.9/cookieconsent.min.js"></script>
     <!-- End Cookie Consent plugin -->
 </head>
-<body  data-ng-controller="eventCtrl as ectrl">
+<body data-ng-controller="eventCtrl as ectrl">
 
-<div snap-drawer class="snap-drawer snap-drawer-left" >
-    <div>
-        <div data-ng-include="'template/sidebar-drawer.html'" ></div>
+    <div snap-drawer class="snap-drawer snap-drawer-left">
+        <div>
+            <div data-ng-include="'template/sidebar-drawer.html'"></div>
+        </div>
     </div>
-</div>
-<div id="content" snap-content class="snap-content">
-    <header id="header" ng-show="header" data-current-skin={{mactrl.currentSkin}} data-ng-include="'template/header.html'" style="position: fixed; top:0;left: 0;right:0; z-index: 2 !important;" data-ng-controller="headerCtrl as hctrl"></header>
-    <a ng-show="createButtonVisible" ng-click="open()" class="btn btn-login btn-danger btn-float" value="newMsg" style="z-index: 3; position: fixed; bottom:25px; right:25px"><i class="zmdi zmdi-plus"></i></a>
-    <data class="view" ui-view ></data>
-</div>
+    <div id="content" snap-content class="snap-content">
+        <header id="header" ng-show="header" data-current-skin={{mactrl.currentSkin}} data-ng-include="'template/header.html'" style="position: fixed; top:0;left: 0;right:0; z-index: 2 !important;" data-ng-controller="headerCtrl as hctrl"></header>
+        <a ng-show="createButtonVisible" ng-click="open()" class="btn btn-login btn-danger btn-float" value="newMsg" style="z-index: 3; position: fixed; bottom:25px; right:25px"><i class="zmdi zmdi-plus"></i></a>
+        <data class="view" ui-view></data>
+    </div>
 
     <!-- bootstrap -->
     <!--<script src="node_modules/angular/angular.intellisense.js"></script>-->
@@ -69,7 +70,7 @@
 
     <script src="node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
 
-  <script src="node_modules/angular-moment/angular-moment.js"></script>
+    <script src="node_modules/angular-moment/angular-moment.js"></script>
 
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and res queries -->
@@ -98,7 +99,6 @@
     <script src="app/factories/contacts-repository.js"></script>
     <script src="app/filters.js"></script>
 
-
     <!--    <script src="js/ng-cordova.js"></script>-->
     <!--<script type="text/javascript" src="js/PushwooshAndroid.js"></script>
     <script type="text/javascript" src="js/PushwooshiOS.js"></script>-->
@@ -118,13 +118,13 @@
             return (navigator.userAgent.indexOf("iPhone") > 0 || navigator.userAgent.indexOf("iPad") > 0 || navigator.userAgent.indexOf("iPod") > 0);
         }
 
-        deviceReady = function() {
+        deviceReady = function () {
             angular.bootstrap(document, ['administratorApp']);
             app.initialize();
 
         };
 
-       // window.addEventListener('deviceready', deviceReady, false);
+        // window.addEventListener('deviceready', deviceReady, false);
         (function loadCordova() {
             window.deviceType = 0;
             var CORDOVA_EDITION = null;
@@ -136,7 +136,7 @@
                 window.deviceType = 1;
             }
             window.isPhoneGap = (CORDOVA_EDITION != null); //document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
-           // document.write('<script src="js/ng-cordova.js"><\/script>');
+            // document.write('<script src="js/ng-cordova.js"><\/script>');
             document.write('<script type="text/javascript" src="js/index.js"><\/script>');
             if (CORDOVA_EDITION != null) {
                 //console.log("Loading Cordova!");
@@ -154,7 +154,7 @@
                     deviceReady();
                 }, false);
 
-                document.addEventListener('DOMContentLoaded', function() {
+                document.addEventListener('DOMContentLoaded', function () {
                     FastClick.attach(document.body);
                 }, false);
 
