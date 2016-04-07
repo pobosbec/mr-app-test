@@ -7,11 +7,19 @@ mobileresponseWebbApp
 
         $rootScope.createButtonVisible = false;
 
+
+        // process the confirmation dialog result
+        function onConfirm(buttonIndex) {
+            if(buttonIndex == 1){
+            $rootScope.logout();
+            }
+        }
+
         $scope.logoutConfirm = function() {
             if(isPhoneGap){
                 navigator.notification.confirm(
                     'By loging out you will clear contacts and other local storage', // message
-                    $rootScope.logout(),            // callback to invoke with index of button pressed
+                    onConfirm,            // callback to invoke with index of button pressed
                     'Logout',           // title
                     ['Logout','Cancel']         // buttonLabels
                 );
