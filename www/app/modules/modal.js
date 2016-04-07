@@ -22,7 +22,7 @@ angular.module('modalcontroll',[])
         $scope.sendMessage = function(message) {
             var userIds = [tokenService.getAppUserId()];
             for(var i = 0; i < $scope.selectedUsers.length; i++){
-                userIds.push($scope.selectedUsers[i].userId);
+                userIds.push($scope.selectedUsers[i].id);
             }
             communicationService.sendMessage(message, userIds);
             $uibModalInstance.close();

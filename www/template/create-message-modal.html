@@ -7,7 +7,7 @@
                         <img class="lv-img-sm" ng-src="{{appUser.avatar}}" alt="">
                     </div>
                     <div class="media-body">
-                        <div class="lv-title">{{appUser.userDisplayName}} <ul class="pull-right" ng-click="removeSelectedAppUser(appUser)">
+                        <div class="lv-title">{{appUser.displayName}} <ul class="pull-right" ng-click="removeSelectedAppUser(appUser)">
                             <i class="zmdi zmdi-close"></i>
                         </ul>
                         </div>
@@ -16,7 +16,7 @@
                     </div>
                 </div>
                 <div class="select">
-                    <input type="text" ng-model="selected" uib-typeahead="user as user.userDisplayName for user in users | filter:{userDisplayName:$viewValue}" typeahead-on-select="onSelect($item, $model, $label)" class="form-control" placeholder="Search users..">
+                    <input type="text" ng-model="selected" uib-typeahead="user as user.displayName for user in users | filter:{displayName:$viewValue}" typeahead-on-select="onSelect($item, $model, $label)" class="form-control" placeholder="Search users..">
                 </div>
             </div>
             <div class="wcc-inner" >

@@ -32,9 +32,8 @@ angular.module('communication', [])
             return tokenService.httpPost(req);
         };
 
-        factory.getAllConversations = function() {
+        factory.getAllConversations = function(conversationIds) {
 
-            var conv = [];
             var req = {
                 method: 'POST',
                 ignoreLoadingBar: true,
@@ -44,7 +43,7 @@ angular.module('communication', [])
                 },
                 data: {
                     Data: {
-                        ConversationIds: null
+                        ConversationIds: conversationIds
                     },
                     AuthenticationToken: tokenService.getAppAuthToken()
                 }
@@ -81,7 +80,10 @@ angular.module('communication', [])
         factory.on = function (event, args) {
             switch (event.name) {
                 case 'download-whats-new':
-                    console.log('This event is deprecated!');
+                    console.log('This event is deprecated! This is a temp solution that downloads messages from last 5 minutes. Use download-messages.');
+                    var fiveMinutesAgo = new Date();
+                    fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5);
+                    factory.syncPeriodMessages(fiveMinutesAgo.toJSON(), new Date().toJSON(), 0, 50)
                     break;
                 case 'download-messages':
                     factory.syncPeriodMessages(args.PeriodStart, args.PeriodEnd, args.Index, args.Size);
@@ -91,28 +93,13 @@ angular.module('communication', [])
                     if (args != undefined) {
                         console.log('Event received: ' + JSON.stringify(args));
                     }
-                    factory.downloadWhatIsNew(args);
+                    var fiveMinutesAgo = new Date();
+                    fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5);
+                    factory.syncPeriodMessages(fiveMinutesAgo.toJSON(), new Date().toJSON(), 0, 50);
                     break;
                 default:
                     break;
             }
-        }
-
-        factory.syncOnce = function(periodStart, periodEnd, currentIndex, size){
-            var promise = downloadMessages(periodStart, periodEnd, currentIndex, size);
-
-            promise.then(
-                function(success){
-                    if(success.data.count > 0){
-                        factory.messagesDownloaded(success.data.items);
-                    }
-                    else {
-                        console.log('Sync between' + periodStart + ' and ' + periodEnd + ' is complete.')
-                    }
-                },
-                function(error){
-                    console.log('Error when making request to list-messages.')
-                });
         }
 
         factory.syncPeriodMessages = function downloadWhatsNew(periodStart, periodEnd, currentIndex, size) {

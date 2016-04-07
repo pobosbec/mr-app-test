@@ -14,12 +14,12 @@ angular.module('contact', [])
         };
 
         $scope.Search = function(query){
-                var queryArr = [];
-                queryArr.push(query);
-                var promise = contactsService.searchAppUser(queryArr);
+                var promise = contactsService.searchAppUser(query);
 
                 promise.then(function(success){
-                    $scope.foundAppUsers = success.data;
+                    for(var i = 0; i < success.data.items.length; i++){
+                        $scope.foundAppUsers.push(success.data.items[i]);
+                    }
                 }, function(error){
                 });
 

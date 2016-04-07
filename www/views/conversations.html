@@ -1,12 +1,5 @@
 <div class="listview lv-bordered lv-lg" data-ng-controller="conversationsCtrl as conversationsCtrl">
     <h2 class="lvh-label">Conversations</h2>
-    <!--<br>Sync messages
-    <br>
-    <input type="date" ng-model="sync.From" placeholder="From..">
-    <br>
-    <input type="date" ng-model="sync.To" placeholder="Too..">
-    <br>
-    <button ng-click="sync(sync.From, sync.To)">Sync</button>-->
     <div class="lv-body">
         <div class="lv-item media" ng-repeat="conversation in conversations">
             <a ui-sref="conversation({conversationId: conversation.ConversationId})">

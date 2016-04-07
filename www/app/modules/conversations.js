@@ -40,6 +40,85 @@ angular.module('conversations', [])
             }
         };
 
+        // The events that this view reacts on
+        $scope.$on('messages-added', function(event, args) {
+
+            var promise = messageRepository.getMessagesByTime(0, 50);
+            promise.then(
+                function(messages){
+                    for (var i = 0; i < messages.length; i++){
+
+                        var newConversation = true;
+
+                        for (var j = 0; j < $scope.conversations.length; j++){
+                            if(messages[i].ConversationId === $scope.conversations[j].ConversationId){
+                                newConversation = false;
+                            }
+                        }
+
+                        if(newConversation === true){
+                            var newConversationsPromise = communicationService.getAllConversations(null);
+
+                            newConversationsPromise.then(
+                                function(newConversationsPromiseSuccess){
+
+                                    // for each conversation, create and add to $scope.conversation. Check if all Authors are available as appUsers. If not, make details call and add to $scope.appusers + save to db
+                                    for(var convo in newConversationsPromiseSuccess.data.usersInConversations){
+                                        var conversation = {
+                                            ConversationId: convo,
+                                            Messages: [],
+                                            Participants: conversationsPromiseSuccess.data.usersInConversations[convo]
+                                        };
+
+                                        syncConversationParticipants(conversation);
+
+                                        $scope.conversations.push(conversation);
+                                    }
+
+                                    function isParticipantAppUser(participantId){
+                                        var found = false;
+
+                                        for(var i = 0; i < $scope.appUsers.length; i++){
+                                            if($scope.appUsers[i].userId === participantId){
+                                                found = true;
+                                            }
+                                        }
+
+                                        return found;
+                                    }
+
+                                    function syncConversationParticipants(conversation){
+                                        for(var i = 0; i < conversation.Participants.length; i++){
+                                            if(isParticipantAppUser(conversation.Participants[i]) === false){
+                                                var promise = syncAppUserParticipant(conversation.Participants[i])
+
+                                                promise.then(
+                                                    function(success){
+                                                        $scope.appUsers.push(success.data.items[0]);
+                                                        contactsService.addAppUser(success.data.items[0]);
+                                                    },
+                                                    function(error){
+                                                        console.error('Could not sync user: ' + conversation.Participants[i]);
+                                                    });
+                                            }
+                                        }
+                                    }
+
+                                    function syncAppUserParticipant(participantId){
+                                        return contactsService.searchAppUser(participantId);
+                                    }
+                                },
+                                function(conversationsPromiseError){
+                                    console.error('Could not sync conversations.')
+                                });
+                        }
+                    }
+                },
+                function(error){
+                    console.log(error);
+                });
+        });
+
         /* Sets initial values.
          */
         function init(){
@@ -55,7 +134,7 @@ angular.module('conversations', [])
                     console.log(JSON.stringify(error));
                 });
 
-            var conversationsPromise = communicationService.getAllConversations();
+            var conversationsPromise = communicationService.getAllConversations(null);
 
             conversationsPromise.then(
                 function(conversationsPromiseSuccess){
@@ -206,7 +285,7 @@ angular.module('conversations', [])
                 var appUser = $scope.appUsers[i];
 
                 if(appUser.id === appUserId){
-                    found =  $scope.appUsers[i].Username;
+                    found =  $scope.appUsers[i].username;
                 }
             }
 
@@ -218,7 +297,7 @@ angular.module('conversations', [])
         // The events that this view reacts on
         $scope.$on('messages-added', function(event, args) {
 
-            var promise = messageRepository.getMessagesByTime(1, 1);
+            var promise = messageRepository.getMessagesByTime(0, 50);
             promise.then(
                 function(messages){
                     for (var i = 0; i < messages.length; i++){
@@ -288,9 +367,10 @@ angular.module('conversations', [])
                 var conversation = {
                     ConversationId: id,
                     Messages: [],
-                    AuthorDisplayNames: [],
                     Participants: []
                 };
+
+                var conversationIds = [id];
 
                 var conversationMessagesPromise =
                     messageRepository.getMessagesByConversation(conversation.ConversationId, 0, 5);
@@ -299,41 +379,53 @@ angular.module('conversations', [])
                     function (conversationMessagesSuccess){
                         conversation.Messages = conversationMessagesSuccess;
 
-                        for(var j = 0; j < conversation.Messages.length; j++){
-                            if(conversation.Participants.indexOf(conversation.Messages[j].AuthorDisplayName) === -1){
-                                conversation.Participants.push(conversation.Messages[j].AuthorDisplayName);
-                            }
+                        var participantsPromise = communicationService.getAllConversations(conversationIds);
 
-                            if(conversation.Participants.indexOf(conversation.Messages[j].Author) === -1){
-                                conversation.Participants.push(conversation.Messages[j].Author);
-                            }
-                        }
-
-                        $scope.conversation = conversation;
-
-                        for(var k = 0; k < $scope.conversation.Participants.length; k++){
-                            var authorId = $scope.conversation.Participants[k];
-
-                            var found = false;
-
-                            for(var l = 0; l < $scope.appUsers.length; l++){
-                                var appUser = $scope.appUsers[l];
-
-                                if(appUser.userId === authorId){
-                                    found == true;
+                        participantsPromise.then(
+                            function(success){
+                                for(var i = 0; i < success.data.usersInConversations[id].length; i++){
+                                    conversation.Participants.push(success.data.usersInConversations[id][i]);
                                 }
-                            }
+                                syncUsers(conversation);
+                            },
+                            function(error){
+                                console.error('Could not get conversation participants from api. Getting info from messages instead.');
+                                for(var j = 0; j < conversation.Messages.length; j++){
+                                    if(conversation.Participants.indexOf(conversation.Messages[j].Author) === -1){
+                                        conversation.Participants.push(conversation.Messages[j].Author);
+                                    }
+                                }
+                                syncUsers(conversation);
+                            });
 
-                            if(found === false){
-                                var promise = contactsService.searchAppUser(authorId);
+                        // TODO: this might be duplicate code from conversationS-controller
+                        function syncUsers(conversation) {
+                            $scope.conversation = conversation;
 
-                                promise.then(
-                                    function(success){
-                                        $scope.appUsers.push(success.data.items[0]);
-                                    },
-                                    function(error){
-                                        console.error('Could not get details for user ' + authorId)
-                                    });
+                            for(var k = 0; k < $scope.conversation.Participants.length; k++){
+                                var authorId = $scope.conversation.Participants[k];
+
+                                var found = false;
+
+                                for(var l = 0; l < $scope.appUsers.length; l++){
+                                    var appUser = $scope.appUsers[l];
+
+                                    if(appUser.userId === authorId){
+                                        found == true;
+                                    }
+                                }
+
+                                if(found === false){
+                                    var promise = contactsService.searchAppUser(authorId);
+
+                                    promise.then(
+                                        function(success){
+                                            $scope.appUsers.push(success.data.items[0]);
+                                        },
+                                        function(error){
+                                            console.error('Could not get details for user ' + authorId)
+                                        });
+                                }
                             }
                         }
                     },
