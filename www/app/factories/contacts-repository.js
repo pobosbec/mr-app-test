@@ -213,13 +213,18 @@ angular.module('contacts', [])
         factory.on = function (event, args) {
             switch (event.name) {
                 case 'logged-in':
-                    //factory.updateAppuser(args.AppUser);
+                    createDatabase().then(
+                        function(){
+                            console.log('Created database after login');
+                        },
+                        function(error){
+                            console.error('Failed to create database after login.\r\n' + error.message);
+                        });
                     break;
                 case 'logged-out':
                     // localStorage.removeItem('latestWhatIsNewUpdate');
                     // Clearing Table on logout, just to be sure
                     dropDatabase().then(
-
                         function(){
                             console.log('Dropped appUsers database');
                         },
@@ -370,7 +375,7 @@ angular.module('contacts', [])
                             if (result.rowsAffected !== 1) {
                                 console.error('');
                                 reject(new {
-                                    message : 'The appUser width id \'' + appUser.UserId + '\' doesn\'t seem to be added properly'});
+                                    message : 'The appUser width id \'' + appUser.id + '\' doesn\'t seem to be added properly'});
                                 return;
                             }
 
