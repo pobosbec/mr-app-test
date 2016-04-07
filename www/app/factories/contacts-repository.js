@@ -40,6 +40,7 @@ angular.module('contacts', [])
             /**/  //getAllMessagesFromConversation: 'SELECT * FROM Messages WHERE ConversationId=?',
             insertAppUser: 'INSERT INTO AppUsers (AppUserId, DisplayName, JSON) VALUES (?, ?, ?)',
             //doesMessageExist : 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?',
+            doesAppUserExist : 'SELECT COUNT(*) AS cnt FROM AppUsers WHERE AppUserId=?',
             //doMessagesExist : 'SELECT MessageId FROM Messages WHERE MessageId IN '
             updateAppUser: 'UPDATE AppUsers SET JSON=? WHERE AppUserId =?'
         };
@@ -56,6 +57,7 @@ angular.module('contacts', [])
             /**/  //getAllMessagesFromAuthor: 'SELECT * FROM Messages WHERE Author=?',
             /**/  //getAllMessagesFromConversation: 'SELECT * FROM Messages WHERE ConversationId=?',
             insertAppUser: 'INSERT INTO AppUsers (AppUserId, DisplayName, JSON) VALUES (?, ?, ?)',
+            doesAppUserExist : 'SELECT COUNT(*) AS cnt FROM AppUsers WHERE AppUserId=?',
             //doesMessageExist : 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?',
             //doMessagesExist : 'SELECT MessageId FROM Messages WHERE MessageId IN '
             updateAppUser: 'UPDATE AppUsers SET JSON=? WHERE AppUserId=?'
@@ -130,14 +132,14 @@ angular.module('contacts', [])
             var req = {
                 method: 'POST',
                 ignoreLoadingBar: true,
-                url: tokenService.currentAppApiUrl + 'app/inboxes/search-multiple',
+                url: tokenService.currentAppApiUrl + 'app/users/search',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 data: {
                     Data: {
                         InboxId: factory.inboxId,
-                        Queries: query
+                        SearchFor: query
                     },
                     AuthenticationToken: tokenService.getAppAuthToken()
                 }
@@ -152,26 +154,6 @@ angular.module('contacts', [])
             });
 
             return deferred.promise;
-        }
-
-        factory.appUserDetails = function (userId) {
-            var req = {
-                method: 'POST',
-                ignoreLoadingBar: true,
-                url: tokenService.currentAppApiUrl + 'app/users/details-for-user',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                data: {
-                    Data: {
-                        UserId: userId,
-                        AuthenticationToken: tokenService.getAppAuthToken()
-                    },
-                    AuthenticationToken: tokenService.getAppAuthToken()
-                }
-            };
-
-            return tokenService.httpPost(req);
         }
 
         factory.getPhoneContacts = function () {
@@ -257,8 +239,8 @@ angular.module('contacts', [])
          */
         factory.addAppUser = function (appUser) {
             db.transaction(function (tx) {
-                console.log('Checking if app-user with id \'' + appUser.UserId + '\' exists.');
-                tx.executeSql(queries.doesAppUserExist, [appUser.UserId], function (transaction, resultData) {
+                console.log('Checking if app-user with id \'' + appUser.id + '\' exists.');
+                tx.executeSql(queries.doesAppUserExist, [appUser.id], function (transaction, resultData) {
                     var rows = getRows(resultData);
                     if(rows.length !== 1){
                         console.error('Unexpected number of rows returned (' + rows.length + '). Check sql statement!');
@@ -271,9 +253,9 @@ angular.module('contacts', [])
                         return;
                     }
 
-                    insertAppUser(appUser)
+                    factory.insertAppUser(appUser)
                         .then(function(){
-                            factory.appUserAdded();
+                            // factory.appUserAdded();
                             console.log('Added appUser with id \'' + appUser.UserId + '\'');
                         }, function(error){
                             console.error('Error while inserting appUser with id \'' + appUser.UserId + '\'.\r\n' + error.message);
@@ -381,8 +363,8 @@ angular.module('contacts', [])
                     tx.executeSql(
                         queries.insertAppUser,
                         [
-                            appUser.userId,
-                            appUser.userDisplayName,
+                            appUser.id,
+                            appUser.displayName,
                             JSON.stringify(appUser)],
                         function (trans, result) {
                             if (result.rowsAffected !== 1) {
