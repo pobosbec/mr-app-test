@@ -7,6 +7,19 @@ mobileresponseWebbApp
 
         $rootScope.createButtonVisible = false;
 
+        $scope.logoutConfirm = function() {
+            if(isPhoneGap){
+                navigator.notification.confirm(
+                    'By loging out you will clear contacts and other local storage', // message
+                    $rootScope.logout(),            // callback to invoke with index of button pressed
+                    'Logout',           // title
+                    ['Logout','Cancel']         // buttonLabels
+                );
+            }
+            else{$rootScope.logout();}
+        };
+
+
         //////////////////////////
         /// Modal
         ///////////////////////////
