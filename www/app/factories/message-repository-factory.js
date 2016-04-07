@@ -505,7 +505,8 @@ angular.module('message', ['ngCordova'])
                         queries.insertMessage,
                         [
                             message.MessageId,
-                            moment(message.CreatedOn).unix(),
+                            //moment(message.CreatedOn).unix(),
+                            message.CreatedOn,
                             message.ConversationId,
                             message.Author,
                             JSON.stringify(message)],

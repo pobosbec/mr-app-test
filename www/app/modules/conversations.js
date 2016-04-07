@@ -107,8 +107,6 @@ angular.module('conversations', [])
                     console.log(JSON.stringify(error));
                 });
 
-
-            var req;
             var conversationsPromise = communicationService.getAllConversations();
 
             conversationsPromise.then(
@@ -233,6 +231,25 @@ angular.module('conversations', [])
                 });
         }
 
+        /* Gets the url for a user. Used in an ng-repeat to display the avatar.
+         */
+        $scope.getAvatar = function(appUserId) {
+
+            var found = null;
+
+            for(var i = 0; i < $scope.appUsers.length; i++){
+                var appUser = $scope.appUsers[i];
+
+                if(appUser.id === appUserId){
+                    found =  $scope.appUsers[i].avatar;
+                }
+            }
+
+            if(found != null){
+                return found;
+            }
+        };
+
         // The events that this view reacts on
         $scope.$on('messages-added', function(event, args) {
 
@@ -292,7 +309,15 @@ angular.module('conversations', [])
          */
         function init(){
             $scope.userId = tokenService.getAppUserId();
-            $scope.appUsers = contactsService.getAppUsers();
+            var appUsersPromise = contactsService.getAppUsers();
+
+            appUsersPromise.then(
+                function(success){
+                    $scope.appUsers = success;
+                },
+                function(error){
+                    console.log(JSON.stringify(error));
+                });
 
             function setupConversation(id) {
                 var conversation = {
@@ -310,19 +335,19 @@ angular.module('conversations', [])
                         conversation.Messages = conversationMessagesSuccess;
 
                         for(var j = 0; j < conversation.Messages.length; j++){
-                            if(conversation.AuthorDisplayNames.indexOf(conversation.Messages[j].AuthorDisplayName) === -1){
-                                conversation.AuthorDisplayNames.push(conversation.Messages[j].AuthorDisplayName);
+                            if(conversation.Participants.indexOf(conversation.Messages[j].AuthorDisplayName) === -1){
+                                conversation.Participants.push(conversation.Messages[j].AuthorDisplayName);
                             }
 
-                            if(conversation.AuthorIds.indexOf(conversation.Messages[j].Author) === -1){
-                                conversation.AuthorIds.push(conversation.Messages[j].Author);
+                            if(conversation.Participants.indexOf(conversation.Messages[j].Author) === -1){
+                                conversation.Participants.push(conversation.Messages[j].Author);
                             }
                         }
 
                         $scope.conversation = conversation;
 
-                        for(var k = 0; k < $scope.conversation.AuthorIds.length; k++){
-                            var authorId = $scope.conversation.AuthorIds[k];
+                        for(var k = 0; k < $scope.conversation.Participants.length; k++){
+                            var authorId = $scope.conversation.Participants[k];
 
                             var found = false;
 
@@ -335,11 +360,11 @@ angular.module('conversations', [])
                             }
 
                             if(found === false){
-                                var promise = contactsService.appUserDetails(authorId);
+                                var promise = contactsService.searchAppUser(authorId);
 
                                 promise.then(
                                     function(success){
-                                        $scope.appUsers.push(success);
+                                        $scope.appUsers.push(success.data.items[0]);
                                     },
                                     function(error){
                                         console.error('Could not get details for user ' + authorId)

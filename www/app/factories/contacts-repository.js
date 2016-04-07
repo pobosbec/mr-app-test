@@ -254,7 +254,7 @@ angular.module('contacts', [])
 
                     // TODO: update user instead?
                     if(rows[0]['cnt'] !== 0){
-                        console.log('AppUser width id \'' + appUser.UserId + '\' exists, won\'t insert.');
+                        console.log('AppUser width id \'' + appUser.id + '\' exists, won\'t insert.');
                         return;
                     }
 
