@@ -19,6 +19,7 @@ mobileresponseWebbApp
                 onEnter: function ($rootScope) {
                     $rootScope.createButtonVisible = true;
                     $rootScope.snapperControl.close();
+                    $rootScope.header = true;
                 },
                 onExit: function ($rootScope) {
                     $rootScope.createButtonVisible = false;
@@ -34,6 +35,7 @@ mobileresponseWebbApp
                 controller: 'editProfileCtrl as profileCtrl',
                 onEnter: function ($rootScope) {
                     $rootScope.snapperControl.close();
+                    $rootScope.header = true;
                 }
             })
 
@@ -46,6 +48,7 @@ mobileresponseWebbApp
                 controller: 'settingsCtrl',
                 onEnter: function ($rootScope) {
                     $rootScope.snapperControl.close();
+                    $rootScope.header = true;
                 }
             })
 
@@ -83,6 +86,7 @@ mobileresponseWebbApp
                 templateUrl: 'views/common.html',
                 onEnter: function ($rootScope) {
                     $rootScope.snapperControl.close();
+                    $rootScope.header = true;
                 }
             })
             .state('pages.messages', {
@@ -90,6 +94,7 @@ mobileresponseWebbApp
                 templateUrl: 'views/messages.html',
                 onEnter: function ($rootScope) {
                     $rootScope.snapperControl.close();
+                    $rootScope.header = true;
                 }
             })
             .state('pages.contacts', {
@@ -98,6 +103,7 @@ mobileresponseWebbApp
                 controller: 'contactsCtrl as contactsCtrl',
                 onEnter: function ($rootScope) {
                     $rootScope.snapperControl.close();
+                    $rootScope.header = true;
                 }
             })
             .state('pages.conversations', {
@@ -107,6 +113,7 @@ mobileresponseWebbApp
                 onEnter: function ($rootScope) {
                     $rootScope.createButtonVisible = true;
                     $rootScope.snapperControl.close();
+                    $rootScope.header = true;
                 },
                 onExit: function ($rootScope) {
                     $rootScope.createButtonVisible = false;
@@ -118,6 +125,7 @@ mobileresponseWebbApp
                 controller: 'conversationCtrl as conversationCtrl',
                 onEnter: function ($rootScope) {
                     $rootScope.snapperControl.close();
+                    $rootScope.header = true;
                 }
             });
     });

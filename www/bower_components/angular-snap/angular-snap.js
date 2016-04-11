@@ -208,7 +208,7 @@ angular.module('snap')
           }
 
           element.bind('click', function() {
-            snapRemote.toggle(snapSide, snapId);
+              snapRemote.toggle(snapSide, snapId);
             $rootScope.$digest();
           });
         }
@@ -282,7 +282,7 @@ angular.module('snap')
 
     exports.toggle = function(side, id) {
       id = id || DEFAULT_SNAPPER_ID;
-      exports.getSnapper(id).then(function(snapper) {
+      exports.getSnapper(id).then(function (snapper) {
         if(side === snapper.state().state) {
           exports.close(id);
         } else {
