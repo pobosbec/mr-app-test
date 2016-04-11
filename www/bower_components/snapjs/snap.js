@@ -188,6 +188,8 @@
                     if(cache.easingTo===0){
                         utils.klass.remove(doc.body, 'snapjs-right');
                         utils.klass.remove(doc.body, 'snapjs-left');
+                        doc.body.style.display = "none";
+                        var reRenderDom = setTimeout(function() { doc.body.style.display = "block" },1);
                     }
 
                     utils.dispatchEvent('animated');
@@ -212,8 +214,8 @@
                         action.translate.x(n);
                     }
                     if(n===0){
-                           settings.element.style[cache.vendor+'Transform'] = '';
-                       }
+                        settings.element.style[cache.vendor+'Transform'] = '';
+                    }
                 },
                 x: function(n) {
                     if( (settings.disable==='left' && n>0) ||
