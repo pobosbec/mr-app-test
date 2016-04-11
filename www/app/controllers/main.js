@@ -34,7 +34,7 @@ mobileresponseWebbApp
         ///////////////////////////
         $scope.animationsEnabled = true;
 
-        $scope.open = function (size) {
+        $scope.opencreate = function (size) {
             $uibModal.open({
                 animation: $scope.animationsEnabled,
                 templateUrl: 'template/create-message-modal.html',

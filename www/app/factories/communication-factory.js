@@ -10,7 +10,7 @@ angular.module('communication', [])
         var inboxId = '8a0958a2-a163-4a20-8afa-e7315012e2d8';
         var pageSize = 50;
 
-        var downloadMessages = function(periodStart, periodEnd, pageIndex, pageSize) {
+        var downloadMessages = function (periodStart, periodEnd, pageIndex, pageSize) {
             var req = {
                 method: 'POST',
                 ignoreLoadingBar: true,
@@ -32,7 +32,7 @@ angular.module('communication', [])
             return tokenService.httpPost(req);
         };
 
-        factory.getAllConversations = function(conversationIds) {
+        factory.getAllConversations = function (conversationIds) {
 
             var req = {
                 method: 'POST',
@@ -52,15 +52,15 @@ angular.module('communication', [])
             return tokenService.httpPost(req);
         }
 
-        factory.messagesDownloaded = function (data){
+        factory.messagesDownloaded = function (data) {
 
             var newMessages = [];
 
-            if(data.length === 0){
+            if (data.length === 0) {
                 return;
             }
 
-            for(var i = 0; i < data.length; i++){
+            for (var i = 0; i < data.length; i++) {
                 var msg = data[i];
 
                 var newMessage = {};
@@ -106,27 +106,27 @@ angular.module('communication', [])
             var promise = downloadMessages(periodStart, periodEnd, currentIndex, size);
 
             promise.then(
-                function(success){
-                    if(success.data.pageIndex < success.data.maxPages){
+                function (success) {
+                    if (success.data.pageIndex < success.data.maxPages) {
                         // more pages to get
                         factory.messagesDownloaded(success.data.items);
                         currentIndex++;
                         factory.syncPeriodMessages(periodStart, periodEnd, currentIndex, size);
                     }
-                    else if(success.data.pageIndex === success.data.maxPages){
+                    else if (success.data.pageIndex === success.data.maxPages) {
                         factory.messagesDownloaded(success.data.items);
                         console.log('Sync between' + periodStart + ' and ' + periodEnd + ' is complete.')
                     }
-                    else if(success.data.pageIndex > success.data.maxPages){
+                    else if (success.data.pageIndex > success.data.maxPages) {
                         console.error('Tried to list messages with pageIndex higher than maxPages.')
                     }
                 },
-                function(error){
+                function (error) {
                     console.log('Error when making request to list-messages.')
                 });
         }
 
-        factory.sendMessage = function sendMessage(message, users, metadata){
+        factory.sendMessage = function sendMessage(message, users, metadata) {
             var req = {
                 method: 'POST',
                 ignoreLoadingBar: true,
@@ -150,7 +150,7 @@ angular.module('communication', [])
 
             $http(req
             ).then(function successCallback(response) {
-                console.log('Message sent.')
+                console.log('Message sent.');
             }, function errorCallback(response) {
                 console.log('Message could not be sent.');
             });

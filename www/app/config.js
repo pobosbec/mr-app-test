@@ -1,25 +1,26 @@
 mobileresponseWebbApp
 
-    .config(function(snapRemoteProvider) {
+    .config(function (snapRemoteProvider) {
         snapRemoteProvider.globalOptions = {
             disable: 'right',
             touchToDrag: true
             // ... others options
         };
     })
-    .config(function ($stateProvider, $urlRouterProvider){
+    .config(function ($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise("/login");
         $stateProvider
-        //------------------------------
-        // HOME
-        //------------------------------
-            .state ('home', {
+            //------------------------------
+            // HOME
+            //------------------------------
+            .state('home', {
                 url: '/home',
                 templateUrl: 'views/home.html',
-                onEnter: function($rootScope) {
+                onEnter: function ($rootScope) {
                     $rootScope.createButtonVisible = true;
+                    $rootScope.snapperControl.close();
                 },
-                onExit: function($rootScope) {
+                onExit: function ($rootScope) {
                     $rootScope.createButtonVisible = false;
                 }
             })
@@ -27,25 +28,31 @@ mobileresponseWebbApp
             //------------------------------
             // EDIT PROFILE
             //------------------------------
-            .state ('profile', {
+            .state('profile', {
                 url: '/profile',
                 templateUrl: 'views/edit-profile.html',
-                controller: 'editProfileCtrl as profileCtrl'
+                controller: 'editProfileCtrl as profileCtrl',
+                onEnter: function ($rootScope) {
+                    $rootScope.snapperControl.close();
+                }
             })
 
             //------------------------------
             // SETTINGS
             //------------------------------
-            .state ('settings', {
+            .state('settings', {
                 url: '/settings',
                 templateUrl: 'views/settings.html',
-                controller: 'settingsCtrl'
+                controller: 'settingsCtrl',
+                onEnter: function ($rootScope) {
+                    $rootScope.snapperControl.close();
+                }
             })
 
             //------------------------------
             // HEADERS
             //------------------------------
-            .state ('headers', {
+            .state('headers', {
                 url: '/headers',
                 templateUrl: 'views/common-2.html'
             })
@@ -53,16 +60,16 @@ mobileresponseWebbApp
             //------------------------------
             // LOGIN
             //------------------------------
-            .state ('login', {
+            .state('login', {
                 url: '/login',
                 templateUrl: 'views/login.html',
                 controller: 'loginCtrl as lctrl',
-                onEnter: function($rootScope) {
+                onEnter: function ($rootScope) {
                     $rootScope.snapperControl.close();
                     $rootScope.snapperControl.disable();
                     $rootScope.header = false;
                 },
-                onExit: function($rootScope) {
+                onExit: function ($rootScope) {
                     $rootScope.snapperControl.enable();
                     $rootScope.header = true;
                 }
@@ -71,33 +78,46 @@ mobileresponseWebbApp
             //------------------------------
             // PAGES
             //------------------------------
-            .state ('pages', {
+            .state('pages', {
                 url: '/pages',
-                templateUrl: 'views/common.html'
+                templateUrl: 'views/common.html',
+                onEnter: function ($rootScope) {
+                    $rootScope.snapperControl.close();
+                }
             })
-            .state ('pages.messages', {
+            .state('pages.messages', {
                 url: '/messages',
-                templateUrl: 'views/messages.html'
+                templateUrl: 'views/messages.html',
+                onEnter: function ($rootScope) {
+                    $rootScope.snapperControl.close();
+                }
             })
-            .state ('pages.contacts', {
+            .state('pages.contacts', {
                 url: '/contacts',
                 templateUrl: 'views/contacts.html',
-                controller: 'contactsCtrl as contactsCtrl'
+                controller: 'contactsCtrl as contactsCtrl',
+                onEnter: function ($rootScope) {
+                    $rootScope.snapperControl.close();
+                }
             })
-            .state ('pages.conversations', {
+            .state('pages.conversations', {
                 url: '/conversations',
                 templateUrl: 'views/conversations.html',
                 controller: 'conversationsCtrl as conversationsCtrl',
-                onEnter: function($rootScope) {
+                onEnter: function ($rootScope) {
                     $rootScope.createButtonVisible = true;
+                    $rootScope.snapperControl.close();
                 },
-                onExit: function($rootScope) {
+                onExit: function ($rootScope) {
                     $rootScope.createButtonVisible = false;
                 }
             })
-            .state ('conversation', {
+            .state('conversation', {
                 url: '/conversation/:conversationId',
                 templateUrl: 'template/conversation.html',
-                controller: 'conversationCtrl as conversationCtrl'
-            })
+                controller: 'conversationCtrl as conversationCtrl',
+                onEnter: function ($rootScope) {
+                    $rootScope.snapperControl.close();
+                }
+            });
     });

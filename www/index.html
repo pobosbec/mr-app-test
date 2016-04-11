@@ -54,7 +54,7 @@
     </div>
     <div id="content" snap-content class="snap-content">
         <header id="header" ng-show="header" data-current-skin={{mactrl.currentSkin}} data-ng-include="'template/header.html'" style="position: fixed; top:0;left: 0;right:0; z-index: 2 !important;" data-ng-controller="headerCtrl as hctrl"></header>
-        <a ng-show="createButtonVisible" ng-click="open()" class="btn btn-login btn-danger btn-float" value="newMsg" style="z-index: 3; position: fixed; bottom:25px; right:25px"><i class="zmdi zmdi-plus"></i></a>
+        <a ng-show="createButtonVisible" ng-click="opencreate()" class="btn btn-login btn-danger btn-float" value="newMsg" style="z-index: 3; position: fixed; bottom:25px; right:25px"><i class="zmdi zmdi-plus"></i></a>
         <data class="view" ui-view></data>
     </div>
 
