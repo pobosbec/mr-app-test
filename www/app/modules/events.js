@@ -141,10 +141,10 @@ angular.module('event', [])
         // Wrapped
 
         $scope.$on('version-information', function (event, args) {
-            var version = args.detail;
-            if (!version.upToDate) {
-                console.warn("\n    A newer version of mr-app is available, please update. ("+version.local.fullVersion+" > "+version.remote.fullVersion+") \n ");
-            }
+            $rootScope.version = args.detail;
+            //if (!version.upToDate) {
+            //    console.warn("\n    A newer version of mr-app is available, please update. ("+version.local.fullVersion+" > "+version.remote.fullVersion+") \n ");
+            //}
         });
 
         // ------------------------------------

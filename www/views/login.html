@@ -25,9 +25,7 @@
                     </ul>
                     <div class="clearfix"></div>
                     <ul class="button-list">
-                        <li  class="btn btn-sm btn-primary login-buttons" data-ng-click="login(login)">Login -
-                            Ver: 0.3
-                        </li>
+                        <li  class="btn btn-sm btn-primary login-buttons" data-ng-click="login(login)">Login</li>
 
                     </ul>
                     <div class="checkbox login-checkbox">
@@ -41,7 +39,7 @@
                 <div class="login-menu">
                     <ul class="">
                         <li>
-                            <a ng-click="showRegister()" >Join MobileResponse</a>
+                            <a ng-click="showRegister()">Join MobileResponse</a>
                         </li>
                         <li>
                             <a ng-click="showForgot()">Lost your password?</a>
@@ -49,6 +47,7 @@
 
                     </ul>
                 </div>
+                <div style="position:absolute; right:20px; top:2px" ng-show="version != null"><small style="font-weight: bold">Version</small> <small>{{version}}</small></div>
             </div>
 
     <!-- Register -->

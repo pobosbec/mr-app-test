@@ -1,29 +1,27 @@
-﻿// Major version change requires re-download of entire App.
-// Minor version change requires re-download of web content.
-if (typeof version === 'undefined') {
-    var version = {}
-    version.local = {}
-    version.local.major = 0;
-    version.local.minor = 2;
-    version.local.fullVersion = version.local.major + "." + version.local.minor;
-    version.upToDate = null;
-} else {
-    version.remote = {}
-    version.remote.major = 0;
-    version.remote.minor = 2;
-    version.remote.fullVersion = version.remote.major + "." + version.remote.minor;
-    version.upToDate = version.local.fullVersion === version.remote.fullVersion;
+﻿var version = null;
 
-    // Here we should dispatch an event.
-    var versionEvent = document.createEvent('CustomEvent');
-    versionEvent.initCustomEvent('version-information', true, true, version);
+var versionEvent = document.createEvent('CustomEvent');
 
-    window.addEventListener("load", function load(event) {
+window.addEventListener("load", function load(event) {
+    function readConfigFile() {
+        var xhr = new XMLHttpRequest();
+        xhr.addEventListener("load", function () {
+            var parser = new DOMParser();
+            var doc = parser.parseFromString(xhr.responseText, "application/xml");
+            version = doc.getElementsByTagName("widget").item(0).attributes.version.value;
+            versionEvent.initCustomEvent('version-information', true, true, version);
+            document.dispatchEvent(versionEvent);
+        });
+        xhr.open("get", "../config.xml", true);
+        xhr.send();
+    }
+    readConfigFile();
+}, false);
+
+document.addEventListener('deviceready', function (event, args) {
+    cordova.getAppVersion.getVersionNumber(function (ver) {
+        version = ver;
+        versionEvent.initCustomEvent('version-information', true, true, version);
         document.dispatchEvent(versionEvent);
-    }, false);
-;
-
-    document.addEventListener('deviceready', function (event, args) {
-        document.dispatchEvent(versionEvent);
-    }, false);
-}
+    });
+}, false);

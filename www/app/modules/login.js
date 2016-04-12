@@ -28,7 +28,6 @@ angular.module('login', [])
             $scope.forgotview = true;
         };
 
-
         $scope.message = "";
         $scope.showLoginError = false;
         $scope.errorMsg = "";

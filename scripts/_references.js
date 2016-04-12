@@ -1,4 +1,7 @@
 ﻿/// <autosync enabled="true" />
+/// <reference path="../plugins/cordova-plugin-app-version/src/windows8/AppVersionProxy.js" />
+/// <reference path="../plugins/cordova-plugin-app-version/www/AppVersionPlugin.js" />
+/// <reference path="../plugins/cordova-plugin-app-version/www/blackberry10/AppVersionProxy.js" />
 /// <reference path="../plugins/cordova-plugin-device/src/blackberry10/index.js" />
 /// <reference path="../plugins/cordova-plugin-device/src/browser/DeviceProxy.js" />
 /// <reference path="../plugins/cordova-plugin-device/src/firefoxos/DeviceProxy.js" />
