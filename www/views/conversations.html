@@ -3,8 +3,16 @@
     <div class="lv-body">
         <div class="lv-item media" ng-repeat="conversation in conversations">
             <a ui-sref="conversation({conversationId: conversation.ConversationId})">
-                <div class="media-body">
-                        <img class="lv-img-sm" style="margin-right: 10px" ng-repeat="participant in conversation.Participants" ng-src="{{ getAvatar(participant) || 'img/profile-pics/5.jpg' }}" alt="">
+                <div class="media-body" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                    <img class="lv-img-sm" style="margin-right: -18px;" ng-class="{'lastAvatar':$last}" ng-repeat="participant in conversation.Participants | orderBy: selfFirst" ng-src="{{ getAvatar(participant) || 'img/profile-pics/5.jpg' }}" alt="">
+                    <ul class="convParticipants">
+                        <li>
+                            <div>
+                                <small ng-repeat="participant in conversation.Participants | orderBy: selfFirst" class="username">{{$first ? "You" : getUsername(participant) || "unknown" }}{{$last ? '' : ', '}}</small>
+                            </div>
+                        </li>
+                        <li><small class="latestMessage">Latest:</small></li>
+                    </ul>
                 </div>
             </a>
         </div>

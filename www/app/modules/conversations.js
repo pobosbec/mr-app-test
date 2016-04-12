@@ -40,6 +40,28 @@ angular.module('conversations', [])
             }
         };
 
+        $scope.getUsername = function(appUserId) {
+            var found = null;
+
+            for(var i = 0; i < $scope.appUsers.length; i++){
+                var appUser = $scope.appUsers[i];
+
+                if(appUser.id === appUserId){
+                    found =  $scope.appUsers[i].username;
+                }
+            }
+
+            if(found != null){
+                return found;
+            }
+        };
+
+        $scope.selfFirst = function (appUserId) {
+            if (appUserId === $scope.userId) {
+                return 1;
+            }
+        }
+
         // The events that this view reacts on
         $scope.$on('messages-added', function(event, args) {
 
@@ -278,7 +300,6 @@ angular.module('conversations', [])
         };
 
         $scope.getUsername = function(appUserId) {
-
             var found = null;
 
             for(var i = 0; i < $scope.appUsers.length; i++){

@@ -272,7 +272,7 @@ and (orientation: portrait) {
     padding-top: 15px!important;
 }
 
-/**Menu drawer bellow!! **/
+/**Menu drawer below!! **/
 
 /* Show "Left" drawer for the "Right" drawer in the demo */
 .snapjs-right .snap-drawer-left {
@@ -510,4 +510,34 @@ and (orientation: portrait) {
 
 .modal{
     margin-top: 20%!important;
+}
+
+/* Conversation classes */
+.lastAvatar {
+    margin-right: 10px !important;
+}
+
+.convParticipants {
+    display: inline-block;
+    vertical-align: top;
+    -webkit-padding-start: 0px;
+    list-style-type: none;
+}
+
+.convParticipants .username {
+    font-weight: bold;
+    color: #5e5e5e;
+    margin-left: 2px;
+    list-style-type: none;
+    overflow: hidden; 
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.latestMessage {
+    display: inline-block;
+    font-weight: normal;
+    color: #5e5e5e;
+    margin-left: 2px;
+    list-style-type: none;
 }
