@@ -39,7 +39,7 @@
                     </div>
                     <div class="clearfix"></div>
                     <div class="lv-footer ms-reply">
-                        <textarea placeholder="Reply..." ng-model="currentReplyMessage" ng-change="captureReplyMessageInput(conversation.ConversationId, currentReplyMessage)" ng-model-options="{ debounce: 10 }"></textarea>
+                        <textarea placeholder="Reply..." ng-model="currentReplyMessage" ng-change="captureReplyMessageInput(conversation.ConversationId, currentReplyMessage)" ></textarea>
                         <button ng-click="reply(currentReplyMessage, conversation.ConversationId);"><i class="zmdi zmdi-mail-send"></i></button>
                     </div>
                 </div>
