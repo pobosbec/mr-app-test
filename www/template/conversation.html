@@ -15,10 +15,10 @@
                             <i id="top-search-close" class="zmdi zmdi-arrow-left zmdi-hc-fw"></i>
                         </a>
                         <div class="lvh-label">
-                            <!--<div class="lv-avatar pull-left">
-                                <img src="img/profile-pics/1.jpg" alt="">
-                            </div>-->
-                            <span class="c-black" ng-repeat="id in conversation.Participants">{{ getUsername(id) }} {{$last ? '' : ', '}}</span>
+                            <ul style="list-style-type:none; margin:0; padding:0;width:250px; text-overflow:ellipsis; white-space:nowrap; overflow:hidden">
+                                <li ng-repeat="id in conversation.Participants" style="display:inline; margin-right:10px">{{ getUsername(id) }} {{$last ? '' : ', '}}</li>
+                            </ul>
+                           <!--<span class="c-black" ng-repeat="id in conversation.Participants" >{{ getUsername(id) }} {{$last ? '' : ', '}}</span>-->
                         </div>
                     </div>
                     <div class="lv-body" style="height:calc( 100vh - 123px)!important; overflow-y: scroll" id="conversationMessagesBody">
