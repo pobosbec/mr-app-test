@@ -10,7 +10,6 @@ mobileresponseWebbApp
 
         // process the confirmation dialog result
         function onConfirm(buttonIndex) {
-            alert('You selected button ' + buttonIndex);
             if(buttonIndex == 1){
             $rootScope.logout();
             }
