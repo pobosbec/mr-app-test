@@ -95,6 +95,9 @@ mobileresponseWebbApp
                 onEnter: function ($rootScope) {
                     $rootScope.snapperControl.close();
                     $rootScope.header = true;
+                },
+                onExit: function ($rootScope) {
+                    $rootScope.header = true;
                 }
             })
             .state('pages.contacts', {
@@ -103,6 +106,9 @@ mobileresponseWebbApp
                 controller: 'contactsCtrl as contactsCtrl',
                 onEnter: function ($rootScope) {
                     $rootScope.snapperControl.close();
+                    $rootScope.header = true;
+                },
+                onExit: function ($rootScope) {
                     $rootScope.header = true;
                 }
             })
@@ -125,6 +131,9 @@ mobileresponseWebbApp
                 controller: 'conversationCtrl as conversationCtrl',
                 onEnter: function ($rootScope) {
                     $rootScope.snapperControl.close();
+                    $rootScope.header = false;
+                },
+                onExit: function ($rootScope) {
                     $rootScope.header = true;
                 }
             });
