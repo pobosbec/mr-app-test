@@ -1,9 +1,9 @@
 <section id="main">
     <section id="content">
-        <div class="card m-b-0">
+        <div class="card m-b-0" style="height: 100vh !important;">
             <div class="ms-body">
                 <div class="listview lv-message">
-                    <div class="lv-header-alt clearfix">
+                    <div class="lv-header-alt clearfix" style="height: 100%!important;">
                         <div id="ms-menu-trigger"  data-ng-class="{ 'open': mactrl.lvMenuStat }" data-ng-click="mactrl.lvMenuStat = (mactrl.lvMenuStat===true ? false : true )">
                             <!--<div class="line-wrap">
                                     <div class="line top"></div>
@@ -21,7 +21,7 @@
                             <span class="c-black" ng-repeat="id in conversation.Participants">{{ getUsername(id) }} {{$last ? '' : ', '}}</span>
                         </div>
                     </div>
-                    <div class="lv-body" style="height: 400px; overflow-y: scroll" id="conversationMessagesBody">
+                    <div class="lv-body" style="height:calc( 100vh - 123px)!important; overflow-y: scroll" id="conversationMessagesBody">
                         <div class="load-more">
                             <a href="" ng-click="loadMoreForConversation(conversation.ConversationId)"><i class="zmdi zmdi-refresh-alt"></i> Load More...</a>
                         </div>
@@ -39,7 +39,7 @@
                     </div>
                     <div class="clearfix"></div>
                     <div class="lv-footer ms-reply">
-                        <textarea placeholder="Reply..." ng-model="currentReplyMessage" ng-change="captureReplyMessageInput(conversation.ConversationId, currentReplyMessage)" ></textarea>
+                        <textarea placeholder="Reply..." style="height: auto !important;" ng-model="currentReplyMessage" ng-change="captureReplyMessageInput(conversation.ConversationId, currentReplyMessage)" ></textarea>
                         <button ng-click="reply(currentReplyMessage, conversation.ConversationId);"><i class="zmdi zmdi-mail-send"></i></button>
                     </div>
                 </div>
