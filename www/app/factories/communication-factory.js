@@ -32,6 +32,28 @@ angular.module('communication', [])
             return tokenService.httpPost(req);
         };
 
+        var downloadMessagesForConversation = function (conversationId, sortAscending, pageIndex, pageSize) {
+            var req = {
+                method: 'POST',
+                ignoreLoadingBar: true,
+                url: tokenService.currentAppApiUrl + 'app/conversations/list-messages',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: {
+                    Data: {
+                        ConversationId: conversationId,
+                        SortAscending: sortAscending,
+                        PageIndex: pageIndex,
+                        PageSize: pageSize
+                    },
+                    AuthenticationToken: tokenService.getAppAuthToken()
+                }
+            };
+
+            return tokenService.httpPost(req);
+        };
+
         factory.getAllConversations = function (conversationIds) {
 
             var req = {
@@ -50,6 +72,10 @@ angular.module('communication', [])
             };
 
             return tokenService.httpPost(req);
+        }
+
+        factory.downloadMessagesForConversation = function(conversationId, sortAscending, pageIndex, pageSize) {
+            return downloadMessagesForConversation(conversationId, sortAscending, pageIndex, pageSize);
         }
 
         factory.messagesDownloaded = function (data) {
@@ -83,7 +109,7 @@ angular.module('communication', [])
                     console.log('This event is deprecated! This is a temp solution that downloads messages from last 5 minutes. Use download-messages.');
                     var fiveMinutesAgo = new Date();
                     fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5);
-                    factory.syncPeriodMessages(fiveMinutesAgo.toJSON(), new Date().toJSON(), 0, 50)
+                    factory.syncPeriodMessages(fiveMinutesAgo.toJSON(), new Date().toJSON(), 0, 50);
                     break;
                 case 'download-messages':
                     factory.syncPeriodMessages(args.PeriodStart, args.PeriodEnd, args.Index, args.Size);
@@ -122,7 +148,7 @@ angular.module('communication', [])
                     }
                 },
                 function (error) {
-                    console.log('Error when making request to list-messages.')
+                    console.log('Error when making request to list-messages.');
                 });
         }
 

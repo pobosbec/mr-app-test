@@ -11,7 +11,7 @@
                                 <small ng-repeat="participant in conversation.Participants | orderBy: selfFirst" class="username">{{$first ? "You" : getUsername(participant) || "unknown" }}{{$last ? '' : ', '}}</small>
                             </div>
                         </li>
-                        <li><small class="latestMessage">Latest:</small></li>
+                        <li ng-repeat="message in conversation.Messages | limitTo: 1"><small class="latestMessage" ng-class="{'unreadMessage':! message.isRead}">{{message.authorDisplayName}}: {{message.content}}</small></li>
                     </ul>
                 </div>
             </a>

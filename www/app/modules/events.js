@@ -186,7 +186,8 @@ angular.module('event', [])
         });
 
         $scope.$on('app-token-available', function (event, args) {
-            $rootScope.$broadcast('download-whats-new', args);
+            // Here we need to do the initial sync
+            // $rootScope.$broadcast('download-whats-new', args);
         });
 
 

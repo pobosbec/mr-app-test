@@ -27,31 +27,23 @@ angular.module('message', ['ngCordova'])
         var sqliteQueries = {
             dropMessages: 'DROP TABLE IF EXISTS Messages',
             createMessages: 'CREATE TABLE IF NOT EXISTS Messages (MessageId text primary key, CreatedOn integer, ConversationId text, Author text, JSON text)',
-            getMessagesByTime : 'SELECT MessageId, JSON FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
-            getConversations : 'SELECT DISTINCT ConversationId FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
-            getMessagesByConversation : 'SELECT MessageId, JSON FROM Messages WHERE ConversationId = ? ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
-            /**/  getAllMessages: 'SELECT * FROM Messages ORDER BY CreatedOn DESC',
-            /**/  getLatestMessages: 'SELECT * FROM Messages ORDER BY CreatedOn DESC LIMIT ?',
-            /**/  getAllMessagesFromAuthor: 'SELECT * FROM Messages WHERE Author=?',
-            /**/  getAllMessagesFromConversation: 'SELECT * FROM Messages WHERE ConversationId=?',
+            getMessagesByTime: 'SELECT MessageId, JSON FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
+            getConversations: 'SELECT DISTINCT ConversationId FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
+            getMessagesByConversation: 'SELECT MessageId, JSON FROM Messages WHERE ConversationId = ? ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
             insertMessage: 'INSERT INTO Messages (MessageId, CreatedOn, ConversationId, Author, JSON) VALUES (?, ?, ?, ?, ?)',
-            doesMessageExist : 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?',
-            doMessagesExist : 'SELECT MessageId FROM Messages WHERE MessageId IN '
+            doesMessageExist: 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?',
+            doMessagesExist: 'SELECT MessageId FROM Messages WHERE MessageId IN '
         };
 
         var webSqlQueries = {
             dropMessages: 'DROP TABLE IF EXISTS Messages',
             createMessages: 'CREATE TABLE IF NOT EXISTS Messages (MessageId unique, CreatedOn, ConversationId, Author, JSON)',
-            getMessagesByTime : 'SELECT MessageId, JSON FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
-            getConversations : 'SELECT DISTINCT ConversationId FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
-            getMessagesByConversation : 'SELECT MessageId, JSON FROM Messages WHERE ConversationId = ? ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
-            /**/  getAllMessages: 'SELECT * FROM Messages ORDER BY CreatedOn DESC',
-            /**/  getLatestMessages: 'SELECT * FROM Messages ORDER BY CreatedOn DESC LIMIT ?',
-            /**/  getAllMessagesFromAuthor: 'SELECT * FROM Messages WHERE Author=?',
-            /**/  getAllMessagesFromConversation: 'SELECT * FROM Messages WHERE ConversationId=?',
+            getMessagesByTime: 'SELECT MessageId, JSON FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
+            getConversations: 'SELECT DISTINCT ConversationId FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
+            getMessagesByConversation: 'SELECT MessageId, JSON FROM Messages WHERE ConversationId = ? ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
             insertMessage: 'INSERT INTO Messages (MessageId, CreatedOn, ConversationId, Author, JSON) VALUES (?, ?, ?, ?, ?)',
-            doesMessageExist : 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?',
-            doMessagesExist : 'SELECT MessageId FROM Messages WHERE MessageId IN '
+            doesMessageExist: 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?',
+            doMessagesExist: 'SELECT MessageId FROM Messages WHERE MessageId IN '
         };
 
         var queries = null;
@@ -66,56 +58,11 @@ angular.module('message', ['ngCordova'])
             configureDatabase();
         };
 
-        factory.authors = [{
-            Id: "956EF224-E73B-453A-97BA-DDEBFAA<A9D17",
-            Avatar: "img/profile-pics/6.jpg",
-            DisplayName: "Testa Testsson"
-        },
-            {
-                Id: "37F57046-F1FD-4EEC-8E31-BB74246EB0AC",
-                Avatar: "img/profile-pics/2.jpg",
-                DisplayName: "Börje Tumme"
-            },
-            {
-                Id: "48001363-EF6C-4FAC-B627-77AAAE361BD7",
-                Avatar: "img/profile-pics/5.jpg",
-                DisplayName: "Pannbandine Grön"
-            }];
-/*
-        factory.getMessages = function (limit) {
-            var messages = factory.messages;
-            if (factory.messages != undefined) {
-                for (var thisMessage in messages) {
-                    if (messages.hasOwnProperty(thisMessage));
-                    {
-                        var author = factory.authors.filter(function (v) {
-                            return v.Id === messages[thisMessage].Author;
-                        })[0];
-
-                        if (author != undefined) {
-                            if (!messages[thisMessage].hasOwnProperty("AuthorAvatar") && author.hasOwnProperty("Avatar")) {
-                                messages[thisMessage]["AuthorAvatar"] = author.Avatar;
-                            }
-                            if (!messages[thisMessage].hasOwnProperty("AuthorDisplayName") && author.hasOwnProperty("DisplayName")) {
-                                messages[thisMessage]["AuthorDisplayName"] = author.DisplayName;
-                            }
-                        }
-                    }
-                }
-
-                messages.sort(function (a, b) {
-                    return new Date(b["CreatedOn"]) - new Date(a["CreatedOn"]);
-                });
-            }
-
-            return messages;
-        };
-*/
         /**
          * Configures the database, sets up the db object and creates tables if needed.
          */
-        function configureDatabase(){
-            if(isConfigured){
+        function configureDatabase() {
+            if (isConfigured) {
                 return;
             }
 
@@ -139,9 +86,9 @@ angular.module('message', ['ngCordova'])
 
             createDatabase()
                 .then(
-                    function(){
+                    function () {
                         console.log('The database is successfully created.');
-                    }, function(error){
+                    }, function (error) {
                         console.error('Failed to create the database.\r\n' + error.message);
                     });
         }
@@ -149,8 +96,8 @@ angular.module('message', ['ngCordova'])
         /**
          * Creates a promise for creating the database tables.
          */
-        function createDatabase(){
-            return $q(function(resolve, reject) {
+        function createDatabase() {
+            return $q(function (resolve, reject) {
                 db.transaction(function (tx) {
                     tx.executeSql(queries.createMessages, [], function () {
                         resolve();
@@ -165,10 +112,10 @@ angular.module('message', ['ngCordova'])
          * Gets the rows from a sql query result and returns them as an array
          * @param {object} result - The result from a sql query
          */
-        function getRows(result){
+        function getRows(result) {
             var rows = [], i = 0;
 
-            if(dbType === 'webSQL'){
+            if (dbType === 'webSQL') {
                 for (i = 0; i < result.rows.length; i++) {
                     rows.push(result.rows[i]);
                 }
@@ -184,8 +131,8 @@ angular.module('message', ['ngCordova'])
         /**
          * Creates a promise for dropping the database tables.
          */
-        function dropDatabase(){
-            return $q(function(resolve, reject) {
+        function dropDatabase() {
+            return $q(function (resolve, reject) {
                 db.transaction(function (tx) {
                     tx.executeSql(queries.dropMessages, [], function () {
                         resolve();
@@ -201,36 +148,36 @@ angular.module('message', ['ngCordova'])
          * @param {number} pageIndex - The page index to fetch.
          * @param {number} size - The number of items per page.
          */
-        factory.getMessagesByTime = function(pageIndex, size){
-            if(typeof (pageIndex) !== 'number'){
+        factory.getMessagesByTime = function (pageIndex, size) {
+            if (typeof (pageIndex) !== 'number') {
                 pageIndex = 0;
             }
 
-            if(typeof (size) !== 'number'){
+            if (typeof (size) !== 'number') {
                 size = 20;
             }
 
             var offset = pageIndex * size;
 
-            return $q(function(resolve, reject){
+            return $q(function (resolve, reject) {
                 db.transaction(function (tx) {
                     tx.executeSql(queries.getMessagesByTime, [size, offset],
-                        function(trans, result){
+                        function (trans, result) {
                             var messages = [];
                             var rows = getRows(result);
 
-                            for(var i = 0; i < rows.length; i++){
+                            for (var i = 0; i < rows.length; i++) {
                                 var row = rows[i];
-                                try{
+                                try {
                                     messages.push(JSON.parse(row['JSON']));
                                 }
-                                catch(err){
+                                catch (err) {
                                     console.error('Failed to parse message \'' + row['MessageId'] + '\'.\r\n' + err);
                                 }
                             }
 
                             resolve(messages);
-                        }, function(trans, error){
+                        }, function (trans, error) {
                             console.error('Error while fetching messages from database.\r\n' + error.message);
                             reject(error);
                         });
@@ -240,29 +187,46 @@ angular.module('message', ['ngCordova'])
 
         /**
          * Creates a promise for getting latest conversations and maximum 5 messages for each conversation descending with page index (0 and upwards) and a limit.
-         * @param {string} conversationId - The conversation id to fetch.
          * @param {number} itemsPerConversation - The maximum number of items per conversation.
          * @param {number} pageIndex - The page index to fetch.
-         * @param {number} size - The number of items per page.
+         * @param {number} size - The number of conversations per page.
          */
-        factory.getConversationsByTime = function(conversationId, itemsPerConversation, pageIndex, size) {
-            if(typeof (conversationId) !== 'string'){
-                return $q(function(resolve, reject){ reject('Invalid conversation id');});
-            }
-
+        factory.getConversationsByTime = function (itemsPerConversation, pageIndex, size) {
             itemsPerConversation = typeof (itemsPerConversation) !== 'number' ? 0 : itemsPerConversation;
             pageIndex = typeof (pageIndex) !== 'number' ? 0 : pageIndex;
-            size = typeof (size) !== 'number' ? 20 : size;
+            size = typeof (size) !== 'number' ? 5 : size;
 
-            return $q(function(resolve, reject){
+            /// Adds the messages within the promise to a conversation
+            var addMessagesToConversation = function(conversation, itmsPerConv) {
+                getMessagesByConversation(conversation.Id, 0, itmsPerConv).then(function (items) {
+                    conversation.messages = items;
+                });
+            }
+
+            return $q(function (resolve, reject) {
                 var promise = getConversations(pageIndex, size);
 
-                promise.then(function(conversations){
+                promise.then(function (conversations) {
+                    var numberOfConversations = conversations.length;
+                    var handledConversations = 0;
                     var result = [];
-                    for (var i = 0; i < conversations.length; i++){
+                    for (var i = 0; i < conversations.length; i++) {
+                        var cid = conversations[i];
+                        var conversation = {
+                            Id: cid,
+                            Messages: []
+                        }
+                        result.push(conversation);
 
+                        addMessagesToConversation(conversation, itemsPerConversation).then(function () {
+                            handledConversations++;
+
+                            if (handledConversations === numberOfConversations) {
+                                resolve(result);
+                            }
+                        });
                     }
-                }, function(error){
+                }, function (error) {
                     reject(error);
                 });
             });
@@ -274,34 +238,34 @@ angular.module('message', ['ngCordova'])
          * @param {number} pageIndex - The page index to fetch.
          * @param {number} size - The number of items per page.
          */
-        factory.getMessagesByConversation = function(conversationId, pageIndex, size) {
-            if(typeof (conversationId) !== 'string'){
-                return $q(function(resolve, reject){ reject('Invalid conversation id');});
+        factory.getMessagesByConversation = function (conversationId, pageIndex, size) {
+            if (typeof (conversationId) !== 'string') {
+                return $q(function (resolve, reject) { reject('Invalid conversation id'); });
             }
 
             pageIndex = typeof (pageIndex) !== 'number' ? 0 : pageIndex;
             size = typeof (size) !== 'number' ? 20 : size;
             var offset = pageIndex * size;
 
-            return $q(function(resolve, reject){
+            return $q(function (resolve, reject) {
                 db.transaction(function (tx) {
                     tx.executeSql(queries.getMessagesByConversation, [conversationId, size, offset],
-                        function(trans, result){
+                        function (trans, result) {
                             var messages = [];
                             var rows = getRows(result);
 
-                            for(var i = 0; i < rows.length; i++){
+                            for (var i = 0; i < rows.length; i++) {
                                 var row = rows[i];
-                                try{
+                                try {
                                     messages.push(JSON.parse(row['JSON']));
                                 }
-                                catch(err){
+                                catch (err) {
                                     console.error('Failed to parse message \'' + row['MessageId'] + '\'.\r\n' + err);
                                 }
                             }
 
                             resolve(messages);
-                        }, function(trans, error){
+                        }, function (trans, error) {
                             console.error('Error while fetching messages from database.\r\n' + error.message);
                             reject(error);
                         });
@@ -315,33 +279,33 @@ angular.module('message', ['ngCordova'])
          * @param {number} pageIndex - The page index to fetch.
          * @param {number} size - The number of items per page.
          */
-        factory.getMessagesForConversation = function(conversationId, pageIndex, size) {
-            if(typeof (conversationId) !== 'string'){
-                return $q(function(resolve, reject){ reject('Invalid conversation id');});
+        factory.getMessagesForConversation = function (conversationId, pageIndex, size) {
+            if (typeof (conversationId) !== 'string') {
+                return $q(function (resolve, reject) { reject('Invalid conversation id'); });
             }
 
             pageIndex = typeof (pageIndex) !== 'number' ? 0 : pageIndex;
             size = typeof (size) !== 'number' ? 20 : size;
 
-            return $q(function(resolve, reject){
+            return $q(function (resolve, reject) {
                 db.transaction(function (tx) {
                     tx.executeSql(queries.getMessagesByConversation, [conversationId, size, pageIndex],
-                        function(trans, result){
+                        function (trans, result) {
                             var messages = [];
                             var rows = getRows(result);
 
-                            for(var i = 0; i < rows.length; i++){
+                            for (var i = 0; i < rows.length; i++) {
                                 var row = rows[i];
-                                try{
+                                try {
                                     messages.push(JSON.parse(row['JSON']));
                                 }
-                                catch(err){
+                                catch (err) {
                                     console.error('Failed to parse message \'' + row['MessageId'] + '\'.\r\n' + err);
                                 }
                             }
 
                             resolve(messages);
-                        }, function(trans, error){
+                        }, function (trans, error) {
                             console.error('Error while fetching messages from database.\r\n' + error.message);
                             reject(error);
                         });
@@ -354,25 +318,25 @@ angular.module('message', ['ngCordova'])
          * @param {number} pageIndex - The page index to fetch.
          * @param {number} size - The number of items per page.
          */
-        factory.getConversations = function(pageIndex, size) {
+        factory.getConversations = function (pageIndex, size) {
             pageIndex = typeof (pageIndex) !== 'number' ? 0 : pageIndex;
             size = typeof (size) !== 'number' ? 20 : size;
             var offset = pageIndex * size;
 
-            return $q(function(resolve, reject){
+            return $q(function (resolve, reject) {
                 db.transaction(function (tx) {
                     tx.executeSql(queries.getConversations, [size, offset],
-                        function(trans, result){
+                        function (trans, result) {
                             var ids = [];
                             var rows = getRows(result);
 
-                            for(var i = 0; i < rows.length; i++){
+                            for (var i = 0; i < rows.length; i++) {
                                 var row = rows[i];
                                 ids.push(row['ConversationId']);
                             }
 
                             resolve(ids);
-                        }, function(trans, error){
+                        }, function (trans, error) {
                             console.error('Error while fetching messages from database.\r\n' + error.message);
                             reject(error);
                         });
@@ -385,30 +349,30 @@ angular.module('message', ['ngCordova'])
          * @param {object} message - the message to add
          */
         factory.addMessage = function (message) {
-            return $q(function(resolve, reject){
+            return $q(function (resolve, reject) {
                 db.transaction(function (tx) {
                     var error;
                     console.log('Checking if message message with id \'' + message.MessageId + '\' exists.');
                     tx.executeSql(queries.doesMessageExist, [message.MessageId], function (transaction, resultData) {
                         var rows = getRows(resultData);
-                        if(rows.length !== 1){
+                        if (rows.length !== 1) {
                             error = 'Unexpected number of rows returned (' + rows.length + '). Check sql statement!';
                             console.error(error);
                             reject(error);
                             return;
                         }
 
-                        if(rows[0]['cnt'] !== 0){
+                        if (rows[0]['cnt'] !== 0) {
                             // console.log('Message width id \'' + message.MessageId + '\' exists, won\'t insert.');
                             return;
                         }
 
                         insertMessage(message)
-                            .then(function(){
+                            .then(function () {
                                 factory.messageAdded();
                                 // console.log('Added message with id \'' + message.MessageId + '\'');
                                 resolve();
-                            }, function(error){
+                            }, function (error) {
                                 error = 'Error while inserting message with id \'' + message.MessageId + '\'.\r\n' + error.message;
                                 console.error(error);
                                 reject(error);
@@ -426,9 +390,9 @@ angular.module('message', ['ngCordova'])
          * Creates a promise that adds a number of messages to the database
          * @param {object|Array} messages - The messages to add
          */
-        factory.addMessages = function(messages){
-            return $q(function(resolve, reject){
-                if(messages.length === 0){
+        factory.addMessages = function (messages) {
+            return $q(function (resolve, reject) {
+                if (messages.length === 0) {
                     resolve();
                     return;
                 }
@@ -437,34 +401,34 @@ angular.module('message', ['ngCordova'])
                 var errorMsg;
 
                 var queryIn = [];
-                for(var i = 0; i < messages.length; i++){
+                for (var i = 0; i < messages.length; i++) {
                     queryIn.push('\'' + messages[i].MessageId + '\'');
                 }
 
-                console.log('queryIn took '+  (new Date() - timer) +'ms to create!');
+                console.log('queryIn took ' + (new Date() - timer) + 'ms to create!');
 
                 timer = new Date();
 
-                db.transaction(function(tx){
-                    console.log('Transaction took '+  (new Date() - timer) +'ms to open!');
+                db.transaction(function (tx) {
+                    console.log('Transaction took ' + (new Date() - timer) + 'ms to open!');
 
                     console.log('Checking if any of the ' + messages.length + ' exist');
                     tx.executeSql(queries.doMessagesExist + '(' + queryIn.join(',') + ')', [],
-                        function(transaction, resultData){
+                        function (transaction, resultData) {
                             var rows = getRows(resultData);
 
-                            console.log('Found '+ rows.length +' messages already in db');
+                            console.log('Found ' + rows.length + ' messages already in db');
 
                             var inserted = 0;
                             var expected = 0;
 
                             timer = new Date();
 
-                            for(var j = 0; j < messages.length; j++) {
+                            for (var j = 0; j < messages.length; j++) {
                                 var msg = messages[j];
-                                if(rows.find(function(a){
+                                if (rows.find(function (a) {
                                         return a['MessageId'] === msg.MessageId;
-                                    })){
+                                })) {
                                     continue;
                                 }
 
@@ -472,8 +436,8 @@ angular.module('message', ['ngCordova'])
 
                                 insertMessage(msg).then(function () {
                                     inserted++;
-                                    if(inserted === expected){
-                                        console.log('All messages are added in '+  (new Date() - timer) +'ms!');
+                                    if (inserted === expected) {
+                                        console.log('All messages are added in ' + (new Date() - timer) + 'ms!');
                                         factory.messageAdded();
                                         resolve();
                                     }
@@ -484,7 +448,7 @@ angular.module('message', ['ngCordova'])
                                 });
                             }
                         },
-                        function(transaction, error){
+                        function (transaction, error) {
                             errorMsg = 'Error while checking if messages exist.\r\n' + error.message;
                             console.error(errorMsg);
                             reject(errorMsg);
@@ -498,8 +462,8 @@ angular.module('message', ['ngCordova'])
          * @param message to insert
          * @returns {promise} returns a promise
          */
-        function insertMessage(message){
-            return $q(function(resolve, reject) {
+        function insertMessage(message) {
+            return $q(function (resolve, reject) {
                 db.transaction(function (tx) {
                     tx.executeSql(
                         queries.insertMessage,
@@ -514,7 +478,8 @@ angular.module('message', ['ngCordova'])
                             if (result.rowsAffected !== 1) {
                                 console.error('');
                                 reject(new {
-                                    message : 'The message width id \'' + message.MessageId + '\' doesn\'t seem to be added properly'});
+                                    message: 'The message width id \'' + message.MessageId + '\' doesn\'t seem to be added properly'
+                                });
                                 return;
                             }
 
@@ -535,10 +500,10 @@ angular.module('message', ['ngCordova'])
             evtMessagesAdded = true;
 
             setTimeout(function () {
-                    console.log("messages-added event");
-                    $rootScope.$broadcast('messages-added', {});
-                    evtMessagesAdded = false;
-                },
+                console.log("messages-added event");
+                $rootScope.$broadcast('messages-added', {});
+                evtMessagesAdded = false;
+            },
                 200);
         };
 
@@ -566,19 +531,19 @@ angular.module('message', ['ngCordova'])
                     localStorage.removeItem('latestWhatIsNewUpdate');
                     // Clearing Table on logout, just to be sure
                     dropDatabase().then(
-                        function(){
+                        function () {
                             console.log('Dropped database');
                         },
-                        function(error){
+                        function (error) {
                             console.error('Failed to drop database.\r\n' + error.message);
                         });
                     break;
                 case 'logged-in':
                     createDatabase().then(
-                        function(){
+                        function () {
                             console.log('Created database after login');
                         },
-                        function(error){
+                        function (error) {
                             console.error('Failed to create database after login.\r\n' + error.message);
                         });
                     break;
