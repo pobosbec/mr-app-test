@@ -243,6 +243,13 @@ angular.module('contacts', [])
          * @param {appUser} the appUser to add
          */
         factory.addAppUser = function (appUser) {
+            if (!appUser.hasOwnProperty('UserId')) {
+                console.log("repaired app user");
+                appUser.UserId = appUser.id;
+            }
+            if (!appUser.hasOwnProperty('id')) {
+                console.log("repaired app user");
+                appUser.id = appUser.UserId;}
             db.transaction(function (tx) {
                 console.log('Checking if app-user with id \'' + appUser.id + '\' exists.');
                 tx.executeSql(queries.doesAppUserExist, [appUser.id], function (transaction, resultData) {
@@ -257,11 +264,11 @@ angular.module('contacts', [])
                         console.log('AppUser width id \'' + appUser.id + '\' exists, won\'t insert.');
                         return;
                     }
-
                     factory.insertAppUser(appUser)
                         .then(function(){
                             // factory.appUserAdded();
                             console.log('Added appUser with id \'' + appUser.UserId + '\'');
+                            console.log(appUser);
                         }, function(error){
                             console.error('Error while inserting appUser with id \'' + appUser.UserId + '\'.\r\n' + error.message);
                         });

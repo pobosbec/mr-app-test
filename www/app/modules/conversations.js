@@ -141,28 +141,19 @@ angular.module('conversations', [])
                 });
         });
 
-        /* Sets initial values.
+        /**
+         * Sets first quickload data (10*10 messages) 
          */
-        function init() {
-            $scope.userId = tokenService.getAppUserId();
-
-            var appUsersPromise = contactsService.getAppUsers();
-
-            appUsersPromise.then(
-                function (success) {
-                    $scope.appUsers = success;
-                },
-                function (error) {
-                    console.log(JSON.stringify(error));
-                });
-            // This should be made to return 10-ish conversations descending upon first init
-            var conversationsPromise = communicationService.getAllConversations(null);
-
-            conversationsPromise.then(
+        function quickLoad() {
+            var quickLoadSize = 10;
+            console.log("QUICK LOADING");
+            var conversationsFromApiPromise = communicationService.getAllConversations(null);
+            conversationsFromApiPromise.then(
                 function (conversationsPromiseSuccess) {
-
+                    var processedConvos = 0;
                     // for each conversation, create and add to $scope.conversation. Check if all Authors are available as appUsers. If not, make details call and add to $scope.appusers + save to db
                     for (var convo in conversationsPromiseSuccess.data.usersInConversations) {
+                        processedConvos++;
                         var conversation = {
                             ConversationId: convo,
                             Messages: [],
@@ -170,21 +161,33 @@ angular.module('conversations', [])
                         };
 
                         syncConversationParticipants(conversation);
-                        syncConversationMessages(conversation);
+
+                        // 10 messages for the 10 first convos, after that only 1 message.
+                        if (processedConvos < quickLoadSize) {
+                            syncConversationMessages(conversation, quickLoadSize);
+                        } else {
+                            //syncConversationMessages(conversation, 1);
+                        }
 
                         $scope.conversations.push(conversation);
                     }
 
-                    function isParticipantAppUser(participantId) {
-                        var found = false;
-
-                        for (var i = 0; i < $scope.appUsers.length; i++) {
-                            if ($scope.appUsers[i].userId === participantId) {
-                                found = true;
+                    function syncConversationMessages(conversation, amount) {
+                        var res = communicationService.downloadMessagesForConversation(conversation.ConversationId, false, 0, amount);
+                        res.then(function (result) {
+                            var messages = result.data.items.sort(function (a, b) {
+                                if (a.CreatedOn > b.CreatedOn) {
+                                    return 1;
+                                }
+                                if (a.CreatedOn < b.CreatedOn) {
+                                    return -1;
+                                }
+                                return 0;
+                            });
+                            for (var i = 0; i < messages.length; i++) {
+                                conversation.Messages.push(messages[i]);
                             }
-                        }
-
-                        return found;
+                        });
                     }
 
                     function syncConversationParticipants(conversation) {
@@ -204,26 +207,55 @@ angular.module('conversations', [])
                         }
                     }
 
-                    function syncConversationMessages(conversation) {
-                        var res = communicationService.downloadMessagesForConversation(conversation.ConversationId, false, 0, 10);
-                        res.then(function (result) {
-                            var messages = result.data.items.sort(function(a, b) {
-                                if (a.CreatedOn > b.CreatedOn) { return 1 }
-                                if (a.CreatedOn < b.CreatedOn) { return -1 }
-                                return 0;
-                            });
-                            for (var i = 0; i < messages.length; i++) {
-                                conversation.Messages.push(messages[i]);
+                    function isParticipantAppUser(participantId) {
+                        var found = false;
+
+                        for (var i = 0; i < $scope.appUsers.length; i++) {
+                            if ($scope.appUsers[i].userId === participantId) {
+                                found = true;
                             }
-                        });
+                        }
+
+                        return found;
                     }
 
                     function syncAppUserParticipant(participantId) {
                         return contactsService.searchAppUser(participantId);
                     }
+                });
+        }
+
+        /* Sets initial values.
+         */
+        function init() {
+            $scope.userId = tokenService.getAppUserId();
+
+            var appUsersPromise = contactsService.getAppUsers();
+
+            appUsersPromise.then(
+                function (success) {
+                    $scope.appUsers = success;
                 },
-                function (conversationsPromiseError) {
-                    console.error('Could not sync conversations.')
+                function (error) {
+                    console.log(JSON.stringify(error));
+                });
+
+            // Deliver what ever data we have asap:
+            var conversationsFromDatabasePromise = messageRepository.getConversationsByTime(10, 0, 1000);
+            conversationsFromDatabasePromise.then(
+                function (conversationsPromiseSuccess) {
+                    for (var cid in conversationsPromiseSuccess) {
+                        var conversation = conversationsPromiseSuccess[cid];
+                        $scope.conversations.push(conversation);
+                    }
+                }).then(function () {
+                    if (!$scope.conversations.length) {
+                        // No messages from Database, Let's do a quick fetch to have at least something initial to show.
+                        quickLoad();
+                    }
+                }).then(function () {
+                    // Time to do a complete load.
+                    //TODO
                 });
         };
         init();
@@ -416,7 +448,6 @@ angular.module('conversations', [])
                         conversation.Messages = conversationMessagesSuccess;
 
                         var participantsPromise = communicationService.getAllConversations(conversationIds);
-
                         participantsPromise.then(
                             function (success) {
                                 for (var i = 0; i < success.data.usersInConversations[id].length; i++) {

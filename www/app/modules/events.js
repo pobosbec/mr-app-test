@@ -203,6 +203,10 @@ angular.module('event', [])
             messageRepository.on(event, args);
         });
 
+        $scope.$on('new-conversations', function (event, args) {
+            messageRepository.on(event, args);
+        });
+
         $scope.$on('updated-message', function (event, args) {
             messageRepository.on(event, args);
         });
