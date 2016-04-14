@@ -8,7 +8,7 @@
     -ms-user-select: none;
     user-select: none;
 }
-input
+input textarea
 {
     -webkit-user-select: auto !important;
     -khtml-user-select: auto !important;
