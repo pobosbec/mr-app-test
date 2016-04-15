@@ -22,15 +22,15 @@
                 <div class="load-more">
                     <a href="" ng-click="loadMoreForConversation(conversation.ConversationId)"><i class="zmdi zmdi-refresh-alt"></i> Load More...</a>
                 </div>
-                <div class="lv-item" ng-repeat="message in conversation.Messages | orderBy: sortMessage: false" ng-class="message.Author === userId ? 'media right': 'media'" my-post-repeat-directive>
-                    <div class="lv-avatar" ng-class="message.Author === userId ? 'pull-right': 'pull-left'">
-                        <img ng-src="{{ getAvatar(message.Author) || 'img/profile-pics/5.jpg' }}" alt="">
+                <div class="lv-item" ng-repeat="message in conversation.Messages | orderBy: sortMessage: false" ng-class="message.author === userId ? 'media right': 'media'" my-post-repeat-directive>
+                    <div class="lv-avatar" ng-class="message.author === userId ? 'pull-right': 'pull-left'">
+                        <img ng-src="{{ getAvatar(message.author) || 'img/profile-pics/5.jpg' }}" alt="">
                     </div>
                     <div class="media-body">
                         <div class="ms-item">
-                            {{ message.Content }}
+                            {{ message.content }}
                         </div>
-                        <small class="ms-date"><i class="zmdi zmdi-time"></i> {{ message.CreatedOn }}</small>
+                        <small class="ms-date"><i class="zmdi zmdi-time"></i> {{ message.createdOn }}</small>
                     </div>
                 </div>
             </div>

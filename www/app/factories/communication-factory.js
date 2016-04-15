@@ -141,10 +141,10 @@ angular.module('communication', [])
                     }
                     else if (success.data.pageIndex === success.data.maxPages) {
                         factory.messagesDownloaded(success.data.items);
-                        console.log('Sync between' + periodStart + ' and ' + periodEnd + ' is complete.')
+                        console.log('Sync between' + periodStart + ' and ' + periodEnd + ' is complete.');
                     }
                     else if (success.data.pageIndex > success.data.maxPages) {
-                        console.error('Tried to list messages with pageIndex higher than maxPages.')
+                        console.error('Tried to list messages with pageIndex higher than maxPages.');
                     }
                 },
                 function (error) {

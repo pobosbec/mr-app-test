@@ -3,7 +3,7 @@
  */
 angular.module('conversations', [])
     .controller('conversationsCtrl', [
-        '$scope', '$http', '$rootScope', 'tokenService', 'contactsService', 'communicationService', 'messageRepository', function($scope, $http, $rootScope, tokenService, contactsService, communicationService, messageRepository) {
+        '$scope', '$http', '$rootScope', 'tokenService', 'contactsService', 'communicationService', 'messageRepository', function ($scope, $http, $rootScope, tokenService, contactsService, communicationService, messageRepository) {
 
             $scope.conversations = [];
             $scope.userId = null;
@@ -11,20 +11,20 @@ angular.module('conversations', [])
 
             /* Make a request to the api to check if a conversation exists
          */
-            $scope.doesConversationExist = function(users) {
+            $scope.doesConversationExist = function (users) {
                 return communicationService.doesConversationExist(users);
             };
 
             /* Makes a request to the api to get messages between two dateTimes. Could be used in a syncing service
          * if the user has dropped the local database.
          */
-            $scope.sync = function(from, to) {
+            $scope.sync = function (from, to) {
                 communicationService.syncPeriodMessages(from.toJSON(), to.toJSON(), 0, 50);
             };
 
             /* Gets the url for a user. Used in an ng-repeat to display the avatar.
          */
-            $scope.getAvatar = function(appUserId) {
+            $scope.getAvatar = function (appUserId) {
 
                 var found = null;
 
@@ -41,7 +41,7 @@ angular.module('conversations', [])
                 }
             };
 
-            $scope.getUsername = function(appUserId) {
+            $scope.getUsername = function (appUserId) {
                 var found = null;
 
                 for (var i = 0; i < $scope.appUsers.length; i++) {
@@ -57,18 +57,18 @@ angular.module('conversations', [])
                 }
             };
 
-            $scope.selfFirst = function(appUserId) {
+            $scope.selfFirst = function (appUserId) {
                 if (appUserId === $scope.userId) {
                     return 1;
                 }
             }
 
             // The events that this view reacts on
-            $scope.$on('messages-added', function(event, args) {
+            $scope.$on('messages-added', function (event, args) {
 
                 var promise = messageRepository.getMessagesByTime(0, 50);
                 promise.then(
-                    function(messages) {
+                    function (messages) {
                         for (var i = 0; i < messages.length; i++) {
 
                             var newConversation = true;
@@ -83,7 +83,7 @@ angular.module('conversations', [])
                                 var newConversationsPromise = communicationService.getAllConversations(null);
 
                                 newConversationsPromise.then(
-                                    function(newConversationsPromiseSuccess) {
+                                    function (newConversationsPromiseSuccess) {
 
                                         // for each conversation, create and add to $scope.conversation. Check if all Authors are available as appUsers. If not, make details call and add to $scope.appusers + save to db
                                         for (var convo in newConversationsPromiseSuccess.data.usersInConversations) {
@@ -116,11 +116,11 @@ angular.module('conversations', [])
                                                     var promise = syncAppUserParticipant(conversation.Participants[i]);
 
                                                     promise.then(
-                                                        function(success) {
+                                                        function (success) {
                                                             $scope.appUsers.push(success.data.items[0]);
                                                             contactsService.addAppUser(success.data.items[0]);
                                                         },
-                                                        function(error) {
+                                                        function (error) {
                                                             console.error('Could not sync user: ' + conversation.Participants[i]);
                                                         });
                                                 }
@@ -131,13 +131,13 @@ angular.module('conversations', [])
                                             return contactsService.searchAppUser(participantId);
                                         }
                                     },
-                                    function(conversationsPromiseError) {
+                                    function (conversationsPromiseError) {
                                         console.error('Could not sync conversations.')
                                     });
                             }
                         }
                     },
-                    function(error) {
+                    function (error) {
                         console.log(error);
                     });
             });
@@ -150,17 +150,17 @@ angular.module('conversations', [])
                 var appUsersPromise = contactsService.getAppUsers();
 
                 appUsersPromise.then(
-                    function(success) {
+                    function (success) {
                         $scope.appUsers = success;
                     },
-                    function(error) {
+                    function (error) {
                         console.log(JSON.stringify(error));
                     });
                 // This should be made to return 10-ish conversations descending upon first init
                 var conversationsPromise = communicationService.getAllConversations(null);
 
                 conversationsPromise.then(
-                    function(conversationsPromiseSuccess) {
+                    function (conversationsPromiseSuccess) {
 
                         // for each conversation, create and add to $scope.conversation. Check if all Authors are available as appUsers. If not, make details call and add to $scope.appusers + save to db
                         for (var convo in conversationsPromiseSuccess.data.usersInConversations) {
@@ -194,11 +194,11 @@ angular.module('conversations', [])
                                     var promise = syncAppUserParticipant(conversation.Participants[i]);
 
                                     promise.then(
-                                        function(success) {
+                                        function (success) {
                                             $scope.appUsers.push(success.data.items[0]);
                                             contactsService.addAppUser(success.data.items[0]);
                                         },
-                                        function(error) {
+                                        function (error) {
                                             console.error('Could not sync user: ' + conversation.Participants[i]);
                                         });
                                 }
@@ -207,8 +207,8 @@ angular.module('conversations', [])
 
                         function syncConversationMessages(conversation) {
                             var res = communicationService.downloadMessagesForConversation(conversation.ConversationId, false, 0, 10);
-                            res.then(function(result) {
-                                var messages = result.data.items.sort(function(a, b) {
+                            res.then(function (result) {
+                                var messages = result.data.items.sort(function (a, b) {
                                     if (a.CreatedOn > b.CreatedOn) {
                                         return 1
                                     }
@@ -227,7 +227,7 @@ angular.module('conversations', [])
                             return contactsService.searchAppUser(participantId);
                         }
                     },
-                    function(conversationsPromiseError) {
+                    function (conversationsPromiseError) {
                         console.error('Could not sync conversations.')
                     });
             };
@@ -236,16 +236,18 @@ angular.module('conversations', [])
         }
     ])
     .controller('conversationCtrl', [
-        '$scope', '$http', '$rootScope', 'tokenService', 'contactsService', 'communicationService', 'messageRepository', '$stateParams', '$uibModal', function($scope, $http, $rootScope, tokenService, contactsService, communicationService, messageRepository, $stateParams, $uibModal) {
+        '$scope', '$http', '$rootScope', 'tokenService', 'contactsService', 'communicationService', 'messageRepository', '$stateParams', '$uibModal', function ($scope, $http, $rootScope, tokenService, contactsService, communicationService, messageRepository, $stateParams, $uibModal) {
 
             $scope.conversationId = $stateParams.conversationId;
             $scope.userId = null;
             $scope.conversation = [];
             $scope.appUsers = [];
+            $scope.PageIndex = 1;
+            $scope.PageSize = 10;
 
             /* Reply to the current conversation
          */
-            $scope.reply = function(message, conversationId) {
+            $scope.reply = function (message, conversationId) {
 
                 $scope.currentReplyMessage = "";
 
@@ -268,7 +270,7 @@ angular.module('conversations', [])
                 var promise = tokenService.httpPost(req);
 
                 promise.then(
-                    function(success) {
+                    function (success) {
                         var newMessage = {
                             MessageId: success.data.messageId,
                             Author: success.data.authorId,
@@ -278,27 +280,46 @@ angular.module('conversations', [])
                         };
                         $scope.conversation.Messages.push(newMessage);
                     },
-                    function(error) {
+                    function (error) {
                         console.log('Could not reply to conversation.');
                     });
             }
 
             /* Gets more messages for the current conversation
          */
-            $scope.loadMoreForConversation = function() {
+            $scope.loadMoreForConversation = function () {
 
                 var promise = messageRepository.getMessagesForConversation(
                     $scope.conversationId,
-                    $scope.conversation.Messages.length,
-                    3);
+                    $scope.PageIndex,
+                    $scope.PageSize);
 
                 promise.then(
-                    function(success) {
-                        for (var i = 0; i < success.length; i++) {
-                            $scope.conversation.Messages.push(success[i]);
+                    function (success) {
+
+                        if (success.length === 0) {
+
+                            var apiMessagesPromise = communicationService.downloadMessagesForConversation($scope.conversationId, true, $scope.PageIndex, $scope.PageSize);
+                            
+                            apiMessagesPromise.then(
+                                function (apiMessagesPromiseSuccess) {
+                                    $scope.PageIndex++;
+                                    for (var j = 0; j < apiMessagesPromiseSuccess.data.items.length; j++) {
+                                        $scope.conversation.Messages.push(apiMessagesPromiseSuccess.data.items[j]);
+                                    }
+                                },
+                                function(error) {
+                                    
+                                });
+
+                        } else {
+                            $scope.PageIndex++;
+                            for (var i = 0; i < success.length; i++) {
+                                $scope.conversation.Messages.push(success[i]);
+                            }
                         }
                     },
-                    function(error) {
+                    function (error) {
                         console.log('Could not get older messages for conversation.');
                     });
             }
@@ -310,15 +331,17 @@ angular.module('conversations', [])
                     templateUrl: 'template/conversation-info-modal.html',
                     controller: 'conversationInfoCtrl',
                     size: size,
-                    resolve: { conversationParticipants: function() {
-                        return $scope.appUsers;
-                    }}
+                    resolve: {
+                        conversationParticipants: function () {
+                            return $scope.appUsers;
+                        }
+                    }
                 });
             };
 
             /* Gets the url for a user. Used in an ng-repeat to display the avatar.
             */
-            $scope.getAvatar = function(appUserId) {
+            $scope.getAvatar = function (appUserId) {
 
                 var found = null;
 
@@ -335,7 +358,7 @@ angular.module('conversations', [])
                 }
             };
 
-            $scope.getUsername = function(appUserId) {
+            $scope.getUsername = function (appUserId) {
                 var found = null;
 
                 for (var i = 0; i < $scope.appUsers.length; i++) {
@@ -352,11 +375,11 @@ angular.module('conversations', [])
             };
 
             // The events that this view reacts on
-            $scope.$on('messages-added', function(event, args) {
+            $scope.$on('messages-added', function (event, args) {
 
                 var promise = messageRepository.getMessagesByTime(0, 50);
                 promise.then(
-                    function(messages) {
+                    function (messages) {
                         for (var i = 0; i < messages.length; i++) {
                             for (var j = 0; j < $scope.conversations.length; j++) {
                                 if (messages[i].ConversationId === $scope.conversations[j].ConversationId) {
@@ -380,19 +403,19 @@ angular.module('conversations', [])
                             }
                         }
                     },
-                    function(error) {
+                    function (error) {
                         console.log(error);
                     });
             });
 
             // This is required for ng-repeat order by date
-            $scope.sortMessage = function(message) {
+            $scope.sortMessage = function (message) {
                 var date = new Date(message.CreatedOn);
                 return date;
             };
 
             // The purpose of fetching messages in this controller is to be able to display that a new conversation has been started
-            var fetchMessagesInterval = setInterval(function() {
+            var fetchMessagesInterval = setInterval(function () {
                 var oneMinuteAgo = new Date();
                 oneMinuteAgo.setMinutes(oneMinuteAgo.getMinutes() - 1);
                 communicationService.syncPeriodMessages(oneMinuteAgo.toJSON(), new Date().toJSON(), 0, 50);
@@ -413,22 +436,22 @@ angular.module('conversations', [])
                     var conversationIds = [id];
 
                     var conversationMessagesPromise =
-                        messageRepository.getMessagesByConversation(conversation.ConversationId, 0, 5);
+                        messageRepository.getMessagesByConversation(conversation.ConversationId, 1, 5);
 
                     conversationMessagesPromise.then(
-                        function(conversationMessagesSuccess) {
+                        function (conversationMessagesSuccess) {
                             conversation.Messages = conversationMessagesSuccess;
 
                             var participantsPromise = communicationService.getAllConversations(conversationIds);
 
                             participantsPromise.then(
-                                function(success) {
+                                function (success) {
                                     for (var i = 0; i < success.data.usersInConversations[id].length; i++) {
                                         conversation.Participants.push(success.data.usersInConversations[id][i]);
                                     }
                                     syncUsers(conversation);
                                 },
-                                function(error) {
+                                function (error) {
                                     console.error('Could not get conversation participants from api. Getting info from messages instead.');
                                     for (var j = 0; j < conversation.Messages.length; j++) {
                                         if (conversation.Participants.indexOf(conversation.Messages[j].Author) === -1) {
@@ -459,17 +482,17 @@ angular.module('conversations', [])
                                         var promise = contactsService.searchAppUser(authorId);
 
                                         promise.then(
-                                            function(success) {
+                                            function (success) {
                                                 $scope.appUsers.push(success.data.items[0]);
                                             },
-                                            function(error) {
+                                            function (error) {
                                                 console.error('Could not get details for user ' + authorId);
                                             });
                                     }
                                 }
                             }
                         },
-                        function(error) {
+                        function (error) {
                             console.log('Could not get messages for conversation.');
                         });
                 }
@@ -486,7 +509,7 @@ angular.module('conversations', [])
 
             /* Gets the url for a user. Used in an ng-repeat to display the avatar.
      */
-            $scope.getAvatar = function(appUserId) {
+            $scope.getAvatar = function (appUserId) {
 
                 var found = null;
 
@@ -503,7 +526,7 @@ angular.module('conversations', [])
                 }
             };
 
-            $scope.getUsername = function(appUserId) {
+            $scope.getUsername = function (appUserId) {
                 var found = null;
 
                 for (var i = 0; i < $scope.appUsers.length; i++) {
