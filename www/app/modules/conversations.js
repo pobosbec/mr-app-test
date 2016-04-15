@@ -259,7 +259,6 @@ angular.module('conversations', [])
             function init() {
                 $scope.loading = true;
                 $scope.userId = tokenService.getAppUserId();
-
                 var appUsersPromise = contactsService.getAppUsers();
 
                 appUsersPromise.then(

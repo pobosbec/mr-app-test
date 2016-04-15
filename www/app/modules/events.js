@@ -4,17 +4,19 @@
 angular.module('event', [])
     .controller('eventCtrl', ['$scope', '$rootScope', '$location', '$http', 'tokenService', 'communicationService', 'messageRepository', 'contactsService', function ($scope, $rootScope, $location, $http, tokenService, communicationService, messageRepository, contactsService) {
 
-        $scope.deviceReady = false;
+        $scope.deviceReady = true;
         $scope.isPhoneGap = window.isPhoneGap;
+
+        if ($scope.isPhoneGap) {
+            console.log("initPushwoosh");
+            initPushwoosh();
+        }
+
         // ------------------------------------
         // PhoneGap/Cordova events
         // ------------------------------------
 
         // Native
-        document.addEventListener('deviceready', function (event, args) {
-            $rootScope.$broadcast('device-ready', args);
-        }, false);
-
         document.addEventListener('resume', function (event, args) {
             $rootScope.$broadcast('on-focus', args);
         }, false);
@@ -50,17 +52,6 @@ angular.module('event', [])
 
 
         // Wrapped
-        $scope.$on('device-ready', function (event, args) {
-            console.log('device-ready');
-            if (!$scope.deviceReady) {
-                console.log("initPushwoosh");
-                initPushwoosh();
-            }
-            $scope.deviceReady = true;
-
-            messageRepository.on(event, args);
-        });
-
         $scope.$on('on-focus', function (event, args) {
             args = args | {};
             args.Sender = 'events';
@@ -118,7 +109,7 @@ angular.module('event', [])
         $scope.$on('menu-button', function (event, args) { });
 
         $scope.$on('push-service-initialized', function (event, args) {
-            console.log("Push service initialized: "+tokenService.getPushToken());
+            console.log("Push service initialized: " + tokenService.getPushToken());
         });
 
         $scope.$on('push-notification', function (event, args) {
@@ -164,7 +155,7 @@ angular.module('event', [])
 
 
         // Wrapped
-        $scope.$on('load', function(event, args) { });
+        $scope.$on('load', function (event, args) { });
 
 
         // ------------------------------------
@@ -172,15 +163,15 @@ angular.module('event', [])
         // ------------------------------------
 
         $scope.$on('logged-in', function (event, args) {
-            if($scope.isPhoneGap){
-            tokenService.registerPushToken();
+            if ($scope.isPhoneGap) {
+                tokenService.registerPushToken();
             }
             messageRepository.on(event, args);
             communicationService.on(event, args);
             contactsService.on(event, args);
         });
 
-        $scope.$on('logged-out', function(event, args) {
+        $scope.$on('logged-out', function (event, args) {
             messageRepository.on(event, args);
             communicationService.on(event, args);
             contactsService.on(event, args);
