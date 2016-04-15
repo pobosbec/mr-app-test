@@ -34,11 +34,63 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="header.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="header.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/template/header.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.31578946">
-              <caret line="1" column="45" selection-start-line="1" selection-start-column="45" selection-end-line="1" selection-end-column="45" />
+            <state vertical-scroll-proportion="-17.653847">
+              <caret line="27" column="26" selection-start-line="27" selection-start-column="26" selection-end-line="27" selection-end-column="26" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="events.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/modules/events.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="35" column="18" selection-start-line="35" selection-start-column="18" selection-end-line="35" selection-end-column="18" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="communication-factory.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/factories/communication-factory.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="118" column="21" selection-start-line="118" selection-start-column="21" selection-end-line="118" selection-end-column="21" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="main.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/controllers/main.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="124" column="40" selection-start-line="124" selection-start-column="40" selection-end-line="124" selection-end-column="40" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="snap.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/bower_components/snapjs/snap.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.8348214">
+              <caret line="189" column="68" selection-start-line="189" selection-start-column="68" selection-end-line="189" selection-end-column="68" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="config.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/config.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="45" column="51" selection-start-line="45" selection-start-column="51" selection-end-line="45" selection-end-column="51" />
               <folding />
             </state>
           </provider>
@@ -56,76 +108,6 @@
                 <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#small#0;n#div#1;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="login.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/modules/login.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="main.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/controllers/main.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="config.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/config.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="7" column="6" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="6" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="custom.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/css/custom.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-10.461538">
-              <caret line="536" column="16" selection-start-line="536" selection-start-column="16" selection-end-line="536" selection-end-column="16" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="css-override.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/css/css-override.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="6.5384617">
-              <caret line="17" column="19" selection-start-line="17" selection-start-column="19" selection-end-line="17" selection-end-column="19" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/index.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="62" column="38" selection-start-line="62" selection-start-column="38" selection-end-line="62" selection-end-column="38" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/app.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="5" column="11" selection-start-line="5" selection-start-column="11" selection-end-line="5" selection-end-column="11" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -148,7 +130,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/services.js" />
         <option value="$PROJECT_DIR$/tests/message-spec.js" />
         <option value="$PROJECT_DIR$/conf.js" />
         <option value="$PROJECT_DIR$/index2.html" />
@@ -184,7 +165,6 @@
         <option value="$PROJECT_DIR$/views/settings.html" />
         <option value="$PROJECT_DIR$/app/modules/settings.js" />
         <option value="$PROJECT_DIR$/template/sidebar-drawer.html" />
-        <option value="$PROJECT_DIR$/app/factories/message-repository-factory.js" />
         <option value="$PROJECT_DIR$/app/modules/events.js" />
         <option value="$PROJECT_DIR$/views/conversations.html" />
         <option value="$PROJECT_DIR$/views/contacts.html" />
@@ -194,11 +174,13 @@
         <option value="$PROJECT_DIR$/template/conversation.html" />
         <option value="$PROJECT_DIR$/views/login.html" />
         <option value="$PROJECT_DIR$/app/modules/login.js" />
-        <option value="$PROJECT_DIR$/app/config.js" />
         <option value="$PROJECT_DIR$/css/custom.css" />
         <option value="$PROJECT_DIR$/app/controllers/main.js" />
         <option value="$PROJECT_DIR$/app/app.js" />
         <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/app/factories/message-repository-factory.js" />
+        <option value="$PROJECT_DIR$/app/config.js" />
+        <option value="$PROJECT_DIR$/bower_components/snapjs/snap.js" />
       </list>
     </option>
   </component>
@@ -309,7 +291,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="node_modules" />
+              <option name="myItemId" value="bower_components" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="snapjs" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -323,65 +309,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="node_modules" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="angular-spinner" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mobileresponsewebbapp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="www" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="node_modules" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="angular-spinner" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="node_modules" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="spin.js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mobileresponsewebbapp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="www" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mobileresponsewebbapp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="www" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="css" />
+              <option name="myItemId" value="bower_components" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -704,13 +632,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/factories/contacts-repository.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="194" column="29" selection-start-line="194" selection-start-column="29" selection-end-line="194" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/template/message-list.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="8.5">
@@ -766,13 +687,6 @@
         <state vertical-scroll-proportion="-5.230769">
           <caret line="8" column="16" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="16" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/factories/communication-factory.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="118" column="21" selection-start-line="118" selection-start-column="21" selection-end-line="118" selection-end-column="21" />
         </state>
       </provider>
     </entry>
@@ -865,26 +779,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/factories/message-repository-factory.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="540" column="24" selection-start-line="540" selection-start-column="22" selection-end-line="540" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/factories/token-factory.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33281493">
           <caret line="17" column="29" selection-start-line="17" selection-start-column="22" selection-end-line="17" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/directives.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.36547434">
-          <caret line="236" column="10" selection-start-line="236" selection-start-column="10" selection-end-line="236" selection-end-column="10" />
           <folding />
         </state>
       </provider>
@@ -929,14 +827,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/modules/events.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.377916">
-          <caret line="35" column="18" selection-start-line="35" selection-start-column="18" selection-end-line="35" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/angular/angular.min.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -944,14 +834,6 @@
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/config.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="7" column="6" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="6" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -979,36 +861,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/login.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.2692308">
-          <caret line="5" column="65" selection-start-line="5" selection-start-column="65" selection-end-line="5" selection-end-column="65" />
-          <folding>
-            <element signature="n#style#0;n#form#0;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#ul#0;n#form#0;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#li#0;n#ul#0;n#form#0;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#small#0;n#div#1;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/controllers/main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="5" column="11" selection-start-line="5" selection-start-column="11" selection-end-line="5" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/modules/login.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1030,9 +882,97 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/template/header.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.31578946">
-          <caret line="1" column="45" selection-start-line="1" selection-start-column="45" selection-end-line="1" selection-end-column="45" />
+        <state vertical-scroll-proportion="-17.653847">
+          <caret line="27" column="26" selection-start-line="27" selection-start-column="26" selection-end-line="27" selection-end-column="26" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/factories/contacts-repository.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="194" column="29" selection-start-line="194" selection-start-column="29" selection-end-line="194" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/directives.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.62053573">
+          <caret line="236" column="10" selection-start-line="236" selection-start-column="10" selection-end-line="236" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.12648809">
+          <caret line="5" column="11" selection-start-line="5" selection-start-column="11" selection-end-line="5" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/login.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.2692308">
+          <caret line="5" column="65" selection-start-line="5" selection-start-column="65" selection-end-line="5" selection-end-column="65" />
+          <folding>
+            <element signature="n#style#0;n#form#0;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#ul#0;n#form#0;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#li#0;n#ul#0;n#form#0;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#small#0;n#div#1;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/factories/message-repository-factory.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.20684293">
+          <caret line="710" column="37" selection-start-line="710" selection-start-column="37" selection-end-line="710" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/modules/events.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="35" column="18" selection-start-line="35" selection-start-column="18" selection-end-line="35" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/config.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="45" column="51" selection-start-line="45" selection-start-column="51" selection-end-line="45" selection-end-column="51" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/factories/communication-factory.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="118" column="21" selection-start-line="118" selection-start-column="21" selection-end-line="118" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controllers/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="124" column="40" selection-start-line="124" selection-start-column="40" selection-end-line="124" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bower_components/snapjs/snap.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.8348214">
+          <caret line="189" column="68" selection-start-line="189" selection-start-column="68" selection-end-line="189" selection-end-column="68" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

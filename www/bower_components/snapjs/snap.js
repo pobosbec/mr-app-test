@@ -188,8 +188,6 @@
                     if(cache.easingTo===0){
                         utils.klass.remove(doc.body, 'snapjs-right');
                         utils.klass.remove(doc.body, 'snapjs-left');
-                        doc.body.style.display = "none";
-                        var reRenderDom = setTimeout(function() { doc.body.style.display = "block" },1);
                     }
 
                     utils.dispatchEvent('animated');
