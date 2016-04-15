@@ -5,6 +5,7 @@ angular.module('conversations', [])
     .controller('conversationsCtrl', [
         '$scope', '$http', '$rootScope', 'tokenService', 'contactsService', 'communicationService', 'messageRepository', function ($scope, $http, $rootScope, tokenService, contactsService, communicationService, messageRepository) {
 
+            $scope.loading = true;
             $scope.conversations = [];
             $scope.userId = null;
             $scope.appUsers = [];
@@ -158,7 +159,7 @@ angular.module('conversations', [])
                 // for each conversation, create and add to $scope.conversation. Check if all Authors are available as appUsers. If not, make details call and add to $scope.appusers + save to db
                 for (var convo in conversations.data.usersInConversations) {
                     // Check if conversation is already present in $scope.conversations.
-                    if ($scope.conversations.filter(function(e) { return e.ConversationId == convo; }).length > 0) {
+                    if ($scope.conversations.filter(function (e) { return e.ConversationId == convo; }).length > 0) {
                         continue;
                     }
 
@@ -225,10 +226,12 @@ angular.module('conversations', [])
             }
 
             function fetchConversations() {
+                $scope.loading = true;
                 var conversationsFromApiPromise = communicationService.getAllConversations(null);
                 conversationsFromApiPromise.then(
                     function (conversationsPromiseSuccess) {
                         addConversations(conversationsPromiseSuccess, 10, 1);
+                        $scope.loading = false;
                         if (Object.keys(conversationsPromiseSuccess.data.usersInConversations).length >= $scope.conversations.length) {
                             var fetchConversationsTimeout = setTimeout(function () {
                                 fetchConversations();
@@ -254,6 +257,7 @@ angular.module('conversations', [])
             /* Sets initial values.
              */
             function init() {
+                $scope.loading = true;
                 $scope.userId = tokenService.getAppUserId();
 
                 var appUsersPromise = contactsService.getAppUsers();
@@ -267,7 +271,8 @@ angular.module('conversations', [])
                     });
 
                 // Deliver what ever data we have asap:
-                var conversationsFromDatabasePromise = messageRepository.getConversationsByTime(10, 0, 1000);
+                var conversationsFromDatabasePromise = messageRepository.getConversationsByTime(10, 0, 10);
+                //Let's load the initial 10
                 conversationsFromDatabasePromise.then(
                     function (conversationsPromiseSuccess) {
                         for (var cid in conversationsPromiseSuccess) {
@@ -278,12 +283,24 @@ angular.module('conversations', [])
                         if (!$scope.conversations.length) {
                             // No messages from Database, Let's do a quick fetch to have at least something initial to show.
                             quickLoad();
+                        } else {
+                            // Database seems to have data, let's try getting up to 200 conversations
+                            // Improvements can definately be done here. The function is paged after all.
+                            var moreConversationsFromDatabasePromise = messageRepository.getConversationsByTime(5, 0, 200);
+                            moreConversationsFromDatabasePromise.then(
+                                function (conversationsPromiseSuccess) {
+                                    for (var cid in conversationsPromiseSuccess) {
+                                        var conversation = conversationsPromiseSuccess[cid];
+                                        $scope.conversations.push(conversation);
+                                    }
+                                });
                         }
                     }).then(function () {
+                        $scope.loading = false;
                         // Time to do some extra conversations loading from api broken down into intervals.
                         var fetchConversationsTimeout = setTimeout(function () {
                             fetchConversations();
-                        }, 5000);
+                        }, 10000);
                     });
             };
             init();

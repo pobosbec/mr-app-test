@@ -1,6 +1,6 @@
-<div class="listview lv-bordered lv-lg" data-ng-controller="conversationsCtrl as conversationsCtrl">
+<div class="listview lv-bordered lv-lg" style="padding-bottom: 30px;" data-ng-controller="conversationsCtrl as conversationsCtrl">
     <div class="lv-body">
-        <div class="lv-item media" ng-repeat="conversation in conversations">
+        <div class="lv-item media" ng-repeat="conversation in conversations" ng-class="{'lastConversation':$last}">
             <a ui-sref="conversation({conversationId: conversation.ConversationId})">
                 <div class="media-body" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                     <img class="lv-img-sm" style="margin-right: -18px;" ng-class="{'lastAvatar':$last}" ng-repeat="participant in conversation.Participants | orderBy: selfFirst" ng-src="{{ getAvatar(participant) || 'img/profile-pics/5.jpg' }}" alt="">
@@ -15,5 +15,6 @@
                 </div>
             </a>
         </div>
+        <div ng-show="loading" style="position: relative; left: 50%; padding-top: 50px; padding-bottom: 50px;">Loading conversations...</div>
     </div>
 </div>

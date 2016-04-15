@@ -96,14 +96,14 @@ angular.module('message', ['ngCordova'])
                 console.log('Opened up web SQL connection');
             }
 
-            createMessagesDatabase()
+            createMessagesTable()
                 .then(
                     function () {
                         console.log('The messages table was successfully created.');
                     }, function (error) {
                         console.error('Failed to create the table.\r\n' + error.message);
                     });
-            createConversationParticipantsDatabase().then(
+            createConversationParticipantsTable().then(
                     function () {
                         console.log('The conversation participants table was successfully created.');
                     }, function (error) {
@@ -114,7 +114,7 @@ angular.module('message', ['ngCordova'])
         /**
          * Creates a promise for creating the database tables.
          */
-        function createMessagesDatabase() {
+        function createMessagesTable() {
             return $q(function (resolve, reject) {
                 db.transaction(function (tx) {
                     tx.executeSql(queries.createMessages, [], function () {
@@ -129,7 +129,7 @@ angular.module('message', ['ngCordova'])
         /**
          * Creates a promise for creating the database tables.
          */
-        function createConversationParticipantsDatabase() {
+        function createConversationParticipantsTable() {
             return $q(function (resolve, reject) {
                 db.transaction(function (tx) {
                     tx.executeSql(queries.createConversationParticipants, [], function () {
@@ -722,7 +722,7 @@ angular.module('message', ['ngCordova'])
                     break;
                 case 'logged-out':
                     localStorage.removeItem('latestWhatIsNewUpdate');
-                    // Clearing Table on logout, just to be sure
+                    // Clearing Table on logout, just to be srure
                     dropMessagesTable().then(function() {
                         dropConversationPartisipantsTable();
                     }).then(
@@ -734,8 +734,8 @@ angular.module('message', ['ngCordova'])
                         });
                     break;
                 case 'logged-in':
-                    createMessagesDatabase().then(function() {
-                        createConversationParticipants(); 
+                    createMessagesTable().then(function() {
+                        createConversationParticipantsTable();
                     }).then(
                         function () {
                             console.log('Created databases after login');

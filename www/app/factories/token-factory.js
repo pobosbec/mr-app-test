@@ -556,6 +556,7 @@ angular.module('token', [])
          * @returns {*}
          */
         factory.getAppApiUrl = function (host) {
+            return "http://apitest.aws.mobileresponse.se/";
             // in test
             if (host.pathname.indexOf("/test") > -1)
                 return "http://api.test.mobileresponse.se/";

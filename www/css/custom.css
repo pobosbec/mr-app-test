@@ -553,6 +553,10 @@ and (orientation: portrait) {
     margin-right: 10px !important;
 }
 
+.lastConversation {
+    margin-bottom: 50px !important;
+}
+
 .convParticipants {
     display: inline-block;
     vertical-align: top;

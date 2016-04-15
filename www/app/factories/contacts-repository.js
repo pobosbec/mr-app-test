@@ -244,11 +244,11 @@ angular.module('contacts', [])
          */
         factory.addAppUser = function (appUser) {
             if (!appUser.hasOwnProperty('UserId')) {
-                console.log("repaired app user");
+                //console.log("repaired app user");
                 appUser.UserId = appUser.id;
             }
             if (!appUser.hasOwnProperty('id')) {
-                console.log("repaired app user");
+                //console.log("repaired app user");
                 appUser.id = appUser.UserId;}
             db.transaction(function (tx) {
                 console.log('Checking if app-user with id \'' + appUser.id + '\' exists.');
