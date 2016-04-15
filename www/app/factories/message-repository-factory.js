@@ -37,6 +37,7 @@ angular.module('message', ['ngCordova'])
             insertMessage: 'INSERT INTO Messages (MessageId, CreatedOn, ConversationId, Author, JSON) VALUES (?, ?, ?, ?, ?)',
             doesMessageExist: 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?',
             doMessagesExist: 'SELECT MessageId FROM Messages WHERE MessageId IN ',
+            dropConversationParticipants: 'DROP TABLE IF EXISTS ConversationParticipants',
             createConversationParticipants: 'CREATE TABLE IF NOT EXISTS ConversationParticipants (ConversationId text primary key, Participants text)',
             getConversationParticipants: 'SELECT Participants FROM ConversationParticipants WHERE ConversationId = ?',
             insertConversationParticipants: 'INSERT OR REPLACE INTO ConversationParticipants (ConversationId, Participants) VALUES (?, ?)'
@@ -51,6 +52,7 @@ angular.module('message', ['ngCordova'])
             insertMessage: 'INSERT INTO Messages (MessageId, CreatedOn, ConversationId, Author, JSON) VALUES (?, ?, ?, ?, ?)',
             doesMessageExist: 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?',
             doMessagesExist: 'SELECT MessageId FROM Messages WHERE MessageId IN ',
+            dropConversationParticipants: 'DROP TABLE IF EXISTS ConversationParticipants',
             createConversationParticipants: 'CREATE TABLE IF NOT EXISTS ConversationParticipants (ConversationId unique, Participants)',
             getConversationParticipants: 'SELECT Participants FROM ConversationParticipants WHERE ConversationId = ?',
             insertConversationParticipants: 'INSERT OR REPLACE INTO ConversationParticipants (ConversationId, Participants) VALUES (?, ?)'
@@ -162,10 +164,22 @@ angular.module('message', ['ngCordova'])
         /**
          * Creates a promise for dropping the database tables.
          */
-        function dropDatabase() {
+        function dropMessagesTable() {
             return $q(function (resolve, reject) {
                 db.transaction(function (tx) {
                     tx.executeSql(queries.dropMessages, [], function () {
+                        resolve();
+                    }, function (transaction, error) {
+                        reject(error);
+                    });
+                });
+            });
+        }
+
+        function dropConversationPartisipantsTable() {
+            return $q(function (resolve, reject) {
+                db.transaction(function (tx) {
+                    tx.executeSql(queries.dropConversationPartisipantsTable, [], function () {
                         resolve();
                     }, function (transaction, error) {
                         reject(error);
@@ -413,7 +427,9 @@ angular.module('message', ['ngCordova'])
                     tx.executeSql(queries.getConversationParticipants, [conversationId],
                         function (trans, result) {
                             var rows = getRows(result);
-                            var participants = JSON.parse(rows[0].Participants);
+                            if (rows.length) {
+                                var participants = JSON.parse(rows[0].Participants);
+                            }
 
                             resolve(participants);
                         }, function (trans, error) {
@@ -707,21 +723,25 @@ angular.module('message', ['ngCordova'])
                 case 'logged-out':
                     localStorage.removeItem('latestWhatIsNewUpdate');
                     // Clearing Table on logout, just to be sure
-                    dropDatabase().then(
+                    dropMessagesTable().then(function() {
+                        dropConversationPartisipantsTable();
+                    }).then(
                         function () {
-                            console.log('Dropped database');
+                            console.log('Dropped databases');
                         },
                         function (error) {
                             console.error('Failed to drop database.\r\n' + error.message);
                         });
                     break;
                 case 'logged-in':
-                    createMessagesDatabase().then(
+                    createMessagesDatabase().then(function() {
+                        createConversationParticipants(); 
+                    }).then(
                         function () {
-                            console.log('Created database after login');
+                            console.log('Created databases after login');
                         },
                         function (error) {
-                            console.error('Failed to create database after login.\r\n' + error.message);
+                            console.error('Failed to create databases after login.\r\n' + error.message);
                         });
                     break;
                 default:

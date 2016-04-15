@@ -30,9 +30,10 @@ angular.module('conversations', [])
 
                 for (var i = 0; i < $scope.appUsers.length; i++) {
                     var appUser = $scope.appUsers[i];
-
-                    if (appUser.id === appUserId) {
-                        found = $scope.appUsers[i].avatar;
+                    if (typeof appUser !== "undefined" && appUser.hasOwnProperty("id")) {
+                        if (appUser.id === appUserId) {
+                            found = $scope.appUsers[i].avatar;
+                        }
                     }
                 }
 
@@ -46,9 +47,10 @@ angular.module('conversations', [])
 
                 for (var i = 0; i < $scope.appUsers.length; i++) {
                     var appUser = $scope.appUsers[i];
-
-                    if (appUser.id === appUserId) {
-                        found = $scope.appUsers[i].username;
+                    if (typeof appUser !== "undefined" && appUser.hasOwnProperty("id")) {
+                        if (appUser.id === appUserId) {
+                            found = $scope.appUsers[i].displayName;
+                        }
                     }
                 }
 
@@ -117,8 +119,10 @@ angular.module('conversations', [])
 
                                                     promise.then(
                                                         function (success) {
-                                                            $scope.appUsers.push(success.data.items[0]);
-                                                            contactsService.addAppUser(success.data.items[0]);
+                                                            if (success.data.items.length) {
+                                                                $scope.appUsers.push(success.data.items[0]);
+                                                                contactsService.addAppUser(success.data.items[0]);
+                                                            }
                                                         },
                                                         function (error) {
                                                             console.error('Could not sync user: ' + conversation.Participants[i]);
@@ -132,7 +136,7 @@ angular.module('conversations', [])
                                         }
                                     },
                                     function (conversationsPromiseError) {
-                                        console.error('Could not sync conversations.')
+                                        console.error('Could not sync conversations.');
                                     });
                             }
                         }
@@ -142,88 +146,108 @@ angular.module('conversations', [])
                     });
             });
 
+            function addConversations(conversations, conversationsLimit, conversationMessages) {
+                if (typeof conversationsLimit != "number") {
+                    conversationsLimit = 1000;
+                }
+                if (typeof conversationMessages != "number") {
+                    conversationMessages = 10;
+                }
+
+                var processedConvos = 0;
+                // for each conversation, create and add to $scope.conversation. Check if all Authors are available as appUsers. If not, make details call and add to $scope.appusers + save to db
+                for (var convo in conversations.data.usersInConversations) {
+                    // Check if conversation is already present in $scope.conversations.
+                    if ($scope.conversations.filter(function(e) { return e.ConversationId == convo; }).length > 0) {
+                        continue;
+                    }
+
+                    processedConvos++;
+                    var conversation = {
+                        ConversationId: convo,
+                        Messages: [],
+                        Participants: conversations.data.usersInConversations[convo]
+                    };
+                    syncConversationParticipants(conversation);
+                    // Break after fetching the desired ammount of conversations.
+                    if (processedConvos <= conversationsLimit) {
+                        syncConversationMessages(conversation, conversationMessages);
+                    } else {
+                        break;
+                    }
+                    $scope.conversations.push(conversation);
+                }
+
+
+                function syncConversationMessages(conversation, amount) {
+                    var messagesPromise = communicationService.downloadMessagesForConversation(conversation.ConversationId, false, 0, amount);
+                    messagesPromise.then(function (result) {
+                        var messages = result.data.items.sort(function (a, b) {
+                            if (a.CreatedOn > b.CreatedOn) {
+                                return 1;
+                            }
+                            if (a.CreatedOn < b.CreatedOn) {
+                                return -1;
+                            }
+                            return 0;
+                        });
+                        for (var i = 0; i < messages.length; i++) {
+                            conversation.Messages.push(messages[i]);
+                        }
+                    });
+                }
+
+                function syncConversationParticipants(conversation) {
+                    for (var i = 0; i < conversation.Participants.length; i++) {
+                        //if (!isParticipantAppUser(conversation.Participants[i])) {
+                        if (!$scope.appUsers.some(function (e) { e.userId === conversation.Participants[i] })) {
+                            $scope.appUsers.push({ userId: conversation.Participants[i] });
+                            var promise = syncAppUserParticipant(conversation.Participants[i]);
+                            promise.then(
+                                function (success) {
+                                    if (success.data.items[0]) {
+                                        $scope.appUsers.push(success.data.items[0]);
+                                        contactsService.addAppUser(success.data.items[0]);
+                                    }
+                                },
+                                function (error) {
+                                    console.error('Could not sync user: ' + conversation.Participants[i]);
+                                });
+                        } else {
+                            console.warn(conversation.Participants[i] + " already in array");
+                        }
+                    }
+                }
+
+                function syncAppUserParticipant(participantId) {
+                    return contactsService.searchAppUser(participantId);
+                }
+            }
+
+            function fetchConversations() {
+                var conversationsFromApiPromise = communicationService.getAllConversations(null);
+                conversationsFromApiPromise.then(
+                    function (conversationsPromiseSuccess) {
+                        addConversations(conversationsPromiseSuccess, 10, 1);
+                        if (Object.keys(conversationsPromiseSuccess.data.usersInConversations).length >= $scope.conversations.length) {
+                            var fetchConversationsTimeout = setTimeout(function () {
+                                fetchConversations();
+                            }, 10000);
+                        }
+                    });
+            }
+
             /**
              * Sets first quickload data (10*10 messages) 
              */
             function quickLoad() {
-                var quickLoadSize = 10;
+                var quickLoadConversationsSize = 10;
+                var quickLoadMessagesSize = 10;
                 console.log("QUICK LOADING");
                 var conversationsFromApiPromise = communicationService.getAllConversations(null);
                 conversationsFromApiPromise.then(
                     function (conversationsPromiseSuccess) {
-                        var processedConvos = 0;
-                        // for each conversation, create and add to $scope.conversation. Check if all Authors are available as appUsers. If not, make details call and add to $scope.appusers + save to db
-                        for (var convo in conversationsPromiseSuccess.data.usersInConversations) {
-                            processedConvos++;
-                            var conversation = {
-                                ConversationId: convo,
-                                Messages: [],
-                                Participants: conversationsPromiseSuccess.data.usersInConversations[convo]
-                            };
-
-                            syncConversationParticipants(conversation);
-
-                            // 10 messages for the 10 first convos, after that only 1 message.
-                            if (processedConvos < quickLoadSize) {
-                                syncConversationMessages(conversation, quickLoadSize);
-                            } else {
-                                //syncConversationMessages(conversation, 1);
-                                break;
-                            }
-
-                            $scope.conversations.push(conversation);
-                        }
-
-                        function syncConversationMessages(conversation, amount) {
-                            var res = communicationService.downloadMessagesForConversation(conversation.ConversationId, false, 0, amount);
-                            res.then(function (result) {
-                                var messages = result.data.items.sort(function (a, b) {
-                                    if (a.CreatedOn > b.CreatedOn) {
-                                        return 1;
-                                    }
-                                    if (a.CreatedOn < b.CreatedOn) {
-                                        return -1;
-                                    }
-                                    return 0;
-                                });
-                                for (var i = 0; i < messages.length; i++) {
-                                    conversation.Messages.push(messages[i]);
-                                }
-                            });
-                        }
-
-                        function syncConversationParticipants(conversation) {
-                            for (var i = 0; i < conversation.Participants.length; i++) {
-                                if (isParticipantAppUser(conversation.Participants[i]) === false) {
-                                    var promise = syncAppUserParticipant(conversation.Participants[i]);
-
-                                    promise.then(
-                                        function (success) {
-                                            $scope.appUsers.push(success.data.items[0]);
-                                            contactsService.addAppUser(success.data.items[0]);
-                                        },
-                                        function (error) {
-                                            console.error('Could not sync user: ' + conversation.Participants[i]);
-                                        });
-                                }
-                            }
-                        }
-
-                        function isParticipantAppUser(participantId) {
-                            var found = false;
-
-                            for (var i = 0; i < $scope.appUsers.length; i++) {
-                                if ($scope.appUsers[i].userId === participantId) {
-                                    found = true;
-                                }
-                            }
-
-                            return found;
-                        }
-
-                        function syncAppUserParticipant(participantId) {
-                            return contactsService.searchAppUser(participantId);
-                        }
+                        addConversations(conversationsPromiseSuccess, quickLoadConversationsSize, quickLoadMessagesSize);
                     });
             }
 
@@ -256,8 +280,10 @@ angular.module('conversations', [])
                             quickLoad();
                         }
                     }).then(function () {
-                        // Time to do a complete load.
-                        //TODO
+                        // Time to do some extra conversations loading from api broken down into intervals.
+                        var fetchConversationsTimeout = setTimeout(function () {
+                            fetchConversations();
+                        }, 5000);
                     });
             };
             init();
@@ -372,7 +398,7 @@ angular.module('conversations', [])
                         var appUser = $scope.appUsers[i];
 
                         if (appUser.id === appUserId) {
-                            found = $scope.appUsers[i].username;
+                            found = $scope.appUsers[i].displayName;
                         }
                     }
 
@@ -540,7 +566,7 @@ angular.module('conversations', [])
                         var appUser = $scope.appUsers[i];
 
                         if (appUser.id === appUserId) {
-                            found = $scope.appUsers[i].username;
+                            found = $scope.appUsers[i].displayName;
                         }
                     }
 

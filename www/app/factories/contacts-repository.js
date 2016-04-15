@@ -38,7 +38,7 @@ angular.module('contacts', [])
             /**/  //getLatestMessages: 'SELECT * FROM Messages ORDER BY CreatedOn DESC LIMIT ?',
             /**/  //getAllMessagesFromAuthor: 'SELECT * FROM Messages WHERE Author=?',
             /**/  //getAllMessagesFromConversation: 'SELECT * FROM Messages WHERE ConversationId=?',
-            insertAppUser: 'INSERT INTO AppUsers (AppUserId, DisplayName, JSON) VALUES (?, ?, ?)',
+            insertAppUser: 'INSERT OR REPLACE INTO AppUsers (AppUserId, DisplayName, JSON) VALUES (?, ?, ?)',
             //doesMessageExist : 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?',
             doesAppUserExist : 'SELECT COUNT(*) AS cnt FROM AppUsers WHERE AppUserId=?',
             //doMessagesExist : 'SELECT MessageId FROM Messages WHERE MessageId IN '
@@ -56,7 +56,7 @@ angular.module('contacts', [])
             /**/  //getLatestMessages: 'SELECT * FROM Messages ORDER BY CreatedOn DESC LIMIT ?',
             /**/  //getAllMessagesFromAuthor: 'SELECT * FROM Messages WHERE Author=?',
             /**/  //getAllMessagesFromConversation: 'SELECT * FROM Messages WHERE ConversationId=?',
-            insertAppUser: 'INSERT INTO AppUsers (AppUserId, DisplayName, JSON) VALUES (?, ?, ?)',
+            insertAppUser: 'INSERT OR REPLACE INTO AppUsers (AppUserId, DisplayName, JSON) VALUES (?, ?, ?)',
             doesAppUserExist : 'SELECT COUNT(*) AS cnt FROM AppUsers WHERE AppUserId=?',
             //doesMessageExist : 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?',
             //doMessagesExist : 'SELECT MessageId FROM Messages WHERE MessageId IN '
