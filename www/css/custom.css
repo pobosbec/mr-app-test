@@ -475,11 +475,12 @@ and (orientation: portrait) {
 }
 
 .snap-drawers {
-    background: #323949;
+    background: #ffffff;
 }
 
 .snap-drawer {
-    background: #323949;
+    background-color: rgba(0, 0, 0, 0.2);
+    /*background: #323949;*/
     color: #eee;
 }
 
@@ -508,7 +509,7 @@ and (orientation: portrait) {
     font-weight: bold;
     text-shadow: 0 1px 0 #000;
     text-decoration: none;
-    color: #ccc;
+    color: #000;
     text-indent: 20px;
 }
 
