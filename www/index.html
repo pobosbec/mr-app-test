@@ -122,9 +122,9 @@
         }
 
         deviceReady = function () {
+            console.log("Device ready initiating Angular");
             angular.bootstrap(document, ['administratorApp']);
             app.initialize();
-
         };
 
         // window.addEventListener('deviceready', deviceReady, false);
@@ -156,7 +156,6 @@
                 document.addEventListener('deviceready', function () {
                     deviceReady();
                 }, false);
-
                 document.addEventListener('DOMContentLoaded', function () {
                     FastClick.attach(document.body);
                 }, false);
