@@ -144,10 +144,6 @@ angular.module('communication', [])
                     factory.syncPeriodMessages(args.PeriodStart, args.PeriodEnd, args.Index, args.Size);
                     break;
                 case 'push-notification':
-                    console.log("communication-factory received broadcast: push-notification");
-                    if (args != undefined) {
-                        console.log('Event received: ' + JSON.stringify(args));
-                    }
                     var fiveMinutesAgo = new Date();
                     fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5);
                     factory.syncPeriodMessages(fiveMinutesAgo.toJSON(), new Date().toJSON(), 0, 50);
@@ -170,14 +166,13 @@ angular.module('communication', [])
                     }
                     else if (success.data.pageIndex === success.data.maxPages) {
                         factory.messagesDownloaded(success.data.items);
-                        console.log('Sync between' + periodStart + ' and ' + periodEnd + ' is complete.')
                     }
                     else if (success.data.pageIndex > success.data.maxPages) {
                         console.error('Tried to list messages with pageIndex higher than maxPages.')
                     }
                 },
                 function (error) {
-                    console.log('Error when making request to list-messages.');
+                    console.error('Error when making request to list-messages. Error: ' + JSON.stringify(error));
                 });
         }
 
