@@ -401,6 +401,7 @@ angular.module('message', ['ngCordova'])
                     tx.executeSql(queries.getConversations, [size, offset],
                         function (trans, result) {
                             console.warn("queries.getConversations Success");
+                            alert("getConversation Success");
                             var ids = [];
                             var rows = getRows(result);
 
