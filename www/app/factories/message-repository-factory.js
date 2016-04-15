@@ -11,6 +11,10 @@ angular.module('message', ['ngCordova'])
         // Indicates if messages are added but event isn't fired yet
         var evtMessagesAdded = false;
 
+        // Indicates if conversations are added but event isn't fired yet
+        var evtConversationsAdded = false;
+        
+
         // Indicates if the database is configured
         var isConfigured = false;
 
@@ -32,7 +36,11 @@ angular.module('message', ['ngCordova'])
             getMessagesByConversation: 'SELECT MessageId, JSON FROM Messages WHERE ConversationId = ? ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
             insertMessage: 'INSERT INTO Messages (MessageId, CreatedOn, ConversationId, Author, JSON) VALUES (?, ?, ?, ?, ?)',
             doesMessageExist: 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?',
-            doMessagesExist: 'SELECT MessageId FROM Messages WHERE MessageId IN '
+            doMessagesExist: 'SELECT MessageId FROM Messages WHERE MessageId IN ',
+            dropConversationParticipants: 'DROP TABLE IF EXISTS ConversationParticipants',
+            createConversationParticipants: 'CREATE TABLE IF NOT EXISTS ConversationParticipants (ConversationId text primary key, Participants text)',
+            getConversationParticipants: 'SELECT Participants FROM ConversationParticipants WHERE ConversationId = ?',
+            insertConversationParticipants: 'INSERT OR REPLACE INTO ConversationParticipants (ConversationId, Participants) VALUES (?, ?)'
         };
 
         var webSqlQueries = {
@@ -43,7 +51,11 @@ angular.module('message', ['ngCordova'])
             getMessagesByConversation: 'SELECT MessageId, JSON FROM Messages WHERE ConversationId = ? ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
             insertMessage: 'INSERT INTO Messages (MessageId, CreatedOn, ConversationId, Author, JSON) VALUES (?, ?, ?, ?, ?)',
             doesMessageExist: 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?',
-            doMessagesExist: 'SELECT MessageId FROM Messages WHERE MessageId IN '
+            doMessagesExist: 'SELECT MessageId FROM Messages WHERE MessageId IN ',
+            dropConversationParticipants: 'DROP TABLE IF EXISTS ConversationParticipants',
+            createConversationParticipants: 'CREATE TABLE IF NOT EXISTS ConversationParticipants (ConversationId unique, Participants)',
+            getConversationParticipants: 'SELECT Participants FROM ConversationParticipants WHERE ConversationId = ?',
+            insertConversationParticipants: 'INSERT OR REPLACE INTO ConversationParticipants (ConversationId, Participants) VALUES (?, ?)'
         };
 
         var queries = null;
@@ -84,22 +96,43 @@ angular.module('message', ['ngCordova'])
                 console.log('Opened up web SQL connection');
             }
 
-            createDatabase()
+            createMessagesDatabase()
                 .then(
                     function () {
-                        console.log('The database is successfully created.');
+                        console.log('The messages table was successfully created.');
                     }, function (error) {
-                        console.error('Failed to create the database.\r\n' + error.message);
+                        console.error('Failed to create the table.\r\n' + error.message);
+                    });
+            createConversationParticipantsDatabase().then(
+                    function () {
+                        console.log('The conversation participants table was successfully created.');
+                    }, function (error) {
+                        console.error('Failed to create the table.\r\n' + error.message);
                     });
         }
 
         /**
          * Creates a promise for creating the database tables.
          */
-        function createDatabase() {
+        function createMessagesDatabase() {
             return $q(function (resolve, reject) {
                 db.transaction(function (tx) {
                     tx.executeSql(queries.createMessages, [], function () {
+                        resolve();
+                    }, function (transaction, error) {
+                        reject(error);
+                    });
+                });
+            });
+        }
+
+        /**
+         * Creates a promise for creating the database tables.
+         */
+        function createConversationParticipantsDatabase() {
+            return $q(function (resolve, reject) {
+                db.transaction(function (tx) {
+                    tx.executeSql(queries.createConversationParticipants, [], function () {
                         resolve();
                     }, function (transaction, error) {
                         reject(error);
@@ -131,10 +164,22 @@ angular.module('message', ['ngCordova'])
         /**
          * Creates a promise for dropping the database tables.
          */
-        function dropDatabase() {
+        function dropMessagesTable() {
             return $q(function (resolve, reject) {
                 db.transaction(function (tx) {
                     tx.executeSql(queries.dropMessages, [], function () {
+                        resolve();
+                    }, function (transaction, error) {
+                        reject(error);
+                    });
+                });
+            });
+        }
+
+        function dropConversationPartisipantsTable() {
+            return $q(function (resolve, reject) {
+                db.transaction(function (tx) {
+                    tx.executeSql(queries.dropConversationPartisipantsTable, [], function () {
                         resolve();
                     }, function (transaction, error) {
                         reject(error);
@@ -197,14 +242,36 @@ angular.module('message', ['ngCordova'])
             size = typeof (size) !== 'number' ? 5 : size;
 
             /// Adds the messages within the promise to a conversation
-            var addMessagesToConversation = function(conversation, itmsPerConv) {
-                getMessagesByConversation(conversation.Id, 0, itmsPerConv).then(function (items) {
-                    conversation.messages = items;
+            var addMessagesToConversation = function (conversation, itmsPerConv) {
+                return factory.getMessagesByConversation(conversation.Id, 0, itmsPerConv).then(function (items) {
+                    var newMessages = [];
+                    for (var i = 0; i < items.length; i++) {
+                        var msg = items[i];
+                        var newMessage = {};
+                        newMessage.messageId = msg.MessageId;
+                        newMessage.participantId = msg.ParticipantId;
+                        newMessage.conversationId = msg.ConversationId;
+                        newMessage.authorDisplayName = msg.AuthorDisplayName;
+                        newMessage.author = msg.AuthorId;
+                        newMessage.createdOn = msg.CreatedOn;
+                        newMessage.content = msg.Content;
+                        newMessages.push(newMessage);
+                    }
+
+                    conversation.Messages = newMessages;
+                    return conversation;
+                });
+            }
+
+            /// Adds the participants within the promise to a conversation
+            var addParticipantsToConversation = function (conversation) {
+                return factory.getConversationParticipants(conversation.Id).then(function (items) {
+                    conversation.Participants = items;
                 });
             }
 
             return $q(function (resolve, reject) {
-                var promise = getConversations(pageIndex, size);
+                var promise = factory.getConversations(pageIndex, size);
 
                 promise.then(function (conversations) {
                     var numberOfConversations = conversations.length;
@@ -218,13 +285,19 @@ angular.module('message', ['ngCordova'])
                         }
                         result.push(conversation);
 
-                        addMessagesToConversation(conversation, itemsPerConversation).then(function () {
-                            handledConversations++;
+                        addMessagesToConversation(conversation, itemsPerConversation).then(function (res) {
+                            addParticipantsToConversation(res).then(function () {
+                                res.ConversationId = res.Id;
+                                handledConversations++;
 
-                            if (handledConversations === numberOfConversations) {
-                                resolve(result);
-                            }
+                                if (handledConversations === numberOfConversations) {
+                                    resolve(result);
+                                }
+                            });
                         });
+                    }
+                    if (!conversations.length) {
+                        resolve(result);
                     }
                 }, function (error) {
                     reject(error);
@@ -345,6 +418,29 @@ angular.module('message', ['ngCordova'])
         };
 
         /**
+          * Creates a promise for returning a list of participants in a conversation
+          * @param {string} conversationId - the id of the conversation
+          */
+        factory.getConversationParticipants = function (conversationId) {
+            return $q(function (resolve, reject) {
+                db.transaction(function (tx) {
+                    tx.executeSql(queries.getConversationParticipants, [conversationId],
+                        function (trans, result) {
+                            var rows = getRows(result);
+                            if (rows.length) {
+                                var participants = JSON.parse(rows[0].Participants);
+                            }
+
+                            resolve(participants);
+                        }, function (trans, error) {
+                            console.error('Error while fetching Participants from database.\r\n' + error.message);
+                            reject(error);
+                        });
+                });
+            });
+        };
+
+        /**
          * Creates a promise for adding a message to the database
          * @param {object} message - the message to add
          */
@@ -457,6 +553,51 @@ angular.module('message', ['ngCordova'])
             });
         };
 
+        factory.addConversations = function (conversations) {
+            return $q(function (resolve, reject) {
+                if (conversations.length === 0) {
+                    resolve();
+                    return;
+                }
+
+                var timer = new Date();
+                var errorMsg;
+
+                var queryIn = [];
+                for (var i = 0; i < conversations.length; i++) {
+                    queryIn.push('\'' + conversations[i].ConversationId + '\'');
+                }
+
+                console.log('queryIn took ' + (new Date() - timer) + 'ms to create!');
+
+                timer = new Date();
+
+                db.transaction(function (tx) {
+                    console.log('Transaction took ' + (new Date() - timer) + 'ms to open!');
+
+                    console.log('Checking if any of the ' + conversations.length + ' exist');
+
+                    timer = new Date();
+                    var inserted = 0;
+                    for (var j = 0; j < conversations.length; j++) {
+                        var conv = conversations[j];
+
+                        insertConversation(conv).then(function () {
+                            inserted++;
+                            if (inserted === conversations.length) {
+                                console.log('All conversations are added in ' + (new Date() - timer) + 'ms!');
+                                factory.conversationsAdded();
+                                resolve();
+                            }
+                        }, function (error) {
+                            errorMsg = 'Error while saving conversation.\r\n' + error.message;
+                            console.error(errorMsg);
+                            reject(errorMsg);
+                        });
+                    }
+                });
+            });
+        };
         /**
          * Inserts the message to the database
          * @param message to insert
@@ -492,6 +633,37 @@ angular.module('message', ['ngCordova'])
             });
         }
 
+        /**
+         * Inserts the converation to the database
+         * @param conversation to insert
+         * @returns {promise} returns a promise
+         */
+        function insertConversation(conversation) {
+            return $q(function (resolve, reject) {
+                db.transaction(function (tx) {
+                    tx.executeSql(
+                        queries.insertConversationParticipants,
+                        [
+                            conversation.ConversationId,
+                            JSON.stringify(conversation.Participants)],
+                        function (trans, result) {
+                            if (result.rowsAffected !== 1) {
+                                console.error('');
+                                reject(new {
+                                    message: 'The conversation with id \'' + conversation.ConversationId + '\' doesn\'t seem to be added properly'
+                                });
+                                return;
+                            }
+
+                            resolve();
+                        },
+                        function (t, error) {
+                            reject(error);
+                        });
+                });
+            });
+        }
+
         factory.messageAdded = function () {
             if (evtMessagesAdded) {
                 return;
@@ -503,6 +675,21 @@ angular.module('message', ['ngCordova'])
                 console.log("messages-added event");
                 $rootScope.$broadcast('messages-added', {});
                 evtMessagesAdded = false;
+            },
+                200);
+        };
+
+        factory.conversationsAdded = function() {
+            if (evtConversationsAdded) {
+                return;
+            }
+
+            evtConversationsAdded = true;
+
+            setTimeout(function () {
+                console.log("conversations-added event");
+                $rootScope.$broadcast('conversations-added', {});
+                evtConversationsAdded = false;
             },
                 200);
         };
@@ -525,26 +712,36 @@ angular.module('message', ['ngCordova'])
                         factory.addMessages(data);
                     }
                     break;
+                case 'new-conversations':
+                    if (data != null) {
+                        console.log("Received new conversations: " + data.length);
+                        factory.addConversations(data);
+                    }
+                    break;
                 case 'device-ready':
                     break;
                 case 'logged-out':
                     localStorage.removeItem('latestWhatIsNewUpdate');
                     // Clearing Table on logout, just to be sure
-                    dropDatabase().then(
+                    dropMessagesTable().then(function() {
+                        dropConversationPartisipantsTable();
+                    }).then(
                         function () {
-                            console.log('Dropped database');
+                            console.log('Dropped databases');
                         },
                         function (error) {
                             console.error('Failed to drop database.\r\n' + error.message);
                         });
                     break;
                 case 'logged-in':
-                    createDatabase().then(
+                    createMessagesDatabase().then(function() {
+                        createConversationParticipants(); 
+                    }).then(
                         function () {
-                            console.log('Created database after login');
+                            console.log('Created databases after login');
                         },
                         function (error) {
-                            console.error('Failed to create database after login.\r\n' + error.message);
+                            console.error('Failed to create databases after login.\r\n' + error.message);
                         });
                     break;
                 default:

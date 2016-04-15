@@ -54,7 +54,7 @@ angular.module('communication', [])
             return tokenService.httpPost(req);
         };
 
-        factory.getAllConversations = function (conversationIds) {
+        var getAllConversations = function (conversationIds) {
 
             var req = {
                 method: 'POST',
@@ -74,8 +74,20 @@ angular.module('communication', [])
             return tokenService.httpPost(req);
         }
 
-        factory.downloadMessagesForConversation = function(conversationId, sortAscending, pageIndex, pageSize) {
-            return downloadMessagesForConversation(conversationId, sortAscending, pageIndex, pageSize);
+        factory.getAllConversations = function(conversationIds) {
+            var conversations = getAllConversations(conversationIds);
+            conversations.then(function (success) {
+                factory.conversationsDownloaded(success.data.usersInConversations);
+            });
+            return conversations;
+        }
+
+        factory.downloadMessagesForConversation = function (conversationId, sortAscending, pageIndex, pageSize) {
+            var messages = downloadMessagesForConversation(conversationId, sortAscending, pageIndex, pageSize);
+            messages.then(function(success) {
+                factory.messagesDownloaded(success.data.items);
+            });
+            return messages;
         }
 
         factory.messagesDownloaded = function (data) {
@@ -101,6 +113,23 @@ angular.module('communication', [])
             }
 
             $rootScope.$broadcast('new-messages', newMessages);
+        }
+
+        factory.conversationsDownloaded = function (data) {
+            var newConversations = [];
+
+            if (data.length === 0) {
+                return;
+            }
+
+            for (conv in data) {
+                var newConversation = {};
+                newConversation.ConversationId = conv;
+                newConversation.Participants = data[conv];
+                newConversations.push(newConversation);
+            }
+
+            $rootScope.$broadcast('new-conversations', newConversations);
         }
 
         factory.on = function (event, args) {

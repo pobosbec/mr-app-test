@@ -15,12 +15,13 @@
     <link rel="stylesheet" href="css/material-design-iconic-font.min.css">
 
     <!-- CSS -->
+    <link href="bower_components/snapjs/snap.css" rel="stylesheet">
+    <link href="bower_components/angular-snap/angular-snap.css" rel="stylesheet">
     <link href="css/app.min.1.css" rel="stylesheet" id="app-level">
     <link href="css/app.min.2.css" rel="stylesheet">
     <link href="css/css-override.css" rel="stylesheet">
     <link href="css/custom.css" rel="stylesheet">
-    <link href="bower_components/snapjs/snap.css" rel="stylesheet">
-    <link href="bower_components/angular-snap/angular-snap.css" rel="stylesheet">
+
 
     <script src="js/version.js"></script>
     <!--<script src="https://s3-eu-west-1.amazonaws.com/app.aws.mobileresponse.se/www/js/version.js"></script> <!--Remote include from S3 -->
@@ -29,14 +30,15 @@
     <!-- Jquery -->
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <!-- Angular -->
-    <script src="bower_components/snapjs/snap.js"></script>
     <script src="node_modules/angular/angular.min.js"></script>
+    <script src="bower_components/snapjs/snap.js"></script>
+
     <script src="bower_components/angular-snap/angular-snap.js"></script>
     <script src="node_modules/angular-resource/angular-resource.min.js"></script>
     <script src="js/ng-cordova.js"></script>
     <script src="bower_components/ng-fastclick/dist/index.min.js"></script>
 
-    <!--<link href="node_modules/angular-loading-bar/build/loading-bar.min.css" rel="stylesheet"/>-->
+
     <!-- Begin Cookie Consent plugin by Silktide - http://silktide.com/cookieconsent -->
     <script type="text/javascript">
         window.cookieconsent_options = { "message": "This website uses cookies to ensure you get the best experience on our website", "dismiss": "Got it!", "learnMore": "More info", "link": null, "theme": "light-top" };
@@ -46,14 +48,14 @@
     <!-- End Cookie Consent plugin -->
 </head>
 <body data-ng-controller="eventCtrl as ectrl">
-
-    <div snap-drawer class="snap-drawer snap-drawer-left">
+<div class="loading-screen" ng-class="loading?'fadeShow':'fadeHide'"><div class="spinner"></div></div>
         <div>
-            <div data-ng-include="'template/sidebar-drawer.html'"></div>
+            <div snap-drawer  data-ng-include="'template/sidebar-drawer.html'"></div>
         </div>
-    </div>
     <div id="content" snap-content class="snap-content">
+
         <header id="header" ng-show="header" data-current-skin={{mactrl.currentSkin}} data-ng-include="'template/header.html'" style="position: fixed; top:0;left: 0;right:0; z-index: 2 !important;" data-ng-controller="headerCtrl as hctrl"></header>
+
         <a ng-show="createButtonVisible" ng-click="opencreate()" class="btn btn-login btn-danger btn-float" value="newMsg" style="z-index: 3; position: fixed; bottom:25px; right:25px"><i class="zmdi zmdi-plus"></i></a>
         <data class="view" ui-view></data>
     </div>
@@ -62,7 +64,6 @@
     <!--<script src="node_modules/angular/angular.intellisense.js"></script>-->
     <script src="node_modules/angular-messages/angular-messages.min.js"></script>
     <script src="node_modules/angular-animate/angular-animate.min.js"></script>
-    <script src="node_modules/angular-loading-bar/build/loading-bar.min.js"></script>
 
 
     <!-- Angular ui router -->
