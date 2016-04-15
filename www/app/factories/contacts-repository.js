@@ -290,7 +290,7 @@ angular.module('contacts', [])
             isConfigured = true;
 
             var conf = databaseConfiguration;
-            if (window.isPhoneGap) {
+            if (false && window.isPhoneGap) {
                 // Mobile Device
                 db = window.sqlitePlugin.openDatabase({ name: conf.name, location: conf.location });
                 queries = sqliteQueries;
