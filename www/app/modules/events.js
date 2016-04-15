@@ -62,6 +62,7 @@ angular.module('event', [])
         });
 
         $scope.$on('on-focus', function (event, args) {
+            args = args | {};
             args.Sender = 'events';
             args.Event = 'on-focus';
             $rootScope.$broadcast('download-whats-new', args);
