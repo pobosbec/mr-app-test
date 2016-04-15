@@ -534,7 +534,7 @@ and (orientation: portrait) {
 }
 .spinner {
     margin:0 auto!important;
-    margin-top:25%!important;
+    margin-top:40vh!important;
     height: 28px;
     width: 28px;
     animation: rotate 0.8s infinite linear;
