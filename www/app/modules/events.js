@@ -4,6 +4,7 @@
 angular.module('event', [])
     .controller('eventCtrl', ['$scope', '$rootScope', '$location', '$http', 'tokenService', 'communicationService', 'messageRepository', 'contactsService', function ($scope, $rootScope, $location, $http, tokenService, communicationService, messageRepository, contactsService) {
 
+        $rootScope.$broadcast('download-whats-new', args);
         $scope.deviceReady = true;
         $scope.isPhoneGap = window.isPhoneGap;
 
