@@ -396,11 +396,12 @@ angular.module('message', ['ngCordova'])
             size = typeof (size) !== 'number' ? 20 : size;
             var offset = pageIndex * size;
 
-            return $q(function (resolve, reject) {
+            var deferred = $q.defer();
                 db.transaction(function (tx) {
                     tx.executeSql(queries.getConversations, [size, offset],
                         function (trans, result) {
                             console.warn("queries.getConversations Success");
+                            alert("getConversation Success");
                             var ids = [];
                             var rows = getRows(result);
 
@@ -409,13 +410,14 @@ angular.module('message', ['ngCordova'])
                                 ids.push(row['ConversationId']);
                             }
 
-                            resolve(ids);
+                            deferred.resolve(ids);
                         }, function (trans, error) {
                             console.error('Error while fetching messages from database.\r\n' + error.message);
-                            reject(error);
+                            deferred.reject(error);
                         });
                 });
-            });
+            return deferred.promise;
+
         };
 
         /**
