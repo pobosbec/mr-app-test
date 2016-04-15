@@ -1,5 +1,4 @@
 mobileresponseWebbApp
-
     .config(function (snapRemoteProvider) {
         snapRemoteProvider.globalOptions = {
             disable: 'right',
