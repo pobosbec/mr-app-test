@@ -66,7 +66,7 @@ angular.module('message', ['ngCordova'])
          * Initializes the factory.
          */
         factory.init = function () {
-            console.log('Factory.init() was called in message repository.');
+            //console.log('Factory.init() was called in message repository.');
             configureDatabase();
         };
 
@@ -78,11 +78,11 @@ angular.module('message', ['ngCordova'])
                 return;
             }
 
-            console.log('Going to configure the database');
+            //console.log('Going to configure the database');
             isConfigured = true;
 
             var conf = databaseConfiguration;
-            if (window.isPhoneGap) {
+            if (false && window.isPhoneGap) {
                 // Mobile Device
                 db = window.sqlitePlugin.openDatabase({ name: conf.name, location: conf.location });
                 queries = sqliteQueries;
@@ -401,7 +401,6 @@ angular.module('message', ['ngCordova'])
                     tx.executeSql(queries.getConversations, [size, offset],
                         function (trans, result) {
                             console.warn("queries.getConversations Success");
-                            alert("getConversation Success");
                             var ids = [];
                             var rows = getRows(result);
 
@@ -451,7 +450,7 @@ angular.module('message', ['ngCordova'])
             return $q(function (resolve, reject) {
                 db.transaction(function (tx) {
                     var error;
-                    console.log('Checking if message message with id \'' + message.MessageId + '\' exists.');
+                    //console.log('Checking if message message with id \'' + message.MessageId + '\' exists.');
                     tx.executeSql(queries.doesMessageExist, [message.MessageId], function (transaction, resultData) {
                         var rows = getRows(resultData);
                         if (rows.length !== 1) {
@@ -504,19 +503,19 @@ angular.module('message', ['ngCordova'])
                     queryIn.push('\'' + messages[i].MessageId + '\'');
                 }
 
-                console.log('queryIn took ' + (new Date() - timer) + 'ms to create!');
+                //console.log('queryIn took ' + (new Date() - timer) + 'ms to create!');
 
                 timer = new Date();
 
                 db.transaction(function (tx) {
-                    console.log('Transaction took ' + (new Date() - timer) + 'ms to open!');
+                    //console.log('Transaction took ' + (new Date() - timer) + 'ms to open!');
 
-                    console.log('Checking if any of the ' + messages.length + ' exist');
+                    //console.log('Checking if any of the ' + messages.length + ' exist');
                     tx.executeSql(queries.doMessagesExist + '(' + queryIn.join(',') + ')', [],
                         function (transaction, resultData) {
                             var rows = getRows(resultData);
 
-                            console.log('Found ' + rows.length + ' messages already in db');
+                            //console.log('Found ' + rows.length + ' messages already in db');
 
                             var inserted = 0;
                             var expected = 0;
@@ -536,7 +535,7 @@ angular.module('message', ['ngCordova'])
                                 insertMessage(msg).then(function () {
                                     inserted++;
                                     if (inserted === expected) {
-                                        console.log('All messages are added in ' + (new Date() - timer) + 'ms!');
+                                        //console.log('All messages are added in ' + (new Date() - timer) + 'ms!');
                                         factory.messageAdded();
                                         resolve();
                                     }
@@ -571,14 +570,14 @@ angular.module('message', ['ngCordova'])
                     queryIn.push('\'' + conversations[i].ConversationId + '\'');
                 }
 
-                console.log('queryIn took ' + (new Date() - timer) + 'ms to create!');
+                //console.log('queryIn took ' + (new Date() - timer) + 'ms to create!');
 
                 timer = new Date();
 
                 db.transaction(function (tx) {
-                    console.log('Transaction took ' + (new Date() - timer) + 'ms to open!');
+                    //console.log('Transaction took ' + (new Date() - timer) + 'ms to open!');
 
-                    console.log('Checking if any of the ' + conversations.length + ' exist');
+                    //console.log('Checking if any of the ' + conversations.length + ' exist');
 
                     timer = new Date();
                     var inserted = 0;
@@ -588,7 +587,7 @@ angular.module('message', ['ngCordova'])
                         insertConversation(conv).then(function () {
                             inserted++;
                             if (inserted === conversations.length) {
-                                console.log('All conversations are added in ' + (new Date() - timer) + 'ms!');
+                                //console.log('All conversations are added in ' + (new Date() - timer) + 'ms!');
                                 factory.conversationsAdded();
                                 resolve();
                             }
@@ -675,7 +674,7 @@ angular.module('message', ['ngCordova'])
             evtMessagesAdded = true;
 
             setTimeout(function () {
-                console.log("messages-added event");
+                //console.log("messages-added event");
                 $rootScope.$broadcast('messages-added', {});
                 evtMessagesAdded = false;
             },
@@ -690,7 +689,7 @@ angular.module('message', ['ngCordova'])
             evtConversationsAdded = true;
 
             setTimeout(function () {
-                console.log("conversations-added event");
+                //console.log("conversations-added event");
                 $rootScope.$broadcast('conversations-added', {});
                 evtConversationsAdded = false;
             },
@@ -711,13 +710,13 @@ angular.module('message', ['ngCordova'])
                     break;
                 case 'new-messages':
                     if (data != null) {
-                        console.log("Received new messages: " + data.length);
+                        //console.log("Received new messages: " + data.length);
                         factory.addMessages(data);
                     }
                     break;
                 case 'new-conversations':
                     if (data != null) {
-                        console.log("Received new conversations: " + data.length);
+                        //console.log("Received new conversations: " + data.length);
                         factory.addConversations(data);
                     }
                     break;
@@ -727,7 +726,7 @@ angular.module('message', ['ngCordova'])
                     localStorage.removeItem('latestWhatIsNewUpdate');
                     // Clearing Table on logout, just to be srure
                     dropMessagesTable().then(function() {
-                        dropConversationPartisipantsTable();
+                        return dropConversationPartisipantsTable();
                     }).then(
                         function () {
                             console.log('Dropped databases');
@@ -738,7 +737,7 @@ angular.module('message', ['ngCordova'])
                     break;
                 case 'logged-in':
                     createMessagesTable().then(function() {
-                        createConversationParticipantsTable();
+                        return createConversationParticipantsTable();
                     }).then(
                         function () {
                             console.log('Created databases after login');
