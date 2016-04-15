@@ -4,7 +4,6 @@
 var mobileresponseWebbApp = angular.module('administratorApp', [
     'ngCordova',
     'snap',
-    'angular-loading-bar',
     'ngAnimate',
     'ngResource',
     'ui.router',

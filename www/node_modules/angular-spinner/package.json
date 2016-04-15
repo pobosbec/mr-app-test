@@ -1,0 +1,62 @@
+{
+  "name": "angular-spinner",
+  "version": "0.8.1",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/urish/angular-spinner.git"
+  },
+  "main": "angular-spinner.js",
+  "dependencies": {
+    "spin.js": "^2.0.0"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "grunt": "0.4.5",
+    "load-grunt-tasks": "3.2.0",
+    "grunt-contrib-jshint": "0.11.3",
+    "grunt-contrib-uglify": "0.9.2",
+    "grunt-karma": "0.12.0",
+    "karma": "0.13.9",
+    "karma-coverage": "0.5.2",
+    "karma-jasmine": "0.3.6",
+    "karma-phantomjs-launcher": "0.2.1",
+    "coveralls": "2.11.4"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "gitHead": "6cbf56991eb21756597ca675bbde804db136cbb5",
+  "description": "Angular directive to show an animated spinner (using [spin.js](http://fgnass.github.io/spin.js/))",
+  "bugs": {
+    "url": "https://github.com/urish/angular-spinner/issues"
+  },
+  "homepage": "https://github.com/urish/angular-spinner#readme",
+  "_id": "angular-spinner@0.8.1",
+  "_shasum": "1dbcdf6bef28992664596aa1ddf8194d013aacf9",
+  "_from": "angular-spinner@latest",
+  "_npmVersion": "3.3.12",
+  "_nodeVersion": "5.4.0",
+  "_npmUser": {
+    "name": "urish",
+    "email": "uri@urish.org"
+  },
+  "maintainers": [
+    {
+      "name": "urish",
+      "email": "uri@urish.org"
+    }
+  ],
+  "dist": {
+    "shasum": "1dbcdf6bef28992664596aa1ddf8194d013aacf9",
+    "tarball": "https://registry.npmjs.org/angular-spinner/-/angular-spinner-0.8.1.tgz"
+  },
+  "_npmOperationalInternal": {
+    "host": "packages-9-west.internal.npmjs.com",
+    "tmp": "tmp/angular-spinner-0.8.1.tgz_1455670753150_0.18338851467706263"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/angular-spinner/-/angular-spinner-0.8.1.tgz"
+}

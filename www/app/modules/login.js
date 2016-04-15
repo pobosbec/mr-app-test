@@ -2,12 +2,14 @@
  * Created by robinpipirs on 09/12/15.
  */
 angular.module('login', [])
-    .controller('loginCtrl', ['$scope', '$rootScope', '$http', 'tokenService','$q','$state', function ($scope, $rootScope, $http, tokenService,$q,$state) {
+    .controller('loginCtrl', ['$scope', '$rootScope', '$http', 'tokenService','$q', function ($scope, $rootScope, $http, tokenService,$q) {
+
 
         //taken from main.js
         $scope.loginview = true;
         $scope.registerview = false;
         $scope.forgotview = false;
+
 
         $scope.showRegister = function(){
             $scope.message="";

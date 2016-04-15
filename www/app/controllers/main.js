@@ -5,8 +5,8 @@ mobileresponseWebbApp
     .controller('materialadminCtrl', function($timeout, $state, $rootScope,tokenService, $scope, snapRemote, $uibModal){
 
 
-        $rootScope.createButtonVisible = false;
 
+        $rootScope.createButtonVisible = false;
 
         // process the confirmation dialog result
         function onConfirm(buttonIndex) {

@@ -522,6 +522,32 @@ and (orientation: portrait) {
     margin-top: 20%!important;
 }
 
+.loading-screen {
+    position:absolute;
+    top:0;
+    left:0;
+    width:100vw;
+    height:100vh;
+    background:white;
+    z-index: 9999;
+    pointer-events: none;
+}
+.spinner {
+    margin:0 auto!important;
+    margin-top:25%!important;
+    height: 28px;
+    width: 28px;
+    animation: rotate 0.8s infinite linear;
+    border: 8px solid #000;
+    border-right-color: transparent;
+    border-radius: 50%;
+}
+
+@keyframes rotate {
+    0%    { transform: rotate(0deg); }
+    100%  { transform: rotate(360deg); }
+}
+
 /* Conversation classes */
 .lastAvatar {
     margin-right: 10px !important;
