@@ -255,6 +255,7 @@ angular.module('message', ['ngCordova'])
                         newMessage.author = msg.AuthorId;
                         newMessage.createdOn = msg.CreatedOn;
                         newMessage.content = msg.Content;
+                        newMessage.isRead = msg.IsRead;
                         newMessages.push(newMessage);
                     }
 

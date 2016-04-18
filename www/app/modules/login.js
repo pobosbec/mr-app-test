@@ -33,7 +33,7 @@ angular.module('login', [])
         $scope.message = "";
         $scope.showLoginError = false;
         $scope.errorMsg = "";
-        $scope.keepLoggedIn = tokenService.keepLoggedInCredentialsFromDatabase().keepLoggedIn;
+        $scope.keepLoggedIn = true; //tokenService.keepLoggedInCredentialsFromDatabase().keepLoggedIn;
         $scope.loggingIn = false;
 
         $scope.login = function (data) {

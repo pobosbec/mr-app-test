@@ -1,7 +1,7 @@
 ﻿.fadeHide {
     opacity: 0;
-    -webkit-animation: fadeHide 0.50s; /*Chrome, Safari, Opera*/
-    animation: fadeHide 0.50s;
+    -webkit-animation: fadeHide 1.5s; /*Chrome, Safari, Opera*/
+    animation: fadeHide 1.5s;
 }
 
 .fadeShow {
@@ -13,47 +13,67 @@
 
 /* Fade Hide */
 @-webkit-keyframes fadeHide {
-    from {
+    0% {
         z-index: 1000;
         opacity: 1;
     }
 
-    to {
+    50% {
+        z-index: 1000;
+        opacity: 1;
+    }
+
+    100% {
         /*z-index: 0;*/
         opacity: 0;
     }
 }
 
 @-moz-keyframes fadeHide {
-    from {
+    0% {
         z-index: 1000;
         opacity: 1;
     }
 
-    to {
+    50% {
+        z-index: 1000;
+        opacity: 1;
+    }
+
+    100% {
         /*z-index: 0;*/
         opacity: 0;
     }
 }
 
 @-o-keyframes fadeHide {
-    from {
+    0% {
         z-index: 1000;
         opacity: 1;
     }
 
-    to {
+    50% {
+        z-index: 1000;
+        opacity: 1;
+    }
+
+    100% {
         /*z-index: 0;*/
         opacity: 0;
     }
 }
 
 @keyframes fadeHide {
-    from {
+    0% {
         opacity: 1;
     }
 
-    to {
+    50% {
+        z-index: 1000;
+        opacity: 1;
+    }
+
+    100% {
         opacity: 0;
     }
 }
