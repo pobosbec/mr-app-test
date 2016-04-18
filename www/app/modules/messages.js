@@ -30,7 +30,6 @@ angular.module('messages', [])
         var fetchMessagesInterval = setInterval(function() {
             var args = { Sender: "messages", Event: 'interval' };
             $rootScope.$broadcast('download-whats-new', args);
-            console.log("10s whats-new");
         }, 10000);
 
         $scope.$on('logged-out', function () {

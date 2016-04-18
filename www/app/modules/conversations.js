@@ -279,16 +279,15 @@ angular.module('conversations', [])
                 //Let's load the initial 10
                 conversationsFromDatabasePromise.then(
                     function (conversationsPromiseSuccess) {
-                        console.warn("conversationsPromiseSuccess");
+                        
                         for (var cid in conversationsPromiseSuccess) {
                             var conversation = conversationsPromiseSuccess[cid];
                             $scope.conversations.push(conversation);
                         }
                     }, function (conversationsPromiseError) {
-                        console.warn("conversationsPromiseError");
                         console.warn(conversationsPromiseError);
                     }).then(function () {
-                        console.warn("2");
+                        
                         if (!$scope.conversations.length) {
                             // No messages from Database, Let's do a quick fetch to have at least something initial to show.
                             quickLoad();
@@ -307,7 +306,7 @@ angular.module('conversations', [])
                                 });
                         }
                     }).then(function () {
-                        console.warn("3");
+                        
                         $scope.loading = false;
                         // Time to do some extra conversations loading from api broken down into intervals.
                         var fetchConversationsTimeout = setTimeout(function () {
@@ -366,6 +365,17 @@ angular.module('conversations', [])
                         });
                 }
 
+                function removeDuplicates(messages) {
+                    messages.some(function (a) {
+                        if (!$scope.conversation.Messages.some(
+                            function (e) {
+                                return e.MessageId === a.MessageId;
+                        })) {
+                            $scope.conversation.Messages.push(a);
+                        }
+                    });
+                }
+
                 /* Gets more messages for the current conversation
              */
                 $scope.loadMoreForConversation = function () {
@@ -381,9 +391,7 @@ angular.module('conversations', [])
 
                     promise.then(
                         function (success) {
-                            success.some(function (msg) {
-                                $scope.conversation.Messages.push(msg);
-                            });
+                            removeDuplicates(success);
                         },
                         function (error) {
                             $scope.pageIndex--;
@@ -448,9 +456,7 @@ angular.module('conversations', [])
 
                     messagesPromise.then(
                         function (gotMessages) {
-                            gotMessages.some(function (msg) {
-                                $scope.conversation.Messages.push(msg);
-                            });
+                                removeDuplicates(gotMessages);
                         },
                         function (errorGettingMessages) {
                             console.warn('Could not get messages.');
