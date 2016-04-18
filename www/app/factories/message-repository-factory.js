@@ -11,9 +11,11 @@ angular.module('message', ['ngCordova'])
         // Indicates if messages are added but event isn't fired yet
         var evtMessagesAdded = false;
 
+        var addedMessages = [];
+
         // Indicates if conversations are added but event isn't fired yet
         var evtConversationsAdded = false;
-        
+
 
         // Indicates if the database is configured
         var isConfigured = false;
@@ -328,45 +330,9 @@ angular.module('message', ['ngCordova'])
                             var messages = [];
                             var rows = getRows(result);
 
-                            for (var i = 0; i < rows.length; i++) {
-                                var row = rows[i];
-                                try {
-                                    messages.push(JSON.parse(row['JSON']));
-                                }
-                                catch (err) {
-                                    console.error('Failed to parse message \'' + row['MessageId'] + '\'.\r\n' + err);
-                                }
+                            if (rows.length === 0) {
+                                $rootScope.$broadcast('download-conversation-messages', { ConversationId: conversationId, PageSize: size, PageIndex: pageIndex });
                             }
-
-                            resolve(messages);
-                        }, function (trans, error) {
-                            console.error('Error while fetching messages from database.\r\n' + error.message);
-                            reject(error);
-                        });
-                });
-            });
-        };
-
-        /**
-         * Creates a promise for fetching messages in a conversation descending with page index (0 and upwards) and a limit.
-         * @param {string} conversationId - The conversation id to fetch.
-         * @param {number} pageIndex - The page index to fetch.
-         * @param {number} size - The number of items per page.
-         */
-        factory.getMessagesForConversation = function (conversationId, pageIndex, size) {
-            if (typeof (conversationId) !== 'string') {
-                return $q(function (resolve, reject) { reject('Invalid conversation id'); });
-            }
-
-            pageIndex = typeof (pageIndex) !== 'number' ? 0 : pageIndex;
-            size = typeof (size) !== 'number' ? 20 : size;
-
-            return $q(function (resolve, reject) {
-                db.transaction(function (tx) {
-                    tx.executeSql(queries.getMessagesByConversation, [conversationId, size, pageIndex],
-                        function (trans, result) {
-                            var messages = [];
-                            var rows = getRows(result);
 
                             for (var i = 0; i < rows.length; i++) {
                                 var row = rows[i];
@@ -398,24 +364,24 @@ angular.module('message', ['ngCordova'])
             var offset = pageIndex * size;
 
             var deferred = $q.defer();
-                db.transaction(function (tx) {
-                    tx.executeSql(queries.getConversations, [size, offset],
-                        function (trans, result) {
-                            console.warn("queries.getConversations Success");
-                            var ids = [];
-                            var rows = getRows(result);
+            db.transaction(function (tx) {
+                tx.executeSql(queries.getConversations, [size, offset],
+                    function (trans, result) {
+                        console.warn("queries.getConversations Success");
+                        var ids = [];
+                        var rows = getRows(result);
 
-                            for (var i = 0; i < rows.length; i++) {
-                                var row = rows[i];
-                                ids.push(row['ConversationId']);
-                            }
+                        for (var i = 0; i < rows.length; i++) {
+                            var row = rows[i];
+                            ids.push(row['ConversationId']);
+                        }
 
-                            deferred.resolve(ids);
-                        }, function (trans, error) {
-                            console.error('Error while fetching messages from database.\r\n' + error.message);
-                            deferred.reject(error);
-                        });
-                });
+                        deferred.resolve(ids);
+                    }, function (trans, error) {
+                        console.error('Error while fetching messages from database.\r\n' + error.message);
+                        deferred.reject(error);
+                    });
+            });
             return deferred.promise;
 
         };
@@ -668,6 +634,7 @@ angular.module('message', ['ngCordova'])
         }
 
         factory.messageAdded = function () {
+            
             if (evtMessagesAdded) {
                 return;
             }
@@ -675,14 +642,13 @@ angular.module('message', ['ngCordova'])
             evtMessagesAdded = true;
 
             setTimeout(function () {
-                //console.log("messages-added event");
                 $rootScope.$broadcast('messages-added', {});
                 evtMessagesAdded = false;
             },
                 200);
         };
 
-        factory.conversationsAdded = function() {
+        factory.conversationsAdded = function () {
             if (evtConversationsAdded) {
                 return;
             }
@@ -726,7 +692,7 @@ angular.module('message', ['ngCordova'])
                 case 'logged-out':
                     localStorage.removeItem('latestWhatIsNewUpdate');
                     // Clearing Table on logout, just to be srure
-                    dropMessagesTable().then(function() {
+                    dropMessagesTable().then(function () {
                         return dropConversationPartisipantsTable();
                     }).then(
                         function () {
@@ -737,7 +703,7 @@ angular.module('message', ['ngCordova'])
                         });
                     break;
                 case 'logged-in':
-                    createMessagesTable().then(function() {
+                    createMessagesTable().then(function () {
                         return createConversationParticipantsTable();
                     }).then(
                         function () {

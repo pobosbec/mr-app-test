@@ -279,7 +279,7 @@ angular.module('conversations', [])
                             var conversation = conversationsPromiseSuccess[cid];
                             $scope.conversations.push(conversation);
                         }
-                    }, function(conversationsPromiseError) {
+                    }, function (conversationsPromiseError) {
                         console.warn("conversationsPromiseError");
                         console.warn(conversationsPromiseError);
                     }).then(function () {
@@ -312,14 +312,14 @@ angular.module('conversations', [])
             };
             init();
         }])
-
-        .controller('conversationCtrl', [
+    .controller('conversationCtrl', [
             '$scope', '$http', '$rootScope', 'tokenService', 'contactsService', 'communicationService', 'messageRepository', '$stateParams', '$uibModal', function ($scope, $http, $rootScope, tokenService, contactsService, communicationService, messageRepository, $stateParams, $uibModal) {
-
                 $scope.conversationId = $stateParams.conversationId;
                 $scope.userId = null;
                 $scope.conversation = [];
                 $scope.appUsers = [];
+                $scope.pageIndex = 0;
+                $scope.pageSize = 10;
 
                 /* Reply to the current conversation
              */
@@ -347,14 +347,14 @@ angular.module('conversations', [])
 
                     promise.then(
                         function (success) {
-                            var newMessage = {
-                                MessageId: success.data.messageId,
-                                Author: success.data.authorId,
-                                ConversationId: success.data.conversationId,
-                                Content: success.data.content,
-                                CreatedOn: success.data.createdOn
-                            };
-                            $scope.conversation.Messages.push(newMessage);
+                            //var newMessage = {
+                            //    MessageId: success.data.messageId,
+                            //    Author: success.data.authorId,
+                            //    ConversationId: success.data.conversationId,
+                            //    Content: success.data.content,
+                            //    CreatedOn: success.data.createdOn
+                            //};
+                            //$scope.conversation.Messages.push(newMessage);
                         },
                         function (error) {
                             console.log('Could not reply to conversation.');
@@ -365,18 +365,23 @@ angular.module('conversations', [])
              */
                 $scope.loadMoreForConversation = function () {
 
-                    var promise = messageRepository.getMessagesForConversation(
+                    //TODO: this might cause the user to have to press the load more button several times before old messages actually starts loading..
+
+                    $scope.pageIndex++;
+
+                    var promise = messageRepository.getMessagesByConversation(
                         $scope.conversationId,
-                        $scope.conversation.Messages.length,
-                        3);
+                        $scope.pageIndex,
+                        $scope.pageSize);
 
                     promise.then(
                         function (success) {
-                            for (var i = 0; i < success.length; i++) {
-                                $scope.conversation.Messages.push(success[i]);
-                            }
+                            success.some(function (msg) {
+                                $scope.conversation.Messages.push(msg);
+                            });
                         },
                         function (error) {
+                            $scope.pageIndex--;
                             console.log('Could not get older messages for conversation.');
                         });
                 }
@@ -434,35 +439,19 @@ angular.module('conversations', [])
                 // The events that this view reacts on
                 $scope.$on('messages-added', function (event, args) {
 
-                    var promise = messageRepository.getMessagesByTime(0, 50);
-                    promise.then(
-                        function (messages) {
-                            for (var i = 0; i < messages.length; i++) {
-                                for (var j = 0; j < $scope.conversations.length; j++) {
-                                    if (messages[i].ConversationId === $scope.conversations[j].ConversationId) {
+                    var messagesPromise = messageRepository.getMessagesByConversation($scope.conversationId, 0, $scope.pageSize);
 
-                                        var found = false;
-
-                                        for (var k = 0; k < $scope.conversations[j].Messages.length; k++) {
-                                            if ($scope.conversations[j].Messages[k].MessageId === messages[i].MessageId) {
-                                                found = true;
-                                            }
-                                        }
-
-                                        if (!found) {
-                                            $scope.conversations[j].Messages.push(messages[i]);
-                                        }
-
-                                    } else {
-                                        // new conversation
-                                        console.log('Message from new conversation!')
-                                    }
-                                }
-                            }
+                    messagesPromise.then(
+                        function (gotMessages) {
+                            gotMessages.some(function (msg) {
+                                $scope.conversation.Messages.push(msg);
+                            });
                         },
-                        function (error) {
-                            console.log(error);
+                        function (errorGettingMessages) {
+                            console.warn('Could not get messages.');
                         });
+
+
                 });
 
                 // This is required for ng-repeat order by date
@@ -471,12 +460,11 @@ angular.module('conversations', [])
                     return date;
                 };
 
-                // The purpose of fetching messages in this controller is to be able to display that a new conversation has been started
                 var fetchMessagesInterval = setInterval(function () {
                     var oneMinuteAgo = new Date();
                     oneMinuteAgo.setMinutes(oneMinuteAgo.getMinutes() - 1);
                     communicationService.syncPeriodMessages(oneMinuteAgo.toJSON(), new Date().toJSON(), 0, 50);
-                }, 50000);
+                }, 3000);
 
                 /* Sets initial values and fetches a limited number of messages for the current conversation
              */
@@ -493,7 +481,7 @@ angular.module('conversations', [])
                         var conversationIds = [id];
 
                         var conversationMessagesPromise =
-                            messageRepository.getMessagesByConversation(conversation.ConversationId, 0, 5);
+                            messageRepository.getMessagesByConversation(conversation.ConversationId, $scope.pageIndex, $scope.pageSize);
 
                         conversationMessagesPromise.then(
                             function (conversationMessagesSuccess) {
@@ -560,7 +548,7 @@ angular.module('conversations', [])
                 init();
 
             }
-        ])
+    ])
         .controller('conversationInfoCtrl', [
             '$scope', '$http', 'tokenService', 'contactsService', 'conversationParticipants', '$uibModalInstance', function ($scope, $http, tokenService, contactsService, conversationParticipants, $uibModalInstance) {
 

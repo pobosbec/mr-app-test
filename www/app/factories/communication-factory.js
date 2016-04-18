@@ -149,6 +149,9 @@ angular.module('communication', [])
                     fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5);
                     factory.syncPeriodMessages(fiveMinutesAgo.toJSON(), new Date().toJSON(), 0, 50);
                     break;
+                case 'download-conversation-messages':
+                    factory.downloadMessagesForConversation(args.ConversationId, false, args.PageSize, args.PageIndex);
+                    break;
                 default:
                     break;
             }
@@ -169,7 +172,7 @@ angular.module('communication', [])
                         factory.messagesDownloaded(success.data.items);
                     }
                     else if (success.data.pageIndex > success.data.maxPages) {
-                        console.error('Tried to list messages with pageIndex higher than maxPages.')
+                        console.error('Tried to list messages with pageIndex higher than maxPages.');
                     }
                 },
                 function (error) {
