@@ -97,7 +97,7 @@ angular.module('conversations', [])
                                             };
 
                                             syncConversationParticipants(conversation);
-
+                                            
                                             $scope.conversations.push(conversation);
                                         }
 
@@ -295,7 +295,9 @@ angular.module('conversations', [])
                                 function (conversationsPromiseSuccess) {
                                     for (var cid in conversationsPromiseSuccess) {
                                         var conversation = conversationsPromiseSuccess[cid];
-                                        $scope.conversations.push(conversation);
+                                        if (!$scope.conversations.some(function (e) { return e.ConversationId === conversation.ConversationId })) {
+                                            $scope.conversations.push(conversation);
+                                        }
                                     }
                                 });
                         }
