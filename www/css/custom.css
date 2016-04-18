@@ -584,4 +584,13 @@ and (orientation: portrait) {
 
 .unreadMessage {
     font-weight: bold;
+    color: white;
+    background-color: dodgerblue;
+    padding: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin: -2px;
+    border-radius: 4px;
+    text-shadow: 0px 0px 1px #000000;
+    border: 1px solid #0569B4;
 }

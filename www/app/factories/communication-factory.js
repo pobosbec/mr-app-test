@@ -109,6 +109,7 @@ angular.module('communication', [])
                 newMessage.Author = msg.authorId;
                 newMessage.CreatedOn = msg.createdOn;
                 newMessage.Content = msg.content;
+                newMessage.IsRead = msg.isRead;
                 newMessages.push(newMessage);
             }
 
