@@ -549,8 +549,13 @@ and (orientation: portrait) {
 }
 
 /* Conversation classes */
+
+.avatar {
+    border: 1px solid silver;
+}
+
 .lastAvatar {
-    margin-right: 10px !important;
+    margin-right: 0px !important;
 }
 
 .lastConversation {
@@ -582,15 +587,15 @@ and (orientation: portrait) {
     list-style-type: none;
 }
 
-.unreadMessage {
+/*.unreadMessage {
     font-weight: bold;
     color: white;
     background-color: dodgerblue;
     padding: 2px;
-    padding-left: 5px;
-    padding-right: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
     margin: -2px;
-    border-radius: 4px;
+    border-radius: 3px;
     text-shadow: 0px 0px 1px #000000;
     border: 1px solid #0569B4;
-}
+}*/

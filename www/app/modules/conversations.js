@@ -66,6 +66,11 @@ angular.module('conversations', [])
                 }
             }
 
+            $scope.conversationsSorting = function (convo) {
+                var date = new Date(convo.Messages[0].createdOn);
+                return 0-date;
+            }
+
             // The events that this view reacts on
             $scope.$on('messages-added', function (event, args) {
 
