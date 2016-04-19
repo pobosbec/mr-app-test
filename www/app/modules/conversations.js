@@ -67,8 +67,11 @@ angular.module('conversations', [])
             }
 
             $scope.conversationsSorting = function (convo) {
-                var date = new Date(convo.Messages[0].createdOn);
-                return 0-date;
+                var sortOrder = 0;
+                if (convo.Messages.length) {
+                    sortOrder = new Date(convo.Messages[0].createdOn);
+                }
+                return 0-sortOrder;
             }
 
             // The events that this view reacts on
