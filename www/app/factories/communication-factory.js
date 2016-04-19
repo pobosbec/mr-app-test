@@ -158,17 +158,6 @@ angular.module('communication', [])
 
         factory.on = function (event, args) {
             switch (event.name) {
-<<<<<<< HEAD
-                //case 'download-whats-new':
-                //    console.log('This event is deprecated! This is a temp solution that downloads messages from last 5 minutes. Use download-messages.');
-                //    var fiveMinutesAgo = new Date();
-                //    fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5);
-                //    factory.syncPeriodMessages(fiveMinutesAgo.toJSON(), new Date().toJSON(), 0, 50);
-                //    break;
-                //case 'download-messages':
-                //    factory.syncPeriodMessages(args.PeriodStart, args.PeriodEnd, args.Index, args.Size);
-                //    break;
-=======
                 case 'download-whats-new':
                     //console.log('This event is deprecated! This is a temp solution that downloads messages from last 5 minutes. Use download-messages.');
                     var fiveMinutesAgo = new Date();
@@ -178,7 +167,6 @@ angular.module('communication', [])
                 case 'download-messages':
                     factory.syncPeriodMessages(args.PeriodStart, args.PeriodEnd, args.Index, args.Size);
                     break;
->>>>>>> 1447f68da22a15461b62890cdfdcfd942f8d6e7d
                 case 'push-notification':
                     var fiveMinutesAgo = new Date();
                     fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5);
