@@ -202,6 +202,7 @@ angular.module('event', [])
         });
 
         $scope.$on('download-whats-new', function (event, args) {
+            //console.log(args);
             communicationService.on(event, args);
         });
 

@@ -10,6 +10,19 @@ angular.module('communication', [])
         var inboxId = '8a0958a2-a163-4a20-8afa-e7315012e2d8';
         var pageSize = 50;
 
+        //var fetchMessagesInterval = setInterval(function () {
+        //    var args = { Sender: "Communications Factory", Event: 'interval' };
+        //    $rootScope.$broadcast('download-whats-new', args);
+        //    console.log(args);
+        //}, 2000);
+
+        var fetchMessagesInterval = setInterval(function () {
+            var oneMinuteAgo = new Date();
+            oneMinuteAgo.setMinutes(oneMinuteAgo.getMinutes() - 1);
+            factory.syncPeriodMessages(oneMinuteAgo.toJSON(), new Date().toJSON(), 0, 50);
+            console.log("fetchMessagesInterval");
+        }, 3000);
+
         var downloadMessages = function (periodStart, periodEnd, pageIndex, pageSize) {
             var req = {
                 method: 'POST',
@@ -74,7 +87,7 @@ angular.module('communication', [])
             return tokenService.httpPost(req);
         }
 
-        factory.getAllConversations = function(conversationIds) {
+        factory.getAllConversations = function (conversationIds) {
             var conversations = getAllConversations(conversationIds);
             conversations.then(function (success) {
                 factory.conversationsDownloaded(success.data.usersInConversations);
@@ -84,7 +97,7 @@ angular.module('communication', [])
 
         factory.downloadMessagesForConversation = function (conversationId, sortAscending, pageIndex, pageSize) {
             var messages = downloadMessagesForConversation(conversationId, sortAscending, pageIndex, pageSize);
-            messages.then(function(success) {
+            messages.then(function (success) {
                 factory.messagesDownloaded(success.data.items);
             });
             return messages;
@@ -136,7 +149,7 @@ angular.module('communication', [])
         factory.on = function (event, args) {
             switch (event.name) {
                 case 'download-whats-new':
-                    console.log('This event is deprecated! This is a temp solution that downloads messages from last 5 minutes. Use download-messages.');
+                    //console.log('This event is deprecated! This is a temp solution that downloads messages from last 5 minutes. Use download-messages.');
                     var fiveMinutesAgo = new Date();
                     fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5);
                     factory.syncPeriodMessages(fiveMinutesAgo.toJSON(), new Date().toJSON(), 0, 50);
@@ -151,6 +164,9 @@ angular.module('communication', [])
                     break;
                 case 'download-conversation-messages':
                     factory.downloadMessagesForConversation(args.ConversationId, false, args.PageSize, args.PageIndex);
+                    break;
+                case 'logged-out':
+                    clearInterval(fetchMessagesInterval);
                     break;
                 default:
                     break;
@@ -209,6 +225,5 @@ angular.module('communication', [])
                 console.log('Message could not be sent.');
             });
         }
-
         return factory;
     }])

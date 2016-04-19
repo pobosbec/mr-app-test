@@ -27,13 +27,8 @@ angular.module('messages', [])
                 console.log(error);
             });
 
-        var fetchMessagesInterval = setInterval(function() {
-            var args = { Sender: "messages", Event: 'interval' };
-            $rootScope.$broadcast('download-whats-new', args);
-        }, 10000);
-
         $scope.$on('logged-out', function () {
-            clearInterval(fetchMessagesInterval);
+            //clearInterval(fetchMessagesInterval);
             $scope.messages = [];
             $scope.conversations = [];
         });
@@ -56,7 +51,7 @@ angular.module('messages', [])
         });
 
         $scope.$on('$stateChangeSuccess', function () {
-        loadingTimer = setTimeout(function() { $scope.loading = false; }, 300);
+            loadingTimer = setTimeout(function() { $scope.loading = false; }, 300);
         });
 
         $scope.$on('$stateChangeError', function () {
