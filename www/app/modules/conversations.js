@@ -384,6 +384,10 @@ angular.module('conversations', [])
                 $scope.loadMoreForConversation = function () {
 
                     //TODO: this might cause the user to have to press the load more button several times before old messages actually starts loading..
+                    // TODO: perhapts it is better not to use a paging mechanism for fetching messages as page 0 will contain the newest messages and it becomes hard
+                    // to keep track of what pages that have been fetched. a better way would be to not think of the messages as pages, but as a stream where we would use 
+                    // time or messageId as index to where we are in the stream. if both the messageRespository and the api could be have functions to support this it would
+                    // be very easy to fetch new/old messages and keep track of what has been loaded 
 
                     $scope.pageIndex++;
 
@@ -394,6 +398,9 @@ angular.module('conversations', [])
 
                     promise.then(
                         function (success) {
+                            if (success.length === 0) {
+                                $scope.pageIndex--;
+                            }
                             removeDuplicates(success);
                         },
                         function (error) {
