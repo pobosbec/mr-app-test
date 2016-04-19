@@ -163,7 +163,7 @@ angular.module('communication', [])
                     factory.syncPeriodMessages(fiveMinutesAgo.toJSON(), new Date().toJSON(), 0, 50);
                     break;
                 case 'download-conversation-messages':
-                    factory.downloadMessagesForConversation(args.ConversationId, false, args.PageSize, args.PageIndex);
+                    factory.downloadMessagesForConversation(args.ConversationId, false, args.PageIndex, args.PageSize);
                     break;
                 case 'logged-out':
                     clearInterval(fetchMessagesInterval);

@@ -49,18 +49,10 @@ angular.module('contacts', [])
             dropAppUsers: 'DROP TABLE IF EXISTS AppUsers',
             createAppUsers: 'CREATE TABLE IF NOT EXISTS AppUsers (AppUserId text primary key, DisplayName text, JSON text)',
             getAppUsers: 'SELECT * FROM AppUsers',
-            //getMessagesByTime : 'SELECT MessageId, JSON FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
-            //getConversations : 'SELECT DISTINCT ConversationId FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
-            //getMessagesByConversation : 'SELECT MessageId, JSON FROM Messages WHERE ConversationId = ? ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
-            /**/  //getAllMessages: 'SELECT * FROM Messages ORDER BY CreatedOn DESC',
-            /**/  //getLatestMessages: 'SELECT * FROM Messages ORDER BY CreatedOn DESC LIMIT ?',
-            /**/  //getAllMessagesFromAuthor: 'SELECT * FROM Messages WHERE Author=?',
-            /**/  //getAllMessagesFromConversation: 'SELECT * FROM Messages WHERE ConversationId=?',
             insertAppUser: 'INSERT OR REPLACE INTO AppUsers (AppUserId, DisplayName, JSON) VALUES (?, ?, ?)',
             doesAppUserExist : 'SELECT COUNT(*) AS cnt FROM AppUsers WHERE AppUserId=?',
-            //doesMessageExist : 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?',
-            //doMessagesExist : 'SELECT MessageId FROM Messages WHERE MessageId IN '
-            updateAppUser: 'UPDATE AppUsers SET JSON=? WHERE AppUserId=?'
+            updateAppUser: 'UPDATE AppUsers SET JSON=? WHERE AppUserId=?',
+            getAppUser: 'SELECT * FROM AppUsers WHERE AppUserId=?'
         };
 
         factory.init = function init() {
@@ -199,6 +191,32 @@ angular.module('contacts', [])
                             }
                             resolve(appUsers);
                         }, function(trans, error){
+                            console.error('Error while fetching appUsers from database.\r\n' + error.message);
+                            reject(error);
+                        });
+                });
+            });
+        }
+
+        factory.getAppUser = function (appUserId) {
+            return $q(function (resolve, reject) {
+                db.transaction(function (tx) {
+                    tx.executeSql(queries.getAppUser, [appUserId],
+                        function (trans, result) {
+                            var appUsers = [];
+                            var rows = getRows(result);
+
+                            for (var i = 0; i < rows.length; i++) {
+                                var row = rows[i];
+                                try {
+                                    appUsers.push(JSON.parse(row['JSON']));
+                                }
+                                catch (err) {
+                                    console.error('Failed to parse appUser \'' + row[i].userId + '\'.\r\n' + err);
+                                }
+                            }
+                            resolve(appUsers);
+                        }, function (trans, error) {
                             console.error('Error while fetching appUsers from database.\r\n' + error.message);
                             reject(error);
                         });

@@ -67,11 +67,16 @@ angular.module('conversations', [])
             }
 
             $scope.conversationsSorting = function (convo) {
+<<<<<<< HEAD
+                var date = new Date(convo.Messages[0].createdOn);
+                return 0 - date;
+=======
                 var sortOrder = 0;
                 if (convo.Messages.length) {
                     sortOrder = new Date(convo.Messages[0].createdOn);
                 }
-                return 0 - sortOrder;
+                return 0-sortOrder;
+>>>>>>> feeb1b7e68f4324086e4f99f2a073703cdd79478
             }
 
             // The events that this view reacts on
@@ -94,7 +99,7 @@ angular.module('conversations', [])
                                 var newConversationsPromise = communicationService.getAllConversations(null);
 
                                 newConversationsPromise.then(
-                                    function(newConversationsPromiseSuccess) {
+                                    function (newConversationsPromiseSuccess) {
 
                                         // for each conversation, create and add to $scope.conversation. Check if all Authors are available as appUsers. If not, make details call and add to $scope.appusers + save to db
                                         for (var convo in newConversationsPromiseSuccess.data.usersInConversations) {
@@ -127,13 +132,13 @@ angular.module('conversations', [])
                                                     var promise = syncAppUserParticipant(conversation.Participants[i]);
 
                                                     promise.then(
-                                                        function(success) {
+                                                        function (success) {
                                                             if (success.data.items.length) {
                                                                 $scope.appUsers.push(success.data.items[0]);
                                                                 contactsService.addAppUser(success.data.items[0]);
                                                             }
                                                         },
-                                                        function(error) {
+                                                        function (error) {
                                                             console.error('Could not sync user: ' + conversation.Participants[i]);
                                                         });
                                                 }
@@ -144,15 +149,9 @@ angular.module('conversations', [])
                                             return contactsService.searchAppUser(participantId);
                                         }
                                     },
-                                    function(conversationsPromiseError) {
+                                    function (conversationsPromiseError) {
                                         console.error('Could not sync conversations.');
                                     });
-                            } else {
-                                for (var message in messages) {
-                                
-                                }
-                                console.log(messages);
-                                console.log("new mess in convo");
                             }
                         }
                     },
@@ -318,9 +317,9 @@ angular.module('conversations', [])
 
                         $scope.loading = false;
                         // Time to do some extra conversations loading from api broken down into intervals.
-                        //var fetchConversationsTimeout = setTimeout(function () {
-                        //    fetchConversations();
-                        //}, 10000);
+                        var fetchConversationsTimeout = setTimeout(function () {
+                            fetchConversations();
+                        }, 10000);
                     });
             };
             init();
@@ -489,6 +488,12 @@ angular.module('conversations', [])
                     var date = new Date(message.CreatedOn);
                     return date;
                 };
+
+                var fetchMessagesInterval = setInterval(function () {
+                    var oneMinuteAgo = new Date();
+                    oneMinuteAgo.setMinutes(oneMinuteAgo.getMinutes() - 1);
+                    communicationService.syncPeriodMessages(oneMinuteAgo.toJSON(), new Date().toJSON(), 0, 50);
+                }, 3000);
 
                 /* Sets initial values and fetches a limited number of messages for the current conversation
              */
