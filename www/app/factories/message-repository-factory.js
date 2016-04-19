@@ -113,6 +113,20 @@ angular.module('message', ['ngCordova'])
                     });
         }
 
+        factory.reMapMessage = function (message) {
+            var reMapped = {};
+            reMapped.messageId = message.MessageId;
+            reMapped.participantId = message.ParticipantId;
+            reMapped.conversationId = message.ConversationId;
+            reMapped.authorDisplayName = message.AuthorDisplayName;
+            reMapped.author = message.AuthorId;
+            reMapped.createdOn = message.CreatedOn;
+            reMapped.content = message.Content;
+            reMapped.isRead = message.IsRead;
+            return reMapped;
+        }
+        
+
         /**
          * Creates a promise for creating the database tables.
          */
