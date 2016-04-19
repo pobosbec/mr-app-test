@@ -33,8 +33,8 @@ angular.module('login', [])
         $scope.message = "";
         $scope.showLoginError = false;
         $scope.errorMsg = "";
-        $scope.keepLoggedIn = true; //tokenService.keepLoggedInCredentialsFromDatabase().keepLoggedIn;
-        $scope.loggingIn = false;
+        $scope.keepLoggedIn = tokenService.keepLoggedInCredentialsFromDatabase().keepLoggedIn;
+        $scope.loggingIn = $scope.keepLoggedIn;
 
         $scope.login = function (data) {
             $scope.message="";
@@ -197,6 +197,7 @@ angular.module('login', [])
 
         if (tokenService.keepLoggedInCredentialsFromDatabase().keepLoggedIn) {
             console.warn("auto-logging in");
+            console.log(tokenService.keepLoggedInCredentialsFromDatabase());
             $scope.login(tokenService.keepLoggedInCredentialsFromDatabase());
         } else {
             // In non-keepLoggedIn MR-App, localStorage Clears YOU!

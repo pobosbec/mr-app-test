@@ -113,6 +113,20 @@ angular.module('message', ['ngCordova'])
                     });
         }
 
+        factory.reMapMessage = function (message) {
+            var reMapped = {};
+            reMapped.messageId = message.MessageId;
+            reMapped.participantId = message.ParticipantId;
+            reMapped.conversationId = message.ConversationId;
+            reMapped.authorDisplayName = message.AuthorDisplayName;
+            reMapped.author = message.AuthorId;
+            reMapped.createdOn = message.CreatedOn;
+            reMapped.content = message.Content;
+            reMapped.isRead = message.IsRead;
+            return reMapped;
+        }
+
+
         /**
          * Creates a promise for creating the database tables.
          */
@@ -409,7 +423,6 @@ angular.module('message', ['ngCordova'])
             db.transaction(function (tx) {
                 tx.executeSql(queries.getConversations, [size, offset],
                     function (trans, result) {
-                        console.warn("queries.getConversations Success");
                         var ids = [];
                         var rows = getRows(result);
 
@@ -542,6 +555,7 @@ angular.module('message', ['ngCordova'])
                                 expected++;
 
                                 insertMessage(msg).then(function () {
+
                                     inserted++;
                                     if (inserted === expected) {
                                         //console.log('All messages are added in ' + (new Date() - timer) + 'ms!');

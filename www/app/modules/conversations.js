@@ -67,8 +67,11 @@ angular.module('conversations', [])
             }
 
             $scope.conversationsSorting = function (convo) {
-                var date = new Date(convo.Messages[0].createdOn);
-                return 0 - date;
+                var sortOrder = 0;
+                if (convo.Messages.length) {
+                    sortOrder = new Date(convo.Messages[0].createdOn);
+                }
+                return 0 - sortOrder;
             }
 
             // The events that this view reacts on
@@ -78,7 +81,7 @@ angular.module('conversations', [])
                 promise.then(
                     function (messages) {
                         for (var i = 0; i < messages.length; i++) {
-
+                            var message = messages[i];
                             var newConversation = true;
 
                             for (var j = 0; j < $scope.conversations.length; j++) {
@@ -144,6 +147,29 @@ angular.module('conversations', [])
                                     function (conversationsPromiseError) {
                                         console.error('Could not sync conversations.');
                                     });
+                            } else {
+                                // new message?
+                                var newMessage = true;
+                                for (var k = 0; k < $scope.conversations.length; k++) {
+                                    for (var l = 0; l < $scope.conversations[k].Messages.length; l++) {
+                                        if ($scope.conversations[k].Messages[l].messageId === message.MessageId) {
+                                            newMessage = false;
+                                        }
+                                    }
+                                }
+                                if (newMessage) {
+                                    for (var m = 0; m < $scope.conversations.length; m++) {
+                                        if ($scope.conversations[m].ConversationId === message.ConversationId) {
+
+                                            $scope.conversations[m].Messages.push(messageRepository.reMapMessage(message));
+                                            $scope.conversations[m].Messages.sort(function(a,b) {
+                                                if (a.createdOn > b.createdOn) { return -1 };
+                                                if (a.createdOn < b.createdOn) { return 1 };
+                                                return 0;
+                                            });
+                                        }
+                                    }
+                                }
                             }
                         }
                     },
@@ -309,9 +335,9 @@ angular.module('conversations', [])
 
                         $scope.loading = false;
                         // Time to do some extra conversations loading from api broken down into intervals.
-                        var fetchConversationsTimeout = setTimeout(function () {
-                            fetchConversations();
-                        }, 10000);
+                        //var fetchConversationsTimeout = setTimeout(function () {
+                        //    fetchConversations();
+                        //}, 10000);
                     });
             };
             init();
@@ -474,12 +500,6 @@ angular.module('conversations', [])
                     var date = new Date(message.CreatedOn);
                     return date;
                 };
-
-                var fetchMessagesInterval = setInterval(function () {
-                    var oneMinuteAgo = new Date();
-                    oneMinuteAgo.setMinutes(oneMinuteAgo.getMinutes() - 1);
-                    communicationService.syncPeriodMessages(oneMinuteAgo.toJSON(), new Date().toJSON(), 0, 50);
-                }, 3000);
 
                 /* Sets initial values and fetches a limited number of messages for the current conversation
              */

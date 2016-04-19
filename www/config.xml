@@ -5,7 +5,7 @@
         xmlns:gap = "http://phonegap.com/ns/1.0"
         xmlns:android = "http://schemas.android.com/apk/res/android"
         id        = "com.bosbec.test-app"
-version   = "0.2.1">
+version   = "0.2.2">
   <!--id        = "com.phonegap.hello-world"-->
 
 <name>Bosbec-MR</name>

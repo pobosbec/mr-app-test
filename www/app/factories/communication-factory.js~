@@ -2,7 +2,12 @@
  * Created by Kristofer on 2016-03-13.
  */
 angular.module('communication', [])
+<<<<<<< HEAD
+    .factory('communicationService', ['$http', '$window', '$rootScope', '$location', '$q', '$state', 'tokenService', function ($http, win, $rootScope, $location, $q, $state, tokenService) {
+=======
     .factory('communicationService', ['$http', '$window', '$rootScope', '$location', '$q', '$state', 'tokenService', 'messageRepository', 'contactsService', function ($http, win, $rootScope, $location, $q, $state, tokenService, messageRepository, contactsService) {
+>>>>>>> 1447f68da22a15461b62890cdfdcfd942f8d6e7d
+
         var factory = {};
         var inboxId = '8a0958a2-a163-4a20-8afa-e7315012e2d8';
 
