@@ -19,9 +19,9 @@ angular.module('communication', [])
         var fetchMessagesInterval = setInterval(function () {
             var oneMinuteAgo = new Date();
             oneMinuteAgo.setMinutes(oneMinuteAgo.getMinutes() - 1);
-            factory.syncPeriodMessages(oneMinuteAgo.toJSON(), new Date().toJSON(), 0, 50);
+            factory.syncPeriodMessages(oneMinuteAgo.toJSON(), new Date().toJSON(), 0, 20);
             //console.log("fetchMessagesInterval");
-        }, 3000);
+        }, 1000);
 
         var downloadMessages = function (periodStart, periodEnd, pageIndex, pageSize) {
             var req = {
