@@ -2,13 +2,10 @@
  * Created by Kristofer on 2016-03-13.
  */
 angular.module('communication', [])
-    .factory('communicationService', ['$http', '$window', '$rootScope', '$location', '$q', '$state', 'tokenService', 'messageRepository', function ($http, win, $rootScope, $location, $q, $state, tokenService, messageRepository) {
+    .factory('communicationService', ['$http', '$window', '$rootScope', '$location', '$q', '$state', 'tokenService', function ($http, win, $rootScope, $location, $q, $state, tokenService) {
 
         var factory = {};
-        var latestUpdate;
-        var synchronizing = false;
         var inboxId = '8a0958a2-a163-4a20-8afa-e7315012e2d8';
-        var pageSize = 50;
 
         var downloadMessages = function (periodStart, periodEnd, pageIndex, pageSize) {
             var req = {
@@ -135,15 +132,15 @@ angular.module('communication', [])
 
         factory.on = function (event, args) {
             switch (event.name) {
-                case 'download-whats-new':
-                    console.log('This event is deprecated! This is a temp solution that downloads messages from last 5 minutes. Use download-messages.');
-                    var fiveMinutesAgo = new Date();
-                    fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5);
-                    factory.syncPeriodMessages(fiveMinutesAgo.toJSON(), new Date().toJSON(), 0, 50);
-                    break;
-                case 'download-messages':
-                    factory.syncPeriodMessages(args.PeriodStart, args.PeriodEnd, args.Index, args.Size);
-                    break;
+                //case 'download-whats-new':
+                //    console.log('This event is deprecated! This is a temp solution that downloads messages from last 5 minutes. Use download-messages.');
+                //    var fiveMinutesAgo = new Date();
+                //    fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5);
+                //    factory.syncPeriodMessages(fiveMinutesAgo.toJSON(), new Date().toJSON(), 0, 50);
+                //    break;
+                //case 'download-messages':
+                //    factory.syncPeriodMessages(args.PeriodStart, args.PeriodEnd, args.Index, args.Size);
+                //    break;
                 case 'push-notification':
                     var fiveMinutesAgo = new Date();
                     fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5);

@@ -374,6 +374,7 @@ angular.module('conversations', [])
                             $scope.conversation.Messages.push(a);
                         }
                     });
+                    $scope.pageIndex = Math.floor($scope.conversation.Messages.length / $scope.pageSize);
                 }
 
                 /* Gets more messages for the current conversation
@@ -385,8 +386,7 @@ angular.module('conversations', [])
                     // to keep track of what pages that have been fetched. a better way would be to not think of the messages as pages, but as a stream where we would use 
                     // time or messageId as index to where we are in the stream. if both the messageRespository and the api could be have functions to support this it would
                     // be very easy to fetch new/old messages and keep track of what has been loaded 
-
-                    $scope.pageIndex++;
+                    //$scope.pageIndex++;
 
                     var promise = messageRepository.getMessagesByConversation(
                         $scope.conversationId,
@@ -395,12 +395,6 @@ angular.module('conversations', [])
 
                     promise.then(
                         function (success) {
-                            //if (success.length === $scope.pageSize) {
-                            //    $scope.pageIndex++;
-                            //}
-
-                            $scope.pageIndex = Math.floor($scope.conversation.Messages.length / $scope.pageSize);
-
                             removeDuplicates(success);
                         },
                         function (error) {
@@ -494,11 +488,11 @@ angular.module('conversations', [])
                     // TODO: this might be duplicate code from conversationS-controller
                     function syncUsers() {
 
-                        $scope.conversation.Participants.some(function(e) {
+                        $scope.conversation.Participants.some(function (e) {
                             var contactsPromise = contactsService.getAppUser(e);
 
                             contactsPromise.then(
-                                function(userFound) {
+                                function (userFound) {
                                     if (userFound.length === 1 && e === userFound[0].UserId) {
                                         $scope.appUsers.push(userFound[0]);
                                     }
