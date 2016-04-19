@@ -28,7 +28,6 @@ angular.module('messages', [])
             });
 
         $scope.$on('logged-out', function () {
-            //clearInterval(fetchMessagesInterval);
             $scope.messages = [];
             $scope.conversations = [];
         });

@@ -125,7 +125,7 @@ angular.module('message', ['ngCordova'])
             reMapped.isRead = message.IsRead;
             return reMapped;
         }
-        
+
 
         /**
          * Creates a promise for creating the database tables.
@@ -513,6 +513,7 @@ angular.module('message', ['ngCordova'])
                                 expected++;
 
                                 insertMessage(msg).then(function () {
+
                                     inserted++;
                                     if (inserted === expected) {
                                         //console.log('All messages are added in ' + (new Date() - timer) + 'ms!');
@@ -647,7 +648,7 @@ angular.module('message', ['ngCordova'])
         }
 
         factory.messageAdded = function () {
-            
+
             if (evtMessagesAdded) {
                 return;
             }

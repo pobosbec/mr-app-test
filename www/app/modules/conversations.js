@@ -149,7 +149,6 @@ angular.module('conversations', [])
                                     });
                             } else {
                                 // new message?
-                                //console.log($scope.conversations);
                                 var newMessage = true;
                                 for (var k = 0; k < $scope.conversations.length; k++) {
                                     for (var l = 0; l < $scope.conversations[k].Messages.length; l++) {
@@ -158,7 +157,6 @@ angular.module('conversations', [])
                                         }
                                     }
                                 }
-                                //console.log(messages);
                                 if (newMessage) {
                                     for (var m = 0; m < $scope.conversations.length; m++) {
                                         if ($scope.conversations[m].ConversationId === message.ConversationId) {
@@ -169,7 +167,6 @@ angular.module('conversations', [])
                                                 if (a.createdOn < b.createdOn) { return 1 };
                                                 return 0;
                                             });
-                                            console.log($scope.conversations[m].Messages);
                                         }
                                     }
                                 }

@@ -2,7 +2,7 @@
  * Created by Kristofer on 2016-03-13.
  */
 angular.module('communication', [])
-    .factory('communicationService', ['$http', '$window', '$rootScope', '$location', '$q', '$state', 'tokenService', 'messageRepository', function ($http, win, $rootScope, $location, $q, $state, tokenService, messageRepository) {
+    .factory('communicationService', ['$http', '$window', '$rootScope', '$location', '$q', '$state', 'tokenService', 'messageRepository', 'contactsService', function ($http, win, $rootScope, $location, $q, $state, tokenService, messageRepository, contactsService) {
 
         var factory = {};
         var latestUpdate;
@@ -20,7 +20,7 @@ angular.module('communication', [])
             var oneMinuteAgo = new Date();
             oneMinuteAgo.setMinutes(oneMinuteAgo.getMinutes() - 1);
             factory.syncPeriodMessages(oneMinuteAgo.toJSON(), new Date().toJSON(), 0, 50);
-            console.log("fetchMessagesInterval");
+            //console.log("fetchMessagesInterval");
         }, 3000);
 
         var downloadMessages = function (periodStart, periodEnd, pageIndex, pageSize) {
@@ -103,6 +103,16 @@ angular.module('communication', [])
             return messages;
         }
 
+        var fixAuthorForMessage = function (msg) {
+            var promise = $q(function (resolve, reject) {
+                contactsService.getAppUser(msg.authorId).then(function (e) {
+                    msg.authorDisplayName = e[0].displayName;
+                    resolve(msg);
+                });
+            });
+            return promise;
+        }
+
         factory.messagesDownloaded = function (data) {
 
             var newMessages = [];
@@ -110,24 +120,28 @@ angular.module('communication', [])
             if (data.length === 0) {
                 return;
             }
-
             for (var i = 0; i < data.length; i++) {
-                var msg = data[i];
-
-                var newMessage = {};
-                newMessage.MessageId = msg.messageId;
-                newMessage.ParticipantId = msg.participantId;
-                newMessage.ConversationId = msg.conversationId;
-                newMessage.AuthorDisplayName = msg.authorDisplayName;
-                newMessage.Author = msg.authorId;
-                newMessage.CreatedOn = msg.createdOn;
-                newMessage.Content = msg.content;
-                newMessage.IsRead = msg.isRead;
-                newMessages.push(newMessage);
+                fixAuthorForMessage(data[i]).then(function (msg) {
+                    var newMessage = {};
+                    newMessage.MessageId = msg.messageId;
+                    newMessage.ParticipantId = msg.participantId;
+                    newMessage.ConversationId = msg.conversationId;
+                    newMessage.AuthorDisplayName = msg.authorDisplayName;
+                    newMessage.Author = msg.authorId;
+                    newMessage.CreatedOn = msg.createdOn;
+                    newMessage.Content = msg.content;
+                    newMessage.IsRead = msg.isRead;
+                    newMessages.push(newMessage);
+                    if (newMessages.length === data.length) {
+                        return newMessages;
+                    }
+                }).then(function (newMessages)
+                {
+                    $rootScope.$broadcast('new-messages', newMessages);
+                });
             }
-
-            $rootScope.$broadcast('new-messages', newMessages);
         }
+
 
         factory.conversationsDownloaded = function (data) {
             var newConversations = [];
