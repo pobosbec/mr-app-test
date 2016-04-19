@@ -39,7 +39,7 @@ angular.module('token', [])
                     console.log(reason);
 
                     var credentials = factory.keepLoggedInCredentialsFromDatabase();
-                    if (credentials.keepLoggedIn) {
+                    if (credentials.keepLoggedIn || true) {
                         console.log("Keep Logged in is active, attempting to re-authenticate");
                         factory.authenticate(credentials.username, credentials.password, credentials.keepLoggedIn);
                     } else {
@@ -411,7 +411,7 @@ angular.module('token', [])
         // Get
         factory.keepLoggedInCredentialsFromDatabase = function() {
             var data = {
-                keepLoggedIn: false,
+                keepLoggedIn: true,
                 username: "",
                 password:""
             };
