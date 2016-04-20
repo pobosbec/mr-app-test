@@ -105,8 +105,13 @@ angular.module('communication', [])
 
         var fixAuthorForMessage = function (msg) {
             var promise = $q(function (resolve, reject) {
+                if (msg.authorDisplayName !== "") {
+                    resolve(msg);
+                }
                 contactsService.getAppUser(msg.authorId).then(function (e) {
-                    msg.authorDisplayName = e[0].displayName;
+                    if (e.length && e[0].hasOwnProperty("displayName")) {
+                        msg.authorDisplayName = e[0].displayName;
+                    }
                     resolve(msg);
                 });
             });
@@ -121,6 +126,7 @@ angular.module('communication', [])
                 return;
             }
             for (var i = 0; i < data.length; i++) {
+                // AuthorDisplayName is not provided from API.
                 fixAuthorForMessage(data[i]).then(function (msg) {
                     var newMessage = {};
                     newMessage.MessageId = msg.messageId;
