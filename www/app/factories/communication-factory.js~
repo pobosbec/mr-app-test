@@ -2,7 +2,12 @@
  * Created by Kristofer on 2016-03-13.
  */
 angular.module('communication', [])
-    .factory('communicationService', ['$http', '$window', '$rootScope', '$location', '$q', '$state', 'tokenService', 'contactsService', function ($http, win, $rootScope, $location, $q, $state, tokenService, contactsService) {
+<<<<<<< HEAD
+    .factory('communicationService', ['$http', '$window', '$rootScope', '$location', '$q', '$state', 'tokenService', function ($http, win, $rootScope, $location, $q, $state, tokenService) {
+=======
+    .factory('communicationService', ['$http', '$window', '$rootScope', '$location', '$q', '$state', 'tokenService', 'messageRepository', 'contactsService', function ($http, win, $rootScope, $location, $q, $state, tokenService, messageRepository, contactsService) {
+>>>>>>> 1447f68da22a15461b62890cdfdcfd942f8d6e7d
+
         var factory = {};
         var inboxId = '8a0958a2-a163-4a20-8afa-e7315012e2d8';
 
@@ -101,13 +106,8 @@ angular.module('communication', [])
 
         var fixAuthorForMessage = function (msg) {
             var promise = $q(function (resolve, reject) {
-                if (msg.authorDisplayName !== "") {
-                    resolve(msg);
-                }
                 contactsService.getAppUser(msg.authorId).then(function (e) {
-                    if (e.length && e[0].hasOwnProperty("displayName")) {
-                        msg.authorDisplayName = e[0].displayName;
-                    }
+                    msg.authorDisplayName = e[0].displayName;
                     resolve(msg);
                 });
             });
@@ -122,7 +122,6 @@ angular.module('communication', [])
                 return;
             }
             for (var i = 0; i < data.length; i++) {
-                // AuthorDisplayName is not provided from API.
                 fixAuthorForMessage(data[i]).then(function (msg) {
                     var newMessage = {};
                     newMessage.MessageId = msg.messageId;
@@ -164,6 +163,17 @@ angular.module('communication', [])
 
         factory.on = function (event, args) {
             switch (event.name) {
+<<<<<<< HEAD
+                //case 'download-whats-new':
+                //    console.log('This event is deprecated! This is a temp solution that downloads messages from last 5 minutes. Use download-messages.');
+                //    var fiveMinutesAgo = new Date();
+                //    fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5);
+                //    factory.syncPeriodMessages(fiveMinutesAgo.toJSON(), new Date().toJSON(), 0, 50);
+                //    break;
+                //case 'download-messages':
+                //    factory.syncPeriodMessages(args.PeriodStart, args.PeriodEnd, args.Index, args.Size);
+                //    break;
+=======
                 case 'download-whats-new':
                     //console.log('This event is deprecated! This is a temp solution that downloads messages from last 5 minutes. Use download-messages.');
                     var fiveMinutesAgo = new Date();
@@ -173,6 +183,7 @@ angular.module('communication', [])
                 case 'download-messages':
                     factory.syncPeriodMessages(args.PeriodStart, args.PeriodEnd, args.Index, args.Size);
                     break;
+>>>>>>> 1447f68da22a15461b62890cdfdcfd942f8d6e7d
                 case 'push-notification':
                     var fiveMinutesAgo = new Date();
                     fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5);

@@ -3,7 +3,7 @@
  */
 
 angular.module('message', ['ngCordova'])
-    .factory('messageRepository', ['$http', '$window', '$rootScope', '$location', '$q', '$state', 'tokenService', '$cordovaSQLite', function ($http, win, $rootScope, $location, $q, $state, tokenService, $cordovaSQLite, angularMoment) {
+    .factory('messageRepository', ['$http', '$window', '$rootScope', '$location', '$q', '$state', 'tokenService', '$cordovaSQLite', 'communicationService', function ($http, win, $rootScope, $location, $q, $state, tokenService, $cordovaSQLite, communicationService) {
         var db;
 
         var factory = {};
@@ -337,34 +337,76 @@ angular.module('message', ['ngCordova'])
             size = typeof (size) !== 'number' ? 20 : size;
             var offset = pageIndex * size;
 
-            return $q(function (resolve, reject) {
-                db.transaction(function (tx) {
-                    tx.executeSql(queries.getMessagesByConversation, [conversationId, size, offset],
-                        function (trans, result) {
-                            var messages = [];
-                            var rows = getRows(result);
+            function findInLocalDatabase() {
+                return $q(function (resolve, reject) {
+                    db.transaction(function (tx) {
+                        tx.executeSql(queries.getMessagesByConversation, [conversationId, size, offset],
+                            function (trans, result) {
+                                var messages = [];
+                                var rows = getRows(result);
 
-                            if (rows.length === 0) {
-                                $rootScope.$broadcast('download-conversation-messages', { ConversationId: conversationId, PageSize: size, PageIndex: pageIndex });
-                            }
-
-                            for (var i = 0; i < rows.length; i++) {
-                                var row = rows[i];
-                                try {
-                                    messages.push(JSON.parse(row['JSON']));
+                                for (var i = 0; i < rows.length; i++) {
+                                    var row = rows[i];
+                                    try {
+                                        messages.push(JSON.parse(row['JSON']));
+                                    }
+                                    catch (err) {
+                                        console.error('Failed to parse message \'' + row['MessageId'] + '\'.\r\n' + err);
+                                    }
                                 }
-                                catch (err) {
-                                    console.error('Failed to parse message \'' + row['MessageId'] + '\'.\r\n' + err);
-                                }
-                            }
 
-                            resolve(messages);
-                        }, function (trans, error) {
-                            console.error('Error while fetching messages from database.\r\n' + error.message);
-                            reject(error);
-                        });
+                                resolve(messages);
+                            }, function (trans, error) {
+                                console.error('Error while fetching messages from database.\r\n' + error.message);
+                                reject(error);
+                            });
+                    });
                 });
-            });
+            }
+
+            var d = $q.defer();
+
+            var messages = findInLocalDatabase();
+
+            messages
+                .then(function (success) {
+                    if (success.length > 0) {
+                        return d.resolve(success);
+                    } else {
+                        return communicationService.downloadMessagesForConversation(conversationId, false, (pageIndex + 1), size);
+                    }
+                })
+                .then(function (fromWebApi) {
+
+                    if (fromWebApi === undefined) {
+                        return;
+                    }
+
+                    var newMessages = [];
+
+                    if (fromWebApi.data.items.length === 0) {
+                        return;
+                    }
+
+                    for (var i = 0; i < fromWebApi.data.items.length; i++) {
+                        var msg = fromWebApi.data.items[i];
+
+                        var newMessage = {};
+                        newMessage.MessageId = msg.messageId;
+                        newMessage.ParticipantId = msg.participantId;
+                        newMessage.ConversationId = msg.conversationId;
+                        newMessage.AuthorDisplayName = msg.authorDisplayName;
+                        newMessage.Author = msg.authorId;
+                        newMessage.CreatedOn = msg.createdOn;
+                        newMessage.Content = msg.content;
+                        newMessage.IsRead = msg.isRead;
+                        newMessages.push(newMessage);
+                        insertMessage(newMessage);
+                    }
+                    d.resolve(newMessages);
+                });
+
+            return d.promise;
         };
 
         /**
