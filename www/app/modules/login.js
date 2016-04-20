@@ -35,7 +35,6 @@ angular.module('login', [])
         $scope.errorMsg = "";
         $scope.keepLoggedIn = tokenService.keepLoggedInCredentialsFromDatabase().keepLoggedIn;
         $scope.loggingIn = $scope.keepLoggedIn;
-        //$rootScope.loading = $rootScope.loading ? $rootScope.loading : $scope.loggingIn;
 
         $scope.login = function (data) {
             $scope.message="";
