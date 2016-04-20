@@ -16,7 +16,6 @@ angular.module('communication', [])
             var oneMinuteAgo = new Date();
             oneMinuteAgo.setMinutes(oneMinuteAgo.getMinutes() - 1);
             factory.syncPeriodMessages(oneMinuteAgo.toJSON(), new Date().toJSON(), 0, 20);
-            //console.log("fetchMessagesInterval");
         }, 1000);
 
         var downloadMessages = function (periodStart, periodEnd, pageIndex, pageSize) {
@@ -103,6 +102,7 @@ angular.module('communication', [])
             var promise = $q(function (resolve, reject) {
                 if (msg.authorDisplayName !== "") {
                     resolve(msg);
+                    return;
                 }
                 contactsService.getAppUser(msg.authorId).then(function (e) {
                     if (e.length && e[0].hasOwnProperty("displayName")) {
@@ -183,6 +183,14 @@ angular.module('communication', [])
                     break;
                 case 'logged-out':
                     clearInterval(fetchMessagesInterval);
+                    break;
+                case 'logged-in':
+                    clearInterval(fetchMessagesInterval);
+                    fetchMessagesInterval = setInterval(function () {
+                        var oneMinuteAgo = new Date();
+                        oneMinuteAgo.setMinutes(oneMinuteAgo.getMinutes() - 1);
+                        factory.syncPeriodMessages(oneMinuteAgo.toJSON(), new Date().toJSON(), 0, 20);
+                    }, 1000);
                     break;
                 default:
                     break;
