@@ -16,7 +16,6 @@ angular.module('communication', [])
             var oneMinuteAgo = new Date();
             oneMinuteAgo.setMinutes(oneMinuteAgo.getMinutes() - 1);
             factory.syncPeriodMessages(oneMinuteAgo.toJSON(), new Date().toJSON(), 0, 20);
-            //console.log("fetchMessagesInterval");
         }, 1000);
 
         var downloadMessages = function (periodStart, periodEnd, pageIndex, pageSize) {
@@ -103,6 +102,7 @@ angular.module('communication', [])
             var promise = $q(function (resolve, reject) {
                 if (msg.authorDisplayName !== "") {
                     resolve(msg);
+                    return;
                 }
                 contactsService.getAppUser(msg.authorId).then(function (e) {
                     if (e.length && e[0].hasOwnProperty("displayName")) {
@@ -184,6 +184,14 @@ angular.module('communication', [])
                 case 'logged-out':
                     clearInterval(fetchMessagesInterval);
                     break;
+                case 'logged-in':
+                    clearInterval(fetchMessagesInterval);
+                    fetchMessagesInterval = setInterval(function () {
+                        var oneMinuteAgo = new Date();
+                        oneMinuteAgo.setMinutes(oneMinuteAgo.getMinutes() - 1);
+                        factory.syncPeriodMessages(oneMinuteAgo.toJSON(), new Date().toJSON(), 0, 20);
+                    }, 1000);
+                    break;
                 default:
                     break;
             }
@@ -194,17 +202,20 @@ angular.module('communication', [])
 
             promise.then(
                 function (success) {
-                    if (success.data.pageIndex < success.data.maxPages) {
-                        // more pages to get
-                        factory.messagesDownloaded(success.data.items);
-                        currentIndex++;
-                        factory.syncPeriodMessages(periodStart, periodEnd, currentIndex, size);
-                    }
-                    else if (success.data.pageIndex === success.data.maxPages) {
-                        factory.messagesDownloaded(success.data.items);
-                    }
-                    else if (success.data.pageIndex > success.data.maxPages) {
-                        console.error('Tried to list messages with pageIndex higher than maxPages.');
+                    if (success.data && success.data.hasOwnProperty("pageIndex")) {
+                        if (success.data.pageIndex < success.data.maxPages) {
+                            // more pages to get
+                            factory.messagesDownloaded(success.data.items);
+                            currentIndex++;
+                            factory.syncPeriodMessages(periodStart, periodEnd, currentIndex, size);
+                        } else if (success.data.pageIndex === success.data.maxPages) {
+                            factory.messagesDownloaded(success.data.items);
+                        } else if (success.data.pageIndex > success.data.maxPages) {
+                            console.error('Tried to list messages with pageIndex higher than maxPages.');
+                        }
+                    } else {
+                        // Error....
+                        console.error(success);
                     }
                 },
                 function (error) {

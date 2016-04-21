@@ -27,27 +27,40 @@ angular.module('token', [])
                 }
             };
 
+            var refreshTokenSuccess = function(greeting) {
+                //Success
+                console.log('Sucess refreshing token');
+                console.log(greeting);
+            };
+
+            var refreshTokenFailed = function(reason) {
+                //failed attempt
+                console.log('Failed refreshing token');
+                console.log(reason);
+
+                var credentials = factory.keepLoggedInCredentialsFromDatabase();
+                if (credentials.keepLoggedIn) {
+                    console.log("Keep Logged in is active, attempting to re-authenticate");
+                    factory.authenticate(credentials.username, credentials.password, credentials.keepLoggedIn);
+                } else {
+                    console.log("Logging out");
+                    $rootScope.logout();
+                }
+            }
+
             var refreshTokenFunction = function () {
                 var promise = factory.httpPost(req);
                 promise.then(function (greeting) {
-                    //Success
-                    console.log('Sucess refreshing token');
-                    console.log(greeting);
-                }, function (reason) {
-                    //failed attempt
-                    console.log('Failed refreshing token');
-                    console.log(reason);
-
-                    var credentials = factory.keepLoggedInCredentialsFromDatabase();
-                    if (credentials.keepLoggedIn) {
-                        console.log("Keep Logged in is active, attempting to re-authenticate");
-                        factory.authenticate(credentials.username, credentials.password, credentials.keepLoggedIn);
+                    if (greeting.status && greeting.status.toLocaleLowerCase() !== "unauthorized") {
+                        refreshTokenSuccess(greeting);
                     } else {
-                        console.log("Logging out");
-                        $rootScope.logout();
+                        refreshTokenFailed(greeting);
                     }
+                }, function (reason) {
+                    refreshTokenFailed(reason);
                 });
             }
+
             refreshTokenFunction();
             refreshTokenIntervall = setInterval(refreshTokenFunction, (15 * 60 * 1000));
         };
@@ -321,7 +334,25 @@ angular.module('token', [])
         };
 
         factory.httpPost = function (req) {
-            //console.log("");
+
+            var timerFunction = function () {
+                var deferred = $q.defer();
+                deferred.resolve(new Date().getTime());
+                return deferred.promise;
+            }
+
+            var promises = [timerFunction(), factory.httpPostOriginal(req)];
+
+            return $q.all(promises).then(function(values) {
+                var elapsedTime = (new Date().getTime() - values[0]);
+                var logString = "[ " + elapsedTime + " ms ] " + (values[1].requestUrl) + " ";
+                console.log(logString);
+                timerResults.push({ timeStamp: values[0], elapsedTime: elapsedTime, url: values[1].requestUrl });
+                return values[1];
+            });
+        }
+
+        factory.httpPostOriginal = function (req) {
             var deferred = $q.defer();
 
             $http(req
@@ -329,7 +360,6 @@ angular.module('token', [])
                 // this callback will be called asynchronously
                 // when the response is available
                 deferred.resolve(response.data);
-
             }, function errorCallback(response) {
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
@@ -598,3 +628,25 @@ angular.module('token', [])
 
 
     }])
+
+
+var timerResults = [];
+
+var listHttpTimers = function (limit, sortAscending) {
+    if (typeof limit != "number") { limit = 10; }
+    var resultArr = [];
+    var result = "";
+    var sorted = timerResults.sort(function (a, b) {
+        if (a.elapsedTime > b.elapsedTime) { return sortAscending ? 1 : -1; }
+        if (a.elapsedTime < b.elapsedTime) { return sortAscending ? -1 : 1; }
+        return 0;
+    });
+    resultArr = sorted.slice().splice(0, limit);
+
+    console.log("\n---- Listing top [" + resultArr.length + "] http requests by execution time " + (sortAscending ? "ASCENDING" : "DESCENDING") + "----\n\n");
+    for (var entry in resultArr) {
+        result += new Date(resultArr[entry].timeStamp) +" [" + resultArr[entry].elapsedTime + " ms] > " + resultArr[entry].url + "\n";
+    }
+    result += "\n\n";
+    console.log(result);
+};

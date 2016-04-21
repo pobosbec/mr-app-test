@@ -298,7 +298,8 @@ and (orientation: portrait) {
 
 /* Show the "Drag" background in the demo */
 #content {
-    background:#edecec url(drag.png) center 75% no-repeat;
+    /*background:#edecec url(drag.png) center 75% no-repeat;*/
+    background-color:#edecec;
 }
 
 /* Demo toolbar styles */

@@ -46,10 +46,10 @@
     <!-- End Cookie Consent plugin -->
 </head>
 <body data-ng-controller="eventCtrl as ectrl">
-<div class="loading-screen" ng-class="loading?'fadeShow':'fadeHide'"><div class="spinner"></div></div>
-        <div>
-            <div data-ng-include="'template/sidebar-drawer.html'"></div>
-        </div>
+    <div class="loading-screen" ng-class="loading?'fadeShow':'fadeHide'"><div class="spinner"></div></div>
+    <div>
+        <div data-ng-include="'template/sidebar-drawer.html'"></div>
+    </div>
     <div id="content" snap-content class="snap-content">
 
         <header id="header" ng-show="header" data-current-skin={{mactrl.currentSkin}} data-ng-include="'template/header.html'" style="position: fixed; top:0;left: 0;right:0; z-index: 2 !important;" data-ng-controller="headerCtrl as hctrl"></header>
@@ -64,8 +64,8 @@
     <script src="node_modules/angular-animate/angular-animate.min.js"></script>
 
 
-        <link href="node_modules/angular-loading-bar/build/loading-bar.min.css" type="text/css" media="all" rel="stylesheet"/>
-        <script src="node_modules/angular-loading-bar/build/loading-bar.min.js"></script>
+    <!--<link href="node_modules/angular-loading-bar/build/loading-bar.min.css" type="text/css" media="all" rel="stylesheet"/>
+    <script src="node_modules/angular-loading-bar/build/loading-bar.min.js"></script>-->
     <!-- Angular ui router -->
     <script src="node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
 
