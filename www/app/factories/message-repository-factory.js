@@ -39,7 +39,7 @@ angular.module('message', ['ngCordova'])
             insertMessage: 'INSERT INTO Messages (MessageId, CreatedOn, ConversationId, Author, JSON) VALUES (?, ?, ?, ?, ?)',
             doesMessageExist: 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?',
             doMessagesExist: 'SELECT MessageId FROM Messages WHERE MessageId IN ',
-            dropConversationParticipants: 'DROP TABLE IF EXISTS ConversationParticipants',
+            dropConversationPartisipantsTable: 'DROP TABLE IF EXISTS ConversationParticipants',
             createConversationParticipants: 'CREATE TABLE IF NOT EXISTS ConversationParticipants (ConversationId text primary key, Participants text)',
             getConversationParticipants: 'SELECT Participants FROM ConversationParticipants WHERE ConversationId = ?',
             insertConversationParticipants: 'INSERT OR REPLACE INTO ConversationParticipants (ConversationId, Participants) VALUES (?, ?)'
@@ -54,7 +54,7 @@ angular.module('message', ['ngCordova'])
             insertMessage: 'INSERT INTO Messages (MessageId, CreatedOn, ConversationId, Author, JSON) VALUES (?, ?, ?, ?, ?)',
             doesMessageExist: 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?',
             doMessagesExist: 'SELECT MessageId FROM Messages WHERE MessageId IN ',
-            dropConversationParticipants: 'DROP TABLE IF EXISTS ConversationParticipants',
+            dropConversationPartisipantsTable: 'DROP TABLE IF EXISTS ConversationParticipants',
             createConversationParticipants: 'CREATE TABLE IF NOT EXISTS ConversationParticipants (ConversationId unique, Participants)',
             getConversationParticipants: 'SELECT Participants FROM ConversationParticipants WHERE ConversationId = ?',
             insertConversationParticipants: 'INSERT OR REPLACE INTO ConversationParticipants (ConversationId, Participants) VALUES (?, ?)'
@@ -233,7 +233,11 @@ angular.module('message', ['ngCordova'])
                                     messages.push(JSON.parse(row['JSON']));
                                 }
                                 catch (err) {
-                                    console.error('Failed to parse message \'' + row['MessageId'] + '\'.\r\n' + err);
+                                    if (typeof row === "undefined") {
+                                        console.error('Failed to parse message, row is undefined' + err);
+                                    } else {
+                                        console.error('Failed to parse message \'' + row['MessageId'] + '\'.\r\n' + err);
+                                    }
                                 }
                             }
 
@@ -348,10 +352,16 @@ angular.module('message', ['ngCordova'])
                                 for (var i = 0; i < rows.length; i++) {
                                     var row = rows[i];
                                     try {
-                                        messages.push(JSON.parse(row['JSON']));
+                                        if (typeof row !== "undefined" && row.hasOwnProperty("JSON")) {
+                                            messages.push(JSON.parse(row.JSON));
+                                        }
                                     }
                                     catch (err) {
-                                        console.error('Failed to parse message \'' + row['MessageId'] + '\'.\r\n' + err);
+                                        if (typeof row === "undefined") {
+                                            console.error('Failed to parse message, row is undefined' + err);
+                                        } else {
+                                            console.error('Failed to parse message \'' + row.MessageId + '\'.\r\n' + err);
+                                        }
                                     }
                                 }
 
@@ -451,8 +461,11 @@ angular.module('message', ['ngCordova'])
                     tx.executeSql(queries.getConversationParticipants, [conversationId],
                         function (trans, result) {
                             var rows = getRows(result);
+                            var participants = "";
                             if (rows.length) {
-                                var participants = JSON.parse(rows[0].Participants);
+                                if (rows[0].hasOwnProperty("Participants")) {
+                                    participants = JSON.parse(rows[0].Participants);
+                                }
                             }
 
                             resolve(participants);
@@ -493,7 +506,11 @@ angular.module('message', ['ngCordova'])
                                 // console.log('Added message with id \'' + message.MessageId + '\'');
                                 resolve();
                             }, function (error) {
-                                error = 'Error while inserting message with id \'' + message.MessageId + '\'.\r\n' + error.message;
+                                if (message.hasOwnProperty("MessageId")) {
+                                    error = 'Error while inserting message with id \'' + message.MessageId + '\'.\r\n' + error.message;
+                                } else {
+                                    error = 'Error while inserting message with undefined id.\r\n' + error.message;
+                                }
                                 console.error(error);
                                 reject(error);
                             });
@@ -547,7 +564,11 @@ angular.module('message', ['ngCordova'])
                             for (var j = 0; j < messages.length; j++) {
                                 var msg = messages[j];
                                 if (rows.find(function (a) {
-                                        return a['MessageId'] === msg.MessageId;
+                                    if (a.hasOwnProperty('MessageId')) {
+                                        return a.MessageId === msg.MessageId;
+                                    } else {
+                                        return false;
+                                    }
                                 })) {
                                     continue;
                                 }
@@ -642,9 +663,14 @@ angular.module('message', ['ngCordova'])
                             JSON.stringify(message)],
                         function (trans, result) {
                             if (result.rowsAffected !== 1) {
-                                console.error('');
+                                var errorMessage;
+                                if (message.hasOwnProperty("MessageId")) {
+                                    errorMessage = 'The message with id \'' + message.MessageId + '\' doesn\'t seem to be added properly';
+                                } else {
+                                    errorMessage = 'The message has an undefined id';
+                                }
                                 reject(new {
-                                    message: 'The message width id \'' + message.MessageId + '\' doesn\'t seem to be added properly'
+                                    message: errorMessage
                                 });
                                 return;
                             }
@@ -673,9 +699,14 @@ angular.module('message', ['ngCordova'])
                             JSON.stringify(conversation.Participants)],
                         function (trans, result) {
                             if (result.rowsAffected !== 1) {
-                                console.error('');
+                                var errorMessage;
+                                if (conversation.hasOwnProperty("ConversationId")) {
+                                    errorMessage = 'The conversation with id \'' + conversation.ConversationId + '\' doesn\'t seem to be added properly';
+                                } else {
+                                    errorMessage = 'The conversation has an undefined id';
+                                }
                                 reject(new {
-                                    message: 'The conversation with id \'' + conversation.ConversationId + '\' doesn\'t seem to be added properly'
+                                    message: errorMessage
                                 });
                                 return;
                             }

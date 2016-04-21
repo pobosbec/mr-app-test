@@ -282,15 +282,9 @@ angular.module('conversations', [])
                         });
                 });
 
-<<<<<<< HEAD
                 $scope.isLoading = true;
                 promise.then(function(result) {
                     $scope.isLoading = false;
-=======
-                $scope.loading = true;
-                return promise.then(function (result) {
-                    $scope.loading = false;
->>>>>>> 655d5aa9c534b336af0ca8d6244364448a1bd62d
                     if (Object.keys(result.data.usersInConversations).length >= $scope.conversations.length) {
                         //var fetchConversationsTimeout = setTimeout(function () {
                         //    fetchConversations();
@@ -372,16 +366,11 @@ angular.module('conversations', [])
                         });
 
                         promise.then(function () {
-<<<<<<< HEAD
                             $scope.isLoading = false;
                             // Time to do some extra conversations loading from api broken down into intervals.
                             var fetchConversationsTimeout = setTimeout(function () {
                                 fetchConversations();
                             }, 5000);
-=======
-                            $scope.loading = false;
-                            console.log("Initial loading of conversations done.");
->>>>>>> 655d5aa9c534b336af0ca8d6244364448a1bd62d
                         });
                     });
             };
