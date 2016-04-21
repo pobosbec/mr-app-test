@@ -1,21 +1,24 @@
 {
-    "prepare_queue": {
-        "installed": [],
-        "uninstalled": []
+  "prepare_queue": {
+    "installed": [ ],
+    "uninstalled": [ ]
+  },
+  "config_munge": {
+    "files": { }
+  },
+  "installed_plugins": {
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.bosbec.testapp"
     },
-    "config_munge": {
-        "files": {}
+    "cordova-plugin-device": {
+      "PACKAGE_NAME": "com.bosbec.testapp"
     },
-    "installed_plugins": {
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.bosbec.testapp"
-        },
-        "cordova-plugin-device": {
-            "PACKAGE_NAME": "com.bosbec.testapp"
-        },
-        "com.pushwoosh.plugins.pushwoosh": {
-            "PACKAGE_NAME": "com.bosbec.testapp"
-        }
+    "com.pushwoosh.plugins.pushwoosh": {
+      "PACKAGE_NAME": "com.bosbec.testapp"
     },
-    "dependent_plugins": {}
+    "com.phonegap.plugin.statusbar": {
+      "PACKAGE_NAME": "com.bosbec.testapp"
+    }
+  },
+  "dependent_plugins": { }
 }

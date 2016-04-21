@@ -9,6 +9,9 @@
     </author>
     <platform name="ios">
       <icon src="img/icon.png" width="180" height="180" />
+      <preference name="StatusBarOverlaysWebView" value="true" />
+      <preference name="StatusBarBackgroundColor" value="#000000" />
+      <preference name="StatusBarStyle" value="lightcontent" />
     </platform>
     <content src="index.html" />
     <plugin name="io.litehelpers.cordova.sqlite" spec="0.7.10" source="pgb" />

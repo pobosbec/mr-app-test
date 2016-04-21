@@ -79,6 +79,9 @@ version   = "0.2.3">
   <!-- Cordova app version plugin -->
   <gap:plugin name="cordova-plugin-app-version" spec="0.1.8" source="npm" />
 
+  <!-- Ios statusbar plugin -->
+  <gap:plugin name="com.phonegap.plugin.statusbar" spec="2.1.3" source="npm" />
+
   <!-- Define app icon for each platform. -->
   <icon src="icon.png" />
   <icon src="res/icon/android/icon-36-ldpi.png"   gap:platform="android"    gap:qualifier="ldpi" />
