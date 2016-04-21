@@ -365,6 +365,7 @@ angular.module('conversations', [])
                 $scope.appUsers = [];
                 $scope.pageIndex = 0;
                 $scope.pageSize = 10;
+                $scope.isGroupConversation = false;
 
                 /* Reply to the current conversation
              */
@@ -479,20 +480,21 @@ angular.module('conversations', [])
                 };
 
                 $scope.getUsername = function (appUserId) {
-                    var found = null;
 
-                    for (var i = 0; i < $scope.appUsers.length; i++) {
-                        var appUser = $scope.appUsers[i];
+                    var displayName = '';
 
+                    $scope.appUsers.some(function(appUser) {
                         if (appUser.id === appUserId) {
-                            found = $scope.appUsers[i].displayName;
+                            displayName = appUser.displayName;
                         }
-                    }
+                    });
 
-                    if (found != null) {
-                        return found;
-                    }
+                    return displayName;
                 };
+
+                $scope.checkIfGroupConversation = function() {
+                    return $scope.isGroupConversation;
+                }
 
                 // The events that this view reacts on
                 $scope.$on('messages-added', function (event, args) {
@@ -563,6 +565,9 @@ angular.module('conversations', [])
                         participantsPromise.then(
                             function (success) {
                                 $scope.conversation.Participants = success;
+                                if ($scope.conversation.Participants.length > 2) {
+                                    $scope.isGroupConversation = true;
+                                } 
                                 syncUsers();
                             },
                             function (error) {
