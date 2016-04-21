@@ -5,7 +5,7 @@ angular.module('conversations', [])
     .controller('conversationsCtrl', [
         '$scope', '$http', '$rootScope', 'tokenService', 'contactsService', '$q', 'communicationService', 'messageRepository', function ($scope, $http, $rootScope, tokenService, contactsService, $q, communicationService, messageRepository) {
             $scope.isPhoneGap = window.isPhoneGap;
-            $scope.loading = true;
+            $scope.isLoading = true;
             $scope.conversations = [];
             $scope.userId = null;
             $scope.appUsers = [];
@@ -282,9 +282,9 @@ angular.module('conversations', [])
                         });
                 });
 
-                $scope.loading = true;
+                $scope.isLoading = true;
                 promise.then(function(result) {
-                    $scope.loading = false;
+                    $scope.isLoading = false;
                     if (Object.keys(result.data.usersInConversations).length >= $scope.conversations.length) {
                         //var fetchConversationsTimeout = setTimeout(function () {
                         //    fetchConversations();
@@ -316,7 +316,7 @@ angular.module('conversations', [])
             /* Sets initial values.
              */
             function init() {
-                $scope.loading = true;
+                $scope.isLoading = true;
                 $scope.userId = tokenService.getAppUserId();
                 var appUsersPromise = contactsService.getAppUsers();
 
@@ -366,7 +366,7 @@ angular.module('conversations', [])
                         });
 
                         promise.then(function () {
-                            $scope.loading = false;
+                            $scope.isLoading = false;
                             // Time to do some extra conversations loading from api broken down into intervals.
                             var fetchConversationsTimeout = setTimeout(function () {
                                 fetchConversations();
