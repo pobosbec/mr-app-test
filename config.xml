@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.bosbec.testapp" version="0.2.3a" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.bosbec.testapp" version="0.2.3b" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>mr-app-test</name>
     <description>
         Another test-app for Bosbec, MobileResponse.
@@ -9,9 +9,6 @@
     </author>
     <platform name="ios">
       <icon src="img/icon.png" width="180" height="180" />
-      <preference name="StatusBarOverlaysWebView" value="true" />
-      <preference name="StatusBarBackgroundColor" value="#000000" />
-      <preference name="StatusBarStyle" value="lightcontent" />
     </platform>
     <content src="index.html" />
     <plugin name="io.litehelpers.cordova.sqlite" spec="0.7.10" source="pgb" />
