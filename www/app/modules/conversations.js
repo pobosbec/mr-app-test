@@ -10,6 +10,7 @@ angular.module('conversations', [])
             $scope.userId = null;
             $scope.appUsers = [];
             $scope.unSyncedAppUsers = [];
+            $scope.unProccessedConversations = [];
 
             /* Make a request to the api to check if a conversation exists
          */
@@ -73,6 +74,15 @@ angular.module('conversations', [])
                     sortOrder = new Date(convo.Messages[0].createdOn);
                 }
                 return 0 - sortOrder;
+            }
+
+            $scope.loadUnprocessedConversations = function () {
+                var conversationToProcess = [];
+
+                for (var i = 0; i < 10; i++) {
+                    conversationToProcess.push($scope.unProccessedConversations.shift());
+                }
+                addConversations(conversationToProcess);
             }
 
             // The events that this view reacts on
@@ -188,28 +198,19 @@ angular.module('conversations', [])
                 }
 
                 var processedConvos = 0;
-                // for each conversation, create and add to $scope.conversation. Check if all Authors are available as appUsers. If not, make details call and add to $scope.appusers + save to db
-                for (var convo in conversations.data.usersInConversations) {
-                    // Check if conversation is already present in $scope.conversations.
-                    if ($scope.conversations.filter(function (e) { return e.ConversationId == convo; }).length > 0) {
-                        continue;
-                    }
 
+                conversations.some(function (conversation) {
                     processedConvos++;
-                    var conversation = {
-                        ConversationId: convo,
-                        Messages: [],
-                        Participants: conversations.data.usersInConversations[convo]
-                    };
+
                     syncConversationParticipants(conversation);
                     // Break after fetching the desired ammount of conversations.
                     if (processedConvos <= conversationsLimit) {
                         syncConversationMessages(conversation, conversationMessages);
+                        $scope.conversations.push(conversation);
                     } else {
-                        break;
+                        $scope.unProccessedConversations.push(conversation);
                     }
-                    $scope.conversations.push(conversation);
-                }
+                });
 
                 var promise = syncAppUserParticipant($scope.unSyncedAppUsers);
                 promise.then(
@@ -277,13 +278,31 @@ angular.module('conversations', [])
                     var conversationsFromApiPromise = communicationService.getAllConversations(null);
                     conversationsFromApiPromise.then(
                         function (conversationsPromiseSuccess) {
+
+                            var conversations = [];
+
+                            for (var convo in conversationsPromiseSuccess.data.usersInConversations) {
+                                // Check if conversation is already present in $scope.conversations.
+                                if ($scope.conversations.filter(function (e) { return e.ConversationId == convo; }).length > 0) {
+                                    continue;
+                                }
+
+                                var conversation = {
+                                    ConversationId: convo,
+                                    Messages: [],
+                                    Participants: conversations.data.usersInConversations[convo]
+                                };
+
+                                conversations.push(conversation);
+                            }
+
                             addConversations(conversationsPromiseSuccess, 10, 1);
                             resolve(conversationsPromiseSuccess);
                         });
                 });
 
                 $scope.isLoading = true;
-                promise.then(function(result) {
+                promise.then(function (result) {
                     $scope.isLoading = false;
                     if (Object.keys(result.data.usersInConversations).length >= $scope.conversations.length) {
                         //var fetchConversationsTimeout = setTimeout(function () {
@@ -305,7 +324,24 @@ angular.module('conversations', [])
                     var conversationsFromApiPromise = communicationService.getAllConversations(null);
                     conversationsFromApiPromise.then(
                         function (conversationsPromiseSuccess) {
-                            addConversations(conversationsPromiseSuccess, quickLoadConversationsSize, quickLoadMessagesSize);
+                            var conversations = [];
+
+                            for (var convo in conversationsPromiseSuccess.data.usersInConversations) {
+                                // Check if conversation is already present in $scope.conversations.
+                                if ($scope.conversations.filter(function (e) { return e.ConversationId == convo; }).length > 0) {
+                                    continue;
+                                }
+
+                                var conversation = {
+                                    ConversationId: convo,
+                                    Messages: [],
+                                    Participants: conversationsPromiseSuccess.data.usersInConversations[convo]
+                                };
+
+                                conversations.push(conversation);
+                            }
+
+                            addConversations(conversations, quickLoadConversationsSize, quickLoadMessagesSize);
                             resolve();
                         });
 

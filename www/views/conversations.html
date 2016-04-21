@@ -1,4 +1,4 @@
-<div class="listview lv-bordered lv-lg" style="padding-bottom: 30px;" data-ng-controller="conversationsCtrl as conversationsCtrl">
+<div class="listview lv-bordered lv-lg" style="padding-bottom: 100px;" data-ng-controller="conversationsCtrl as conversationsCtrl">
     <div class="lv-body">
         <div class="lv-item media" ng-repeat="conversation in conversations | orderBy: conversationsSorting" ng-class="{'lastConversation':$last, 'hoverOverride':isPhoneGap}">
             <a ui-sref="conversation({conversationId: conversation.ConversationId})">
@@ -17,5 +17,8 @@
         </div>
         <!-- <div ng-show="loading" style="position: relative; left: 0px; text-align:center; padding-top: 50px; padding-bottom: 50px;">Loading conversations...</div>-->
         <loading></loading>
+        <div style="background-color: rgb(237, 236, 235); width: 100%; text-align: center; font-size: 2em !important; bottom: 0">
+            <a href="" ng-click="loadUnprocessedConversations()"><i class="zmdi zmdi-refresh-alt"></i> Older conversations...</a>
+        </div>
     </div>
 </div>

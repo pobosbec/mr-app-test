@@ -560,7 +560,8 @@ and (orientation: portrait) {
 }
 
 .lastConversation {
-    margin-bottom: 50px !important;
+    /*margin-bottom: 50px !important;*/
+    padding-bottom: 0px;
 }
 
 .convParticipants {
