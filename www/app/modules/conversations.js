@@ -102,7 +102,7 @@ angular.module('conversations', [])
                                             var conversation = {
                                                 ConversationId: convo,
                                                 Messages: [],
-                                                Participants: conversationsPromiseSuccess.data.usersInConversations[convo]
+                                                Participants: newConversationsPromiseSuccess.data.usersInConversations[convo]
                                             };
 
                                             syncConversationParticipants(conversation);
@@ -367,10 +367,7 @@ angular.module('conversations', [])
 
                         promise.then(function () {
                             $scope.isLoading = false;
-                            // Time to do some extra conversations loading from api broken down into intervals.
-                            var fetchConversationsTimeout = setTimeout(function () {
-                                fetchConversations();
-                            }, 5000);
+                            console.log("Initial loading of conversations done.");
                         });
                     });
             };
@@ -451,7 +448,7 @@ angular.module('conversations', [])
                     //$scope.pageIndex++;
 
                     $scope.isLoading = true;
-                    
+
                     var promise = messageRepository.getMessagesByConversation(
                         $scope.conversationId,
                         $scope.pageIndex,
