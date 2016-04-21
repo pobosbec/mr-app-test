@@ -233,7 +233,11 @@ angular.module('message', ['ngCordova'])
                                     messages.push(JSON.parse(row['JSON']));
                                 }
                                 catch (err) {
-                                    console.error('Failed to parse message \'' + row['MessageId'] + '\'.\r\n' + err);
+                                    if (typeof row === "undefined") {
+                                        console.error('Failed to parse message, row is undefined' + err);
+                                    } else {
+                                        console.error('Failed to parse message \'' + row['MessageId'] + '\'.\r\n' + err);
+                                    }
                                 }
                             }
 
@@ -351,7 +355,11 @@ angular.module('message', ['ngCordova'])
                                         messages.push(JSON.parse(row['JSON']));
                                     }
                                     catch (err) {
-                                        console.error('Failed to parse message \'' + row['MessageId'] + '\'.\r\n' + err);
+                                        if (typeof row === "undefined") {
+                                            console.error('Failed to parse message, row is undefined' + err);
+                                        } else {
+                                            console.error('Failed to parse message \'' + row['MessageId'] + '\'.\r\n' + err);
+                                        }
                                     }
                                 }
 

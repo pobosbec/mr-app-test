@@ -272,7 +272,6 @@ angular.module('conversations', [])
             }
 
             function fetchConversations() {
-
                 var promise = $q(function (resolve, reject) {
                     var conversationsFromApiPromise = communicationService.getAllConversations(null);
                     conversationsFromApiPromise.then(
