@@ -9,6 +9,7 @@ angular.module('conversations', [])
             $scope.conversations = [];
             $scope.userId = null;
             $scope.appUsers = [];
+            $scope.unSyncedAppUsers = [];
 
             /* Make a request to the api to check if a conversation exists
          */
@@ -162,7 +163,7 @@ angular.module('conversations', [])
                                         if ($scope.conversations[m].ConversationId === message.ConversationId) {
 
                                             $scope.conversations[m].Messages.push(messageRepository.reMapMessage(message));
-                                            $scope.conversations[m].Messages.sort(function(a,b) {
+                                            $scope.conversations[m].Messages.sort(function (a, b) {
                                                 if (a.createdOn > b.createdOn) { return -1 };
                                                 if (a.createdOn < b.createdOn) { return 1 };
                                                 return 0;
@@ -210,6 +211,22 @@ angular.module('conversations', [])
                     $scope.conversations.push(conversation);
                 }
 
+                var promise = syncAppUserParticipant($scope.unSyncedAppUsers);
+                promise.then(
+                    function (success) {
+                        if (success.data.items != null) {
+                            success.data.items.some(function (appUser) {
+                                $scope.appUsers.push(appUser);
+                                contactsService.addAppUser(appUser);
+                            });
+                        }
+
+                        $scope.unSyncedAppUsers = [];
+
+                    },
+                    function (error) {
+                        console.error('Could not sync user: ' + conversation.Participants[i]);
+                    });
 
                 function syncConversationMessages(conversation, amount) {
                     var messagesPromise = communicationService.downloadMessagesForConversation(conversation.ConversationId, false, 0, amount);
@@ -230,21 +247,10 @@ angular.module('conversations', [])
                 }
 
                 function syncConversationParticipants(conversation) {
+
                     for (var i = 0; i < conversation.Participants.length; i++) {
-                        //if (!isParticipantAppUser(conversation.Participants[i])) {
                         if (!$scope.appUsers.some(function (e) { e.userId === conversation.Participants[i] })) {
-                            $scope.appUsers.push({ userId: conversation.Participants[i] });
-                            var promise = syncAppUserParticipant(conversation.Participants[i]);
-                            promise.then(
-                                function (success) {
-                                    if (success.data.items[0]) {
-                                        $scope.appUsers.push(success.data.items[0]);
-                                        contactsService.addAppUser(success.data.items[0]);
-                                    }
-                                },
-                                function (error) {
-                                    console.error('Could not sync user: ' + conversation.Participants[i]);
-                                });
+                            $scope.unSyncedAppUsers.push(conversation.Participants[i]);
                         } else {
                             console.warn(conversation.Participants[i] + " already in array");
                         }
@@ -252,7 +258,16 @@ angular.module('conversations', [])
                 }
 
                 function syncAppUserParticipant(participantId) {
-                    return contactsService.searchAppUser(participantId);
+                    var query = '';
+
+                    participantId.some(function (id) {
+                        query += "," + id;
+                    });
+
+                    query = query.slice(0, -1);
+                    query = query.slice(1, query.length);
+
+                    return contactsService.searchAppUser(query);
                 }
             }
 
