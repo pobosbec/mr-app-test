@@ -5,7 +5,7 @@
         xmlns:gap = "http://phonegap.com/ns/1.0"
         xmlns:android = "http://schemas.android.com/apk/res/android"
         id        = "com.bosbec.test-app"
-version   = "0.2.3">
+version   = "0.2.3a">
   <!--id        = "com.phonegap.hello-world"-->
 
 <name>Bosbec-MR</name>
@@ -165,6 +165,9 @@ version   = "0.2.3">
   <platform name="ios">
     <allow-intent href="itms:*" />
     <allow-intent href="itms-apps:*" />
+    <preference name="StatusBarOverlaysWebView" value="true" />
+    <preference name="StatusBarBackgroundColor" value="#000000" />
+    <preference name="StatusBarStyle" value="lightcontent" />
   </platform>
 
 
