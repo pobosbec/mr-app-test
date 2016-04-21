@@ -5,7 +5,7 @@
         xmlns:gap = "http://phonegap.com/ns/1.0"
         xmlns:android = "http://schemas.android.com/apk/res/android"
         id        = "com.bosbec.test-app"
-version   = "0.2.3">
+version   = "0.2.3b">
   <!--id        = "com.phonegap.hello-world"-->
 
 <name>Bosbec-MR</name>
@@ -79,6 +79,9 @@ version   = "0.2.3">
   <!-- Cordova app version plugin -->
   <gap:plugin name="cordova-plugin-app-version" spec="0.1.8" source="npm" />
 
+  <!-- Ios statusbar plugin -->
+  <gap:plugin name="cordova-plugin-statusbar" spec="2.1.3" source="npm" />
+
   <!-- Define app icon for each platform. -->
   <icon src="icon.png" />
   <icon src="res/icon/android/icon-36-ldpi.png"   gap:platform="android"    gap:qualifier="ldpi" />
@@ -127,8 +130,11 @@ version   = "0.2.3">
   <gap:splash src="res/screen/ios/screen-ipad-landscape.png"          gap:platform="ios"     width="1024" height="768" />
   <gap:splash src="res/screen/windows-phone/screen-portrait.jpg"      gap:platform="winphone" />
 
+  <preference name="StatusBarOverlaysWebView" value="true" />
+  <preference name="StatusBarBackgroundColor" value="#000000" />
+
   <gap:config-file platform="ios" parent="CFBundleShortVersionString">
-    <string>100</string>
+    <string>0.2.3b</string>
   </gap:config-file>
 
   <gap:config-file platform="android" parent="/manifest">
