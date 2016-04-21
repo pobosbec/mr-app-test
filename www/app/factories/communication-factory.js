@@ -115,7 +115,7 @@ angular.module('communication', [])
         }
 
         factory.messagesDownloaded = function (data) {
-
+            console.log("messages downloaded");
             var newMessages = [];
 
             if (data.length === 0) {
@@ -137,8 +137,8 @@ angular.module('communication', [])
                     if (newMessages.length === data.length) {
                         return newMessages;
                     }
-                }).then(function (newMessages)
-                {
+                }).then(function (newMessages) {
+                    console.log("broadcasting 'new-messages'");
                     $rootScope.$broadcast('new-messages', newMessages);
                 });
             }

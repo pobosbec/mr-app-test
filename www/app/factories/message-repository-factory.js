@@ -558,7 +558,7 @@ angular.module('message', ['ngCordova'])
 
                                     inserted++;
                                     if (inserted === expected) {
-                                        //console.log('All messages are added in ' + (new Date() - timer) + 'ms!');
+                                        console.log('All messages are added in ' + (new Date() - timer) + 'ms!');
                                         factory.messageAdded();
                                         resolve();
                                     }
@@ -733,7 +733,7 @@ angular.module('message', ['ngCordova'])
                     break;
                 case 'new-messages':
                     if (data != null) {
-                        //console.log("Received new messages: " + data.length);
+                        console.log("Received new messages: " + data.length);
                         factory.addMessages(data);
                     }
                     break;
