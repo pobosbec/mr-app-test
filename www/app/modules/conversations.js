@@ -385,6 +385,7 @@ angular.module('conversations', [])
                 $scope.pageIndex = 0;
                 $scope.pageSize = 10;
                 $scope.isGroupConversation = false;
+                $scope.isLoading = false;
 
                 /* Reply to the current conversation
              */
@@ -449,6 +450,8 @@ angular.module('conversations', [])
                     // be very easy to fetch new/old messages and keep track of what has been loaded 
                     //$scope.pageIndex++;
 
+                    $scope.isLoading = true;
+                    
                     var promise = messageRepository.getMessagesByConversation(
                         $scope.conversationId,
                         $scope.pageIndex,
@@ -457,9 +460,11 @@ angular.module('conversations', [])
                     promise.then(
                         function (success) {
                             removeDuplicates(success);
+                            $scope.isLoading = false;
                         },
                         function (error) {
                             //$scope.pageIndex--;
+                            $scope.isLoading = false;
                             console.log('Could not get older messages for conversation.');
                         });
                 }
