@@ -564,7 +564,11 @@ angular.module('message', ['ngCordova'])
                             for (var j = 0; j < messages.length; j++) {
                                 var msg = messages[j];
                                 if (rows.find(function (a) {
-                                        return a['MessageId'] === msg.MessageId;
+                                    if (a.hasOwnProperty('MessageId')) {
+                                        return a.MessageId === msg.MessageId;
+                                    } else {
+                                        return false;
+                                    }
                                 })) {
                                     continue;
                                 }
