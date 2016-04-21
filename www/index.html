@@ -122,6 +122,7 @@
         }
 
         deviceReady = function () {
+            StatusBar.overlaysWebView(false);
             console.log("Device ready initiating Angular");
             angular.bootstrap(document, ['administratorApp']);
             app.initialize();

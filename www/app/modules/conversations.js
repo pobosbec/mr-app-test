@@ -3,7 +3,7 @@
  */
 angular.module('conversations', [])
     .controller('conversationsCtrl', [
-        '$scope', '$http', '$rootScope', 'tokenService', 'contactsService', 'communicationService', 'messageRepository', function ($scope, $http, $rootScope, tokenService, contactsService, communicationService, messageRepository) {
+        '$scope', '$http', '$rootScope', 'tokenService', 'contactsService', '$q', 'communicationService', 'messageRepository', function ($scope, $http, $rootScope, tokenService, contactsService, $q, communicationService, messageRepository) {
             $scope.isPhoneGap = window.isPhoneGap;
             $scope.loading = true;
             $scope.conversations = [];
@@ -272,32 +272,45 @@ angular.module('conversations', [])
             }
 
             function fetchConversations() {
+
+                var promise = $q(function (resolve, reject) {
+                    var conversationsFromApiPromise = communicationService.getAllConversations(null);
+                    conversationsFromApiPromise.then(
+                        function (conversationsPromiseSuccess) {
+                            addConversations(conversationsPromiseSuccess, 10, 1);
+                            resolve(conversationsPromiseSuccess);
+                        });
+                });
+
                 $scope.loading = true;
-                var conversationsFromApiPromise = communicationService.getAllConversations(null);
-                conversationsFromApiPromise.then(
-                    function (conversationsPromiseSuccess) {
-                        addConversations(conversationsPromiseSuccess, 10, 1);
-                        $scope.loading = false;
-                        if (Object.keys(conversationsPromiseSuccess.data.usersInConversations).length >= $scope.conversations.length) {
-                            var fetchConversationsTimeout = setTimeout(function () {
-                                fetchConversations();
-                            }, 10000);
-                        }
-                    });
+                promise.then(function(result) {
+                    $scope.loading = false;
+                    if (Object.keys(result.data.usersInConversations).length >= $scope.conversations.length) {
+                        //var fetchConversationsTimeout = setTimeout(function () {
+                        //    fetchConversations();
+                        //    resolve();
+                        //}, 10000);
+                    }
+                });
             }
 
             /**
              * Sets first quickload data (10*10 messages) 
              */
             function quickLoad() {
-                var quickLoadConversationsSize = 10;
-                var quickLoadMessagesSize = 10;
-                console.log("QUICK LOADING");
-                var conversationsFromApiPromise = communicationService.getAllConversations(null);
-                conversationsFromApiPromise.then(
-                    function (conversationsPromiseSuccess) {
-                        addConversations(conversationsPromiseSuccess, quickLoadConversationsSize, quickLoadMessagesSize);
-                    });
+                var promise = $q(function (resolve, reject) {
+                    var quickLoadConversationsSize = 10;
+                    var quickLoadMessagesSize = 10;
+                    console.log("QUICK LOADING");
+                    var conversationsFromApiPromise = communicationService.getAllConversations(null);
+                    conversationsFromApiPromise.then(
+                        function (conversationsPromiseSuccess) {
+                            addConversations(conversationsPromiseSuccess, quickLoadConversationsSize, quickLoadMessagesSize);
+                            resolve();
+                        });
+
+                });
+                return promise;
             }
 
             /* Sets initial values.
@@ -320,7 +333,6 @@ angular.module('conversations', [])
                 //Let's load the initial 10
                 conversationsFromDatabasePromise.then(
                     function (conversationsPromiseSuccess) {
-
                         for (var cid in conversationsPromiseSuccess) {
                             var conversation = conversationsPromiseSuccess[cid];
                             $scope.conversations.push(conversation);
@@ -328,31 +340,38 @@ angular.module('conversations', [])
                     }, function (conversationsPromiseError) {
                         console.warn(conversationsPromiseError);
                     }).then(function () {
+                        var promise = $q(function (resolve, reject) {
 
-                        if (!$scope.conversations.length) {
-                            // No messages from Database, Let's do a quick fetch to have at least something initial to show.
-                            quickLoad();
-                        } else {
-                            // Database seems to have data, let's try getting up to 200 conversations
-                            // Improvements can definately be done here. The function is paged after all.
-                            var moreConversationsFromDatabasePromise = messageRepository.getConversationsByTime(5, 0, 200);
-                            moreConversationsFromDatabasePromise.then(
-                                function (conversationsPromiseSuccess) {
-                                    for (var cid in conversationsPromiseSuccess) {
-                                        var conversation = conversationsPromiseSuccess[cid];
-                                        if (!$scope.conversations.some(function (e) { return e.ConversationId === conversation.ConversationId })) {
-                                            $scope.conversations.push(conversation);
-                                        }
-                                    }
+                            if (!$scope.conversations.length) {
+                                // No messages from Database, Let's do a quick fetch to have at least something initial to show.
+                                var quickLoadPromise = quickLoad();
+                                quickLoadPromise.then(function (result) {
+                                    resolve();
                                 });
-                        }
-                    }).then(function () {
+                            } else {
+                                // Database seems to have data, let's try getting up to 200 conversations
+                                // Improvements can definately be done here. The function is paged after all.
+                                var moreConversationsFromDatabasePromise = messageRepository.getConversationsByTime(5, 0, 200);
+                                moreConversationsFromDatabasePromise.then(
+                                    function (conversationsPromiseSuccess) {
+                                        for (var cid in conversationsPromiseSuccess) {
+                                            var conversation = conversationsPromiseSuccess[cid];
+                                            if (!$scope.conversations.some(function (e) { return e.ConversationId === conversation.ConversationId })) {
+                                                $scope.conversations.push(conversation);
+                                            }
+                                        }
+                                        resolve();
+                                    });
+                            }
+                        });
 
-                        $scope.loading = false;
-                        // Time to do some extra conversations loading from api broken down into intervals.
-                        //var fetchConversationsTimeout = setTimeout(function () {
-                        //    fetchConversations();
-                        //}, 10000);
+                        promise.then(function () {
+                            $scope.loading = false;
+                            // Time to do some extra conversations loading from api broken down into intervals.
+                            var fetchConversationsTimeout = setTimeout(function () {
+                                fetchConversations();
+                            }, 5000);
+                        });
                     });
             };
             init();
@@ -488,7 +507,7 @@ angular.module('conversations', [])
 
                     var displayName = '';
 
-                    $scope.appUsers.some(function(appUser) {
+                    $scope.appUsers.some(function (appUser) {
                         if (appUser.id === appUserId) {
                             displayName = appUser.displayName;
                         }
@@ -497,7 +516,7 @@ angular.module('conversations', [])
                     return displayName;
                 };
 
-                $scope.checkIfGroupConversation = function() {
+                $scope.checkIfGroupConversation = function () {
                     return $scope.isGroupConversation;
                 }
 
@@ -572,7 +591,7 @@ angular.module('conversations', [])
                                 $scope.conversation.Participants = success;
                                 if ($scope.conversation.Participants.length > 2) {
                                     $scope.isGroupConversation = true;
-                                } 
+                                }
                                 syncUsers();
                             },
                             function (error) {
