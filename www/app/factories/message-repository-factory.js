@@ -352,13 +352,15 @@ angular.module('message', ['ngCordova'])
                                 for (var i = 0; i < rows.length; i++) {
                                     var row = rows[i];
                                     try {
-                                        messages.push(JSON.parse(row['JSON']));
+                                        if (typeof row !== "undefined" && row.hasOwnProperty("JSON")) {
+                                            messages.push(JSON.parse(row.JSON));
+                                        }
                                     }
                                     catch (err) {
                                         if (typeof row === "undefined") {
                                             console.error('Failed to parse message, row is undefined' + err);
                                         } else {
-                                            console.error('Failed to parse message \'' + row['MessageId'] + '\'.\r\n' + err);
+                                            console.error('Failed to parse message \'' + row.MessageId + '\'.\r\n' + err);
                                         }
                                     }
                                 }
@@ -459,8 +461,11 @@ angular.module('message', ['ngCordova'])
                     tx.executeSql(queries.getConversationParticipants, [conversationId],
                         function (trans, result) {
                             var rows = getRows(result);
+                            var participants = "";
                             if (rows.length) {
-                                var participants = JSON.parse(rows[0].Participants);
+                                if (rows[0].hasOwnProperty("Participants")) {
+                                    participants = JSON.parse(rows[0].Participants);
+                                }
                             }
 
                             resolve(participants);
