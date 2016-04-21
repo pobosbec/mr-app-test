@@ -39,7 +39,7 @@ angular.module('message', ['ngCordova'])
             insertMessage: 'INSERT INTO Messages (MessageId, CreatedOn, ConversationId, Author, JSON) VALUES (?, ?, ?, ?, ?)',
             doesMessageExist: 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?',
             doMessagesExist: 'SELECT MessageId FROM Messages WHERE MessageId IN ',
-            dropConversationParticipants: 'DROP TABLE IF EXISTS ConversationParticipants',
+            dropConversationPartisipantsTable: 'DROP TABLE IF EXISTS ConversationParticipants',
             createConversationParticipants: 'CREATE TABLE IF NOT EXISTS ConversationParticipants (ConversationId text primary key, Participants text)',
             getConversationParticipants: 'SELECT Participants FROM ConversationParticipants WHERE ConversationId = ?',
             insertConversationParticipants: 'INSERT OR REPLACE INTO ConversationParticipants (ConversationId, Participants) VALUES (?, ?)'
@@ -54,7 +54,7 @@ angular.module('message', ['ngCordova'])
             insertMessage: 'INSERT INTO Messages (MessageId, CreatedOn, ConversationId, Author, JSON) VALUES (?, ?, ?, ?, ?)',
             doesMessageExist: 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?',
             doMessagesExist: 'SELECT MessageId FROM Messages WHERE MessageId IN ',
-            dropConversationParticipants: 'DROP TABLE IF EXISTS ConversationParticipants',
+            dropConversationPartisipantsTable: 'DROP TABLE IF EXISTS ConversationParticipants',
             createConversationParticipants: 'CREATE TABLE IF NOT EXISTS ConversationParticipants (ConversationId unique, Participants)',
             getConversationParticipants: 'SELECT Participants FROM ConversationParticipants WHERE ConversationId = ?',
             insertConversationParticipants: 'INSERT OR REPLACE INTO ConversationParticipants (ConversationId, Participants) VALUES (?, ?)'
