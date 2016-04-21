@@ -79,9 +79,16 @@ angular.module('conversations', [])
             $scope.loadUnprocessedConversations = function () {
                 var conversationToProcess = [];
 
-                for (var i = 0; i < 10; i++) {
-                    conversationToProcess.push($scope.unProccessedConversations.shift());
+                if ($scope.unProccessedConversations.length < 10) {
+                    for (var i = 0; i < $scope.unProccessedConversations.length; i++) {
+                        conversationToProcess.push($scope.unProccessedConversations.shift());
+                    }
+                } else {
+                    for (var j = 0; j < 10; j++) {
+                        conversationToProcess.push($scope.unProccessedConversations.shift());
+                    }
                 }
+                
                 addConversations(conversationToProcess);
             }
 
@@ -200,6 +207,9 @@ angular.module('conversations', [])
                 var processedConvos = 0;
 
                 conversations.some(function (conversation) {
+                    if (typeof conversation === "undefined" || conversation === undefined) {
+                        return;
+                    }
                     processedConvos++;
 
                     syncConversationParticipants(conversation);
