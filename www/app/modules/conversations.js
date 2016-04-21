@@ -102,7 +102,7 @@ angular.module('conversations', [])
                                             var conversation = {
                                                 ConversationId: convo,
                                                 Messages: [],
-                                                Participants: conversationsPromiseSuccess.data.usersInConversations[convo]
+                                                Participants: newConversationsPromiseSuccess.data.usersInConversations[convo]
                                             };
 
                                             syncConversationParticipants(conversation);
@@ -283,7 +283,7 @@ angular.module('conversations', [])
                 });
 
                 $scope.loading = true;
-                promise.then(function(result) {
+                return promise.then(function (result) {
                     $scope.loading = false;
                     if (Object.keys(result.data.usersInConversations).length >= $scope.conversations.length) {
                         //var fetchConversationsTimeout = setTimeout(function () {
@@ -367,10 +367,7 @@ angular.module('conversations', [])
 
                         promise.then(function () {
                             $scope.loading = false;
-                            // Time to do some extra conversations loading from api broken down into intervals.
-                            var fetchConversationsTimeout = setTimeout(function () {
-                                fetchConversations();
-                            }, 5000);
+                            console.log("Initial loading of conversations done.");
                         });
                     });
             };
@@ -451,7 +448,7 @@ angular.module('conversations', [])
                     //$scope.pageIndex++;
 
                     $scope.isLoading = true;
-                    
+
                     var promise = messageRepository.getMessagesByConversation(
                         $scope.conversationId,
                         $scope.pageIndex,
