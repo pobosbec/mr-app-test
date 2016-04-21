@@ -598,3 +598,7 @@ and (orientation: portrait) {
     text-shadow: 0px 0px 1px #000000;
     border: 1px solid #0569B4;
 }*/
+
+.hoverOverride {
+  background-color: transparent !important;
+}

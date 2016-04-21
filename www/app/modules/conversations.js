@@ -4,7 +4,7 @@
 angular.module('conversations', [])
     .controller('conversationsCtrl', [
         '$scope', '$http', '$rootScope', 'tokenService', 'contactsService', 'communicationService', 'messageRepository', function ($scope, $http, $rootScope, tokenService, contactsService, communicationService, messageRepository) {
-
+            $scope.isPhoneGap = window.isPhoneGap;
             $scope.loading = true;
             $scope.conversations = [];
             $scope.userId = null;
