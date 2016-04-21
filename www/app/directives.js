@@ -35,37 +35,37 @@ mobileresponseWebbApp
     // MAINMENU COLLAPSE
     // =========================================================================
 
-    .directive('toggleSidebar', function(){
+    .directive('toggleSidebar', function () {
         return {
             restrict: 'A',
             scope: {
                 modelLeft: '=',
                 modelRight: '='
             },
-            link: function(scope, element, attr) {
-                element.on('click', function(){
- 
+            link: function (scope, element, attr) {
+                element.on('click', function () {
+
                     if (element.data('target') === 'mainmenu') {
                         if (scope.modelLeft === false) {
-                            scope.$apply(function(){
+                            scope.$apply(function () {
                                 scope.modelLeft = true;
                             })
                         }
                         else {
-                            scope.$apply(function(){
+                            scope.$apply(function () {
                                 scope.modelLeft = false;
                             })
                         }
                     }
-                    
+
                     if (element.data('target') === 'chat') {
                         if (scope.modelRight === false) {
-                            scope.$apply(function(){
+                            scope.$apply(function () {
                                 scope.modelRight = true;
                             })
                         }
                         else {
-                            scope.$apply(function(){
+                            scope.$apply(function () {
                                 scope.modelRight = false;
                             });
                         }
@@ -78,11 +78,11 @@ mobileresponseWebbApp
     // =========================================================================
     // SUBMENU TOGGLE
     // =========================================================================
-    .directive('toggleSubmenu', function(){
+    .directive('toggleSubmenu', function () {
         return {
             restrict: 'A',
-            link: function(scope, element, attrs) {
-                element.click(function(){
+            link: function (scope, element, attrs) {
+                element.click(function () {
                     element.next().slideToggle(200);
                     element.parent().toggleClass('toggled');
                 });
@@ -116,22 +116,22 @@ mobileresponseWebbApp
     // =========================================================================
     // STOP PROPAGATION
     // =========================================================================
-    .directive('stopPropagate', function(){
+    .directive('stopPropagate', function () {
         return {
             restrict: 'C',
-            link: function(scope, element) {
-                element.on('click', function(event){
+            link: function (scope, element) {
+                element.on('click', function (event) {
                     event.stopPropagation();
                 });
             }
         }
     })
 
-    .directive('aPrevent', function(){
+    .directive('aPrevent', function () {
         return {
             restrict: 'C',
-            link: function(scope, element) {
-                element.on('click', function(event){
+            link: function (scope, element) {
+                element.on('click', function (event) {
                     event.preventDefault();
                 });
             }
@@ -277,9 +277,9 @@ mobileresponseWebbApp
         };
     })
 
-    .directive('myPostRepeatDirective', function() {
-        return function(scope, element, attrs) {
-            if (scope.$last){
+    .directive('myPostRepeatDirective', function () {
+        return function (scope, element, attrs) {
+            if (scope.$last) {
                 // iteration is complete, do whatever post-processing
                 // is necessary
                 var el = document.querySelector('#conversationMessagesBody');
@@ -289,6 +289,25 @@ mobileresponseWebbApp
         };
     })
 
+    // =========================================================================
+    // Loading spinner
+    // =========================================================================
+
+    .directive('loading', function () {
+        return {
+            restrict: 'E',
+            replace: true,
+            template: '<div class="spinner" style="margin-top: 0px !important"></div>',
+            link: function (scope, element, attr) {
+                scope.$watch('isLoading', function (val) {
+                    if (val)
+                        $(element).show();
+                    else
+                        $(element).hide();
+                });
+            }
+        }
+    })
 
 
-   
+
