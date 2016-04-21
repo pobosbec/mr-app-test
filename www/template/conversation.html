@@ -9,7 +9,7 @@
                 </a>
                 <div class="lvh-label">
                     <ul style="list-style-type: none; margin: 0; padding: 0; width: 230px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden">
-                        <li ng-repeat="id in conversation.Participants" style="display: inline; margin-right: 10px">{{ getUsername(id) }} {{$last ? '' : ', '}}</li>
+                        <li ng-repeat="id in conversation.Participants" style="display: inline; margin-right: 10px">{{getUsername(id)}} {{$last ? '' : ', '}}</li>
                     </ul>
                 </div>
                 <a data-ng-click="viewConversationInfo('lg', conversation.Participants)" style="color: gray; position: absolute; right: 10px">
@@ -28,7 +28,7 @@
                         <div class="ms-item">
                             {{ message.Content }}
                         </div>
-                        <small class="ms-date"><i class="zmdi zmdi-time"></i> {{ message.CreatedOn }}</small>
+                        <small class="ms-date"><span ng-if="checkIfGroupConversation()" style="margin-right: 5px">{{getUsername(message.Author)}}</span><i class="zmdi zmdi-time"></i> {{ message.CreatedOn }}</small>
                     </div>
                 </div>
             </div>
