@@ -183,11 +183,12 @@ angular.module('contacts', [])
 
                             for(var i = 0; i < rows.length; i++){
                                 var row = rows[i];
-                                try{
-                                    appUsers.push(JSON.parse(row['JSON']));
-                                }
-                                catch(err){
-                                    console.error('Failed to parse appUser \'' + row[i].userId + '\'.\r\n' + err);
+                                if (row !== null && typeof row !== "undefined" && row.hasOwnProperty('JSON')) {
+                                    try {
+                                        appUsers.push(JSON.parse(row.JSON));
+                                    } catch (err) {
+                                        console.error('Failed to parse appUser \'' + row[i].userId + '\'.\r\n' + err);
+                                    }
                                 }
                             }
                             resolve(appUsers);
@@ -209,11 +210,12 @@ angular.module('contacts', [])
 
                             for (var i = 0; i < rows.length; i++) {
                                 var row = rows[i];
-                                try {
-                                    appUsers.push(JSON.parse(row['JSON']));
-                                }
-                                catch (err) {
-                                    console.error('Failed to parse appUser \'' + row[i].userId + '\'.\r\n' + err);
+                                if (row !== null && typeof row !== "undefined" && row.hasOwnProperty('JSON')) {
+                                    try {
+                                        appUsers.push(JSON.parse(row['JSON']));
+                                    } catch (err) {
+                                        console.error('Failed to parse appUser \'' + row[i].userId + '\'.\r\n' + err);
+                                    }
                                 }
                             }
                             resolve(appUsers);
@@ -293,7 +295,7 @@ angular.module('contacts', [])
                     }
 
                     // TODO: update user instead?
-                    if(rows[0]['cnt'] !== 0){
+                    if(rows.length && rows[0] !== null && typeof rows[0] !== "undefined" && rows[0].hasOwnProperty('cnt') && rows[0].cnt !== 0){
                         console.log('AppUser width id \'' + appUser.id + '\' exists, won\'t insert.');
                         return;
                     }

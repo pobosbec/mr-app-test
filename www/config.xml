@@ -5,10 +5,18 @@
         xmlns:gap = "http://phonegap.com/ns/1.0"
         xmlns:android = "http://schemas.android.com/apk/res/android"
         id        = "com.bosbec.test-app"
-version   = "0.2.3b">
+        version   = "0.2.3c">
   <!--id        = "com.phonegap.hello-world"-->
 
-<name>Bosbec-MR</name>
+  <gap:config-file platform="ios" parent="CFBundleShortVersionString">
+    <string>0.2.3c</string>
+  </gap:config-file>
+
+  <gap:config-file platform="android" parent="/manifest">
+    <application android:debuggable="true" />
+  </gap:config-file>
+
+  <name>Bosbec-MR</name>
 
   <description>
     Test appliction for Bosbec and MobileResponse
@@ -26,27 +34,42 @@ version   = "0.2.3b">
   <preference name="permissions"                value="none"/>
 
   <!-- Customize your app and platform with the preference element. -->
-  <preference name="orientation"                value="default" />        <!-- all: default means both landscape and portrait are enabled -->
-  <preference name="target-device"              value="universal" />      <!-- all: possible values handset, tablet, or universal -->
-  <preference name="fullscreen"                 value="false" />           <!-- all: hides the status bar at the top of the screen -->
-  <preference name="webviewbounce"              value="false" />           <!-- ios: control whether the screen 'bounces' when scrolled beyond the top -->
-  <preference name="prerendered-icon"           value="true" />           <!-- ios: if icon is prerendered, iOS will not apply it's gloss to the app's icon on the user's home screen -->
-  <preference name="stay-in-webview"            value="false" />          <!-- ios: external links should open in the default browser, 'true' would use the webview the app lives in -->
-  <preference name="ios-statusbarstyle"         value="black-opaque" />   <!-- ios: black-translucent will appear black because the PhoneGap webview doesn't go beneath the status bar -->
-  <preference name="detect-data-types"          value="true" />           <!-- ios: controls whether data types (such as phone no. and dates) are automatically turned into links by the system -->
-  <preference name="exit-on-suspend"            value="false" />          <!-- ios: if set to true, app will terminate when home button is pressed -->
-  <preference name="show-splash-screen-spinner" value="true" />           <!-- ios: if set to false, the spinner won't appear on the splash screen during app loading -->
-  <preference name="auto-hide-splash-screen"    value="true" />           <!-- ios: if set to false, the splash screen must be hidden using a JavaScript API -->
-  <preference name="disable-cursor"             value="false" />          <!-- blackberry: prevents a mouse-icon/cursor from being displayed on the app -->
-  <preference name="android-installLocation"    value="auto" />           <!-- android: app install location. 'auto' will choose. 'internalOnly' is device memory. 'preferExternal' is SDCard. -->
-  <preference name="android-minSdkVersion"      value="9" />              <!-- android: MIN SDK version supported on the target device. MAX version is blank by default. -->
+  <preference name="orientation"                value="default" />
+  <!-- all: default means both landscape and portrait are enabled -->
+  <preference name="target-device"              value="universal" />
+  <!-- all: possible values handset, tablet, or universal -->
+  <preference name="fullscreen"                 value="false" />
+  <!-- all: hides the status bar at the top of the screen -->
+  <preference name="webviewbounce"              value="false" />
+  <!-- ios: control whether the screen 'bounces' when scrolled beyond the top -->
+  <preference name="prerendered-icon"           value="true" />
+  <!-- ios: if icon is prerendered, iOS will not apply it's gloss to the app's icon on the user's home screen -->
+  <preference name="stay-in-webview"            value="false" />
+  <!-- ios: external links should open in the default browser, 'true' would use the webview the app lives in -->
+  <preference name="ios-statusbarstyle"         value="black-opaque" />
+  <!-- ios: black-translucent will appear black because the PhoneGap webview doesn't go beneath the status bar -->
+  <preference name="detect-data-types"          value="true" />
+  <!-- ios: controls whether data types (such as phone no. and dates) are automatically turned into links by the system -->
+  <preference name="exit-on-suspend"            value="false" />
+  <!-- ios: if set to true, app will terminate when home button is pressed -->
+  <preference name="show-splash-screen-spinner" value="true" />
+  <!-- ios: if set to false, the spinner won't appear on the splash screen during app loading -->
+  <preference name="auto-hide-splash-screen"    value="true" />
+  <!-- ios: if set to false, the splash screen must be hidden using a JavaScript API -->
+  <preference name="disable-cursor"             value="false" />
+  <!-- blackberry: prevents a mouse-icon/cursor from being displayed on the app -->
+  <preference name="android-installLocation"    value="auto" />
+  <!-- android: app install location. 'auto' will choose. 'internalOnly' is device memory. 'preferExternal' is SDCard. -->
+  <preference name="android-minSdkVersion"      value="9" />
+  <!-- android: MIN SDK version supported on the target device. MAX version is blank by default. -->
   <preference name="DisallowOverscroll"         value="true" />
   <preference name="UIWebViewBounce"            value="false" />
   <!--
       Define a specific version of PhoneGap to build into your app.
       <preference name="phonegap-version"       value="3.5.0" />
   -->
-  <preference name="phonegap-version"           value="cli-5.2.0" />     <!-- all: current version of PhoneGap -->
+  <preference name="phonegap-version"           value="cli-5.2.0" />
+  <!-- all: current version of PhoneGap -->
 
   <preference name="android-build-tool" value="gradle" />
 
@@ -98,7 +121,7 @@ version   = "0.2.3b">
   <icon src="res/icon/windows-phone/icon-48.png"  gap:platform="winphone" />
   <icon src="res/icon/windows-phone/icon-173.png" gap:platform="winphone"   gap:role="background" />
 
-  
+
   <!--
     <icon src="icon.png" />
     <icon src="res/icon/android/icon-36-ldpi.png"   gap:platform="android"    gap:density="ldpi" />
@@ -132,14 +155,6 @@ version   = "0.2.3b">
 
   <preference name="StatusBarOverlaysWebView" value="true" />
   <preference name="StatusBarBackgroundColor" value="#000000" />
-
-  <gap:config-file platform="ios" parent="CFBundleShortVersionString">
-    <string>0.2.3b</string>
-  </gap:config-file>
-
-  <gap:config-file platform="android" parent="/manifest">
-    <application android:debuggable="true" />
-  </gap:config-file>
 
   <!--
     Define access to external domains.

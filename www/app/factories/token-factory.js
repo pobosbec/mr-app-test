@@ -27,13 +27,13 @@ angular.module('token', [])
                 }
             };
 
-            var refreshTokenSuccess = function(greeting) {
+            var refreshTokenSuccess = function (greeting) {
                 //Success
                 console.log('Sucess refreshing token');
                 console.log(greeting);
             };
 
-            var refreshTokenFailed = function(reason) {
+            var refreshTokenFailed = function (reason) {
                 //failed attempt
                 console.log('Failed refreshing token');
                 console.log(reason);
@@ -162,7 +162,7 @@ angular.module('token', [])
 
                 console.log(userDetails.displayName);
                 factory.saveToDb("userDetails", userDetails);
-              //  factory.saveToDb("pushToken", factory.getPushToken());
+                //  factory.saveToDb("pushToken", factory.getPushToken());
 
                 //TODO: logged in now transfer home
                 $rootScope.$broadcast("app-token-available");
@@ -343,7 +343,7 @@ angular.module('token', [])
 
             var promises = [timerFunction(), factory.httpPostOriginal(req)];
 
-            return $q.all(promises).then(function(values) {
+            return $q.all(promises).then(function (values) {
                 var elapsedTime = (new Date().getTime() - values[0]);
                 var logString = "[ " + elapsedTime + " ms ] " + (values[1].requestUrl) + " ";
                 console.log(logString);
@@ -393,7 +393,7 @@ angular.module('token', [])
 
                 return $http(req).then(function successCallback(response) {
                     console.log("registerPushToken update success");
-                    $rootScope.$broadcast('push-token-registered',response);
+                    $rootScope.$broadcast('push-token-registered', response);
                     return response;
                 }, function errorCallback(response) {
 
@@ -439,11 +439,11 @@ angular.module('token', [])
         };
 
         // Get
-        factory.keepLoggedInCredentialsFromDatabase = function() {
+        factory.keepLoggedInCredentialsFromDatabase = function () {
             var data = {
                 keepLoggedIn: false,
                 username: "",
-                password:""
+                password: ""
             };
             var keepLoggedInCredentials = JSON.parse(localStorage.getItem("keepLoggedInCredentials"));
             if (typeof keepLoggedInCredentials !== "undefined" && keepLoggedInCredentials !== null) {
@@ -469,8 +469,6 @@ angular.module('token', [])
         }
 
         userDetails = factory.userDetailsFromDatabase();
-        console.log(userDetails);
-
 
         factory.getUsername = function () {
             return userDetails.displayName;
@@ -563,7 +561,7 @@ angular.module('token', [])
          * @returns {*}
          */
         factory.getApiUrl = function (host) {
-        return "http://apitest.aws.mobileresponse.se/";
+            return "http://apitest.aws.mobileresponse.se/";
             // in test
             if (host.pathname.indexOf("/test") > -1)
                 return "http://api2.test.mobileresponse.se/";
@@ -645,7 +643,7 @@ var listHttpTimers = function (limit, sortAscending) {
 
     console.log("\n---- Listing top [" + resultArr.length + "] http requests by execution time " + (sortAscending ? "ASCENDING" : "DESCENDING") + "----\n\n");
     for (var entry in resultArr) {
-        result += new Date(resultArr[entry].timeStamp) +" [" + resultArr[entry].elapsedTime + " ms] > " + resultArr[entry].url + "\n";
+        result += new Date(resultArr[entry].timeStamp) + " [" + resultArr[entry].elapsedTime + " ms] > " + resultArr[entry].url + "\n";
     }
     result += "\n\n";
     console.log(result);
