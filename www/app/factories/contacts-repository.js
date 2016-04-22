@@ -52,7 +52,8 @@ angular.module('contacts', [])
             insertAppUser: 'INSERT OR REPLACE INTO AppUsers (AppUserId, DisplayName, JSON) VALUES (?, ?, ?)',
             doesAppUserExist : 'SELECT COUNT(*) AS cnt FROM AppUsers WHERE AppUserId=?',
             updateAppUser: 'UPDATE AppUsers SET JSON=? WHERE AppUserId=?',
-            getAppUser: 'SELECT * FROM AppUsers WHERE AppUserId=?'
+            getAppUser: 'SELECT * FROM AppUsers WHERE AppUserId=?',
+            deleteAppUser: 'DELETE FROM AppUsers WHERE AppUserId=?'
         };
 
         factory.init = function init() {
@@ -216,6 +217,20 @@ angular.module('contacts', [])
                                 }
                             }
                             resolve(appUsers);
+                        }, function (trans, error) {
+                            console.error('Error while fetching appUsers from database.\r\n' + error.message);
+                            reject(error);
+                        });
+                });
+            });
+        }
+
+        factory.removeUser = function(appUserId) {
+            return $q(function (resolve, reject) {
+                db.transaction(function (tx) {
+                    tx.executeSql(queries.deleteAppUser, [appUserId],
+                        function (trans, result) {
+                            resolve(result);
                         }, function (trans, error) {
                             console.error('Error while fetching appUsers from database.\r\n' + error.message);
                             reject(error);

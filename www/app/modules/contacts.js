@@ -2,61 +2,111 @@
  * Created by Kristofer on 2016-03-17.
  */
 angular.module('contact', [])
-    .controller('contactsCtrl', ['$scope', '$http', 'tokenService', 'contactsService', 'communicationService', '$cordovaSQLite', function($scope, $http, tokenService, contactsService, communicationService) {
+    .controller('contactsCtrl', ['$scope', '$http', 'tokenService', 'contactsService', 'communicationService', '$cordovaSQLite', function ($scope, $http, tokenService, contactsService, communicationService) {
 
         $scope.contacts = [];
         $scope.appUsers = [];
         $scope.foundAppUsers = [];
-        $scope.appUserTest = { Test: "Hello"};
+        $scope.isLoading = false;
 
-        $scope.GetAppUsersFromPhoneContacts = function(){
+        $scope.getAppUsersFromPhoneContacts = function () {
             contactsService.findAppUsersFromAllContacts();
         };
 
-        $scope.Search = function(query){
-                var promise = contactsService.searchAppUser(query);
+        $scope.valueNullOrUndefined = function (val) {
+            if (val === null || val === undefined) {
+                return true;
+            } else {
+                return false;
+            }
+        }
 
-                promise.then(function(success){
-                    for(var i = 0; i < success.data.items.length; i++){
-                        $scope.foundAppUsers.push(success.data.items[i]);
+        $scope.clearSearch = function () {
+            $scope.isLoading = true;
+            $scope.query = null;
+            $scope.foundAppUsers = [];
+            $scope.isLoading = false;
+        }
+
+        $scope.search = function (query) {
+            $scope.isLoading = true;
+            $scope.foundAppUsers = [];
+            var promise = contactsService.searchAppUser(query);
+
+            promise.then(function (success) {
+                for (var i = 0; i < success.data.items.length; i++) {
+                    $scope.foundAppUsers.push(success.data.items[i]);
+                }
+                $scope.isLoading = false;
+            }, function (error) {
+                $scope.isLoading = false;
+            });
+        }
+
+        $scope.addUser = function (user) {
+            var addUserPromise = contactsService.insertAppUser(user);
+
+            addUserPromise.then(
+                function (success) {
+
+                    var index = -1;
+
+                    for (var i = 0; i < $scope.foundAppUsers.length; i++) {
+                        var appUser = $scope.foundAppUsers[i];
+                        if (appUser.id === user.id) {
+                            index = i;
+                        }
                     }
-                }, function(error){
+
+                    if (index > -1) {
+                        $scope.foundAppUsers.splice(index, 1);
+                    }
+
+                    $scope.appUsers.push(user);
+
+                }, function (error) {
+
                 });
-
-            $scope.$apply();
-        }
-
-        $scope.SendMessage = function(message, users){
-            var usersToSendTo = [];
-            usersToSendTo.push(users);
-            usersToSendTo.push(tokenService.getAppUserId());
-            communicationService.sendMessage('hello from app!', usersToSendTo);
-        }
-
-        $scope.AddUser = function(user){
-          contactsService.insertAppUser(user);
         };
 
-        $scope.RemoveUser = function(user){
-            contactsService.removeUser(user);
+        $scope.removeUser = function (user) {
+            var deletePromise = contactsService.removeUser(user.id);
+
+            deletePromise.then(
+                function (success) {
+
+                    var index = -1;
+
+                    for (var i = 0; i < $scope.appUsers.length; i++) {
+                        var appUser = $scope.appUsers[i];
+                        if (appUser.id === user.id) {
+                            index = i;
+                        }
+                    }
+
+                    if (index > -1) {
+                        $scope.appUsers.slice(index, 1);
+                    }
+                },
+                function (error) {
+
+                });
         };
 
-        function init(){
-            var promise =  contactsService.getAppUsers();
+        function init() {
+            var promise = contactsService.getAppUsers();
 
             promise.then(
-                function(success){
-                    for (var i = 0; i < success.length; i++){
+                function (success) {
+                    for (var i = 0; i < success.length; i++) {
                         $scope.appUsers.push(success[i]);
                     }
 
                 },
-                function(error){
-                    console.log('Could not get appUsers!')
+                function (error) {
+                    console.log('Could not get appUsers!');
                 }
             );
-
-            $scope.contacts = contactsService.getPhoneContacts();
         };
 
         init();
