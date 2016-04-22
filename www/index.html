@@ -143,15 +143,15 @@
             // document.write('<script src="js/ng-cordova.js"><\/script>');
             document.write('<script type="text/javascript" src="js/index.js"><\/script>');
             if (CORDOVA_EDITION != null) {
-                //console.log("Loading Cordova!");
+                console.log(">> Loading Cordova.");
                 document.write('<script type="text/javascript" src="cordova.js"><\/script>');
                 // now add plugins
                 if (isIOS()) {
-                    //console.log("Loading Cordova IOS-Plugins!");
+                    console.log(">> Loading Cordova IOS-Plugins.");
                     document.write('<script type="text/javascript" src="js/PushwooshiOS.js"><\/script>');
                 }
                 if (isAndroid()) {
-                    //console.log("Loading Cordova Android-Plugins!");
+                    console.log(">> Loading Cordova Android-Plugins");
                     document.write('<script type="text/javascript" src="js/PushwooshAndroid.js"><\/script>');
                 }
                 document.addEventListener('deviceready', function () {
@@ -162,6 +162,7 @@
                 }, false);
 
             } else {
+                console.log(">> Ignoring native cordova.");
                 angular.bootstrap(document, ['administratorApp']);
             }
         })();

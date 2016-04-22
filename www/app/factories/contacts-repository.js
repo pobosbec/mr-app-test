@@ -280,7 +280,7 @@ angular.module('contacts', [])
                     }
 
                     // TODO: update user instead?
-                    if(rows.length && rows[0].hasOwnProperty('cnt') && rows[0].cnt !== 0){
+                    if(rows.length && rows[0] !== null && typeof rows[0] !== "undefined" && rows[0].hasOwnProperty('cnt') && rows[0].cnt !== 0){
                         console.log('AppUser width id \'' + appUser.id + '\' exists, won\'t insert.');
                         return;
                     }
