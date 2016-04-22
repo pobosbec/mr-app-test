@@ -88,7 +88,7 @@ angular.module('conversations', [])
                         conversationToProcess.push($scope.unProccessedConversations.shift());
                     }
                 }
-                
+
                 addConversations(conversationToProcess);
             }
 
@@ -212,11 +212,11 @@ angular.module('conversations', [])
                     }
                     processedConvos++;
 
-                    syncConversationParticipants(conversation);
                     // Break after fetching the desired ammount of conversations.
                     if (processedConvos <= conversationsLimit) {
                         syncConversationMessages(conversation, conversationMessages);
                         $scope.conversations.push(conversation);
+                        syncConversationParticipants(conversation);
                     } else {
                         $scope.unProccessedConversations.push(conversation);
                     }
