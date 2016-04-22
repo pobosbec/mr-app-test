@@ -230,11 +230,13 @@ angular.module('message', ['ngCordova'])
                             for (var i = 0; i < rows.length; i++) {
                                 var row = rows[i];
                                 try {
-                                    messages.push(JSON.parse(row['JSON']));
+                                    if (row !== null && typeof row !== "undefined" && row.hasOwnProperty("JSON")) {
+                                        messages.push(JSON.parse(row['JSON']));
+                                    }
                                 }
                                 catch (err) {
-                                    if (typeof row === "undefined") {
-                                        console.error('Failed to parse message, row is undefined' + err);
+                                    if (row === null || typeof row === "undefined") {
+                                        console.error('Failed to parse message, row is undefined. ' + err);
                                     } else {
                                         console.error('Failed to parse message \'' + row['MessageId'] + '\'.\r\n' + err);
                                     }
@@ -352,13 +354,13 @@ angular.module('message', ['ngCordova'])
                                 for (var i = 0; i < rows.length; i++) {
                                     var row = rows[i];
                                     try {
-                                        if (typeof row !== "undefined" && row.hasOwnProperty("JSON")) {
+                                        if (row !== null && typeof row !== "undefined" && row.hasOwnProperty("JSON")) {
                                             messages.push(JSON.parse(row.JSON));
                                         }
                                     }
                                     catch (err) {
-                                        if (typeof row === "undefined") {
-                                            console.error('Failed to parse message, row is undefined' + err);
+                                        if (row === null || typeof row === "undefined") {
+                                            console.error('Failed to parse message, row is undefined. ' + err);
                                         } else {
                                             console.error('Failed to parse message \'' + row.MessageId + '\'.\r\n' + err);
                                         }
@@ -438,7 +440,9 @@ angular.module('message', ['ngCordova'])
 
                         for (var i = 0; i < rows.length; i++) {
                             var row = rows[i];
-                            ids.push(row['ConversationId']);
+                            if (row !== null && typeof row != "undefined" && row.hasOwnProperty('ConversationId')) {
+                                ids.push(row.ConversationId);
+                            }
                         }
 
                         deferred.resolve(ids);
@@ -463,7 +467,7 @@ angular.module('message', ['ngCordova'])
                             var rows = getRows(result);
                             var participants = "";
                             if (rows.length) {
-                                if (rows[0].hasOwnProperty("Participants")) {
+                                if (rows[0] !== null && typeof rows[0] !== "undefined" && rows[0].hasOwnProperty("Participants")) {
                                     participants = JSON.parse(rows[0].Participants);
                                 }
                             }
@@ -564,7 +568,7 @@ angular.module('message', ['ngCordova'])
                             for (var j = 0; j < messages.length; j++) {
                                 var msg = messages[j];
                                 if (rows.find(function (a) {
-                                    if (a.hasOwnProperty('MessageId')) {
+                                    if (a !== null && typeof a !== "undefined" && a.hasOwnProperty('MessageId') && msg !== null && typeof msg !== "undefined" && msg.hasOwnProperty('MessageId')) {
                                         return a.MessageId === msg.MessageId;
                                     } else {
                                         return false;
