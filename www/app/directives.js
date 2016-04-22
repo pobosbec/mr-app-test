@@ -297,7 +297,7 @@ mobileresponseWebbApp
         return {
             restrict: 'E',
             replace: true,
-            template: '<div class="spinner" style="margin-top: 0px !important"></div>',
+            template: '<div class="spinner" style="margin-top: 10px !important; margin-bottom:10px !important;"></div>',
             link: function (scope, element, attr) {
                 scope.$watch('isLoading', function (val) {
                     if (val)
