@@ -121,15 +121,8 @@
             return (navigator.userAgent.indexOf("iPhone") > 0 || navigator.userAgent.indexOf("iPad") > 0 || navigator.userAgent.indexOf("iPod") > 0);
         }
 
-        deviceReady = function () {
-            StatusBar.overlaysWebView(false);
-            console.log("Device ready initiating Angular");
-            angular.bootstrap(document, ['administratorApp']);
-            app.initialize();
-        };
-
         // window.addEventListener('deviceready', deviceReady, false);
-        (function loadCordova() {
+        function loadCordova() {
             window.deviceType = 0;
             var CORDOVA_EDITION = null;
             if (isAndroid()) {
@@ -154,8 +147,12 @@
                     console.log(">> Loading Cordova Android-Plugins");
                     document.write('<script type="text/javascript" src="js/PushwooshAndroid.js"><\/script>');
                 }
+
                 document.addEventListener('deviceready', function () {
-                    deviceReady();
+                    StatusBar.overlaysWebView(false);
+                    console.log("Device ready initiating Angular");
+                    angular.bootstrap(document, ['administratorApp']);
+                    app.initialize();;
                 }, false);
                 document.addEventListener('DOMContentLoaded', function () {
                     FastClick.attach(document.body);
@@ -165,7 +162,10 @@
                 console.log(">> Ignoring native cordova.");
                 angular.bootstrap(document, ['administratorApp']);
             }
-        })();
+        };
+
+        loadCordova();
+
     </script>
 
 </body>
