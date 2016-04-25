@@ -115,7 +115,7 @@ angular.module('communication', [])
         }
 
         factory.messagesDownloaded = function (data) {
-            console.log("messages downloaded");
+            //console.log("messages downloaded");
             var newMessages = [];
 
             if (data.length === 0) {

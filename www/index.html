@@ -44,7 +44,12 @@
     <!-- End Cookie Consent plugin -->
 </head>
 <body data-ng-controller="eventCtrl as ectrl">
-    <div class="loading-screen" ng-class="loading?'fadeShow':'fadeHide'"><div class="spinner"></div></div>
+    <div class="loading-screen" ng-class="loading?'fadeShow':'fadeHide'">
+        <div class="spinner"></div>
+    </div>
+    <div class="btn btn-warning" style="cursor:default; position: absolute; top: 0px; left: 50%; transform: translate(-50%, 0); z-index: 9998;" ng-show="slowConnection">
+        <i class="zmdi zmdi-hourglass-alt zmdi-hc-spin"></i>&nbsp;&nbsp;Slow Connection detected
+    </div>
     <div>
         <div data-ng-include="'template/sidebar-drawer.html'"></div>
     </div>

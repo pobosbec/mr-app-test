@@ -11,6 +11,7 @@ angular.module('conversations', [])
             $scope.appUsers = [];
             $scope.unSyncedAppUsers = [];
             $scope.unProccessedConversations = [];
+            $scope.moreConversationsAreAvailable = true;
 
             /* Make a request to the api to check if a conversation exists
          */
@@ -78,7 +79,7 @@ angular.module('conversations', [])
 
             $scope.loadUnprocessedConversations = function () {
                 var conversationToProcess = [];
-
+                
                 if ($scope.unProccessedConversations.length < 10) {
                     for (var i = 0; i < $scope.unProccessedConversations.length; i++) {
                         conversationToProcess.push($scope.unProccessedConversations.shift());
@@ -88,7 +89,7 @@ angular.module('conversations', [])
                         conversationToProcess.push($scope.unProccessedConversations.shift());
                     }
                 }
-
+                $scope.moreConversationsAreAvailable = $scope.unProccessedConversations.length>0;
                 addConversations(conversationToProcess);
             }
 
@@ -219,6 +220,7 @@ angular.module('conversations', [])
                         syncConversationParticipants(conversation);
                     } else {
                         $scope.unProccessedConversations.push(conversation);
+                        $scope.moreConversationsAreAvailable = $scope.unProccessedConversations.length > 0;
                     }
                 });
 
