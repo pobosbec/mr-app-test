@@ -419,7 +419,7 @@ angular.module('conversations', [])
             init();
         }])
     .controller('conversationCtrl', [
-            '$scope', '$http', '$rootScope', 'tokenService', 'contactsService', 'communicationService', 'messageRepository', '$stateParams', '$uibModal', function ($scope, $http, $rootScope, tokenService, contactsService, communicationService, messageRepository, $stateParams, $uibModal) {
+            '$scope', '$http', '$rootScope', 'tokenService', 'contactsService', 'communicationService', 'messageRepository', '$stateParams', '$uibModal', 'moment', function ($scope, $http, $rootScope, tokenService, contactsService, communicationService, messageRepository, $stateParams, $uibModal, angularMoment) {
                 $scope.conversationId = $stateParams.conversationId;
                 $scope.userId = null;
                 $scope.conversation = {};
@@ -479,6 +479,12 @@ angular.module('conversations', [])
                         }
                     });
                     $scope.pageIndex = Math.floor($scope.conversation.Messages.length / $scope.pageSize);
+                }
+
+                $scope.format = function (dateString) {
+                    var parsed = angularMoment(dateString+"+00:00");
+                    var returnV = parsed.format('YYYY-MM-DD HH:mm:ss Z');
+                    return returnV;
                 }
 
                 /* Gets more messages for the current conversation
