@@ -17,18 +17,21 @@
  * under the License.
  */
 function initPushwoosh() {
-    if(window.isPhoneGap){
-        var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
-        if (device.platform == "Android") {
-            registerPushwooshAndroid();
-        }
+    if (window.isPhoneGap) {
+        if (cordova !== null && typeof cordova !== "undefined" && cordova.require !== null && typeof cordova.require !== "undefined") {
+            var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
+            console.log(pushNotification);
+            if (device.platform == "Android") {
+                registerPushwooshAndroid();
+            }
 
-        if (device.platform == "iPhone" || device.platform == "iOS") {
-            registerPushwooshIOS();
-        }
+            if (device.platform == "iPhone" || device.platform == "iOS") {
+                registerPushwooshIOS();
+            }
 
-        if (device.platform == "Win32NT") {
-            registerPushwooshWP();
+            if (device.platform == "Win32NT") {
+                registerPushwooshWP();
+            }
         }
     }
 }
