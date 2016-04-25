@@ -29,7 +29,7 @@
                         <div class="ms-item">
                             {{ message.Content }}
                         </div>
-                        <small class="ms-date"><span ng-if="checkIfGroupConversation()" style="margin-right: 5px">{{getUsername(message.Author)}}</span><i class="zmdi zmdi-time"></i> {{ message.CreatedOn }}</small>
+                        <small class="ms-date"><span ng-if="checkIfGroupConversation()" style="margin-right: 5px">{{getUsername(message.Author)}}</span><i class="zmdi zmdi-time"></i><span>{{format(message.CreatedOn) | amTimeAgo}}</span></small>
                     </div>
                 </div>
             </div>
