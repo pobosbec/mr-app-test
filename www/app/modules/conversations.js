@@ -596,13 +596,22 @@ angular.module('conversations', [])
 
                     // TODO: this might be duplicate code from conversationS-controller
                     function syncUsers() {
-
+                        if ($scope.conversation !== null &&
+                        typeof $scope.conversation !== "undefined" &&
+                            $scope.conversation.hasOwnProperty("Participants") &&
+                            $scope.conversation.Participants.length &&
+                            $scope.conversation.Participants !== null &&
+                            typeof $scope.conversation.Participants !== "undefined")
                         $scope.conversation.Participants.some(function (e) {
                             var contactsPromise = contactsService.getAppUser(e);
 
                             contactsPromise.then(
                                 function (userFound) {
-                                    if (userFound.length === 1 && e === userFound[0].UserId) {
+                                    if (userFound.length === 1 &&
+                                        userFound[0] !== null &&
+                                        typeof userFound[0] !== "undefined" &&
+                                        userFound[0].hasOwnProperty("UserId") &&
+                                        e === userFound[0].UserId) {
                                         $scope.appUsers.push(userFound[0]);
                                     }
                                 },
@@ -612,7 +621,11 @@ angular.module('conversations', [])
 
                                     promise.then(
                                         function (success) {
-                                            if (e === success.data.items[0].userId) {
+                                            if (success !== null && 
+                                                typeof success !== "undefined" && success.hasOwnProperty("data") && success.data.hasOwnProperty("items") &&
+                                                success.data.items !== null && typeof success.data.items !== "undefined" && success.data.items.length &&
+                                                success.data.items[0] !== null && typeof success.data.items[0] !== "undefined" && success.data.items[0].hasOwnProperty("userId") &&
+                                                success.data.items[0].userId !== null && typeof success.data.items[0].userId !== "undefined" && e === success.data.items[0].userId) {
                                                 $scope.appUsers.push(success.data.items[0]);
                                             }
                                         },
