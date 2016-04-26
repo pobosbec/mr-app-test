@@ -25,8 +25,9 @@ angular.module('event', [])
             if (conversationId === null) {
                 $location.path('/conversation/');
             } else {
-                $location.path('/conversation/').search({ param: conversationId });
+                $location.path('/conversation/' + conversationId);
             }
+            localStorage.setItem("pushConversations", null);
             $rootScope.$broadcast('on-focus', args);
         }, false);
 

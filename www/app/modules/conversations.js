@@ -13,10 +13,6 @@ angular.module('conversations', [])
             $scope.unProccessedConversations = [];
             $scope.moreConversationsAreAvailable = true;
 
-            $scope.testBtn = function() {
-                $location.path('/conversation/').search({ conversationId: '9c7a9035-6455-414f-bfdb-eb97c197627d' });
-            }
-
             /* Make a request to the api to check if a conversation exists
          */
             $scope.doesConversationExist = function (users) {
