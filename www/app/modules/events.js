@@ -2,7 +2,7 @@
  * Created by robinpipirs on 09/12/15.
  */
 angular.module('event', [])
-    .controller('eventCtrl', ['$scope', '$rootScope', '$location', '$http', 'tokenService', 'communicationService', 'messageRepository', 'contactsService', function ($scope, $rootScope, $location, $http, tokenService, communicationService, messageRepository, contactsService) {
+    .controller('eventCtrl', ['$scope', '$rootScope', '$location', '$http', 'tokenService', 'communicationService', 'messageRepository', 'contactsService', '$location', function ($scope, $rootScope, $location, $http, tokenService, communicationService, messageRepository, contactsService, $location) {
 
         $scope.deviceReady = true;
         $scope.isPhoneGap = window.isPhoneGap;
@@ -18,6 +18,22 @@ angular.module('event', [])
 
         // Native
         document.addEventListener('resume', function (event, args) {
+            // TODO: fix this smell..
+
+            var conversationIds = localStorage.getItem("pushConversations");
+            var conversationId = null;
+
+            if (conversationIds.constructor === Array) {
+                if (conversationIds.length === 1) {
+                    conversationId = conversationIds[0];
+                } 
+            }
+
+            if (conversationId === null) {
+                $location.path('/conversation/');
+            } else {
+                $location.path('/conversation/').search({ param: conversationId });
+            }
             $rootScope.$broadcast('on-focus', args);
         }, false);
 
