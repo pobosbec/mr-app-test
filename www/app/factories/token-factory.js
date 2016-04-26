@@ -345,9 +345,18 @@ angular.module('token', [])
 
             return $q.all(promises).then(function (values) {
                 var elapsedTime = (new Date().getTime() - values[0]);
+                //var elapsedTime = (values[1].debug.executionTime);
                 var logString = "[ " + elapsedTime + " ms ] " + (values[1].requestUrl) + " ";
-                console.log(logString);
-                timerResults.push({ timeStamp: values[0], elapsedTime: elapsedTime, url: values[1].requestUrl });
+
+                var timedResponse = { timeStamp: values[0], elapsedTime: elapsedTime, url: values[1].requestUrl, response: values[1] };
+                // Insert log item and limit logging to 50 posts
+                timerResults.unshift(timedResponse);
+                timerResults = timerResults.slice(0, 50);
+                
+                // Broadcast event to state slow connections.
+                if (elapsedTime > 2000 || (elapsedTime > 1000 && elapsedTime > (timersAverage * 1.3) && timerResults.length > 10)) {
+                    $rootScope.$broadcast('slow-http-request-detected', timedResponse);
+                }
                 return values[1];
             });
         }
@@ -629,6 +638,16 @@ angular.module('token', [])
 
 
 var timerResults = [];
+
+var timersAverage = function () {
+    var sum = 0;
+    for (var i = 0; i < timerResults.length; i++) {
+        sum += parseInt(timerResults[i].elapsedTime, 10);
+    }
+
+    var avg = sum / timerResults.length;
+    return avg;
+}
 
 var listHttpTimers = function (limit, sortAscending) {
     if (typeof limit != "number") { limit = 10; }

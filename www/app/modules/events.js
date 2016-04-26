@@ -181,6 +181,13 @@ angular.module('event', [])
             console.log('push-token-registered');
         });
 
+        $scope.$on('slow-http-request-detected', function (event, args) {
+            console.warn('slow-http-request-detected: ' + args.url + ' (' + args.elapsedTime + ' ms)');
+            $rootScope.slowConnection = true;
+            clearTimeout($scope.slowConnectionResetTimer);
+            $scope.slowConnectionResetTimer = setTimeout(function () { $rootScope.slowConnection = false; }, 3000);
+        });
+
         // ------------------------------------
         // Factory-forwarded events 
         // ------------------------------------

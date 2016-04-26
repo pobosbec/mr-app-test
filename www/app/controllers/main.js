@@ -7,6 +7,7 @@ mobileresponseWebbApp
 
 
         $rootScope.createButtonVisible = false;
+        $rootScope.slowConnection = false;
 
         // process the confirmation dialog result
         function onConfirm(buttonIndex) {
