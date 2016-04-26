@@ -20,13 +20,15 @@ angular.module('event', [])
         document.addEventListener('resume', function (event, args) {
             // TODO: fix this smell..
 
-            var conversationIds = localStorage.getItem("pushConversations");
+            var conversationIds = JSON.parse(localStorage.getItem("pushConversations")).UserData.c;
             var conversationId = null;
 
-            if (conversationIds.constructor === Array) {
-                if (conversationIds.length === 1) {
-                    conversationId = conversationIds[0];
-                } 
+            if (conversationIds != null) {
+                if (conversationIds.constructor === Array) {
+                    if (conversationIds.length === 1) {
+                        conversationId = conversationIds[0];
+                    }
+                }
             }
 
             if (conversationId === null) {
@@ -62,6 +64,7 @@ angular.module('event', [])
         }, false);
 
         document.addEventListener('push-notification', function (event, args) {
+            localStorage.setItem("pushConversations", JSON.stringify(event.notification));
             $rootScope.$broadcast('push-notification', event);
         }, false);
 
