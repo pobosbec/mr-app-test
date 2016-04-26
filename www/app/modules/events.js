@@ -20,7 +20,10 @@ angular.module('event', [])
         document.addEventListener('resume', function (event, args) {
             // TODO: fix this smell..
 
-            var conversationIds = JSON.parse(localStorage.getItem("pushConversations")).UserData.c;
+            var conversationIds = JSON.parse(localStorage.getItem("pushConversations"));
+
+            var tmp = conversationIds.UserData.c;
+
             var conversationId = null;
 
             if (conversationIds != null) {
