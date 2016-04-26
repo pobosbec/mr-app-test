@@ -20,19 +20,7 @@ angular.module('event', [])
         document.addEventListener('resume', function (event, args) {
             // TODO: fix this smell..
 
-            var conversationIds = JSON.parse(localStorage.getItem("pushConversations"));
-
-            var tmp = conversationIds.UserData.c;
-
-            var conversationId = null;
-
-            if (conversationIds != null) {
-                if (conversationIds.constructor === Array) {
-                    if (conversationIds.length === 1) {
-                        conversationId = conversationIds[0];
-                    }
-                }
-            }
+            var conversationId = JSON.parse(localStorage.getItem("pushConversations")).userdata.c;
 
             if (conversationId === null) {
                 $location.path('/conversation/');
