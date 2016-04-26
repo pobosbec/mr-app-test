@@ -183,7 +183,6 @@ angular.module('token', [])
             });
         }
 
-
         //set user credentials
         factory.refreshUserDetails = function () {
 
@@ -411,8 +410,6 @@ angular.module('token', [])
 
                     return $q.reject(response);
                 });
-
-                return $q.reject(response);
             };
         };
 
@@ -525,7 +522,8 @@ angular.module('token', [])
             if (pushToken == null) {
                 pushToken = JSON.parse(localStorage.getItem("pushToken"));
             }
-            return pushToken.deviceToken;
+            //return pushToken.deviceToken;
+            return pushToken;
         };
 
         // Save
