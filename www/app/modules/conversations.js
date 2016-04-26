@@ -282,46 +282,6 @@ angular.module('conversations', [])
                 }
             }
 
-            function fetchConversations() {
-                var promise = $q(function (resolve, reject) {
-                    var conversationsFromApiPromise = communicationService.getAllConversations(null);
-                    conversationsFromApiPromise.then(
-                        function (conversationsPromiseSuccess) {
-
-                            var conversations = [];
-
-                            for (var convo in conversationsPromiseSuccess.data.usersInConversations) {
-                                // Check if conversation is already present in $scope.conversations.
-                                if ($scope.conversations.filter(function (e) { return e.ConversationId == convo; }).length > 0) {
-                                    continue;
-                                }
-
-                                var conversation = {
-                                    ConversationId: convo,
-                                    Messages: [],
-                                    Participants: conversations.data.usersInConversations[convo]
-                                };
-
-                                conversations.push(conversation);
-                            }
-
-                            addConversations(conversationsPromiseSuccess, 10, 1);
-                            resolve(conversationsPromiseSuccess);
-                        });
-                });
-
-                $scope.isLoading = true;
-                promise.then(function (result) {
-                    $scope.isLoading = false;
-                    if (Object.keys(result.data.usersInConversations).length >= $scope.conversations.length) {
-                        //var fetchConversationsTimeout = setTimeout(function () {
-                        //    fetchConversations();
-                        //    resolve();
-                        //}, 10000);
-                    }
-                });
-            }
-
             /**
              * Sets first quickload data (10*10 messages) 
              */
@@ -455,14 +415,10 @@ angular.module('conversations', [])
 
                     promise.then(
                         function (success) {
-                            //var newMessage = {
-                            //    MessageId: success.data.messageId,
-                            //    Author: success.data.authorId,
-                            //    ConversationId: success.data.conversationId,
-                            //    Content: success.data.content,
-                            //    CreatedOn: success.data.createdOn
-                            //};
-                            //$scope.conversation.Messages.push(newMessage);
+                            var fiveMinutesAgo = new Date();
+                            fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5);
+                            var args = { PeriodStart: fiveMinutesAgo, PeriodEnd: new Date().toJSON(), PageIndex: 0, PageSize: 50 };
+                            $rootScope.$broadcast('download-messages', args);
                         },
                         function (error) {
                             console.log('Could not reply to conversation.');
@@ -580,8 +536,6 @@ angular.module('conversations', [])
                         function (errorGettingMessages) {
                             console.warn('Could not get messages.');
                         });
-
-
                 });
 
                 // This is required for ng-repeat order by date

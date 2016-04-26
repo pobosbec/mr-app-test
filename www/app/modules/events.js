@@ -4,7 +4,6 @@
 angular.module('event', [])
     .controller('eventCtrl', ['$scope', '$rootScope', '$location', '$http', 'tokenService', 'communicationService', 'messageRepository', 'contactsService', function ($scope, $rootScope, $location, $http, tokenService, communicationService, messageRepository, contactsService) {
 
-        $rootScope.$broadcast('download-whats-new',{});
         $scope.deviceReady = true;
         $scope.isPhoneGap = window.isPhoneGap;
 
@@ -57,7 +56,6 @@ angular.module('event', [])
             args = args | {};
             args.Sender = 'events';
             args.Event = 'on-focus';
-            $rootScope.$broadcast('download-whats-new', args);
         });
 
         $scope.$on('on-blur', function (event, args) { });
@@ -65,7 +63,6 @@ angular.module('event', [])
         $scope.$on('online', function (event, args) {
             args.Sender = 'events';
             args.Event = 'online';
-            $rootScope.$broadcast('download-whats-new', args);
         });
 
         $scope.$on('offline', function (event, args) { });
@@ -177,7 +174,6 @@ angular.module('event', [])
 
         $scope.$on('app-token-available', function (event, args) {
             // Here we need to do the initial sync
-            // $rootScope.$broadcast('download-whats-new', args);
         });
 
 
@@ -199,11 +195,6 @@ angular.module('event', [])
 
         $scope.$on('updated-message', function (event, args) {
             messageRepository.on(event, args);
-        });
-
-        $scope.$on('download-whats-new', function (event, args) {
-            //console.log(args);
-            communicationService.on(event, args);
         });
 
         $scope.$on('download-conversation-messages', function (event, args) {

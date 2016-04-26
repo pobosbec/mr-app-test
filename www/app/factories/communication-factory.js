@@ -7,16 +7,10 @@ angular.module('communication', [])
         var inboxId = '8a0958a2-a163-4a20-8afa-e7315012e2d8';
 
         //var fetchMessagesInterval = setInterval(function () {
-        //    var args = { Sender: "Communications Factory", Event: 'interval' };
-        //    $rootScope.$broadcast('download-whats-new', args);
-        //    console.log(args);
-        //}, 2000);
-
-        var fetchMessagesInterval = setInterval(function () {
-            var oneMinuteAgo = new Date();
-            oneMinuteAgo.setMinutes(oneMinuteAgo.getMinutes() - 1);
-            factory.syncPeriodMessages(oneMinuteAgo.toJSON(), new Date().toJSON(), 0, 20);
-        }, 1000);
+        //    var oneMinuteAgo = new Date();
+        //    oneMinuteAgo.setMinutes(oneMinuteAgo.getMinutes() - 1);
+        //    factory.syncPeriodMessages(oneMinuteAgo.toJSON(), new Date().toJSON(), 0, 20);
+        //}, 1000);
 
         var downloadMessages = function (periodStart, periodEnd, pageIndex, pageSize) {
             var req = {
@@ -144,7 +138,6 @@ angular.module('communication', [])
             }
         }
 
-
         factory.conversationsDownloaded = function (data) {
             var newConversations = [];
 
@@ -164,12 +157,6 @@ angular.module('communication', [])
 
         factory.on = function (event, args) {
             switch (event.name) {
-                case 'download-whats-new':
-                    //console.log('This event is deprecated! This is a temp solution that downloads messages from last 5 minutes. Use download-messages.');
-                    var fiveMinutesAgo = new Date();
-                    fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5);
-                    factory.syncPeriodMessages(fiveMinutesAgo.toJSON(), new Date().toJSON(), 0, 50);
-                    break;
                 case 'download-messages':
                     factory.syncPeriodMessages(args.PeriodStart, args.PeriodEnd, args.Index, args.Size);
                     break;
@@ -182,15 +169,11 @@ angular.module('communication', [])
                     factory.downloadMessagesForConversation(args.ConversationId, false, args.PageIndex, args.PageSize);
                     break;
                 case 'logged-out':
-                    clearInterval(fetchMessagesInterval);
                     break;
                 case 'logged-in':
-                    clearInterval(fetchMessagesInterval);
-                    fetchMessagesInterval = setInterval(function () {
-                        var oneMinuteAgo = new Date();
-                        oneMinuteAgo.setMinutes(oneMinuteAgo.getMinutes() - 1);
-                        factory.syncPeriodMessages(oneMinuteAgo.toJSON(), new Date().toJSON(), 0, 20);
-                    }, 1000);
+                var fiveMinutesAgo = new Date();
+                    fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5);
+                    factory.syncPeriodMessages(fiveMinutesAgo.toJSON(), new Date().toJSON(), 0, 50);
                     break;
                 default:
                     break;

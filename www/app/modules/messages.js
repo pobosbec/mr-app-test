@@ -185,7 +185,6 @@ angular.module('messages', [])
                     //TODO check if success
                     $scope.conversations[findConversation(conversationId)].TextArea = "";
                     var args = { Sender: "messages", Event: "Reply" }
-                    $rootScope.$broadcast('download-whats-new', args);
                 }, function errorCallback(response) {
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
