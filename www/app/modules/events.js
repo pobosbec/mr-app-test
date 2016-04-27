@@ -65,7 +65,7 @@ angular.module('event', [])
         }, false);
 
         document.addEventListener('push-notification', function (event, args) {
-
+            // TODO: fix code smell.. 
             var notificationConversations = JSON.parse(localStorage.getItem("pushConversations"));
 
             if (notificationConversations != null) {
@@ -80,6 +80,12 @@ angular.module('event', [])
                         arr.push(event.notification.userdata.c);
                         localStorage.setItem("pushConversations", JSON.stringify(arr));
                     }
+                }
+            } else {
+                notificationConversations = [];
+                if (event.notification.userdata.c != null) {
+                    notificationConversations.push(event.notification.userdata.c);
+                    localStorage.setItem("pushConversations", JSON.stringify(notificationConversations));
                 }
             }
             $rootScope.$broadcast('push-notification', event);
