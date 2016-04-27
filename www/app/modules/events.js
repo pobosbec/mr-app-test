@@ -20,6 +20,8 @@ angular.module('event', [])
         document.addEventListener('resume', function (event, args) {
             // TODO: fix this smell..
 
+            // if not logged in? check if logged in?
+
             var conversationIds = JSON.parse(localStorage.getItem("pushConversations"));
 
             if (conversationIds === null) {
@@ -68,6 +70,10 @@ angular.module('event', [])
                     if (event.notification.userdata.c != null) {
                         notificationConversations.push(event.notification.userdata.c);
                         localStorage.setItem("pushConversations", notificationConversations);
+                    }
+                } else {
+                    if (event.notification.userdata.c != null) {
+                        localStorage.setItem("pushConversations", [event.notification.userdata.c]);
                     }
                 }
             }
