@@ -33,7 +33,10 @@ angular.module('event', [])
                     $location.path('/conversation/');
                 }
             }
-            localStorage.setItem("pushConversations", []);
+
+            conversationIds = [];
+
+            localStorage.setItem("pushConversations", JSON.stringify(conversationIds));
             $rootScope.$broadcast('on-focus', args);
         }, false);
 
@@ -63,17 +66,19 @@ angular.module('event', [])
 
         document.addEventListener('push-notification', function (event, args) {
 
-            var notificationConversations = localStorage.getItem("pushConversations");
+            var notificationConversations = JSON.parse(localStorage.getItem("pushConversations"));
 
             if (notificationConversations != null) {
                 if (notificationConversations.constructor === Array) {
                     if (event.notification.userdata.c != null) {
                         notificationConversations.push(event.notification.userdata.c);
-                        localStorage.setItem("pushConversations", notificationConversations);
+                        localStorage.setItem("pushConversations", JSON.stringify(notificationConversations));
                     }
                 } else {
                     if (event.notification.userdata.c != null) {
-                        localStorage.setItem("pushConversations", [event.notification.userdata.c]);
+                        var arr = [];
+                        arr.push(event.notification.userdata.c);
+                        localStorage.setItem("pushConversations", JSON.stringify(arr));
                     }
                 }
             }
