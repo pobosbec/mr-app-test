@@ -21,6 +21,7 @@
     <link href="css/custom.css" rel="stylesheet">
     <link href="bower_components/snapjs/snap.css" rel="stylesheet">
     <link href="bower_components/angular-snap/angular-snap.css" rel="stylesheet">
+    <link href="node_modules/node-waves/dist/waves.min.js" rel="stylesheet">
 
     <script src="js/version.js"></script>
     <!--<script src="https://s3-eu-west-1.amazonaws.com/app.aws.mobileresponse.se/www/js/version.js"></script> <!--Remote include from S3 -->
@@ -35,6 +36,7 @@
     <script src="node_modules/angular-resource/angular-resource.min.js"></script>
     <script src="js/ng-cordova.js"></script>
     <script src="bower_components/ng-fastclick/dist/index.min.js"></script>
+    <script src="node_modules/node-waves/dist/waves.min.js"></script>
 
     <!-- Begin Cookie Consent plugin by Silktide - http://silktide.com/cookieconsent -->
     <script type="text/javascript">
@@ -99,6 +101,8 @@
     <script src="app/filters.js"></script>
 
     <script language="javascript">
+
+        Waves.init();
 
         function isAndroid() {
             return navigator.userAgent.indexOf("Android") > 0;
