@@ -2,7 +2,7 @@
     <div class="lv-body">
         <div class="lv-item media" ng-repeat="conversation in conversations | orderBy: conversationsSorting" ng-class="{'lastConversation':$last, 'hoverOverride':isPhoneGap}">
             <a ui-sref="conversation({conversationId: conversation.ConversationId})">
-                <div class="media-body" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                <div class="media-body waves-effect" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                     <img class="lv-img-sm avatar" style="margin-right: -18px;" ng-class="{'lastAvatar':$last}" ng-repeat="participant in conversation.Participants | orderBy: selfFirst" ng-src="{{ getAvatar(participant) || 'img/profile-pics/5.jpg' }}" alt="">
                     <ul class="convParticipants">
                         <li>
