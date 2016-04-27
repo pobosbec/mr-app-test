@@ -79,7 +79,7 @@ angular.module('conversations', [])
 
             $scope.loadUnprocessedConversations = function () {
                 var conversationToProcess = [];
-                
+
                 if ($scope.unProccessedConversations.length < 10) {
                     for (var i = 0; i < $scope.unProccessedConversations.length; i++) {
                         conversationToProcess.push($scope.unProccessedConversations.shift());
@@ -89,7 +89,7 @@ angular.module('conversations', [])
                         conversationToProcess.push($scope.unProccessedConversations.shift());
                     }
                 }
-                $scope.moreConversationsAreAvailable = $scope.unProccessedConversations.length>0;
+                $scope.moreConversationsAreAvailable = $scope.unProccessedConversations.length > 0;
                 addConversations(conversationToProcess);
             }
 
@@ -227,24 +227,23 @@ angular.module('conversations', [])
                 if ($scope.unSyncedAppUsers != null) {
                     if ($scope.unSyncedAppUsers.length > 0) {
                         var promise = syncAppUserParticipant($scope.unSyncedAppUsers);
+
+                        promise.then(
+                            function (success) {
+                                if (success.data.items != null) {
+                                    success.data.items.some(function (appUser) {
+                                        $scope.appUsers.push(appUser);
+                                        contactsService.addAppUser(appUser);
+                                    });
+                                }
+                                $scope.unSyncedAppUsers = [];
+
+                            },
+                            function (error) {
+                                console.error('Could not sync user: ' + JSON.stringify(error));
+                            });
                     }
                 }
-
-                promise.then(
-                    function (success) {
-                        if (success.data.items != null) {
-                            success.data.items.some(function (appUser) {
-                                $scope.appUsers.push(appUser);
-                                contactsService.addAppUser(appUser);
-                            });
-                        }
-
-                        $scope.unSyncedAppUsers = [];
-
-                    },
-                    function (error) {
-                        console.error('Could not sync user: ' + conversation.Participants[i]);
-                    });
 
                 function syncConversationMessages(conversation, amount) {
                     var messagesPromise = communicationService.downloadMessagesForConversation(conversation.ConversationId, false, 0, amount);
@@ -445,7 +444,7 @@ angular.module('conversations', [])
                 }
 
                 $scope.format = function (dateString) {
-                    var parsed = angularMoment(dateString+"+00:00");
+                    var parsed = angularMoment(dateString + "+00:00");
                     var returnV = parsed.format('YYYY-MM-DD HH:mm:ss Z');
                     return returnV;
                 }
@@ -563,38 +562,38 @@ angular.module('conversations', [])
                             $scope.conversation.Participants.length &&
                             $scope.conversation.Participants !== null &&
                             typeof $scope.conversation.Participants !== "undefined")
-                        $scope.conversation.Participants.some(function (e) {
-                            var contactsPromise = contactsService.getAppUser(e);
+                            $scope.conversation.Participants.some(function (e) {
+                                var contactsPromise = contactsService.getAppUser(e);
 
-                            contactsPromise.then(
-                                function (userFound) {
-                                    if (userFound.length === 1 &&
-                                        userFound[0] !== null &&
-                                        typeof userFound[0] !== "undefined" &&
-                                        userFound[0].hasOwnProperty("UserId") &&
-                                        e === userFound[0].UserId) {
-                                        $scope.appUsers.push(userFound[0]);
-                                    }
-                                },
-                                function (userNotFound) {
-                                    console.log('Could not find appUser. Syncing from api. Error: ' + JSON.stringify(userNotFound));
-                                    var promise = contactsService.searchAppUser(e);
+                                contactsPromise.then(
+                                    function (userFound) {
+                                        if (userFound.length === 1 &&
+                                            userFound[0] !== null &&
+                                            typeof userFound[0] !== "undefined" &&
+                                            userFound[0].hasOwnProperty("UserId") &&
+                                            e === userFound[0].UserId) {
+                                            $scope.appUsers.push(userFound[0]);
+                                        }
+                                    },
+                                    function (userNotFound) {
+                                        console.log('Could not find appUser. Syncing from api. Error: ' + JSON.stringify(userNotFound));
+                                        var promise = contactsService.searchAppUser(e);
 
-                                    promise.then(
-                                        function (success) {
-                                            if (success !== null && 
-                                                typeof success !== "undefined" && success.hasOwnProperty("data") && success.data.hasOwnProperty("items") &&
-                                                success.data.items !== null && typeof success.data.items !== "undefined" && success.data.items.length &&
-                                                success.data.items[0] !== null && typeof success.data.items[0] !== "undefined" && success.data.items[0].hasOwnProperty("userId") &&
-                                                success.data.items[0].userId !== null && typeof success.data.items[0].userId !== "undefined" && e === success.data.items[0].userId) {
-                                                $scope.appUsers.push(success.data.items[0]);
-                                            }
-                                        },
-                                        function (error) {
-                                            console.error('Could not get details for user ' + authorId + ". Error: " + JSON.stringify(error));
-                                        });
-                                });
-                        });
+                                        promise.then(
+                                            function (success) {
+                                                if (success !== null &&
+                                                    typeof success !== "undefined" && success.hasOwnProperty("data") && success.data.hasOwnProperty("items") &&
+                                                    success.data.items !== null && typeof success.data.items !== "undefined" && success.data.items.length &&
+                                                    success.data.items[0] !== null && typeof success.data.items[0] !== "undefined" && success.data.items[0].hasOwnProperty("userId") &&
+                                                    success.data.items[0].userId !== null && typeof success.data.items[0].userId !== "undefined" && e === success.data.items[0].userId) {
+                                                    $scope.appUsers.push(success.data.items[0]);
+                                                }
+                                            },
+                                            function (error) {
+                                                console.error('Could not get details for user ' + authorId + ". Error: " + JSON.stringify(error));
+                                            });
+                                    });
+                            });
                     }
 
                     $scope.userId = tokenService.getAppUserId();
