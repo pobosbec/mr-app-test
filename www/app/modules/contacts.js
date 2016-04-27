@@ -8,13 +8,14 @@ angular.module('contact', [])
         $scope.appUsers = [];
         $scope.foundAppUsers = [];
         $scope.isLoading = false;
+        $scope.query = {};
 
         $scope.getAppUsersFromPhoneContacts = function () {
             contactsService.findAppUsersFromAllContacts();
         };
 
         $scope.valueNullOrUndefined = function (val) {
-            if (val === null || val === undefined) {
+            if (val === null || val === undefined || val === "") {
                 return true;
             } else {
                 return false;
@@ -23,15 +24,15 @@ angular.module('contact', [])
 
         $scope.clearSearch = function () {
             $scope.isLoading = true;
-            $scope.query = null;
+            $scope.query.text = null;
             $scope.foundAppUsers = [];
             $scope.isLoading = false;
         }
 
-        $scope.search = function (query) {
+        $scope.search = function () {
             $scope.isLoading = true;
             $scope.foundAppUsers = [];
-            var promise = contactsService.searchAppUser(query);
+            var promise = contactsService.searchAppUser($scope.query.text);
 
             promise.then(function (success) {
                 for (var i = 0; i < success.data.items.length; i++) {

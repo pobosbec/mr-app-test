@@ -1,8 +1,8 @@
 <div class="listview lv-bordered lv-lg" style="padding-bottom: 100px;" data-ng-controller="conversationsCtrl as conversationsCtrl">
     <div class="lv-body">
         <div class="lv-item media">
-            <input type="text" placeholder="Search new contacts" ng-model="query"/>
-            <button class="btn btn-default btn-icon-text waves-effect" ng-click="search(query)">
+            <input type="text" placeholder="Search new contacts" ng-model="query.text"/>
+            <button class="btn btn-default btn-icon-text waves-effect" ng-click="search(query.text)">
                 <i class="zmdi zmdi-search"></i> Search
             </button>
             <button class="btn btn-default btn-icon-text waves-effect" ng-click="clearSearch()"><i class="zmdi zmdi-close"></i> Clear</button>
@@ -15,7 +15,7 @@
                     <h4>{{foundAppUser.displayName}}</h4>
                     <li ng-if="!valueNullOrUndefined(foundAppUser.phoneNumber)">{{foundAppUser.phoneNumber}}</li>
                     <li ng-if="!valueNullOrUndefined(foundAppUser.email)">{{foundAppUser.email}}</li>
-                    <div class="btn btn-primary" ng-click="addUser(foundAppUser)">Add</div>
+                    <div class="btn btn-primary" ng-click="addUser(foundAppUser)" style="margin-top: 0.5em">Add</div>
                 </ul>
             </div>
         </div>

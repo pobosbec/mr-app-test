@@ -18,25 +18,6 @@ angular.module('event', [])
 
         // Native
         document.addEventListener('resume', function (event, args) {
-            // TODO: fix this smell..
-
-            // if not logged in? check if logged in?
-
-            var conversationIds = JSON.parse(localStorage.getItem("pushConversations"));
-
-            if (conversationIds === null) {
-                $location.path('/conversation/');
-            } else {
-                if (conversationIds.length === 1) {
-                    $location.path('/conversation/' + conversationIds[0]);
-                } else {
-                    $location.path('/conversation/');
-                }
-            }
-
-            conversationIds = [];
-
-            localStorage.setItem("pushConversations", JSON.stringify(conversationIds));
             $rootScope.$broadcast('on-focus', args);
         }, false);
 
@@ -98,6 +79,26 @@ angular.module('event', [])
             args = args | {};
             args.Sender = 'events';
             args.Event = 'on-focus';
+
+            var conversationIds = JSON.parse(localStorage.getItem("pushConversations"));
+
+            if (conversationIds === null || conversationIds === undefined) {
+                $location.path('/conversation/');
+            } else {
+                if (conversationIds.constructor === Array) {
+                    if (conversationIds.length === 1) {
+                        $location.path('/conversation/' + conversationIds[0]);
+                    } else {
+                        $location.path('/conversation/');
+                    }
+                } else {
+                    $location.path('/conversation/');
+                }
+            }
+
+            conversationIds = [];
+
+            localStorage.setItem("pushConversations", JSON.stringify(conversationIds));
         });
 
         $scope.$on('on-blur', function (event, args) { });

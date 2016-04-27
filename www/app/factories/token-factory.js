@@ -508,6 +508,7 @@ angular.module('token', [])
         factory.getAppUserId = function () {
             return userDetails.appUserId;
         };
+
         factory.getEmailAddress = function () {
             return userDetails.emailAddress;
         };
