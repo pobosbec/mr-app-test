@@ -20,14 +20,18 @@ angular.module('event', [])
         document.addEventListener('resume', function (event, args) {
             // TODO: fix this smell..
 
-            var conversationId = JSON.parse(localStorage.getItem("pushConversations")).userdata.c;
+            var conversationIds = JSON.parse(localStorage.getItem("pushConversations")).userdata.c;
 
-            if (conversationId === null) {
+            if (conversationIds === null) {
                 $location.path('/conversation/');
             } else {
-                $location.path('/conversation/' + conversationId);
+                if (conversationIds.length === 1) {
+                    $location.path('/conversation/' + conversationIds[0]);
+                } else {
+                    $location.path('/conversation/');
+                }
             }
-            localStorage.setItem("pushConversations", null);
+            localStorage.setItem("pushConversations", []);
             $rootScope.$broadcast('on-focus', args);
         }, false);
 
@@ -56,7 +60,17 @@ angular.module('event', [])
         }, false);
 
         document.addEventListener('push-notification', function (event, args) {
-            localStorage.setItem("pushConversations", JSON.stringify(event.notification));
+
+            var notificationConversations = localStorage.getItem("pushConversations");
+
+            if (notificationConversations != null) {
+                if (notificationConversations.constructor === Array) {
+                    if (event.notification.userdata.c != null) {
+                        notificationConversations.push(event.notification.userdata.c);
+                        localStorage.setItem("pushConversations", notificationConversations);
+                    }
+                }
+            }
             $rootScope.$broadcast('push-notification', event);
         }, false);
 
