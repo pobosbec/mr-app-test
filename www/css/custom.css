@@ -300,6 +300,8 @@ and (orientation: portrait) {
 #content {
     /*background:#edecec url(drag.png) center 75% no-repeat;*/
     background-color:#edecec;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
 }
 
 /* Demo toolbar styles */

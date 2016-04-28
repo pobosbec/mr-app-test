@@ -18,80 +18,76 @@
  */
 
 function registerPushwooshIOS() {
- 	var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
+    var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
 
- 	//set push notification callback before we initialize the plugin
-	document.addEventListener('push-notification',
-		function(event)
-		{
-			//get the notification payload
-			var notification = event.notification;
+    //set push notification callback before we initialize the plugin
+    document.addEventListener('push-notification',
+		function (event) {
+		    //get the notification payload
+		    var notification = event.notification;
 
-			//display alert to the user for example
-			alert(notification.aps.alert);
-      document.onNotification(notification.aps.alert);
+		    //display alert to the user for example
+		    alert(notification.aps.alert);
+		    document.onNotification(notification.aps.alert);
 
-			//to view full push payload
-			//alert(JSON.stringify(notification));
+		    //to view full push payload
+		    //alert(JSON.stringify(notification));
 
-			//clear the app badge
-			pushNotification.setApplicationIconBadgeNumber(0);
-		 }
-	);
-
-	//initialize the plugin
-    pushNotification.onDeviceReady({pw_appid:"A014B-AC83E"});
-
-	//register for pushes
-	pushNotification.registerDevice(
-		function(deviceToken)
-		{
-		    localStorage.setItem("pushToken", JSON.stringify(deviceToken));
-			evt.initCustomEvent("push-service-initialized", true, true, { token: deviceToken });
-			window.dispatchEvent(evt);
-			//document.dispatchEvent(new CustomEvent("push-service-initialized", { "token": deviceToken }));
-
-			onPushwooshiOSInitialized(deviceToken);
-		},
-		function(status)
-		{
-			console.warn('failed to register : ' + JSON.stringify(status));
-			//alert(JSON.stringify(['failed to register ', status]));
+		    //clear the app badge
+		    pushNotification.setApplicationIconBadgeNumber(0);
 		}
 	);
 
-	//reset badges on start
-	pushNotification.setApplicationIconBadgeNumber(0);
+    //initialize the plugin
+    pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
+
+    //register for pushes
+    pushNotification.registerDevice(
+		function (token) {
+		    var deviceToken = token.deviceToken;
+		    localStorage.setItem("pushToken", JSON.stringify(deviceToken));
+		    evt.initCustomEvent("push-service-initialized", true, true, { token: deviceToken });
+		    window.dispatchEvent(evt);
+		    //document.dispatchEvent(new CustomEvent("push-service-initialized", { "token": deviceToken }));
+
+		    onPushwooshiOSInitialized(deviceToken);
+		},
+		function (status) {
+		    console.warn('failed to register : ' + JSON.stringify(status));
+		    //alert(JSON.stringify(['failed to register ', status]));
+		}
+	);
+
+    //reset badges on start
+    pushNotification.setApplicationIconBadgeNumber(0);
 }
 
-function onPushwooshiOSInitialized(pushToken)
-{
-	var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
-	//retrieve the tags for the device
-	pushNotification.getTags(
-		function(tags) {
-			console.warn('tags for the device: ' + JSON.stringify(tags));
+function onPushwooshiOSInitialized(pushToken) {
+    var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
+    //retrieve the tags for the device
+    pushNotification.getTags(
+		function (tags) {
+		    console.warn('tags for the device: ' + JSON.stringify(tags));
 		},
-		function(error) {
-			console.warn('get tags error: ' + JSON.stringify(error));
+		function (error) {
+		    console.warn('get tags error: ' + JSON.stringify(error));
 		}
 	);
 
-	//example how to get push token at a later time
-	pushNotification.getPushToken(
-		function(token)
-		{
-			console.warn('push token device: ' + token);
+    //example how to get push token at a later time
+    pushNotification.getPushToken(
+		function (token) {
+		    console.warn('push token device: ' + token);
 		}
 	);
 
-	//example how to get Pushwoosh HWID to communicate with Pushwoosh API
-	pushNotification.getPushwooshHWID(
-		function(token) {
-			console.warn('Pushwoosh HWID: ' + token);
+    //example how to get Pushwoosh HWID to communicate with Pushwoosh API
+    pushNotification.getPushwooshHWID(
+		function (token) {
+		    console.warn('Pushwoosh HWID: ' + token);
 		}
 	);
 
-	//start geo tracking.
-	//pushNotification.startLocationTracking();
+    //start geo tracking.
+    //pushNotification.startLocationTracking();
 }
