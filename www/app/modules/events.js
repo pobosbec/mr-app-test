@@ -84,37 +84,39 @@ angular.module('event', [])
 
         // Wrapped
         $scope.$on('on-focus', function (event, args) {
-            args = args | {};
-            args.Sender = 'events';
-            args.Event = 'on-focus';
+            var onFocusDelay = setTimeout(function (event, args) {
+                args = args | {};
+                args.Sender = 'events';
+                args.Event = 'on-focus';
 
-            // TODO: this smells.
+                // TODO: this smells.
 
-            function resetData() {
-                var conversationIds = [];
-                localStorage.setItem("pushConversations", JSON.stringify(conversationIds));
-            }
+                function resetData() {
+                    var conversationIds = [];
+                    localStorage.setItem("pushConversations", JSON.stringify(conversationIds));
+                }
 
-            var conversationIds = JSON.parse(localStorage.getItem("pushConversations"));
+                var conversationIds = JSON.parse(localStorage.getItem("pushConversations"));
 
-            if (conversationIds === null || conversationIds === undefined) {
-                resetData();
-                return;
-            } else {
-                if (conversationIds.constructor === Array) {
-                    if (conversationIds.length === 1) {
-                        var convoId = conversationIds[0];
-                        resetData();
-                        $location.path('/conversation/' + convoId);
-                    } else if (conversationIds.length > 1) {
-                        resetData();
-                        $location.path('/conversation/');
-                    }
-                } else {
+                if (conversationIds === null || conversationIds === undefined) {
                     resetData();
                     return;
+                } else {
+                    if (conversationIds.constructor === Array) {
+                        if (conversationIds.length === 1) {
+                            var convoId = conversationIds[0];
+                            resetData();
+                            $location.path('/conversation/' + convoId);
+                        } else if (conversationIds.length > 1) {
+                            resetData();
+                            $location.path('/conversation/');
+                        }
+                    } else {
+                        resetData();
+                        return;
+                    }
                 }
-            }
+            }, 0);
         });
 
         $scope.$on('on-blur', function (event, args) { });
