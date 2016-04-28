@@ -21,7 +21,15 @@ angular.module('event', [])
             $rootScope.$broadcast('on-focus', args);
         }, false);
 
+        document.addEventListener('active', function (event, args) {
+            $rootScope.$broadcast('on-focus', args);
+        }, false);
+
         document.addEventListener('pause', function (event, args) {
+            $rootScope.$broadcast('on-blur', args);
+        }, false);
+
+        document.addEventListener('resign', function (event, args) {
             $rootScope.$broadcast('on-blur', args);
         }, false);
 
@@ -80,25 +88,33 @@ angular.module('event', [])
             args.Sender = 'events';
             args.Event = 'on-focus';
 
+            // TODO: this smells.
+
+            function resetData() {
+                var conversationIds = [];
+                localStorage.setItem("pushConversations", JSON.stringify(conversationIds));
+            }
+
             var conversationIds = JSON.parse(localStorage.getItem("pushConversations"));
 
             if (conversationIds === null || conversationIds === undefined) {
-                $location.path('/conversation/');
+                resetData();
+                return;
             } else {
                 if (conversationIds.constructor === Array) {
                     if (conversationIds.length === 1) {
-                        $location.path('/conversation/' + conversationIds[0]);
-                    } else {
+                        var convoId = conversationIds[0];
+                        resetData();
+                        $location.path('/conversation/' + convoId);
+                    } else if (conversationIds.length > 1) {
+                        resetData();
                         $location.path('/conversation/');
                     }
                 } else {
-                    $location.path('/conversation/');
+                    resetData();
+                    return;
                 }
             }
-
-            conversationIds = [];
-
-            localStorage.setItem("pushConversations", JSON.stringify(conversationIds));
         });
 
         $scope.$on('on-blur', function (event, args) { });
