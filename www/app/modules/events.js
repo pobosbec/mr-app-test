@@ -84,6 +84,7 @@ angular.module('event', [])
 
         // Wrapped
         $scope.$on('on-focus', function (event, args) {
+            pushNotification.setApplicationIconBadgeNumber(0);
             var onFocusDelay = setTimeout(function (event, args) {
                 args = args | {};
                 args.Sender = 'events';
