@@ -28,7 +28,7 @@ function registerPushwooshIOS() {
 
 		    //display alert to the user for example
 		    //alert(notification.aps.alert);
-		    document.onNotification(notification.aps.alert);
+		    //document.onNotification(notification.aps.alert);
 
 		    //to view full push payload
 		    //alert(JSON.stringify(notification));
