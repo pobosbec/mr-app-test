@@ -443,6 +443,18 @@ angular.module('conversations', [])
                     $scope.pageIndex = Math.floor($scope.conversation.Messages.length / $scope.pageSize);
                 }
 
+                $scope.formatMode = function (dateString) {
+                    var then = angularMoment(dateString + "+00:00");
+                    var now = angularMoment();
+                    if (now.subtract(1,'day') < then) {
+                        return 1;
+                    } else if (now.subtract(1, 'year') < then) {
+                        return 2;
+                    }  else {
+                        return 3;
+                    }
+                }
+
                 $scope.format = function (dateString) {
                     var parsed = angularMoment(dateString + "+00:00");
                     var returnV = parsed.format('YYYY-MM-DD HH:mm:ss Z');

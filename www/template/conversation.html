@@ -34,7 +34,7 @@
                         <div class="ms-item">
                             {{ message.Content }}
                         </div>
-                        <small class="ms-date"><span ng-if="checkIfGroupConversation()" style="margin-right: 5px">{{getUsername(message.Author)}}</span><i class="zmdi zmdi-time"></i><span>{{format(message.CreatedOn) | amTimeAgo}}</span></small>
+                        <small class="ms-date"><span ng-if="checkIfGroupConversation()" style="margin-right: 5px">{{getUsername(message.Author)}}</span><i class="zmdi zmdi-time"></i> <span ng-show="formatMode(message.CreatedOn)==1">{{format(message.CreatedOn) | amTimeAgo}}</span><span ng-show="formatMode(message.CreatedOn)==2">{{format(message.CreatedOn) | amDateFormat:'D MMM HH:mm'}}</span><span ng-show="formatMode(message.CreatedOn)==3">{{format(message.CreatedOn) | amDateFormat:'YYYY-MM-DD HH:mm'}}</span></small>
                     </div>
                 </div>
             </div>
