@@ -2,7 +2,7 @@
  * Created by Kristofer on 2016-03-17.
  */
 angular.module('contact', [])
-    .controller('contactsCtrl', ['$scope', '$http', 'tokenService', 'contactsService', 'communicationService', '$cordovaSQLite', function ($scope, $http, tokenService, contactsService, communicationService) {
+    .controller('contactsCtrl', ['$scope', '$http', 'tokenService', 'contactsService', '$q', function ($scope, $http, tokenService, contactsService, $q) {
 
         $scope.contacts = [];
         $scope.appUsers = [];
@@ -25,13 +25,13 @@ angular.module('contact', [])
         $scope.clearSearch = function () {
             $scope.isLoading = true;
             $scope.query.text = null;
-            $scope.foundAppUsers = [];
+            $scope.foundAppUsers.length = 0;
             $scope.isLoading = false;
         }
 
         $scope.search = function () {
             $scope.isLoading = true;
-            $scope.foundAppUsers = [];
+            $scope.foundAppUsers.length = 0;
             var promise = contactsService.searchAppUser($scope.query.text);
 
             promise.then(function (success) {
@@ -50,13 +50,17 @@ angular.module('contact', [])
             addUserPromise.then(
                 function (success) {
 
-                    contactsService.factory.getAppUser(user.id);
+                    var findUserPromise = contactsService.getAppUser(user.id);
 
+                    return findUserPromise;
+                }, function (error) {
+
+                }).then(function (findUserPromise) {
                     var index = -1;
 
                     for (var i = 0; i < $scope.foundAppUsers.length; i++) {
                         var appUser = $scope.foundAppUsers[i];
-                        if (appUser.id === user.id) {
+                        if (appUser.id === findUserPromise[0].id) {
                             index = i;
                         }
                     }
@@ -65,10 +69,10 @@ angular.module('contact', [])
                         $scope.foundAppUsers.splice(index, 1);
                     }
 
-                    $scope.appUsers.push(user);
+                    var found = findUserPromise[0];
+                    console.log(found);
 
-                }, function (error) {
-
+                    $scope.appUsers.push(findUserPromise[0]);
                 });
         };
 
@@ -88,7 +92,7 @@ angular.module('contact', [])
                     }
 
                     if (index > -1) {
-                        $scope.appUsers.slice(index, 1);
+                        $scope.appUsers.splice(index, 1);
                     }
                 },
                 function (error) {

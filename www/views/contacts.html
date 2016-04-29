@@ -1,4 +1,4 @@
-<div class="listview lv-bordered lv-lg" style="padding-bottom: 100px;" data-ng-controller="conversationsCtrl as conversationsCtrl">
+<div class="listview lv-bordered lv-lg" style="padding-bottom: 100px;">
     <div class="lv-body">
         <div class="lv-item media">
             <input type="text" placeholder="Search new contacts" ng-model="query.text"/>
@@ -8,7 +8,7 @@
             <button class="btn btn-default btn-icon-text waves-effect" ng-click="clearSearch()"><i class="zmdi zmdi-close"></i> Clear</button>
         </div>
         <loading></loading>
-        <div class="lv-item media" ng-repeat="foundAppUser in foundAppUsers" ng-class="{'hoverOverride':isPhoneGap}">
+        <div class="lv-item media" ng-repeat="foundAppUser in foundAppUsers track by foundAppUser.id" ng-class="{'hoverOverride':isPhoneGap}">
             <div class="media-body">
                 <img class="lv-img-sm avatar" style="margin-right: -18px; vertical-align: inherit !important" ng-src="{{ foundAppUser.avatar || 'img/profile-pics/5.jpg' }}" alt="">
                 <ul style="display: inline-block !important">
@@ -19,7 +19,7 @@
                 </ul>
             </div>
         </div>
-        <div class="lv-item media" ng-repeat="appUser in appUsers" ng-class="{'hoverOverride':isPhoneGap}">
+        <div class="lv-item media" ng-repeat="appUser in appUsers track by appUser.id" ng-class="{'hoverOverride':isPhoneGap}">
             <div class="media-body">
                 <img class="lv-img-sm avatar" style="margin-right: -18px; vertical-align: inherit !important" ng-src="{{ appUser.avatar || 'img/profile-pics/5.jpg' }}" alt="">
                 <ul style="display: inline-block !important">

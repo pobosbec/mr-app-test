@@ -232,6 +232,10 @@ angular.module('contacts', [])
                 db.transaction(function (tx) {
                     tx.executeSql(queries.deleteAppUser, [appUserId],
                         function (trans, result) {
+                            if (result.rowsAffected !== 1) {
+                                console.error('Error while fetching appUsers from database.\r\n' + error.message);
+                                reject();
+                            }
                             resolve(result);
                         }, function (trans, error) {
                             console.error('Error while fetching appUsers from database.\r\n' + error.message);
