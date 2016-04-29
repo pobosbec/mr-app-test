@@ -50,6 +50,8 @@ angular.module('contact', [])
             addUserPromise.then(
                 function (success) {
 
+                    contactsService.factory.getAppUser(user.id);
+
                     var index = -1;
 
                     for (var i = 0; i < $scope.foundAppUsers.length; i++) {
