@@ -118,7 +118,7 @@ angular.module('event', [])
                         return;
                     }
                 }
-            }, 0);
+            }, 10);
         });
 
         $scope.$on('on-blur', function (event, args) { });
