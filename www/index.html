@@ -135,7 +135,7 @@
                 CORDOVA_EDITION = "ios";
                 window.deviceType = 1;
             }
-            window.isPhoneGap = (CORDOVA_EDITION != null); //document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+            window.isPhoneGap = (CORDOVA_EDITION !== null); //document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
             // document.write('<script src="js/ng-cordova.js"><\/script>');
             loadScript("js/index.js");
             //document.write('<script type="text/javascript" src="js/index.js"><\/script>');

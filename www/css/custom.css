@@ -1,23 +1,22 @@
 /*Native feeling starts here */
 /*Native feel removal of text selection*/
-*
-{
+* {
     -webkit-user-select: none;
     -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
 }
-input
-{
+
+input {
     -webkit-user-select: auto !important;
     -khtml-user-select: auto !important;
     -moz-user-select: auto !important;
     -ms-user-select: auto !important;
     user-select: auto !important;
 }
-textarea
-{
+
+textarea {
     -webkit-user-select: auto !important;
     -khtml-user-select: auto !important;
     -moz-user-select: auto !important;
@@ -26,15 +25,14 @@ textarea
 }
 
 /* anchor element popout */
-*
-{
+* {
     -webkit-touch-callout: none;
     -moz-touch-callout: none;
     -ms-touch-callout: none;
     touch-callout: none;
 }
 /* dragging of elements disable */
-*{
+* {
     -webkit-user-drag: none;
     -moz-user-drag: none;
     -ms-user-drag: none;
@@ -54,7 +52,7 @@ textarea
     -moz-transform: translateY(-100%) rotate(90deg); /* Firefox 3.6 Firefox 4 */
     -ms-transform: translateY(-100%) rotate(90deg); /* IE9 */
     -o-transform: translateY(-100%) rotate(90deg); /* Opera */
-    transform: translateY(-100%) rotate(90deg); /* W3C */  
+    transform: translateY(-100%) rotate(90deg); /* W3C */
     -webkit-transform-origin: left bottom;
     -moz-transform-origin: left bottom;
     -ms-transform-origin: left bottom;
@@ -74,132 +72,105 @@ textarea
 /* ----------- iPhone 4 and 4S ----------- */
 
 /* Portrait */
-@media only screen
-and (min-device-width: 320px)
-and (max-device-width: 480px)
-and (-webkit-min-device-pixel-ratio: 2)
-and (orientation: portrait) {
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
     .container {
-        padding-right: 0!important;
-        padding-left: 0!important;
+        padding-right: 0 !important;
+        padding-left: 0 !important;
     }
 }
 /* ----------- iPhone 5 and 5S ----------- */
 /* Portrait */
-@media only screen
-and (min-device-width: 320px)
-and (max-device-width: 568px)
-and (-webkit-min-device-pixel-ratio: 2)
-and (orientation: portrait) {
+@media only screen and (min-device-width: 320px) and (max-device-width: 568px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
     .container {
-        padding-right: 0!important;
-        padding-left: 0!important;
+        padding-right: 0 !important;
+        padding-left: 0 !important;
     }
 }
 /* ----------- iPhone 6 ----------- */
 /* Portrait */
-@media only screen
-and (min-device-width: 375px)
-and (max-device-width: 667px)
-and (-webkit-min-device-pixel-ratio: 2)
-and (orientation: portrait) {
+@media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
     .container {
-        padding-right: 0!important;
-        padding-left: 0!important;
+        padding-right: 0 !important;
+        padding-left: 0 !important;
     }
 }
 
 /* ----------- iPhone 6 + ----------- */
 /* Portrait */
-@media only screen
-and (min-device-width: 414px)
-and (max-device-width: 736px)
-and (-webkit-min-device-pixel-ratio: 3)
-and (orientation: portrait) {
+@media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (-webkit-min-device-pixel-ratio: 3) and (orientation: portrait) {
     .container {
-        padding-right: 0!important;
-        padding-left: 0!important;
+        padding-right: 0 !important;
+        padding-left: 0 !important;
     }
 }
 
 /* ----------- Galaxy S3 ----------- */
 /* Portrait */
-@media screen
-and (device-width: 320px)
-and (device-height: 640px)
-and (-webkit-device-pixel-ratio: 2)
-and (orientation: portrait) {
+@media screen and (device-width: 320px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait) {
     .container {
-        padding-right: 0!important;
-        padding-left: 0!important;
+        padding-right: 0 !important;
+        padding-left: 0 !important;
     }
 }
 /* ----------- Galaxy S4 ----------- */
 /* Portrait */
-@media screen
-and (device-width: 320px)
-and (device-height: 640px)
-and (-webkit-device-pixel-ratio: 3)
-and (orientation: portrait) {
+@media screen and (device-width: 320px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) {
     .container {
-        padding-right: 0!important;
-        padding-left: 0!important;
+        padding-right: 0 !important;
+        padding-left: 0 !important;
     }
-
 }
 /* ----------- Galaxy S5 ----------- */
 /* Portrait */
-@media screen
-and (device-width: 360px)
-and (device-height: 640px)
-and (-webkit-device-pixel-ratio: 3)
-and (orientation: portrait) {
+@media screen and (device-width: 360px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) {
     .container {
-        padding-right: 0!important;
-        padding-left: 0!important;
+        padding-right: 0 !important;
+        padding-left: 0 !important;
     }
 }
 /* -- card-header for messages in list --*/
 @media screen and (min-width: 768px) {
     .card-header-conversation {
-        padding: 5px 5px!important;
+        padding: 5px 5px !important;
     }
 }
 
 @media screen and (max-width: 991px) {
     .card-header-conversation {
-        padding: 5px 5px 5px!important;
+        padding: 5px 5px 5px !important;
     }
+
     .login-logo {
-        height: 50%!important;
-        width: 50%!important;
+        height: 50% !important;
+        width: 50% !important;
     }
 }
 
-.card-message{
+.card-message {
     width: 98% !important;
-    margin-bottom: 1px!important;
+    margin-bottom: 1px !important;
     margin-left: auto !important;
-    margin-right:auto !important;
-}
-.card-focused{
-    margin-top: 30px!important;
-    margin-bottom: 30px!important;
-    margin-left: auto !important;
-    margin-right:auto !important;
-    width:100%!important;
+    margin-right: auto !important;
 }
 
-.login{
+.card-focused {
+    margin-top: 30px !important;
+    margin-bottom: 30px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    width: 100% !important;
+}
+
+.login {
     display: flex !important;
-    align-items: center!important;
-    height:90% !important;
+    align-items: center !important;
+    height: 90% !important;
     padding-bottom: 80px;
 }
 
-.lc-block{
+.lc-block {
     display: block !important;
-    margin:0 auto !important;
+    margin: 0 auto !important;
 }
 
 .login-logo {
@@ -210,21 +181,25 @@ and (orientation: portrait) {
     text-align: center;
     padding-bottom: 40px;
 }
-#header{
-    position: relative!important;
+
+#header {
+    position: relative !important;
 }
+
 .header-logo {
     height: 50%;
     width: 50%;
 }
-#main{
-    padding: 0!important;
-    width:100%;
-    height:100%;
-    margin-top:0px;
+
+#main {
+    padding: 0 !important;
+    width: 100%;
+    height: 100%;
+    margin-top: 0px;
     position: fixed;
     overflow: auto;
 }
+
 .login-navigations {
     list-style: none;
     padding: 0;
@@ -236,28 +211,29 @@ and (orientation: portrait) {
     bottom: -45px;
 }
 
-.login-navigations >li {
-    display: inline-block;
-    margin: 0 2px;
-    -webkit-transition: all;
-    -o-transition: all;
-    transition: all;
-    -webkit-transition-duration: 150ms;
-    transition-duration: 150ms;
-    cursor: pointer;
-    vertical-align: top;
-    color: #fff;
-    line-height: 16px;
-    min-width: 16px;
-    min-height: 16px;
-    text-transform: uppercase;
-    -webkit-backface-visibility: hidden;
-    -moz-backface-visibility: hidden;
-    backface-visibility: hidden;
-    border-radius: 10px!important;
-    padding: 0 5px!important;
-    font-size: 8px!important;
-}
+    .login-navigations > li {
+        display: inline-block;
+        margin: 0 2px;
+        -webkit-transition: all;
+        -o-transition: all;
+        transition: all;
+        -webkit-transition-duration: 150ms;
+        transition-duration: 150ms;
+        cursor: pointer;
+        vertical-align: top;
+        color: #fff;
+        line-height: 16px;
+        min-width: 16px;
+        min-height: 16px;
+        text-transform: uppercase;
+        -webkit-backface-visibility: hidden;
+        -moz-backface-visibility: hidden;
+        backface-visibility: hidden;
+        border-radius: 10px !important;
+        padding: 0 5px !important;
+        font-size: 8px !important;
+    }
+
 .login-navigations {
     opacity: 1;
     filter: alpha(opacity=100);
@@ -269,17 +245,19 @@ and (orientation: portrait) {
     margin-bottom: -10px;
 }
 
-.view:after {
-    content: "";
-    display: block;
-}
-#footer, .view:after {
-    height: 10px;
-}
+    .view:after {
+        content: "";
+        display: block;
+    }
+
+    #footer, .view:after {
+        height: 10px;
+    }
+
 #footer {
     position: static;
-    padding-bottom: 35px!important;
-    padding-top: 15px!important;
+    padding-bottom: 35px !important;
+    padding-top: 15px !important;
 }
 
 /**Menu drawer below!! **/
@@ -299,7 +277,7 @@ and (orientation: portrait) {
 /* Show the "Drag" background in the demo */
 #content {
     /*background:#edecec url(drag.png) center 75% no-repeat;*/
-    background-color:#edecec;
+    background-color: #edecec;
     padding-left: 0px !important;
     padding-right: 0px !important;
 }
@@ -316,19 +294,19 @@ and (orientation: portrait) {
     height: 44px;
 }
 
-#toolbar h1 {
-    color: #fff;
-    font-size: 16px;
-    line-height: 22px;
-    text-align: center;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.8);
-    position: absolute;
-    top: 0;
-    right: 44px;
-    left: 44px;
-    width: auto;
-    height: 44px;
-}
+    #toolbar h1 {
+        color: #fff;
+        font-size: 16px;
+        line-height: 22px;
+        text-align: center;
+        text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.8);
+        position: absolute;
+        top: 0;
+        right: 44px;
+        left: 44px;
+        width: auto;
+        height: 44px;
+    }
 
 #open-left {
     background: url(open.png) center center no-repeat;
@@ -352,7 +330,8 @@ and (orientation: portrait) {
     text-align: center;
     line-height: 100px;
 }
-#do-drag{
+
+#do-drag {
     background: green;
 }
 
@@ -371,46 +350,50 @@ and (orientation: portrait) {
     padding: 20px;
     margin-bottom: 20px;
 }
-.button-list{
-    margin-top:10px;
-    padding:0 !important;
+
+.button-list {
+    margin-top: 10px;
+    padding: 0 !important;
 }
 
-.login-buttons{
-    width:100%;
+.login-buttons {
+    width: 100%;
 }
 
-.login-menu{
+.login-menu {
     bottom: 0 !important;
 }
-.login-menu ul{
-    list-style-type: none !important;
-    padding:0;
-}
-.login-menu li{
-    margin-top: 10px;
-}
+
+    .login-menu ul {
+        list-style-type: none !important;
+        padding: 0;
+    }
+
+    .login-menu li {
+        margin-top: 10px;
+    }
+
 .login-checkbox {
-    margin-top: 15px!important;
+    margin-top: 15px !important;
 }
 
 .inputfield {
-    width: 302px!important;
+    width: 302px !important;
     padding: 17px 17px 17px 40px;
-    text-align: center!important;
+    text-align: center !important;
     font-size: 15px;
     margin-bottom: 10px;
 }
 
-.login-form{
-    margin-top:-20px;
+.login-form {
+    margin-top: -20px;
     text-align: center;
-    display:block;
+    display: block;
 }
 
-.setting-form{
+.setting-form {
     text-align: center;
-    display:block;
+    display: block;
 }
 
 
@@ -439,10 +422,10 @@ and (orientation: portrait) {
     box-shadow: inset 0 1px 2px -1px rgba(0, 0, 0, 0.5),0 1px 2px -1px rgba(255, 255, 255, 0.4);
 }
 
-#search:focus {
-    outline: none;
-    border-color: #151515;
-}
+    #search:focus {
+        outline: none;
+        border-color: #151515;
+    }
 
 /* Styles for fading out the drawer content in the "Expanding" demo */
 .drawer-inner {
@@ -464,13 +447,13 @@ and (orientation: portrait) {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.opt p {
-    font-weight: bold;
-    margin-top: 0;
-    margin-bottom: 5px;
-    color: #222;
-    color: rgba(0, 0, 0, 0.6);
-}
+    .opt p {
+        font-weight: bold;
+        margin-top: 0;
+        margin-bottom: 5px;
+        color: #222;
+        color: rgba(0, 0, 0, 0.6);
+    }
 
 /* Default demo styles */
 .snap-content {
@@ -486,58 +469,59 @@ and (orientation: portrait) {
     color: #eee;
 }
 
-.snap-drawer h3 {
-    font-size: 36px;
-    font-weight: normal;
-    margin: 15px;
-}
+    .snap-drawer h3 {
+        font-size: 36px;
+        font-weight: normal;
+        margin: 15px;
+    }
 
-.snap-drawer h4 {
-    padding: 15px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    margin-bottom: 0;
-}
+    .snap-drawer h4 {
+        padding: 15px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 0;
+    }
 
-.snap-drawer ul {
-    padding: 0;
-    margin: 0;
-    list-style-type: none;
-}
+    .snap-drawer ul {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+    }
 
-.snap-drawer li > a {
-    display: block;
-    border-bottom: 1px solid rgba(0,0,0, 0.1);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    font-weight: bold;
-    text-shadow: 0 1px 0 #000;
-    text-decoration: none;
-    color: #ccc;
-    text-indent: 20px;
-}
+    .snap-drawer li > a {
+        display: block;
+        border-bottom: 1px solid rgba(0,0,0, 0.1);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        font-weight: bold;
+        text-shadow: 0 1px 0 #000;
+        text-decoration: none;
+        color: #ccc;
+        text-indent: 20px;
+    }
 
-.snap-drawer p {
-    opacity: 0.5;
-    padding: 15px;
-    font-size: 12px;
-}
+    .snap-drawer p {
+        opacity: 0.5;
+        padding: 15px;
+        font-size: 12px;
+    }
 
-.modal{
-    margin-top: 20%!important;
+.modal {
+    margin-top: 20% !important;
 }
 
 .loading-screen {
-    position:absolute;
-    top:0;
-    left:0;
-    width:100vw;
-    height:100vh;
-    background:white;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: white;
     z-index: 9999;
     pointer-events: none;
 }
+
 .spinner {
-    margin:0 auto!important;
-    margin-top:40vh!important;
+    margin: 0 auto !important;
+    margin-top: 40vh !important;
     height: 28px;
     width: 28px;
     animation: rotate 0.8s infinite linear;
@@ -547,8 +531,13 @@ and (orientation: portrait) {
 }
 
 @keyframes rotate {
-    0%    { transform: rotate(0deg); }
-    100%  { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 /* Conversation classes */
@@ -573,15 +562,15 @@ and (orientation: portrait) {
     list-style-type: none;
 }
 
-.convParticipants .username {
-    font-weight: bold;
-    color: #5e5e5e;
-    margin-left: 2px;
-    list-style-type: none;
-    overflow: hidden; 
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
+    .convParticipants .username {
+        font-weight: bold;
+        color: #5e5e5e;
+        margin-left: 2px;
+        list-style-type: none;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
 
 .latestMessage {
     display: inline-block;
@@ -603,7 +592,7 @@ and (orientation: portrait) {
 }*/
 
 .hoverOverride {
-  background-color: transparent !important;
+    background-color: transparent !important;
 }
 
 .tmpMessage {
@@ -616,4 +605,36 @@ and (orientation: portrait) {
     text-align: center;
     font-size: 1.3em !important;
     bottom: 0;
+}
+
+.listview.lv-lg .lv-item {
+    /*padding: 17px 35px 17px 20px !important;*/
+}
+
+.lv-footer {
+      /*padding: 0px 10px 8px !important;*/
+}
+
+.ms-reply {
+    text-align: left;
+}
+
+.ms-reply textarea {
+    width: calc( 100% - 47px );
+    /*padding: 17px 8px 10px 8px !important;*/
+}
+
+.container {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+
+@media (min-width: 1200px) {
+  .container {
+    width: 1200px !important;
+  }
+}
+
+#content {
+    overflow: hidden;
 }
