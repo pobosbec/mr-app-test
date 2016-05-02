@@ -5,11 +5,11 @@
         xmlns:gap = "http://phonegap.com/ns/1.0"
         xmlns:android = "http://schemas.android.com/apk/res/android"
         id        = "com.bosbec.test-app"
-        version   = "0.2.3d">
+        version   = "0.2.4">
   <!--id        = "com.phonegap.hello-world"-->
 
   <gap:config-file platform="ios" parent="CFBundleShortVersionString">
-    <string>0.2.3d</string>
+    <string>0.2.4</string>
   </gap:config-file>
 
   <gap:config-file platform="android" parent="/manifest">
