@@ -4,14 +4,7 @@
             <div class="lv-header-alt clearfix" style="height: 100% !important;">
                 <div id="ms-menu-trigger" data-ng-class="{ 'open': mactrl.lvMenuStat }" data-ng-click="mactrl.lvMenuStat = (mactrl.lvMenuStat===true ? false : true )">
                 </div>
-                <!--<a ui-sref="home" style="color: gray; width: 65px; height: 35px; display: inline-block; vertical-align: middle; line-height: 35px;">
-                    <i class="zmdi zmdi-arrow-left zmdi-hc-2x waves-effect" style="vertical-align: middle; font-size: 24px"></i>
-                    <i class="zmdi zmdi-arrow-left zmdi-hc-2x waves-effect" style="vertical-align: middle; font-size: 24px"></i>
-                </a>-->
-
-                <!--<button class="btn btn-default btn-icon-text waves-effect" ui-sref="home"><i class="zmdi zmdi-arrow-back"></i> Back</button>-->
                 <button class="btn btn-default btn-icon waves-effect waves-circle" ui-sref="home"><i class="zmdi zmdi-arrow-back"></i></button>
-
                 <div class="lvh-label">
                     <ul style="list-style-type: none; margin: 0; padding: 0; width: 230px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden">
                         <li ng-repeat="id in conversation.Participants" style="display: inline; margin-right: 10px">{{getUsername(id)}} {{$last ? '' : ', '}}</li>
@@ -26,22 +19,28 @@
                     <a href="" ng-click="loadMoreForConversation(conversation.ConversationId)"><i class="zmdi zmdi-refresh-alt"></i> Load More...</a>
                 </div>
                 <loading></loading>
-                <div class="lv-item" ng-repeat="message in conversation.Messages | orderBy: sortMessage" ng-class="message.Author === userId ? 'media right': 'media'" my-post-repeat-directive>
+                <div class="lv-item" ng-repeat="message in conversation.Messages track by message.MessageId | orderBy: sortMessage" ng-class="message.Author === userId ? 'media right': 'media'" my-post-repeat-directive>
                     <div class="lv-avatar" ng-class="message.Author === userId ? 'pull-right': 'pull-left'">
                         <img ng-src="{{ getAvatar(message.Author) || 'img/profile-pics/5.jpg' }}" alt="">
                     </div>
                     <div class="media-body">
                         <div class="ms-item">
                             {{ message.Content }}
+                            <p ng-if="message.Failed" style="font-size: 12px" ng-click="reply()">
+                                <i>Try send again.</i>
+                            </p>
                         </div>
                         <small class="ms-date"><span ng-if="checkIfGroupConversation()" style="margin-right: 5px">{{getUsername(message.Author)}}</span><i class="zmdi zmdi-time"></i> <span ng-show="formatMode(message.CreatedOn)==1">{{format(message.CreatedOn) | amTimeAgo}}</span><span ng-show="formatMode(message.CreatedOn)==2">{{format(message.CreatedOn) | amDateFormat:'D MMM HH:mm'}}</span><span ng-show="formatMode(message.CreatedOn)==3">{{format(message.CreatedOn) | amDateFormat:'YYYY-MM-DD HH:mm'}}</span></small>
+                    </div>
+                    <div ng-if="message.tmpMessage === true" style="opacity: 0.2">
+                        Sending
                     </div>
                 </div>
             </div>
             <div class="clearfix"></div>
             <div class="lv-footer ms-reply">
                 <textarea placeholder="Reply..." style="height: auto !important;" ng-model="currentReplyMessage"></textarea>
-                <button ng-click="reply(currentReplyMessage, conversation.ConversationId);">
+                <button ng-click="reply()">
                     <i class="zmdi zmdi-mail-send"></i>
                 </button>
             </div>

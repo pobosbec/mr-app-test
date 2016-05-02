@@ -606,6 +606,10 @@ and (orientation: portrait) {
   background-color: transparent !important;
 }
 
+.tmpMessage {
+    opacity: 0.5;
+}
+
 .load-more .bottom {
     background-color: rgb(237, 236, 235);
     width: 100%;
