@@ -454,6 +454,7 @@ angular.module('conversations', [])
 
                     $scope.conversation.Messages.push(msg);
 
+                    // ugly solution, should be a directive
                     $timeout(function () {
                         var scroller = document.getElementById('conversationMessagesBody');
                         scroller.scrollTop = scroller.scrollHeight;
@@ -587,6 +588,12 @@ angular.module('conversations', [])
                                 PageIndex: 0,
                                 PageSize: 50
                             };
+
+                            $timeout(function () {
+                                var scroller = document.getElementById('conversationMessagesBody');
+                                scroller.scrollTop = scroller.scrollHeight;
+                            }, 0, false);
+
                             $rootScope.$broadcast('download-messages', args);
                         },
                         function (error) {
