@@ -277,16 +277,26 @@ mobileresponseWebbApp
         };
     })
 
-    .directive('myPostRepeatDirective', function () {
+    .directive('goToBottom', function () {
         return function (scope, element, attrs) {
-            if (scope.$last) {
-                // iteration is complete, do whatever post-processing
-                // is necessary
                 var el = document.querySelector('#conversationMessagesBody');
                 el.scrollTop = el.scrollHeight;
-                // element.parent().css('border', '1px solid black');
-            }
         };
+    })
+
+    .directive('scrollBottom', function () {
+        return {
+            scope: {
+                scrollBottom: "="
+            },
+            link: function (scope, element) {
+                scope.$watchCollection('scrollBottom', function (newValue) {
+                    if (newValue) {
+                        $(element).scrollTop($(element)[0].scrollHeight);
+                    }
+                });
+            }
+        }
     })
 
     // =========================================================================

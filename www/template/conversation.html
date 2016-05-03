@@ -25,15 +25,19 @@
                     </div>
                     <div class="media-body">
                         <div class="ms-item">
-                            {{ message.Content }}
-                            <p ng-if="message.Failed" style="font-size: 12px" ng-click="reply()">
-                                <i>Try send again.</i>
+                            <p>{{ message.Content }}</p>
+                            <p ng-if="message.Failed" style="font-size: 12px" ng-click="resendMessage(message)">
+                                <button class="btn btn-default waves-effect"><i class="zmdi zmdi-refresh"></i></button>
                             </p>
                         </div>
-                        <small class="ms-date"><span ng-if="checkIfGroupConversation()" style="margin-right: 5px">{{getUsername(message.Author)}}</span><i class="zmdi zmdi-time"></i> <span ng-show="formatMode(message.CreatedOn)==1">{{format(message.CreatedOn) | amTimeAgo}}</span><span ng-show="formatMode(message.CreatedOn)==2">{{format(message.CreatedOn) | amDateFormat:'D MMM HH:mm'}}</span><span ng-show="formatMode(message.CreatedOn)==3">{{format(message.CreatedOn) | amDateFormat:'YYYY-MM-DD HH:mm'}}</span></small>
-                    </div>
-                    <div ng-if="message.tmpMessage === true" style="opacity: 0.2">
-                        Sending
+                        <small class="ms-date">
+                            <span ng-if="checkIfGroupConversation()" style="margin-right: 5px">{{getUsername(message.Author)}}</span>
+                            <span ng-if="message.Failed"><small><i>Message could not be sent. Try again by pressing refresh button.</i></small></span>
+                            <i class="zmdi zmdi-time"></i>
+                            <span ng-show="formatMode(message.CreatedOn)==1">{{format(message.CreatedOn) | amTimeAgo}}</span>
+                            <span ng-show="formatMode(message.CreatedOn)==2">{{format(message.CreatedOn) | amDateFormat:'D MMM HH:mm'}}</span>
+                            <span ng-show="formatMode(message.CreatedOn)==3">{{format(message.CreatedOn) | amDateFormat:'YYYY-MM-DD HH:mm'}}</span>
+                        </small>
                     </div>
                 </div>
             </div>

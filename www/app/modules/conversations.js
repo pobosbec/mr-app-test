@@ -411,7 +411,7 @@ angular.module('conversations', [])
             init();
         }])
     .controller('conversationCtrl', [
-            '$scope', '$http', '$rootScope', 'tokenService', 'contactsService', 'communicationService', 'messageRepository', '$stateParams', '$uibModal', 'moment', function ($scope, $http, $rootScope, tokenService, contactsService, communicationService, messageRepository, $stateParams, $uibModal, angularMoment) {
+            '$scope', '$http', '$rootScope', 'tokenService', 'contactsService', 'communicationService', 'messageRepository', '$stateParams', '$uibModal', 'moment', '$timeout', function ($scope, $http, $rootScope, tokenService, contactsService, communicationService, messageRepository, $stateParams, $uibModal, angularMoment, $timeout) {
                 $scope.conversationId = $stateParams.conversationId;
                 $scope.userId = null;
                 $scope.conversation = {};
@@ -431,10 +431,18 @@ angular.module('conversations', [])
                         return;
                     }
 
-                    $scope.unConfirmedIds++;
+                    function guid() {
+                        function s4() {
+                            return Math.floor((1 + Math.random()) * 0x10000)
+                              .toString(16)
+                              .substring(1);
+                        }
+                        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                          s4() + '-' + s4() + s4() + s4();
+                    }
 
                     var msg = {
-                        tmpId: $scope.unConfirmedIds,
+                        MessageId: guid(),
                         ConversationId: $scope.conversationId,
                         CreatedOn: new Date().toJSON(),
                         Content: $scope.currentReplyMessage,
@@ -444,6 +452,11 @@ angular.module('conversations', [])
                     };
 
                     $scope.conversation.Messages.push(msg);
+
+                    $timeout(function () {
+                        var scroller = document.getElementById('conversationMessagesBody');
+                        scroller.scrollTop = scroller.scrollHeight;
+                    }, 0, false);
 
                     var req = {
                         method: 'POST',
@@ -468,29 +481,96 @@ angular.module('conversations', [])
                     promise.then(
                         function (success) {
 
+                            if (success.errors.length > 0) {
+                                for (var j = 0; j < success.errors.length; j++) {
+                                    console.error(success.errors[j].errorMessage);
+                                }
+                                msg.Failed = true;
+                                return;
+                            }
+
                             var foundIndex = -1;
 
                             for (var i = 0; i < $scope.conversation.Messages.length; i++) {
                                 var msgInArray = $scope.conversation.Messages[i];
-                                if (msgInArray.tmpId != null && msgInArray.tmpId != undefined) {
-                                    if (msgInArray.tmpId === msg.tmpId) {
-                                        foundIndex = i;
-                                    }
+                                if (msgInArray.MessageId === msg.MessageId) {
+                                    foundIndex = i;
                                 }
                             }
 
-                            var newMsg = {
-                                MessageId: success.data.messageId,
-                                ParticipantId: success.data.participantId,
-                                ConversationId: success.data.conversationId,
-                                AuthorDisplayName: success.data.authorDisplayName,
-                                Author: success.data.authorId,
-                                CreatedOn: success.data.createdOn,
-                                Content: success.data.content,
-                                IsRead: success.data.isRead
+                            $scope.conversation.Messages[foundIndex].MessageId = success.data.messageId;
+                            $scope.conversation.Messages[foundIndex].CreatedOn = success.data.createdOn;
+                            $scope.conversation.Messages[foundIndex].ParticipantId = success.data.participantId;
+                            $scope.conversation.Messages[foundIndex].ConversationId = success.data.conversationId;
+                            $scope.conversation.Messages[foundIndex].AuthorDisplayName = success.data.authorDisplayName;
+                            $scope.conversation.Messages[foundIndex].Author = success.data.authorId;
+                            $scope.conversation.Messages[foundIndex].Author = success.data.authorId;
+                            $scope.conversation.Messages[foundIndex].tmpMessage = false;
+
+                            var fiveMinutesAgo = new Date();
+                            fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5);
+                            var args = {
+                                PeriodStart: fiveMinutesAgo,
+                                PeriodEnd: new Date().toJSON(),
+                                PageIndex: 0,
+                                PageSize: 50
+                            };
+                            $rootScope.$broadcast('download-messages', args);
+                        },
+                        function (error) {
+                            msg.Failed = true;
+                            console.log('Could not reply to conversation.');
+                        });
+                }
+
+                $scope.resendMessage = function (message) {
+
+                    var req = {
+                        method: 'POST',
+                        url: tokenService.currentAppApiUrl + 'app/conversations/reply',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        data: {
+                            Data: {
+                                ConversationId: $scope.conversationId,
+                                Message: message.Content,
+                                MetaData: []
+                            },
+                            AuthenticationToken: tokenService.getAppAuthToken()
+                        }
+                    };
+
+                    var promise = tokenService.httpPost(req);
+
+                    promise.then(
+                        function (success) {
+
+                            if (success.errors.length > 0) {
+                                for (var j = 0; j < success.errors.length; j++) {
+                                    console.error(success.errors[j].errorMessage);
+                                }
+                                message.Failed = true;
+                                return;
                             }
 
-                            $scope.conversation.Messages[foundIndex] = newMsg;
+                            var foundIndex = -1;
+
+                            for (var i = 0; i < $scope.conversation.Messages.length; i++) {
+                                var msgInArray = $scope.conversation.Messages[i];
+                                if (msgInArray.MessageId === msg.MessageId) {
+                                    foundIndex = i;
+                                }
+                            }
+
+                            $scope.conversation.Messages[foundIndex].MessageId = success.data.messageId;
+                            $scope.conversation.Messages[foundIndex].CreatedOn = success.data.createdOn;
+                            $scope.conversation.Messages[foundIndex].ParticipantId = success.data.participantId;
+                            $scope.conversation.Messages[foundIndex].ConversationId = success.data.conversationId;
+                            $scope.conversation.Messages[foundIndex].AuthorDisplayName = success.data.authorDisplayName;
+                            $scope.conversation.Messages[foundIndex].Author = success.data.authorId;
+                            $scope.conversation.Messages[foundIndex].tmpMessage = false;
+                            $scope.conversation.Messages[foundIndex].Failed = false;
 
                             var fiveMinutesAgo = new Date();
                             fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5);
@@ -714,6 +794,10 @@ angular.module('conversations', [])
                         conversationMessagesPromise.then(
                             function (conversationMessagesSuccess) {
                                 $scope.conversation.Messages = conversationMessagesSuccess;
+                                $timeout(function () {
+                                    var scroller = document.getElementById('conversationMessagesBody');
+                                    scroller.scrollTop = scroller.scrollHeight;
+                                }, 0, false);
                             },
                             function (error) {
                                 console.log('Could not get messages for conversation. Error: ' + JSON.stringify(error));
