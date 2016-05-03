@@ -6,11 +6,14 @@ angular.module('communication', [])
         var factory = {};
         var inboxId = '8a0958a2-a163-4a20-8afa-e7315012e2d8';
 
-        //var fetchMessagesInterval = setInterval(function () {
-        //    var oneMinuteAgo = new Date();
-        //    oneMinuteAgo.setMinutes(oneMinuteAgo.getMinutes() - 1);
-        //    factory.syncPeriodMessages(oneMinuteAgo.toJSON(), new Date().toJSON(), 0, 20);
-        //}, 1000);
+        var fetchMessagesInterval;
+        if (!window.isPhoneGap) {
+            fetchMessagesInterval = setInterval(function () {
+                var oneMinuteAgo = new Date();
+                oneMinuteAgo.setMinutes(oneMinuteAgo.getMinutes() - 1);
+                factory.syncPeriodMessages(oneMinuteAgo.toJSON(), new Date().toJSON(), 0, 20);
+            }, 5000);
+        }
 
         var downloadMessages = function (periodStart, periodEnd, pageIndex, pageSize) {
             var req = {
@@ -169,9 +172,20 @@ angular.module('communication', [])
                     factory.downloadMessagesForConversation(args.ConversationId, false, args.PageIndex, args.PageSize);
                     break;
                 case 'logged-out':
+                    if (!window.isPhoneGap) {
+                        clearInterval(fetchMessagesInterval);
+                    }
                     break;
                 case 'logged-in':
-                var fiveMinutesAgo = new Date();
+                    if (!window.isPhoneGap) {
+                        clearInterval(fetchMessagesInterval);
+                        fetchMessagesInterval = setInterval(function () {
+                            var oneMinuteAgo = new Date();
+                            oneMinuteAgo.setMinutes(oneMinuteAgo.getMinutes() - 1);
+                            factory.syncPeriodMessages(oneMinuteAgo.toJSON(), new Date().toJSON(), 0, 20);
+                        }, 5000);
+                    }
+                    var fiveMinutesAgo = new Date();
                     fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5);
                     factory.syncPeriodMessages(fiveMinutesAgo.toJSON(), new Date().toJSON(), 0, 50);
                     break;
