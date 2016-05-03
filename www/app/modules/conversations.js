@@ -448,7 +448,8 @@ angular.module('conversations', [])
                         Content: $scope.currentReplyMessage,
                         Author: $scope.userId,
                         Failed: false,
-                        tmpMessage: true
+                        tmpMessage: true,
+                        Retrying: false
                     };
 
                     $scope.conversation.Messages.push(msg);
@@ -495,6 +496,7 @@ angular.module('conversations', [])
                                 var msgInArray = $scope.conversation.Messages[i];
                                 if (msgInArray.MessageId === msg.MessageId) {
                                     foundIndex = i;
+                                    continue;
                                 }
                             }
 
@@ -525,6 +527,8 @@ angular.module('conversations', [])
 
                 $scope.resendMessage = function (message) {
 
+                    message.Retrying = true;
+
                     var req = {
                         method: 'POST',
                         url: tokenService.currentAppApiUrl + 'app/conversations/reply',
@@ -546,6 +550,8 @@ angular.module('conversations', [])
                     promise.then(
                         function (success) {
 
+                            message.Retrying = false;
+
                             if (success.errors.length > 0) {
                                 for (var j = 0; j < success.errors.length; j++) {
                                     console.error(success.errors[j].errorMessage);
@@ -558,8 +564,9 @@ angular.module('conversations', [])
 
                             for (var i = 0; i < $scope.conversation.Messages.length; i++) {
                                 var msgInArray = $scope.conversation.Messages[i];
-                                if (msgInArray.MessageId === msg.MessageId) {
+                                if (msgInArray.MessageId === message.MessageId) {
                                     foundIndex = i;
+                                    continue;
                                 }
                             }
 

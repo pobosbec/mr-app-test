@@ -25,10 +25,16 @@
                     </div>
                     <div class="media-body">
                         <div class="ms-item">
-                            <p>{{ message.Content }}</p>
-                            <p ng-if="message.Failed" style="font-size: 12px" ng-click="resendMessage(message)">
+                            {{ message.Content }} <div ng-if="message.Failed" style="font-size: 12px; display: inline-flex; padding-left: 10px" ng-click="resendMessage(message)">
                                 <button class="btn btn-default waves-effect"><i class="zmdi zmdi-refresh"></i></button>
-                            </p>
+                                <div ng-if="message.Retrying" style="padding-left: 10px; display: inline-flex">
+                                    <div class="preloader pl-xs">
+                                        <svg class="pl-circular" viewBox="25 25 50 50">
+                                            <circle class="plc-path" cx="50" cy="50" r="20"></circle>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <small class="ms-date">
                             <span ng-if="checkIfGroupConversation()" style="margin-right: 5px">{{getUsername(message.Author)}}</span>
