@@ -158,7 +158,7 @@ angular.module('communication', [])
         factory.on = function (event, args) {
             switch (event.name) {
                 case 'download-messages':
-                    factory.syncPeriodMessages(args.PeriodStart, args.PeriodEnd, args.Index, args.Size);
+                    factory.syncPeriodMessages(args.PeriodStart, args.PeriodEnd, args.PageIndex, args.PageSize);
                     break;
                 case 'push-notification':
                     var fiveMinutesAgo = new Date();

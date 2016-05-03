@@ -630,10 +630,7 @@ angular.module('token', [])
         factory.keepTokenAlive();
 
         return factory;
-
-
-
-    }])
+    }]);
 
 
 var timerResults = [];
