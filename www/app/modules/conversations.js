@@ -394,12 +394,30 @@ angular.module('conversations', [])
                 $scope.pageSize = 10;
                 $scope.isGroupConversation = false;
                 $scope.isLoading = false;
+                $scope.unConfirmedIds = 0;
+                $scope.currentReplyMessage = null;
 
                 /* Reply to the current conversation
-             */
-                $scope.reply = function (message, conversationId) {
+                */
+                $scope.reply = function () {
 
-                    $scope.currentReplyMessage = "";
+                    if ($scope.currentReplyMessage === null || $scope.currentReplyMessage === '' || $scope.currentReplyMessage === undefined) {
+                        return;
+                    }
+
+                    $scope.unConfirmedIds++;
+
+                    var msg = {
+                        tmpId: $scope.unConfirmedIds,
+                        ConversationId: $scope.conversationId,
+                        CreatedOn: new Date().toJSON(),
+                        Content: $scope.currentReplyMessage,
+                        Author: $scope.userId,
+                        Failed: false,
+                        tmpMessage: true
+                    };
+
+                    $scope.conversation.Messages.push(msg);
 
                     var req = {
                         method: 'POST',
@@ -409,24 +427,57 @@ angular.module('conversations', [])
                         },
                         data: {
                             Data: {
-                                ConversationId: conversationId,
-                                Message: message,
+                                ConversationId: $scope.conversationId,
+                                Message: $scope.currentReplyMessage,
                                 MetaData: []
                             },
                             AuthenticationToken: tokenService.getAppAuthToken()
                         }
                     };
 
+                    $scope.currentReplyMessage = null;
+
                     var promise = tokenService.httpPost(req);
 
                     promise.then(
                         function (success) {
+
+                            var foundIndex = -1;
+
+                            for (var i = 0; i < $scope.conversation.Messages.length; i++) {
+                                var msgInArray = $scope.conversation.Messages[i];
+                                if (msgInArray.tmpId != null && msgInArray.tmpId != undefined) {
+                                    if (msgInArray.tmpId === msg.tmpId) {
+                                        foundIndex = i;
+                                    }
+                                }
+                            }
+
+                            var newMsg = {
+                                MessageId: success.data.messageId,
+                                ParticipantId: success.data.participantId,
+                                ConversationId: success.data.conversationId,
+                                AuthorDisplayName: success.data.authorDisplayName,
+                                Author: success.data.authorId,
+                                CreatedOn: success.data.createdOn,
+                                Content: success.data.content,
+                                IsRead: success.data.isRead
+                            }
+
+                            $scope.conversation.Messages[foundIndex] = newMsg;
+
                             var fiveMinutesAgo = new Date();
                             fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5);
-                            var args = { PeriodStart: fiveMinutesAgo, PeriodEnd: new Date().toJSON(), PageIndex: 0, PageSize: 50 };
+                            var args = {
+                                PeriodStart: fiveMinutesAgo,
+                                PeriodEnd: new Date().toJSON(),
+                                PageIndex: 0,
+                                PageSize: 50
+                            };
                             $rootScope.$broadcast('download-messages', args);
                         },
                         function (error) {
+                            msg.Failed = true;
                             console.log('Could not reply to conversation.');
                         });
                 }
@@ -446,11 +497,11 @@ angular.module('conversations', [])
                 $scope.formatMode = function (dateString) {
                     var then = angularMoment(dateString + "+00:00");
                     var now = angularMoment();
-                    if (now.subtract(1,'day') < then) {
+                    if (now.subtract(1, 'day') < then) {
                         return 1;
                     } else if (now.subtract(1, 'year') < then) {
                         return 2;
-                    }  else {
+                    } else {
                         return 3;
                     }
                 }
