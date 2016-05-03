@@ -19,7 +19,7 @@
                     <a href="" ng-click="loadMoreForConversation(conversation.ConversationId)"><i class="zmdi zmdi-refresh-alt"></i> Load More...</a>
                 </div>
                 <loading></loading>
-                <div class="lv-item" ng-repeat="message in conversation.Messages track by message.MessageId | orderBy: sortMessage" ng-class="message.Author === userId ? 'media right': 'media'" my-post-repeat-directive>
+                <div class="lv-item" ng-repeat="message in conversation.Messages | orderBy: sortMessage track by message.MessageId" ng-class="message.Author === userId ? 'media right': 'media'" my-post-repeat-directive>
                     <div class="lv-avatar" ng-class="message.Author === userId ? 'pull-right': 'pull-left'">
                         <img ng-src="{{ getAvatar(message.Author) || 'img/profile-pics/5.jpg' }}" alt="">
                     </div>

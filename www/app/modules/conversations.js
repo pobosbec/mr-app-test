@@ -3,7 +3,7 @@
  */
 angular.module('conversations', [])
     .controller('conversationsCtrl', [
-        '$scope', '$http', '$rootScope', 'tokenService', 'contactsService', '$q', 'communicationService', 'messageRepository', function ($scope, $http, $rootScope, tokenService, contactsService, $q, communicationService, messageRepository) {
+        '$scope', '$http', '$rootScope', 'tokenService', 'contactsService', '$q', 'communicationService', 'messageRepository', 'moment', function ($scope, $http, $rootScope, tokenService, contactsService, $q, communicationService, messageRepository, angularMoment) {
             $scope.isPhoneGap = window.isPhoneGap;
             $scope.isLoading = true;
             $scope.conversations = [];
@@ -73,6 +73,14 @@ angular.module('conversations', [])
                 var sortOrder = 0;
                 if (convo.Messages.length) {
                     sortOrder = new Date(convo.Messages[0].createdOn);
+                }
+                return 0 - sortOrder;
+            }
+
+            $scope.messagesSorting = function(message) {
+                var sortOrder = 0;
+                if (message.hasOwnProperty('createdOn')) {
+                    sortOrder = new Date(message.createdOn);
                 }
                 return 0 - sortOrder;
             }
@@ -196,6 +204,24 @@ angular.module('conversations', [])
                         console.log(error);
                     });
             });
+
+            $scope.formatMode = function (dateString) {
+                var then = angularMoment(dateString + "+00:00");
+                var now = angularMoment();
+                if (now.subtract(1, 'day') < then) {
+                    return 1;
+                } else if (now.subtract(1, 'year') < then) {
+                    return 2;
+                } else {
+                    return 3;
+                }
+            }
+
+            $scope.format = function (dateString) {
+                var parsed = angularMoment(dateString + "+00:00");
+                var returnV = parsed.format('YYYY-MM-DD HH:mm:ss Z');
+                return returnV;
+            }
 
             function addConversations(conversations, conversationsLimit, conversationMessages) {
                 if (typeof conversationsLimit != "number") {

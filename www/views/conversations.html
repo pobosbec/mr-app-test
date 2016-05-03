@@ -10,7 +10,15 @@
                                 <small ng-repeat="participant in conversation.Participants | orderBy: selfFirst" class="username">{{$first ? "You" : getUsername(participant) || "unknown" }}{{$last ? '' : ', '}}</small>
                             </div>
                         </li>
-                        <li ng-repeat="message in conversation.Messages | limitTo: 1"><small class="latestMessage" ng-class="{'unreadMessage':! message.isRead}">{{message.authorDisplayName}}: {{message.content}}</small>&nbsp;</li>
+                        <li ng-repeat="message in conversation.Messages | orderBy: messagesSorting | limitTo: 1">
+                            <small class="latestMessage" ng-class="{'unreadMessage':! message.isRead}">{{message.authorDisplayName}}: {{message.content}}</small>&nbsp;
+                            <small class="ms-date">
+                                <i class="zmdi zmdi-time"></i>
+                                <span ng-show="formatMode(message.createdOn)==1">{{format(message.createdOn) | amTimeAgo}}</span>
+                                <span ng-show="formatMode(message.createdOn)==2">{{format(message.createdOn) | amDateFormat:'D MMM HH:mm'}}</span>
+                                <span ng-show="formatMode(message.createdOn)==3">{{format(message.createdOn) | amDateFormat:'YYYY-MM-DD HH:mm'}}</span>
+                            </small>
+                        </li>
                     </ul>
                 </div>
             </a>
