@@ -597,6 +597,7 @@ angular.module('conversations', [])
                             $rootScope.$broadcast('download-messages', args);
                         },
                         function (error) {
+                            message.Retrying = false;
                             msg.Failed = true;
                             console.log('Could not reply to conversation.');
                         });
