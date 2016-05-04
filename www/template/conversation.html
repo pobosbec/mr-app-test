@@ -1,5 +1,6 @@
 <div class="card m-b-0" style="height: auto; overflow: hidden; margin-bottom: -12px !important; padding: 0px;">
     <div class="ms-body">
+        <div scroll-on-click href="#messagesBottom" ng-show="unseenMessages" class="btn btn-default waves-effect" style="background:#edecec; z-index:999;position:absolute; bottom:70px;    left: calc( 50% - 5em); text-align:center;">New messages <i class="zmdi zmdi-long-arrow-down"></i></div>
         <div class="listview lv-message">
             <div class="lv-header-alt clearfix" style="height: 100% !important;">
                 <div id="ms-menu-trigger" data-ng-class="{ 'open': mactrl.lvMenuStat }" data-ng-click="mactrl.lvMenuStat = (mactrl.lvMenuStat===true ? false : true )">
@@ -14,7 +15,7 @@
                     <i class="zmdi zmdi-info-outline zmdi-hc-fw" style="font-size: 24px; color: gray"></i>
                 </a>
             </div>
-            <div class="lv-body" style="height: calc(100vh - 123px) !important; overflow-y: scroll" id="conversationMessagesBody">
+            <div class="lv-body" style="height: calc(100vh - 123px) !important; overflow-y: scroll" id="conversationMessagesBody" scroll-position-check>
                 <div style="background-color: rgb(237, 236, 235); width: 100%; text-align: center; font-size: 1.2em !important">
                     <a href="" ng-click="loadMoreForConversation(conversation.ConversationId)"><i class="zmdi zmdi-refresh-alt"></i> Load More...</a>
                 </div>
@@ -25,7 +26,8 @@
                     </div>
                     <div class="media-body">
                         <div class="ms-item">
-                            {{ message.Content }} <div ng-if="message.Failed" style="font-size: 12px; display: inline-flex; padding-left: 10px" ng-click="resendMessage(message)">
+                            {{ message.Content }}
+                            <div ng-if="message.Failed" style="font-size: 12px; display: inline-flex; padding-left: 10px" ng-click="resendMessage(message)">
                                 <button class="btn btn-default waves-effect"><i class="zmdi zmdi-refresh"></i></button>
                                 <div ng-if="message.Retrying" style="padding-left: 10px; display: inline-flex">
                                     <div class="preloader pl-xs">
@@ -46,6 +48,7 @@
                         </small>
                     </div>
                 </div>
+                <span id="messagesBottom"></span>
             </div>
             <div class="clearfix"></div>
             <div class="lv-footer ms-reply">

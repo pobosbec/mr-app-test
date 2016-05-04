@@ -4,37 +4,38 @@ mobileresponseWebbApp
     // =========================================================================
     // MAINMENU COLLAPSE
     // =========================================================================
-    .directive("outsideClick", ['$document', '$parse', function ($document, $parse) {
-        return {
-            link: function ($scope, $element, $attributes) {
-                var scopeExpression = $attributes.outsideClick,
-                    onDocumentClick = function (event) {
-                        // For declaring elements that are treated as "inside" without actually being inside.
-                        var ignoreOutsideClick = false;
-                        if (event.target.dataset["treatAsChildWhenOutside"] === "true" || $(event.target).parents('*[data-treat-as-child-when-outside="true"]').length) {
-                            ignoreOutsideClick = true;
-                        }
+    .directive("outsideClick", [
+        '$document', '$parse', function ($document, $parse) {
+            return {
+                link: function ($scope, $element, $attributes) {
+                    var scopeExpression = $attributes.outsideClick,
+                        onDocumentClick = function (event) {
+                            // For declaring elements that are treated as "inside" without actually being inside.
+                            var ignoreOutsideClick = false;
+                            if (event.target.dataset["treatAsChildWhenOutside"] === "true" || $(event.target).parents('*[data-treat-as-child-when-outside="true"]').length) {
+                                ignoreOutsideClick = true;
+                            }
 
-                        var isChild = $element.find(event.target).length > 0;
+                            var isChild = $element.find(event.target).length > 0;
 
-                        if (!ignoreOutsideClick && !isChild) {
-                            $scope.$apply(scopeExpression);
-                        }
-                    };
+                            if (!ignoreOutsideClick && !isChild) {
+                                $scope.$apply(scopeExpression);
+                            }
+                        };
 
-                $document.on("click", onDocumentClick);
+                    $document.on("click", onDocumentClick);
 
-                $element.on('$destroy', function () {
-                    $document.off("click", onDocumentClick);
-                });
+                    $element.on('$destroy', function () {
+                        $document.off("click", onDocumentClick);
+                    });
+                }
             }
         }
-    }])
+    ])
 
     // =========================================================================
     // MAINMENU COLLAPSE
     // =========================================================================
-
     .directive('toggleSidebar', function () {
         return {
             restrict: 'A',
@@ -50,8 +51,7 @@ mobileresponseWebbApp
                             scope.$apply(function () {
                                 scope.modelLeft = true;
                             })
-                        }
-                        else {
+                        } else {
                             scope.$apply(function () {
                                 scope.modelLeft = false;
                             })
@@ -63,8 +63,7 @@ mobileresponseWebbApp
                             scope.$apply(function () {
                                 scope.modelRight = true;
                             })
-                        }
-                        else {
+                        } else {
                             scope.$apply(function () {
                                 scope.modelRight = false;
                             });
@@ -97,6 +96,7 @@ mobileresponseWebbApp
         function link(scope, element) {
 
         }
+
         return {
             restrict: 'AE',
             link: link,
@@ -126,7 +126,6 @@ mobileresponseWebbApp
             }
         }
     })
-
     .directive('aPrevent', function () {
         return {
             restrict: 'C',
@@ -141,79 +140,79 @@ mobileresponseWebbApp
 // =========================================================================
 // Strong password
 // =========================================================================
-.directive("strongPassword", function () {
-    return {
+    .directive("strongPassword", function () {
+        return {
 
-        // limit usage to argument only
-        restrict: 'A',
+            // limit usage to argument only
+            restrict: 'A',
 
-        // require NgModelController, i.e. require a controller of ngModel directive
-        require: "ngModel",
+            // require NgModelController, i.e. require a controller of ngModel directive
+            require: "ngModel",
 
-        // create linking function and pass in our NgModelController as a 4th argument
-        link: function (scope, elem, attrs, ctrl) {
+            // create linking function and pass in our NgModelController as a 4th argument
+            link: function (scope, elem, attrs, ctrl) {
 
-            // please note you can name your function & argument anything you like
-            function customValidator(ngModelValue) {
+                // please note you can name your function & argument anything you like
+                function customValidator(ngModelValue) {
 
-                // check if contains uppercase
-                // if it does contain uppercase, set our custom `uppercaseValidator` to valid/true
-                // otherwise set it to non-valid/false
-                if (/[A-Z]/.test(ngModelValue)) {
-                    ctrl.$setValidity('uppercaseValidator', true);
-                } else {
-                    ctrl.$setValidity('uppercaseValidator', false);
+                    // check if contains uppercase
+                    // if it does contain uppercase, set our custom `uppercaseValidator` to valid/true
+                    // otherwise set it to non-valid/false
+                    if (/[A-Z]/.test(ngModelValue)) {
+                        ctrl.$setValidity('uppercaseValidator', true);
+                    } else {
+                        ctrl.$setValidity('uppercaseValidator', false);
+                    }
+
+                    // check if contains lowercase
+                    // if it does contain lowercase, set our custom `lowercaseValidator` to valid/true
+                    // otherwise set it to non-valid/false
+                    if (/[a-z]/.test(ngModelValue)) {
+                        ctrl.$setValidity('lowercaseValidator', true);
+                    } else {
+                        ctrl.$setValidity('lowercaseValidator', false);
+                    }
+
+                    // check if contains number
+                    // if it does contain number, set our custom `numberValidator`  to valid/true
+                    // otherwise set it to non-valid/false
+                    if (/[0-9]/.test(ngModelValue)) {
+                        ctrl.$setValidity('numberValidator', true);
+                    } else {
+                        ctrl.$setValidity('numberValidator', false);
+                    }
+
+                    // check if the length of our input is atleast 8 characters
+                    // if it is 8, set our custom `sixCharactersValidator` to valid/true
+                    // othwise set it to non-valid/false
+                    if (ngModelValue.length > 8) {
+                        ctrl.$setValidity('eightCharactersValidator', true);
+                    } else {
+                        ctrl.$setValidity('eightCharactersValidator', false);
+                    }
+
+                    //check if the length of our input is atleast 8 characters
+                    // if it is 8, set our custom `sixCharactersValidator` to valid/true
+                    // othwise set it to non-valid/false
+                    if (ngModelValue.length < 26) {
+                        ctrl.$setValidity('maxlengthCharactersValidator', true);
+                    } else {
+                        ctrl.$setValidity('maxlengthCharactersValidator', false);
+                    }
+                    // we need to return our ngModelValue, to be displayed to the user(value of the input)
+                    return ngModelValue;
                 }
 
-                // check if contains lowercase
-                // if it does contain lowercase, set our custom `lowercaseValidator` to valid/true
-                // otherwise set it to non-valid/false
-                if (/[a-z]/.test(ngModelValue)) {
-                    ctrl.$setValidity('lowercaseValidator', true);
-                } else {
-                    ctrl.$setValidity('lowercaseValidator', false);
-                }
-
-                // check if contains number
-                // if it does contain number, set our custom `numberValidator`  to valid/true
-                // otherwise set it to non-valid/false
-                if (/[0-9]/.test(ngModelValue)) {
-                    ctrl.$setValidity('numberValidator', true);
-                } else {
-                    ctrl.$setValidity('numberValidator', false);
-                }
-
-                // check if the length of our input is atleast 8 characters
-                // if it is 8, set our custom `sixCharactersValidator` to valid/true
-                // othwise set it to non-valid/false
-                if (ngModelValue.length > 8) {
-                    ctrl.$setValidity('eightCharactersValidator', true);
-                } else {
-                    ctrl.$setValidity('eightCharactersValidator', false);
-                }
-
-                //check if the length of our input is atleast 8 characters
-                // if it is 8, set our custom `sixCharactersValidator` to valid/true
-                // othwise set it to non-valid/false
-                if (ngModelValue.length < 26) {
-                    ctrl.$setValidity('maxlengthCharactersValidator', true);
-                } else {
-                    ctrl.$setValidity('maxlengthCharactersValidator', false);
-                }
-                // we need to return our ngModelValue, to be displayed to the user(value of the input)
-                return ngModelValue;
+                // we need to add our customValidator function to an array of other(build-in or custom) functions
+                // I have not notice any performance issues, but it would be worth investigating how much
+                // effect does this have on the performance of the app
+                ctrl.$parsers.push(customValidator);
             }
-            // we need to add our customValidator function to an array of other(build-in or custom) functions
-            // I have not notice any performance issues, but it would be worth investigating how much
-            // effect does this have on the performance of the app
-            ctrl.$parsers.push(customValidator);
         }
-    }
-})
+    })
 // =========================================================================
 // Username validator
 // =========================================================================
-
     .directive("usernameValidator", function () {
         return {
 
@@ -262,7 +261,6 @@ mobileresponseWebbApp
     // =========================================================================
     // Focus me
     // =========================================================================
-
     .directive('focusMe', function ($timeout) {
         return {
             link: function (scope, element, attr) {
@@ -276,14 +274,12 @@ mobileresponseWebbApp
             }
         };
     })
-
     .directive('goToBottom', function () {
         return function (scope, element, attrs) {
-                var el = document.querySelector('#conversationMessagesBody');
-                el.scrollTop = el.scrollHeight;
+            var el = document.querySelector('#conversationMessagesBody');
+            el.scrollTop = el.scrollHeight;
         };
     })
-
     .directive('scrollBottom', function () {
         return {
             scope: {
@@ -302,7 +298,6 @@ mobileresponseWebbApp
     // =========================================================================
     // Loading spinner
     // =========================================================================
-
     .directive('loading', function () {
         return {
             restrict: 'E',
@@ -319,5 +314,40 @@ mobileresponseWebbApp
         }
     })
 
+    .directive('scrollPositionCheck', function () {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs) {
+                var raw = element[0];
 
+                element.bind('scroll', function () {
+                    if (raw.offsetHeight + raw.scrollTop >= raw.scrollHeight - 20) {
+                        scope.atBottom = true;
+                        scope.unseenMessages = false;
+                    } else {
+                        scope.atBottom = false;
+                    }
+                    scope.$apply();
+                });
+            }
+        };
+    })
 
+.directive('scrollOnClick', function () {
+    return {
+        restrict: 'A',
+        link: function (scope, $elm, attrs) {
+            var idToScroll = attrs.href;
+            $elm.on('click', function () {
+                
+                var $target;
+                if (idToScroll) {
+                    $target = $(idToScroll);
+                } else {
+                    $target = $elm;
+                }
+                $("#conversationMessagesBody").animate({ scrollTop: $target.offset().top }, "slow");
+            });
+        }
+    }
+});
