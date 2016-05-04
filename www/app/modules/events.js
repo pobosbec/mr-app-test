@@ -80,8 +80,6 @@ angular.module('event', [])
             $rootScope.$broadcast('push-notification', event);
         }, false);
 
-
-
         // Wrapped
         $scope.$on('on-focus', function (event, args) {
             var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");

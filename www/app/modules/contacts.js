@@ -32,6 +32,12 @@ angular.module('contact', [])
         $scope.search = function () {
             $scope.isLoading = true;
             $scope.foundAppUsers.length = 0;
+
+            if ($scope.query.text === "" || $scope.query.text === null || $scope.query.text === undefined) {
+                $scope.isLoading = false;
+                return;
+            }
+
             var promise = contactsService.searchAppUser($scope.query.text);
 
             promise.then(function (success) {
