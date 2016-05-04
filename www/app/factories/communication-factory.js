@@ -37,6 +37,30 @@ angular.module('communication', [])
             return tokenService.httpPost(req);
         };
 
+        var downloadMessagesForConversationDuringPeriod = function (conversationId, sortAscending, periodStart, periodEnd, pageIndex, pageSize) {
+            var req = {
+                method: 'POST',
+                ignoreLoadingBar: true,
+                url: tokenService.currentAppApiUrl + 'app/users/list-messages-for-conversation-for-time-period',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: {
+                    Data: {
+                        ConversationId: conversationId,
+                        SortAscending: sortAscending,
+                        PeriodStart: periodStart,
+                        PeriodEnd: periodEnd,
+                        PageIndex: pageIndex,
+                        PageSize: pageSize
+                    },
+                    AuthenticationToken: tokenService.getAppAuthToken()
+                }
+            };
+
+            return tokenService.httpPost(req);
+        };
+
         var downloadMessagesForConversation = function (conversationId, sortAscending, pageIndex, pageSize) {
             var req = {
                 method: 'POST',
@@ -93,22 +117,6 @@ angular.module('communication', [])
                 factory.messagesDownloaded(success.data.items);
             });
             return messages;
-        }
-
-        var fixAuthorForMessage = function (msg) {
-            var promise = $q(function (resolve, reject) {
-                if (msg.authorDisplayName !== "") {
-                    resolve(msg);
-                    return;
-                }
-                contactsService.getAppUser(msg.authorId).then(function (e) {
-                    if (e.length && e[0].hasOwnProperty("displayName")) {
-                        msg.authorDisplayName = e[0].displayName;
-                    }
-                    resolve(msg);
-                });
-            });
-            return promise;
         }
 
         factory.messagesDownloaded = function (data) {
@@ -194,6 +202,32 @@ angular.module('communication', [])
             }
         }
 
+        factory.syncPeriodMessagesForConversation = function (conversationId, sortAscending, periodStart, periodEnd, pageIndex, pageSize) {
+            var promise = downloadMessagesForConversationDuringPeriod(conversationId, sortAscending, periodStart, periodEnd, pageIndex, pageSize);
+
+            promise.then(
+                function (success) {
+                    if (success.data && success.data.hasOwnProperty("pageIndex")) {
+                        if (success.data.pageIndex < success.data.maxPages) {
+                            // more pages to get
+                            factory.messagesDownloaded(success.data.items);
+                            currentIndex++;
+                            factory.syncPeriodMessages(periodStart, periodEnd, currentIndex, size);
+                        } else if (success.data.pageIndex === success.data.maxPages) {
+                            factory.messagesDownloaded(success.data.items);
+                        } else if (success.data.pageIndex > success.data.maxPages) {
+                            console.error('Tried to list messages with pageIndex higher than maxPages.');
+                        }
+                    } else {
+                        // Error....
+                        console.error(success);
+                    }
+                },
+                function (error) {
+                    console.error('Error when making request to list-messages. Error: ' + JSON.stringify(error));
+                });
+        }
+
         factory.syncPeriodMessages = function downloadWhatsNew(periodStart, periodEnd, currentIndex, size) {
             var promise = downloadMessages(periodStart, periodEnd, currentIndex, size);
 
@@ -249,5 +283,22 @@ angular.module('communication', [])
                 console.log('Message could not be sent.');
             });
         }
+
+        var fixAuthorForMessage = function (msg) {
+            var promise = $q(function (resolve, reject) {
+                if (msg.authorDisplayName !== "") {
+                    resolve(msg);
+                    return;
+                }
+                contactsService.getAppUser(msg.authorId).then(function (e) {
+                    if (e.length && e[0].hasOwnProperty("displayName")) {
+                        msg.authorDisplayName = e[0].displayName;
+                    }
+                    resolve(msg);
+                });
+            });
+            return promise;
+        }
+
         return factory;
     }])

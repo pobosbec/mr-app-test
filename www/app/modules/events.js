@@ -2,7 +2,7 @@
  * Created by robinpipirs on 09/12/15.
  */
 angular.module('event', [])
-    .controller('eventCtrl', ['$scope', '$rootScope', '$location', '$http', 'tokenService', 'communicationService', 'messageRepository', 'contactsService', '$location', function ($scope, $rootScope, $location, $http, tokenService, communicationService, messageRepository, contactsService, $location) {
+    .controller('eventCtrl', ['$scope', '$rootScope', '$location', '$http', 'tokenService', 'communicationService', 'messageRepository', 'contactsService', function ($scope, $rootScope, $location, $http, tokenService, communicationService, messageRepository, contactsService) {
 
         $scope.deviceReady = true;
         $scope.isPhoneGap = window.isPhoneGap;

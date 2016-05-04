@@ -422,6 +422,7 @@ angular.module('conversations', [])
                 $scope.isLoading = false;
                 $scope.unConfirmedIds = 0;
                 $scope.currentReplyMessage = null;
+                $scope.advancedSettings = false;
 
                 /* Reply to the current conversation
                 */
@@ -671,8 +672,8 @@ angular.module('conversations', [])
                         controller: 'conversationInfoCtrl',
                         size: size,
                         resolve: {
-                            conversationParticipants: function () {
-                                return $scope.appUsers;
+                            conversationInfo: function () {
+                                return { Participants: $scope.appUsers, ConversationId: $scope.conversationId };
                             }
                         }
                     });
@@ -827,7 +828,7 @@ angular.module('conversations', [])
             }
     ])
         .controller('conversationInfoCtrl', [
-            '$scope', '$http', 'tokenService', 'contactsService', 'conversationParticipants', '$uibModalInstance', function ($scope, $http, tokenService, contactsService, conversationParticipants, $uibModalInstance) {
+            '$scope', '$http', 'tokenService', 'contactsService', 'conversationInfo', '$uibModalInstance', 'communicationService', function ($scope, $http, tokenService, contactsService, conversationInfo, $uibModalInstance, communicationService) {
 
                 /* Gets the url for a user. Used in an ng-repeat to display the avatar.
          */
@@ -864,7 +865,28 @@ angular.module('conversations', [])
                     }
                 };
 
-                $scope.conversationParticipants = conversationParticipants;
+                $scope.newMessageEvents = [];
+
+                $scope.conversationParticipants = conversationInfo.Participants;
+
+                $scope.syncMessages = function () {
+                    communicationService.syncPeriodMessagesForConversation(conversationInfo.ConversationId, true, $scope.sync.From, $scope.sync.To, 0, 50);
+                }
+
+                $scope.$on('new-messages', function (event, args) {
+                    pushToEvents('Messages recevied from backend.');
+                });
+
+                $scope.$on('messages-added', function (event, args) {
+                    pushToEvents('Messages added to repository.');
+                });
+
+                function pushToEvents(event) {
+                    if ($scope.newMessageEvents.length > 50) {
+                        $scope.newMessageEvents.pop();
+                    }
+                    $scope.newMessageEvents.unshift(event);
+                }
 
                 $scope.close = function () {
                     $uibModalInstance.dismiss('cancel');

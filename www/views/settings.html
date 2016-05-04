@@ -1,17 +1,46 @@
 <section id="main">
-    <!---->
     <div class="container">
-        <div class="setting-form toggled m-t-15" id="" >
-            <form role="form" class="ng-pristine ng-valid" ng-keyup="$event.keyCode == 13 && login(login)" style="display: inline-block; margin-right: auto;margin-left: auto;text-align: center">
-                <div class="checkbox login-checkbox">
-                    <label>
-                        <input type="checkbox" value="" ng-model="checkthisout">
-                        <i class="input-helper"></i>
-                        Something
-                    </label>
+        <div class="setting-form toggled m-t-15" id="">
+            <button class="btn btn-primary waves-effect" ng-click="advancedSettings = !advancedSettings" style="margin-bottom: 10px">Advanced settings</button>
+            <div ng-show="advancedSettings" style="height: auto;">
+                <button ng-show="closeable" type="button" class="close ng-hide" ng-click="close({$event: $event})">
+                    <span aria-hidden="true">×</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <div ng-transclude="">
+                    <h1>Sync messages for all conversations</h1>
+                    <br>
+                    From
+                    <input type="date" ng-model="sync.From" placeholder="From.." style="margin-top: 10px; color: black !important">
+                    <br>
+                    To
+                    <input type="date" ng-model="sync.To" placeholder="Too.." style="margin-top: 10px; color: black !important">
+                    <br>
+                    <li class="btn btn-sm btn-primary" data-ng-click="syncMessages(sync.From, sync.To)" style="margin-top: 10px">
+                        Sync messages
+                    </li>
+                    <h1>Sync messages for specific conversation</h1>
+                    <br>
+                    From
+                    <input type="date" ng-model="specificSync.From" placeholder="From.." style="margin-top: 10px; color: black !important">
+                    <br>
+                    To
+                    <input type="date" ng-model="specificSync.To" placeholder="Too.." style="margin-top: 10px; color: black !important">
+                    <br>
+                    <div ng-repeat="conversation in conversations">
+                        {{conversation.id}}
+                    </div>
+                    <li class="btn btn-sm btn-primary" data-ng-click="syncMessages(sync.From, sync.To)" style="margin-top: 10px; margin-bottom: 10px">
+                        Sync messages
+                    </li>
+                    <h1>Console</h1>
+                    <div style="max-height: 20em; overflow-y: scroll">
+                        <div ng-repeat="event in newMessageEvents track by $index">
+                            {{event}}
+                        </div>
+                    </div>
                 </div>
-                <div class="clearfix"></div>
-            </form>
+            </div>
         </div>
     </div>
 </section>

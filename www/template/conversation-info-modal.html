@@ -17,6 +17,26 @@
                     </ul>
                 </div>
             </div>
+            <button class="btn btn-primary waves-effect" ng-click="advancedSettings = !advancedSettings" style="margin-bottom: 10px;width: 100%">Advanced settings</button>
+            <div ng-show="advancedSettings" style="height: auto;">
+                    <h1>Sync messages</h1>
+                    <br>
+                    From
+                    <input type="date" ng-model="sync.From" placeholder="From.." style="margin-top: 10px; color: black !important">
+                    <br>
+                    To
+                    <input type="date" ng-model="sync.To" placeholder="Too.." style="margin-top: 10px; color: black !important">
+                    <br>
+                    <li class="btn btn-sm btn-primary" data-ng-click="syncMessages(sync.From, sync.To)" style="margin-top: 10px; margin-bottom: 10px">
+                        Sync messages
+                    </li>
+                    <h1>Console</h1>
+                    <div style="max-height: 20em; overflow-y: scroll">
+                        <div ng-repeat="event in newMessageEvents track by $index">
+                            {{event}}
+                        </div>
+                    </div>
+            </div>
             <button class="btn btn-sm btn-primary" ng-click="close()" style="width: 100%">Close</button>
         </div>
     </div>
