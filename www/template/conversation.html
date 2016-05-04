@@ -10,12 +10,10 @@
                         <li ng-repeat="id in conversation.Participants" style="display: inline; margin-right: 10px">{{getUsername(id)}} {{$last ? '' : ', '}}</li>
                     </ul>
                 </div>
-                <a data-ng-click="viewConversationInfo('lg', conversation.Participants)" style="color: gray; position: absolute; right: 10px">
-                    <i class="zmdi zmdi-info-outline zmdi-hc-fw" style="font-size: 24px; color: gray"></i>
-                </a>
+                <button class="btn btn-default btn-icon waves-effect waves-circle" data-ng-click="viewConversationInfo('lg', conversation.Participants)" style="color: gray; position: absolute; right: 10px"><i class="zmdi zmdi-info-outline zmdi-hc-fw" style="font-size: 24px; color: gray"></i></button>
             </div>
             <div class="lv-body" style="height: calc(100vh - 123px) !important; overflow-y: scroll" id="conversationMessagesBody">
-                <div style="background-color: rgb(237, 236, 235); width: 100%; text-align: center; font-size: 1.2em !important">
+                <div style="background-color: rgb(237, 236, 235); width: 100%; text-align: center; font-size: 1.2em !important" class="waves-effect">
                     <a href="" ng-click="loadMoreForConversation(conversation.ConversationId)"><i class="zmdi zmdi-refresh-alt"></i> Load More...</a>
                 </div>
                 <loading></loading>
@@ -48,6 +46,7 @@
                 </div>
             </div>
             <div class="clearfix"></div>
+            <div></div>
             <div class="lv-footer ms-reply">
                 <textarea placeholder="Reply..." style="height: auto !important;" ng-model="currentReplyMessage"></textarea>
                 <button ng-click="reply()">

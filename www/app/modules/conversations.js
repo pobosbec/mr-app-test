@@ -77,7 +77,7 @@ angular.module('conversations', [])
                 return 0 - sortOrder;
             }
 
-            $scope.messagesSorting = function(message) {
+            $scope.messagesSorting = function (message) {
                 var sortOrder = 0;
                 if (message.hasOwnProperty('createdOn')) {
                     sortOrder = new Date(message.createdOn);
