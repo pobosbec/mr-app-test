@@ -423,6 +423,8 @@ angular.module('conversations', [])
                 $scope.unConfirmedIds = 0;
                 $scope.currentReplyMessage = null;
                 $scope.advancedSettings = false;
+                $scope.atBottom = true;
+                $scope.unseenMessages = !$scope.atBottom;
 
                 /* Reply to the current conversation
                 */
@@ -611,6 +613,7 @@ angular.module('conversations', [])
                                 return e.MessageId === a.MessageId;
                         })) {
                             $scope.conversation.Messages.push(a);
+                            $scope.unseenMessages = $scope.unseenMessages || !$scope.atBottom;
                         }
                     });
                     $scope.pageIndex = Math.floor($scope.conversation.Messages.length / $scope.pageSize);
