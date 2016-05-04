@@ -23,7 +23,7 @@ angular.module('token', [])
                 data: {
                     "Data": {},
                     "AuthenticationToken": userDetails.token,
-                    "Tags": null
+                    "Tags": [$rootScope.version]
                 }
             };
 
@@ -91,7 +91,7 @@ angular.module('token', [])
                 data: {
                     "Data": {},
                     "AuthenticationToken": data,
-                    "Tags": null
+                    "Tags": ['version:' + $rootScope.version]
                 }
             };
             var promise = factory.httpPost(req);
@@ -244,7 +244,7 @@ angular.module('token', [])
                         "Username": username,
                         "Password": password
                     },
-                    "Tags": null
+                    "Tags": ['version:' + $rootScope.version]
                 }
             };
 
@@ -296,7 +296,8 @@ angular.module('token', [])
                         data: {
                             Data: { AuthenticationToken: authenticationTokenAdmin },
                             AuthenticationToken: authenticationTokenAdmin
-                        }
+                        },
+                        "Tags": ['version:' + $rootScope.version]
                     };
                     promise = factory.httpPost(appTokenAuthentication);
                     promise.then(function (greeting) {

@@ -1,11 +1,8 @@
 <div class="listview lv-bordered lv-lg" style="padding-bottom: 100px;">
     <div class="lv-body">
-        <div class="lv-item media">
-            <input type="text" placeholder="Search new contacts" ng-model="query.text"/>
-            <button class="btn btn-default btn-icon-text waves-effect" ng-click="search(query.text)">
-                <i class="zmdi zmdi-search"></i> Search
-            </button>
-            <button class="btn btn-default btn-icon-text waves-effect" ng-click="clearSearch()"><i class="zmdi zmdi-close"></i> Clear</button>
+        <div class="lvh-search" style="position: relative">
+            <input type="text" placeholder="Search..." class="lvhs-input" ng-model="query.text" ng-model-options="{ debounce: 1000}" ng-change="search(query.text)" />
+            <i class="lvh-search-close" data-ng-click="clearSearch()">x</i>
         </div>
         <loading></loading>
         <div class="lv-item media" ng-repeat="foundAppUser in foundAppUsers track by foundAppUser.id" ng-class="{'hoverOverride':isPhoneGap}">
