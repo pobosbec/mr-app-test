@@ -8,7 +8,7 @@
                 <button class="btn btn-default btn-icon waves-effect waves-circle" ui-sref="home"><i class="zmdi zmdi-arrow-back"></i></button>
                 <div class="lvh-label">
                     <ul style="list-style-type: none; margin: 0; padding: 0; width: 230px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden">
-                        <li ng-repeat="id in conversation.Participants" style="display: inline; margin-right: 10px">{{getUsername(id)}} {{$last ? '' : ', '}}</li>
+                        <li ng-repeat="id in conversation.Participants | filter: filterOutOwnUser" style="display: inline; margin-right: 10px">{{getUsername(id)}} {{$last ? '' : ' ,'}}</li>
                     </ul>
                 </div>
                 <button class="btn btn-default btn-icon waves-effect waves-circle" data-ng-click="viewConversationInfo('lg', conversation.Participants)" style="color: gray; position: absolute; right: 10px"><i class="zmdi zmdi-info-outline zmdi-hc-fw" style="font-size: 24px; color: gray"></i></button>

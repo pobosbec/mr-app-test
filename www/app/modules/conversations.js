@@ -631,6 +631,14 @@ angular.module('conversations', [])
                     }
                 }
 
+                $scope.filterOutOwnUser = function(id) {
+                    if (id === $scope.userId) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+
                 $scope.format = function (dateString) {
                     var parsed = angularMoment(dateString + "+00:00");
                     var returnV = parsed.format('YYYY-MM-DD HH:mm:ss Z');
@@ -702,6 +710,10 @@ angular.module('conversations', [])
                 };
 
                 $scope.getUsername = function (appUserId) {
+
+                    if (appUserId === $scope.userId) {
+                        return 'you';
+                    }
 
                     var displayName = '';
 
