@@ -13,19 +13,6 @@ angular.module('conversations', [])
             $scope.unProccessedConversations = [];
             $scope.moreConversationsAreAvailable = true;
 
-            /* Make a request to the api to check if a conversation exists
-         */
-            $scope.doesConversationExist = function (users) {
-                return communicationService.doesConversationExist(users);
-            };
-
-            /* Makes a request to the api to get messages between two dateTimes. Could be used in a syncing service
-         * if the user has dropped the local database.
-         */
-            $scope.sync = function (from, to) {
-                communicationService.syncPeriodMessages(from.toJSON(), to.toJSON(), 0, 50);
-            };
-
             /* Gets the url for a user. Used in an ng-repeat to display the avatar.
          */
             $scope.getAvatar = function (appUserId) {
@@ -110,31 +97,37 @@ angular.module('conversations', [])
                         for (var i = 0; i < messages.length; i++) {
                             var message = messages[i];
                             var newConversation = true;
-
+                            
                             for (var j = 0; j < $scope.conversations.length; j++) {
                                 if (messages[i].ConversationId === $scope.conversations[j].ConversationId) {
                                     newConversation = false;
                                 }
                             }
 
-                            if (newConversation === true) {
-                                var newConversationsPromise = communicationService.getAllConversations(null);
+                            function addNewConversation(firstMessage) {
+                                var newConversations = [firstMessage.ConversationId];
 
-                                newConversationsPromise.then(
+                                var newConversationPromise = communicationService.getAllConversations(newConversations);
+
+                                newConversationPromise.then(
                                     function (newConversationsPromiseSuccess) {
 
-                                        // for each conversation, create and add to $scope.conversation. Check if all Authors are available as appUsers. If not, make details call and add to $scope.appusers + save to db
-                                        for (var convo in newConversationsPromiseSuccess.data.usersInConversations) {
-                                            var conversation = {
-                                                ConversationId: convo,
-                                                Messages: [],
-                                                Participants: newConversationsPromiseSuccess.data.usersInConversations[convo]
-                                            };
+                                        var conversation = {
+                                            ConversationId: firstMessage.ConversationId,
+                                            Messages: [firstMessage],
+                                            Participants: newConversationsPromiseSuccess.data.usersInConversations[firstMessage.ConversationId]
+                                        };
 
-                                            syncConversationParticipants(conversation);
+                                        // TODO: should have some service that transforms to required property
+                                        conversation.Messages[0].createdOn = conversation.Messages[0].CreatedOn;
+                                        conversation.Messages[0].content = conversation.Messages[0].Content;
+                                        conversation.Messages[0].avatar = conversation.Messages[0].Avatar;
+                                        conversation.Messages[0].authorDisplayName = conversation.Messages[0].AuthorDisplayName;
+                                         
 
-                                            $scope.conversations.push(conversation);
-                                        }
+                                        syncConversationParticipants(conversation);
+
+                                        $scope.conversations.push(conversation);
 
                                         function isParticipantAppUser(participantId) {
                                             var found = false;
@@ -174,7 +167,12 @@ angular.module('conversations', [])
                                     function (conversationsPromiseError) {
                                         console.error('Could not sync conversations.');
                                     });
-                            } else {
+                            }
+
+                            if (newConversation === true) {
+                                addNewConversation(message);
+                            }
+                            else {
                                 // new message?
                                 var newMessage = true;
                                 for (var k = 0; k < $scope.conversations.length; k++) {
@@ -189,13 +187,19 @@ angular.module('conversations', [])
                                         if ($scope.conversations[m].ConversationId === message.ConversationId) {
 
                                             $scope.conversations[m].Messages.push(messageRepository.reMapMessage(message));
-                                            $scope.conversations[m].Messages.sort(function (a, b) {
-                                                if (a.createdOn > b.createdOn) { return -1 };
-                                                if (a.createdOn < b.createdOn) { return 1 };
+                                            $scope.conversations[m].Messages.sort(function(a, b) {
+                                                if (a.createdOn > b.createdOn) {
+                                                    return -1
+                                                };
+                                                if (a.createdOn < b.createdOn) {
+                                                    return 1
+                                                };
                                                 return 0;
                                             });
                                         }
                                     }
+                                } else {
+                                    // if the message is old we dont want to do anything with it
                                 }
                             }
                         }
