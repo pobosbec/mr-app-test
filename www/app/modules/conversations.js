@@ -122,8 +122,7 @@ angular.module('conversations', [])
                                         conversation.Messages[0].createdOn = conversation.Messages[0].CreatedOn;
                                         conversation.Messages[0].content = conversation.Messages[0].Content;
                                         conversation.Messages[0].avatar = conversation.Messages[0].Avatar;
-                                        conversation.Messages[0].authorDisplayName = conversation.Messages[0].AuthorDisplayName;
-                                         
+                                        conversation.Messages[0].authorDisplayName = conversation.Messages[0].AuthorDisplayName;             
 
                                         syncConversationParticipants(conversation);
 
