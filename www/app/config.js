@@ -136,4 +136,7 @@ mobileresponseWebbApp
                     $rootScope.header = true;
                 }
             });
-    });
+    })
+    .config(['$compileProvider', function ($compileProvider) {
+    $compileProvider.debugInfoEnabled(false);
+}]);
