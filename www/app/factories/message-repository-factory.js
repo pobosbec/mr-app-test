@@ -37,6 +37,7 @@ angular.module('message', ['ngCordova'])
             getConversations: 'SELECT DISTINCT ConversationId FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
             getMessagesByConversation: 'SELECT MessageId, JSON FROM Messages WHERE ConversationId = ? ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
             insertMessage: 'INSERT INTO Messages (MessageId, CreatedOn, ConversationId, Author, JSON) VALUES (?, ?, ?, ?, ?)',
+            deleteConversation: 'DELETE FROM Messages WHERE ConversationId=?',
             doesMessageExist: 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?',
             doMessagesExist: 'SELECT MessageId FROM Messages WHERE MessageId IN ',
             dropConversationPartisipantsTable: 'DROP TABLE IF EXISTS ConversationParticipants',
@@ -52,6 +53,7 @@ angular.module('message', ['ngCordova'])
             getConversations: 'SELECT DISTINCT ConversationId FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
             getMessagesByConversation: 'SELECT MessageId, JSON FROM Messages WHERE ConversationId = ? ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
             insertMessage: 'INSERT INTO Messages (MessageId, CreatedOn, ConversationId, Author, JSON) VALUES (?, ?, ?, ?, ?)',
+            deleteConversation: 'DELETE FROM Messages WHERE ConversationId=?',
             doesMessageExist: 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?',
             doMessagesExist: 'SELECT MessageId FROM Messages WHERE MessageId IN ',
             dropConversationPartisipantsTable: 'DROP TABLE IF EXISTS ConversationParticipants',
@@ -328,6 +330,105 @@ angular.module('message', ['ngCordova'])
             });
         };
 
+        factory.quickSync = function () {
+            var promise = $q(function (resolve, reject) {
+                var quickSyncConversationsSize = 10;
+                var quickSyncMessagesSize = 10;
+                console.log("QUICK SYNC");
+                var conversationsFromApiPromise = communicationService.getAllConversations(null);
+                conversationsFromApiPromise.then(
+                    function (conversationsPromiseSuccess) {
+                        var conversations = [];
+
+                        for (var convo in conversationsPromiseSuccess.data.usersInConversations) {
+                            var conversation = {
+                                ConversationId: convo,
+                                Messages: [],
+                                Participants: conversationsPromiseSuccess.data.usersInConversations[convo]
+                            };
+                            conversations.push(conversation);
+                        }
+                        var processedConvos = 0;
+                        conversations.some(function (conversation) {
+                            if (typeof conversation === "undefined" || conversation === null) {
+                                return;
+                            }
+                            processedConvos++;
+
+                            // Break after fetching the desired ammount of conversations.
+                            if (processedConvos <= quickSyncConversationsSize) {
+                                var messagesPromise = communicationService.downloadMessagesForConversation(conversation.ConversationId, false, 0, quickSyncMessagesSize, false);
+                                messagesPromise.then(function (result) {
+                                    var messagesFromApi = result.data.items.sort(function (a, b) {
+                                        if (a.CreatedOn > b.CreatedOn) {
+                                            return 1;
+                                        }
+                                        if (a.CreatedOn < b.CreatedOn) {
+                                            return -1;
+                                        }
+                                        return 0;
+                                    });
+
+                                    var messagesFromDatabasePromise = factory.getMessagesFromLocalDatabase(messagesFromApi[0].conversationId, 10, 0);
+                                    messagesFromDatabasePromise.then(function (messagesFromDatabase) {
+                                        var intersect = messagesFromDatabase.some(function (messageFromDb) {
+                                            return messagesFromApi.some(function (messageFromApi) {
+                                                return messageFromDb.MessageId === messageFromApi.messageId;
+                                            });
+                                        });
+                                        //intersect = Math.random() < .5;
+                                        if (!intersect) {
+                                            if (typeof messagesFromApi[0] !== "undefined" && messagesFromApi[0] !== null && messagesFromApi[0].hasOwnProperty("conversationId")) {
+                                                console.log("- CLEARED CONVO (" + messagesFromApi[0].conversationId + ") IN DB BECAUSE OF TOO MANY MISSING MESSAGES -");
+                                                deleteConversation(messagesFromApi[0].conversationId);
+                                            }
+                                        }
+                                        communicationService.messagesDownloaded(messagesFromApi);
+                                        //console.log(intersect);
+                                    });
+                                });
+                            }
+                        });
+                        resolve();
+                    });
+
+            });
+            return promise;
+        }
+
+        factory.getMessagesFromLocalDatabase = function (conversationId, size, offset) {
+            return $q(function (resolve, reject) {
+                db.transaction(function (tx) {
+                    tx.executeSql(queries.getMessagesByConversation, [conversationId, size, offset],
+                        function (trans, result) {
+                            var messages = [];
+                            var rows = getRows(result);
+
+                            for (var i = 0; i < rows.length; i++) {
+                                var row = rows[i];
+                                try {
+                                    if (row !== null && typeof row !== "undefined" && row.hasOwnProperty("JSON")) {
+                                        messages.push(JSON.parse(row.JSON));
+                                    }
+                                }
+                                catch (err) {
+                                    if (row === null || typeof row === "undefined") {
+                                        console.error('Failed to parse message, row is undefined. ' + err);
+                                    } else {
+                                        console.error('Failed to parse message \'' + row.MessageId + '\'.\r\n' + err);
+                                    }
+                                }
+                            }
+
+                            resolve(messages);
+                        }, function (trans, error) {
+                            console.error('Error while fetching messages from database.\r\n' + error.message);
+                            reject(error);
+                        });
+                });
+            });
+        };
+
         /**
          * Creates a promise for fetching messages in a conversation descending with page index (0 and upwards) and a limit.
          * @param {string} conversationId - The conversation id to fetch.
@@ -343,42 +444,9 @@ angular.module('message', ['ngCordova'])
             size = typeof (size) !== 'number' ? 20 : size;
             var offset = pageIndex * size;
 
-            function findInLocalDatabase() {
-                return $q(function (resolve, reject) {
-                    db.transaction(function (tx) {
-                        tx.executeSql(queries.getMessagesByConversation, [conversationId, size, offset],
-                            function (trans, result) {
-                                var messages = [];
-                                var rows = getRows(result);
-
-                                for (var i = 0; i < rows.length; i++) {
-                                    var row = rows[i];
-                                    try {
-                                        if (row !== null && typeof row !== "undefined" && row.hasOwnProperty("JSON")) {
-                                            messages.push(JSON.parse(row.JSON));
-                                        }
-                                    }
-                                    catch (err) {
-                                        if (row === null || typeof row === "undefined") {
-                                            console.error('Failed to parse message, row is undefined. ' + err);
-                                        } else {
-                                            console.error('Failed to parse message \'' + row.MessageId + '\'.\r\n' + err);
-                                        }
-                                    }
-                                }
-
-                                resolve(messages);
-                            }, function (trans, error) {
-                                console.error('Error while fetching messages from database.\r\n' + error.message);
-                                reject(error);
-                            });
-                    });
-                });
-            }
-
             var d = $q.defer();
 
-            var messages = findInLocalDatabase();
+            var messages = factory.getMessagesFromLocalDatabase(conversationId, size, offset);
 
             messages
                 .then(function (success) {
@@ -570,9 +638,9 @@ angular.module('message', ['ngCordova'])
                                 if (rows.find(function (a) {
                                     if (a !== null && typeof a !== "undefined" && a.hasOwnProperty('MessageId') && msg !== null && typeof msg !== "undefined" && msg.hasOwnProperty('MessageId')) {
                                         return a.MessageId === msg.MessageId;
-                                    } else {
+                                } else {
                                         return false;
-                                    }
+                                }
                                 })) {
                                     continue;
                                 }
@@ -724,6 +792,22 @@ angular.module('message', ['ngCordova'])
             });
         }
 
+        function deleteConversation(conversationId) {
+            return $q(function (resolve, reject) {
+                db.transaction(function (tx) {
+                    tx.executeSql(
+                        queries.deleteConversation,
+                        [conversationId],
+                        function (trans, result) {
+                            resolve();
+                        },
+                        function (t, error) {
+                            reject(error);
+                        });
+                });
+            });
+        }
+
         factory.messageAdded = function () {
 
             if (evtMessagesAdded) {
@@ -768,7 +852,7 @@ angular.module('message', ['ngCordova'])
                     break;
                 case 'new-messages':
                     if (data != null) {
-                        console.log("Received new messages: " + data.length);
+                        //console.log("Received new messages: " + data.length);
                         factory.addMessages(data);
                     }
                     break;
@@ -777,6 +861,9 @@ angular.module('message', ['ngCordova'])
                         //console.log("Received new conversations: " + data.length);
                         factory.addConversations(data);
                     }
+                    break;
+                case 'sync-conversations':
+                    factory.quickSync();
                     break;
                 case 'device-ready':
                     break;

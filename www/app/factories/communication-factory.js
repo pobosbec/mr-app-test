@@ -111,10 +111,16 @@ angular.module('communication', [])
             return conversations;
         }
 
-        factory.downloadMessagesForConversation = function (conversationId, sortAscending, pageIndex, pageSize) {
+        factory.downloadMessagesForConversation = function (conversationId, sortAscending, pageIndex, pageSize, broadcastAfterFetch) {
+            if (typeof broadcastAfterFetch !== "boolean") {
+                broadcastAfterFetch = true;
+            }
+
             var messages = downloadMessagesForConversation(conversationId, sortAscending, pageIndex, pageSize);
             messages.then(function (success) {
-                factory.messagesDownloaded(success.data.items);
+                if (broadcastAfterFetch) {
+                    factory.messagesDownloaded(success.data.items);
+                };
             });
             return messages;
         }
@@ -143,7 +149,7 @@ angular.module('communication', [])
                         return newMessages;
                     }
                 }).then(function (newMessages) {
-                    console.log("broadcasting 'new-messages'");
+                    //console.log("broadcasting 'new-messages'");
                     $rootScope.$broadcast('new-messages', newMessages);
                 });
             }

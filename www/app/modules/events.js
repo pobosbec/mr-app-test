@@ -117,6 +117,7 @@ angular.module('event', [])
                     }
                 }
             }, 10);
+            $rootScope.$broadcast('sync-conversations', args);
         });
 
         $scope.$on('on-blur', function (event, args) { });
@@ -213,6 +214,7 @@ angular.module('event', [])
         // Wrapped
         $scope.$on('load', function(event, args) {
             console.log('load!');
+            $rootScope.$broadcast('sync-conversations', args);
         });
 
 
@@ -264,6 +266,10 @@ angular.module('event', [])
         });
 
         $scope.$on('updated-message', function (event, args) {
+            messageRepository.on(event, args);
+        });
+
+        $scope.$on('sync-conversations', function (event, args) {
             messageRepository.on(event, args);
         });
 

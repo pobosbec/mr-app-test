@@ -97,7 +97,7 @@ angular.module('conversations', [])
                         for (var i = 0; i < messages.length; i++) {
                             var message = messages[i];
                             var newConversation = true;
-                            
+
                             for (var j = 0; j < $scope.conversations.length; j++) {
                                 if (messages[i].ConversationId === $scope.conversations[j].ConversationId) {
                                     newConversation = false;
@@ -122,7 +122,7 @@ angular.module('conversations', [])
                                         conversation.Messages[0].createdOn = conversation.Messages[0].CreatedOn;
                                         conversation.Messages[0].content = conversation.Messages[0].Content;
                                         conversation.Messages[0].avatar = conversation.Messages[0].Avatar;
-                                        conversation.Messages[0].authorDisplayName = conversation.Messages[0].AuthorDisplayName;             
+                                        conversation.Messages[0].authorDisplayName = conversation.Messages[0].AuthorDisplayName;
 
                                         syncConversationParticipants(conversation);
 
@@ -186,12 +186,12 @@ angular.module('conversations', [])
                                         if ($scope.conversations[m].ConversationId === message.ConversationId) {
 
                                             $scope.conversations[m].Messages.push(messageRepository.reMapMessage(message));
-                                            $scope.conversations[m].Messages.sort(function(a, b) {
+                                            $scope.conversations[m].Messages.sort(function (a, b) {
                                                 if (a.createdOn > b.createdOn) {
-                                                    return -1
+                                                    return -1;
                                                 };
                                                 if (a.createdOn < b.createdOn) {
-                                                    return 1
+                                                    return 1;
                                                 };
                                                 return 0;
                                             });
@@ -237,7 +237,7 @@ angular.module('conversations', [])
                 var processedConvos = 0;
 
                 conversations.some(function (conversation) {
-                    if (typeof conversation === "undefined" || conversation === undefined) {
+                    if (typeof conversation === "undefined" || conversation === null) {
                         return;
                     }
                     processedConvos++;
@@ -316,6 +316,7 @@ angular.module('conversations', [])
                     return contactsService.searchAppUser(query);
                 }
             }
+
 
             /**
              * Sets first quickload data (10*10 messages) 
@@ -615,8 +616,19 @@ angular.module('conversations', [])
                             function (e) {
                                 return e.MessageId === a.MessageId;
                         })) {
+                            if (!$scope.conversation.Messages.some(function (x) {
+                                return x.CreatedOn > a.CreatedOn;
+                            }))
+                            {
+                                $scope.unseenMessages = $scope.unseenMessages || !$scope.atBottom;   
+                            }
+
                             $scope.conversation.Messages.push(a);
-                            $scope.unseenMessages = $scope.unseenMessages || !$scope.atBottom;
+
+                            if ($scope.atBottom) {
+                                //$('#conversationMessagesBody').scrollTop($('#conversationMessagesBody')[0].scrollHeight);
+                                $("#conversationMessagesBody").animate({ scrollTop: $("#conversationMessagesBody")[0].scrollHeight }, "slow");
+                            };
                         }
                     });
                     $scope.pageIndex = Math.floor($scope.conversation.Messages.length / $scope.pageSize);
@@ -634,7 +646,7 @@ angular.module('conversations', [])
                     }
                 }
 
-                $scope.filterOutOwnUser = function(id) {
+                $scope.filterOutOwnUser = function (id) {
                     if (id === $scope.userId) {
                         return false;
                     } else {
