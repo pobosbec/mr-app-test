@@ -1,0 +1,14 @@
+{
+  "name": "mr-app",
+  "description": "The MobileResponse app.",
+  "author": "Kristofer",
+  "homepage": "https://github.com/pobosbec/mr-app-test#readme",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-aws-s3": "^0.14.5",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-compress": "^1.2.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-uglify": "^1.0.1"
+  }
+}
