@@ -1,2 +1,6 @@
 .idea/
 platforms/
+../node_modules
+../credentials.json
+../buildzip
+../build
