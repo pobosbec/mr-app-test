@@ -30,12 +30,6 @@
                     <li class="btn btn-sm btn-primary waves-effect" style="width: 100%" data-ng-click="syncMessages(sync.From, sync.To)" style="margin-top: 10px; margin-bottom: 10px">
                         Sync messages
                     </li>
-                    <h1>Console</h1>
-                    <div style="max-height: 20em; overflow-y: scroll">
-                        <div ng-repeat="event in newMessageEvents track by $index">
-                            {{event}}
-                        </div>
-                    </div>
             </div>
             <button class="btn btn-sm btn-primary waves-effect" ng-click="close()" style="width: 100%">Close</button>
         </div>
