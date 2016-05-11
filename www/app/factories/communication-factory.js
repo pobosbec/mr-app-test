@@ -144,12 +144,12 @@ angular.module('communication', [])
                     newMessage.CreatedOn = msg.createdOn;
                     newMessage.Content = msg.content;
                     newMessage.IsRead = msg.isRead;
+                    newMessage.MetaData = msg.metaData;
                     newMessages.push(newMessage);
                     if (newMessages.length === data.length) {
                         return newMessages;
                     }
                 }).then(function (newMessages) {
-                    //console.log("broadcasting 'new-messages'");
                     $rootScope.$broadcast('new-messages', newMessages);
                 });
             }

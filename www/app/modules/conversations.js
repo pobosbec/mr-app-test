@@ -415,7 +415,7 @@ angular.module('conversations', [])
             init();
         }])
     .controller('conversationCtrl', [
-            '$scope', '$http', '$rootScope', 'tokenService', 'contactsService', 'communicationService', 'messageRepository', '$stateParams', '$uibModal', 'moment', '$timeout', function ($scope, $http, $rootScope, tokenService, contactsService, communicationService, messageRepository, $stateParams, $uibModal, angularMoment, $timeout) {
+            '$scope', '$http', '$rootScope', 'tokenService', 'contactsService', 'communicationService', 'messageRepository', '$stateParams', '$uibModal', 'moment', '$timeout', '$window', function ($scope, $http, $rootScope, tokenService, contactsService, communicationService, messageRepository, $stateParams, $uibModal, angularMoment, $timeout, $window) {
                 $scope.conversationId = $stateParams.conversationId;
                 $scope.userId = null;
                 $scope.conversation = {};
@@ -429,6 +429,35 @@ angular.module('conversations', [])
                 $scope.advancedSettings = false;
                 $scope.atBottom = true;
                 $scope.unseenMessages = !$scope.atBottom;
+
+                $scope.openDefaultBrowserWindow = function(url) {
+                    $window.open(url);
+                }
+
+                $scope.containsFormLink = function (message) {
+
+                    if (message.MetaData === null || message.MetaData === undefined || !(message.MetaData.constructor === Array)) {
+                        return false;
+                    }
+
+                    if (message.Form != null || message.Form != undefined) {
+                        return true;
+                    }
+
+                    var found = false;
+
+                    message.MetaData.some(function (element) {
+                        if (element.contentType === 'application/vnd.bosbec.form') {
+                            message.Form = element;
+                            message.Form.Value = JSON.parse(element.value);
+                            message.Form.Url = "http://m.mobileresponse.se/?formId=" + message.Form.Value.id;
+                            found = true;
+                            return true;
+                        }
+                    });
+
+                    return found;
+                };
 
                 /* Reply to the current conversation
                 */
@@ -618,9 +647,8 @@ angular.module('conversations', [])
                         })) {
                             if (!$scope.conversation.Messages.some(function (x) {
                                 return x.CreatedOn > a.CreatedOn;
-                            }))
-                            {
-                                $scope.unseenMessages = $scope.unseenMessages || !$scope.atBottom;   
+                            })) {
+                                $scope.unseenMessages = $scope.unseenMessages || !$scope.atBottom;
                             }
 
                             $scope.conversation.Messages.push(a);

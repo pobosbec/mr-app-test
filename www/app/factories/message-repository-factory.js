@@ -280,6 +280,7 @@ angular.module('message', ['ngCordova'])
                         newMessage.createdOn = msg.CreatedOn;
                         newMessage.content = msg.Content;
                         newMessage.isRead = msg.IsRead;
+                        newMessage.MetaData = msg.MetaData;
                         newMessages.push(newMessage);
                     }
 
@@ -480,6 +481,7 @@ angular.module('message', ['ngCordova'])
                         newMessage.CreatedOn = msg.createdOn;
                         newMessage.Content = msg.content;
                         newMessage.IsRead = msg.isRead;
+                        newMessage.MetaData = msg.metaData;
                         newMessages.push(newMessage);
                         insertMessage(newMessage);
                     }
