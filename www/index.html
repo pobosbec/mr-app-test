@@ -1,7 +1,5 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" ng-controller="materialadminCtrl as mactrl">
-<!--<html xmlns="http://www.w3.org/1999/xhtml" data-ng-app="administratorApp"  data-ng-controller="materialadminCtrl as mactrl" data-ng-click="mactrl.clickHandler($event)">-->
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -123,8 +121,18 @@
             document.head.appendChild(script);
         }
 
+        var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+        if (app) {
+            // PhoneGap application
+            window.isPhoneGap = true;
+            loadCordova();
+        } else {
+            // Web page
+            window.isPhoneGap = false;
+            window.deviceType = 0;
+            angular.bootstrap(document, ['administratorApp']);
+        }
 
-        // window.addEventListener('deviceready', deviceReady, false);
         function loadCordova() {
             window.deviceType = 0;
             var CORDOVA_EDITION = null;
@@ -135,24 +143,16 @@
                 CORDOVA_EDITION = "ios";
                 window.deviceType = 1;
             }
-            window.isPhoneGap = (CORDOVA_EDITION !== null); //document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
-            // document.write('<script src="js/ng-cordova.js"><\/script>');
+            window.isPhoneGap = (CORDOVA_EDITION !== null);
             loadScript("js/index.js");
-            //document.write('<script type="text/javascript" src="js/index.js"><\/script>');
             if (CORDOVA_EDITION != null) {
-                //console.log("Loading Cordova!");
                 loadScript("cordova.js");
-                //document.write('<script type="text/javascript" src="cordova.js"><\/script>');
                 // now add plugins
                 if (isIOS()) {
-                    //console.log("Loading Cordova IOS-Plugins!");
                     loadScript("js/PushwooshiOS.js");
-                    //document.write('<script type="text/javascript" src="js/PushwooshiOS.js"><\/script>');
                 }
                 if (isAndroid()) {
-                    //console.log("Loading Cordova Android-Plugins!");
                     loadScript("js/PushwooshAndroid.js");
-                    //document.write('<script type="text/javascript" src="js/PushwooshAndroid.js"><\/script>');
                 }
                 document.addEventListener('deviceready', function () {
                     StatusBar.overlaysWebView(false);
@@ -165,12 +165,9 @@
                 }, false);
 
             } else {
-                angular.bootstrap(document, ['administratorApp']);
+                //angular.bootstrap(document, ['administratorApp']);
             }
         }
-
-        loadCordova();
     </script>
-
 </body>
 </html>
