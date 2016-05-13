@@ -55,13 +55,14 @@ angular.module('contact', [])
 
             addUserPromise.then(
                 function (success) {
-
                     var findUserPromise = contactsService.getAppUser(user.id);
-
                     return findUserPromise;
                 }, function (error) {
-
+                    console.error('Could not fetch user.');
                 }).then(function (findUserPromise) {
+                    if (findUserPromise.length === 0) {
+                        console.error('Could not fetch user.');
+                    }
                     var index = -1;
 
                     for (var i = 0; i < $scope.foundAppUsers.length; i++) {

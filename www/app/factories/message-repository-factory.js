@@ -168,11 +168,6 @@ angular.module('message', ['ngCordova'])
 
             if (dbType === 'webSQL') {
                 for (i = 0; i < result.rows.length; i++) {
-                    rows.push(result.rows[i]);
-                }
-            }
-            else {
-                for (i = 0; i < result.rows.length; i++) {
                     rows.push(result.rows.item(i));
                 }
             }

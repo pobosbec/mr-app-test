@@ -524,7 +524,6 @@ angular.module('token', [])
             if (pushToken == null) {
                 pushToken = JSON.parse(localStorage.getItem("pushToken"));
             }
-            //return pushToken.deviceToken;
             return pushToken;
         };
 

@@ -26,21 +26,12 @@ function registerPushwooshAndroid() {
 		    var title = event.notification.title;
 		    var userData = event.notification.userdata;
 
-		    //dump custom data to the console if it exists
 		    if (typeof (userData) != "undefined") {
 		        console.warn('user data: ' + JSON.stringify(userData));
 		    }
-
-		    //and show alert
-		    //alert(title);
-		    //document.onNotification(title);
-
-		    //stopping geopushes
-		    //pushNotification.stopGeoPushes();
 		}
 	);
 
-    //initialize Pushwoosh with projectid: "GOOGLE_PROJECT_ID", appid : "PUSHWOOSH_APP_ID". This will trigger all pending push notifications on start.
     pushNotification.onDeviceReady({ projectid: "482590317251", appid: "A014B-AC83E" });
 
     //register for push notifications
@@ -88,22 +79,7 @@ function onPushwooshAndroidInitialized(pushToken) {
 		}
 	);
 
-
-    //set multi notificaiton mode
-    //pushNotification.setMultiNotificationMode();
-    //pushNotification.setEnableLED(true);
-
-    //set single notification mode
-    //pushNotification.setSingleNotificationMode();
-
-    //disable sound and vibration
-    //pushNotification.setSoundType(1);
-    //pushNotification.setVibrateType(1);
-
     pushNotification.setLightScreenOnNotification(false);
-
-    //setting list tags
-    //pushNotification.setTags({"MyTag":["hello", "world"]});
 
     //settings tags
     pushNotification.setTags({ deviceName: "hello", deviceId: 10 },
@@ -114,7 +90,4 @@ function onPushwooshAndroidInitialized(pushToken) {
 		    console.warn('setTags failed');
 		}
 	);
-
-    //Pushwoosh Android specific method that cares for the battery
-    //pushNotification.startGeoPushes();
 }

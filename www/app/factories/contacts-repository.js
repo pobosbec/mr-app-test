@@ -376,7 +376,7 @@ angular.module('contacts', [])
 
             if(dbType === 'webSQL'){
                 for (var i = 0; i < result.rows.length; i++) {
-                    rows.push(result.rows[i]);
+                    rows.push(result.rows.item(i));
                 }
             }
             else {
