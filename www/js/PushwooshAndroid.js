@@ -37,9 +37,7 @@ function registerPushwooshAndroid() {
     //register for push notifications
     pushNotification.registerDevice(
 		function (token) {
-		    evt.initCustomEvent("push-service-initialized", true, true, { token: token });
-
-		    window.dispatchEvent(evt);
+		    document.dispatchEvent(new CustomEvent("push-service-initialized", true, true, { token: token }));
 
 		    //callback when pushwoosh is ready
 		    onPushwooshAndroidInitialized(token);

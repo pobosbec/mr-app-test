@@ -37,7 +37,9 @@ function registerPushwooshIOS() {
 		function (token) {
             var deviceToken = token.deviceToken;
 
-            document.dispatchEvent(new CustomEvent("push-service-initialized", { token: token }));
+            evt.initCustomEvent("push-service-initialized", true, true, { token: deviceToken });
+
+		    window.dispatchEvent(evt);
 
 		    onPushwooshiOSInitialized(deviceToken);
 		},

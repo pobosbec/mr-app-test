@@ -524,6 +524,11 @@ angular.module('token', [])
         };
 
         factory.getPushToken = function () {
+
+            var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
+
+            console.log('This is the token directly from plugin!' + pushNotification.getPushToken());
+
             return factory.getPushTokenFromDb();
         };
 
