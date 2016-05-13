@@ -185,11 +185,6 @@ angular.module('communication', [])
                 case 'download-conversation-messages':
                     factory.downloadMessagesForConversation(args.ConversationId, false, args.PageIndex, args.PageSize);
                     break;
-                case 'logged-out':
-                    if (!window.isPhoneGap) {
-                        clearInterval(fetchMessagesInterval);
-                    }
-                    break;
                 case 'logged-in':
                     if (!window.isPhoneGap) {
                         clearInterval(fetchMessagesInterval);

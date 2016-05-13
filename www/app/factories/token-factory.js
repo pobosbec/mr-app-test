@@ -518,10 +518,6 @@ angular.module('token', [])
             return deviceId;
         };
 
-        factory.getPushToken = function () {
-            return ;
-        };
-
         // Save
 
         factory.saveToDb = function (key, value) {
