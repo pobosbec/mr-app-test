@@ -163,8 +163,8 @@ angular.module('event', [])
 
         $scope.$on('menu-button', function (event, args) { });
 
-        $scope.$on('push-service-initialized', function (event, args, args2, actualArgs) {
-            tokenService.on(event, actualArgs);
+        $scope.$on('push-service-initialized', function (event, args) {
+            //tokenService.on(event, args);
             window.plugins.pushNotification.getPushToken(function(token){ console.log('Token from plugin: ' + token )});
         });
 
