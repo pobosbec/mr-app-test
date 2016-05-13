@@ -380,10 +380,7 @@ angular.module('token', [])
 
         factory.registerPushToken = function () {
 
-            var pushTokenPromise = factory.getPushToken();
-
-            pushTokenPromise.then(function (success) {
-                var req = {
+            var req = {
                     method: 'POST',
                     url: factory.currentAppApiUrl + 'app/users/update-device',
                     headers: {
@@ -394,7 +391,7 @@ angular.module('token', [])
                             InstanceName: "mobileresponse",
                             UserId: factory.getAppUserId(),
                             HardwareId: factory.getDeviceId(),
-                            PushToken: success,
+                            PushToken: factory.getPushToken,
                             DeviceType: window.deviceType,
                             MacAddress: null
                         },
@@ -414,10 +411,6 @@ angular.module('token', [])
 
                     return $q.reject(response);
                 });
-            }, function (error) {
-                console.error("registerPushToken update error");
-                console.error(error);
-            });
         };
 
         factory.unRegisterPushToken = function () {
