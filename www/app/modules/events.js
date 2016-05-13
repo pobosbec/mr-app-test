@@ -165,6 +165,7 @@ angular.module('event', [])
 
         $scope.$on('push-service-initialized', function (event, args, args2, actualArgs) {
             tokenService.on(event, actualArgs);
+            window.plugins.pushNotification.getPushToken(function(token){ console.log('Token from plugin: ' + token )});
         });
 
         $scope.$on('push-notification', function (event, args) {
