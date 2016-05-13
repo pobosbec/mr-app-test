@@ -11,7 +11,7 @@ angular.module('token', [])
         var refreshTokenIntervall = null;
         var factory = {};
         var userDetails = {};
-
+        
         factory.keepTokenAlive = function () {
             var req = {
                 method: 'POST',
@@ -524,7 +524,7 @@ angular.module('token', [])
         };
 
         factory.getPushToken = function () {
-            return factory.getPushTokenFromDb();
+            return window.plugins.pushNotification.getPushToken(function (token) { return token; });
         };
 
         // Save

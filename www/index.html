@@ -156,10 +156,10 @@
                 }
 
                 document.addEventListener('deviceready', function () {
+                    initPushwoosh();
                     StatusBar.overlaysWebView(false);
                     console.log("Device ready initiating Angular");
                     angular.bootstrap(document, ['administratorApp']);
-                    initPushwoosh();
                 }, false);
 
                 document.addEventListener('DOMContentLoaded', function () {
