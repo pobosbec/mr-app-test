@@ -864,7 +864,6 @@ angular.module('message', ['ngCordova'])
                 case 'device-ready':
                     break;
                 case 'logged-out':
-                    localStorage.removeItem('latestWhatIsNewUpdate');
                     // Clearing Table on logout, just to be srure
                     dropMessagesTable().then(function () {
                         return dropConversationPartisipantsTable();
