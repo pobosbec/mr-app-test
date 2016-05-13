@@ -7,11 +7,6 @@ angular.module('event', [])
         $scope.deviceReady = true;
         $scope.isPhoneGap = window.isPhoneGap;
 
-        if ($scope.isPhoneGap) {
-            console.log("initPushwoosh");
-            initPushwoosh();
-        }
-
         // ------------------------------------
         // PhoneGap/Cordova events
         // ------------------------------------
@@ -169,7 +164,7 @@ angular.module('event', [])
         $scope.$on('menu-button', function (event, args) { });
 
         $scope.$on('push-service-initialized', function (event, args) {
-            console.log("Push service initialized: " + tokenService.getPushToken());
+            tokenService.on(event, args);
         });
 
         $scope.$on('push-notification', function (event, args) {

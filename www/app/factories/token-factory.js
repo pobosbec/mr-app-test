@@ -8,10 +8,10 @@ angular.module('token', [])
         $rootScope.token = null;
 
         var token = null;
-        var pushToken = null;
         var refreshTokenIntervall = null;
         var factory = {};
         var userDetails = {};
+
         factory.keepTokenAlive = function () {
             var req = {
                 method: 'POST',
@@ -352,7 +352,7 @@ angular.module('token', [])
                 // Insert log item and limit logging to 50 posts
                 timerResults.unshift(timedResponse);
                 timerResults = timerResults.slice(0, 50);
-                
+
                 // Broadcast event to state slow connections.
                 if (elapsedTime > 2000 || (elapsedTime > 1000 && elapsedTime > (timersAverage * 1.3) && timerResults.length > 10)) {
                     $rootScope.$broadcast('slow-http-request-detected', timedResponse);
@@ -379,7 +379,10 @@ angular.module('token', [])
         };
 
         factory.registerPushToken = function () {
-            if (factory.getDeviceId() != null) {
+
+            var pushTokenPromise = factory.getPushToken();
+
+            pushTokenPromise.then(function (success) {
                 var req = {
                     method: 'POST',
                     url: factory.currentAppApiUrl + 'app/users/update-device',
@@ -391,7 +394,7 @@ angular.module('token', [])
                             InstanceName: "mobileresponse",
                             UserId: factory.getAppUserId(),
                             HardwareId: factory.getDeviceId(),
-                            PushToken: factory.getPushToken(),
+                            PushToken: success,
                             DeviceType: window.deviceType,
                             MacAddress: null
                         },
@@ -411,7 +414,10 @@ angular.module('token', [])
 
                     return $q.reject(response);
                 });
-            };
+            }, function (error) {
+                console.error("registerPushToken update error");
+                console.error(error);
+            });
         };
 
         factory.unRegisterPushToken = function () {
@@ -440,8 +446,6 @@ angular.module('token', [])
 
                     return $q.reject(response);
                 });
-
-                return $q.reject(response);
             }
         };
 
@@ -489,7 +493,6 @@ angular.module('token', [])
             return userDetails.lastName;
         };
 
-
         factory.getAdminId = function () {
             return userDetails.administratorId;
         };
@@ -521,10 +524,7 @@ angular.module('token', [])
         };
 
         factory.getPushToken = function () {
-            if (pushToken == null) {
-                pushToken = JSON.parse(localStorage.getItem("pushToken"));
-            }
-            return pushToken;
+            return factory.getPushTokenFromDb();
         };
 
         // Save
@@ -555,12 +555,20 @@ angular.module('token', [])
 
         factory.clearTokenData = function () {
             factory.saveToDb("userDetails", null);
-            //factory.saveToDb("deviceId", null); // Should we clear this as well?
-            //factory.saveToDb("pushToken", null); // Should we clear this as well?
         }
 
         factory.clearLocalStorage = function () {
             localStorage.clear();
+        }
+
+        factory.on = function (event, args) {
+            switch (event.name) {
+                case 'push-service-initialized':
+                    insertPushToken(event.token);
+                    break;
+                default:
+                    break;
+            }
         }
 
         /**
@@ -628,6 +636,134 @@ angular.module('token', [])
         factory.currentReservationServiceUrl = factory.getReservationServiceUrl(window.location);
 
         factory.keepTokenAlive();
+
+        /* Database config for pushtoken
+         * 
+         */
+
+        var queries = null;
+
+        function getRows(result) {
+            var rows = [], i = 0;
+
+            if (dbType === 'webSQL') {
+                for (i = 0; i < result.rows.length; i++) {
+                    rows.push(result.rows.item(i));
+                }
+            }
+            return rows;
+        }
+
+        function createPushTokensTable() {
+            return $q(function (resolve, reject) {
+                db.transaction(function (tx) {
+                    tx.executeSql(queries.createMessages, [], function () {
+                        resolve();
+                    }, function (transaction, error) {
+                        reject(error);
+                    });
+                });
+            });
+        }
+
+        var isConfigured = false;
+
+        var dbType = null;
+
+        var databaseConfiguration = {
+            name: "bosbec-mr.db",
+            location: 1,
+            version: "1.0",
+            displayName: "Bosbec-Mr",
+            size: (5 * 1024 * 1024)
+        };
+
+        var webSqlQueries = {
+            dropPushTokens: 'DROP TABLE IF EXISTS PushTokens',
+            createPushTokens: 'CREATE TABLE IF NOT EXISTS PushTokens (PushToken text primary key)',
+            getAllPushTokens: 'SELECT * FROM PushTokens',
+            insertPushToken: 'INSERT OR REPLACE INTO PushTokens (PushToken) VALUES (?)'
+        };
+
+        function dropPushTokensTable() {
+            return $q(function (resolve, reject) {
+                db.transaction(function (tx) {
+                    tx.executeSql(queries.dropMessages, [], function () {
+                        resolve();
+                    }, function (transaction, error) {
+                        reject(error);
+                    });
+                });
+            });
+        }
+
+        factory.getPushTokenFromDb = function () {
+            return $q(function (resolve, reject) {
+                db.transaction(function (tx) {
+                    tx.executeSql('SELECT * FROM PushTokens', [],
+                        function (trans, result) {
+                            var rows = getRows(result);
+                            resolve(rows);
+                        }, function (trans, error) {
+                            console.error('Error while fetching PushTokens from database.\r\n' + error.message);
+                            reject(error);
+                        });
+                });
+            });
+        };
+
+        function insertPushToken(pushToken) {
+            return $q(function (resolve, reject) {
+                db.transaction(function (tx) {
+                    tx.executeSql(
+                        queries.insertPushToken,
+                        [pushToken],
+                        function (trans, result) {
+                            if (result.rowsAffected !== 1) {
+                                reject(new {
+                                    message: result
+                                });
+                                return;
+                            }
+                            resolve();
+                        },
+                        function (t, error) {
+                            reject(error);
+                        });
+                });
+            });
+        }
+
+        function configureDatabase() {
+            if (isConfigured) {
+                return;
+            }
+
+            //console.log('Going to configure the database');
+            isConfigured = true;
+
+            var conf = databaseConfiguration;
+
+            // Browser
+            db = window.openDatabase(conf.name, conf.version, conf.displayName, conf.size);
+            queries = webSqlQueries;
+            dbType = 'webSQL';
+            console.log('Opened up web SQL connection');
+
+            createPushTokensTable()
+                .then(
+                    function () {
+                        console.log('The pushtokens table was successfully created.');
+                    }, function (error) {
+                        console.error('Failed to create the pushtokens table.\r\n' + error.message);
+                    });
+        }
+
+        function initDb() {
+            configureDatabase();
+        }
+
+        initDb();
 
         return factory;
     }]);

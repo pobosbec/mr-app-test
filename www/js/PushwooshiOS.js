@@ -23,17 +23,8 @@ function registerPushwooshIOS() {
     //set push notification callback before we initialize the plugin
     document.addEventListener('push-notification',
 		function (event) {
-		    //get the notification payload
 		    var notification = event.notification;
 
-		    //display alert to the user for example
-		    //alert(notification.aps.alert);
-		    //document.onNotification(notification.aps.alert);
-
-		    //to view full push payload
-		    //alert(JSON.stringify(notification));
-
-		    //clear the app badge
 		    pushNotification.setApplicationIconBadgeNumber(0);
 		}
 	);
@@ -44,17 +35,16 @@ function registerPushwooshIOS() {
     //register for pushes
     pushNotification.registerDevice(
 		function (token) {
-		    var deviceToken = token.deviceToken;
-		    localStorage.setItem("pushToken", JSON.stringify(deviceToken));
-		    evt.initCustomEvent("push-service-initialized", true, true, { token: deviceToken });
+            var deviceToken = token.deviceToken;
+
+            evt.initCustomEvent("push-service-initialized", true, true, { token: deviceToken });
+
 		    window.dispatchEvent(evt);
-		    //document.dispatchEvent(new CustomEvent("push-service-initialized", { "token": deviceToken }));
 
 		    onPushwooshiOSInitialized(deviceToken);
 		},
 		function (status) {
 		    console.warn('failed to register : ' + JSON.stringify(status));
-		    //alert(JSON.stringify(['failed to register ', status]));
 		}
 	);
 
@@ -87,7 +77,4 @@ function onPushwooshiOSInitialized(pushToken) {
 		    console.warn('Pushwoosh HWID: ' + token);
 		}
 	);
-
-    //start geo tracking.
-    //pushNotification.startLocationTracking();
 }

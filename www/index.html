@@ -154,12 +154,14 @@
                 if (isAndroid()) {
                     loadScript("js/PushwooshAndroid.js");
                 }
+
                 document.addEventListener('deviceready', function () {
                     StatusBar.overlaysWebView(false);
                     console.log("Device ready initiating Angular");
                     angular.bootstrap(document, ['administratorApp']);
-                    app.initialize();
+                    initPushwoosh();
                 }, false);
+
                 document.addEventListener('DOMContentLoaded', function () {
                     FastClick.attach(document.body);
                 }, false);
