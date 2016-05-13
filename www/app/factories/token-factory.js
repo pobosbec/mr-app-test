@@ -380,7 +380,8 @@ angular.module('token', [])
 
         factory.registerPushToken = function () {
 
-            var req = {
+           return window.plugins.pushNotification.getPushToken(function(token) {
+                var req = {
                     method: 'POST',
                     url: factory.currentAppApiUrl + 'app/users/update-device',
                     headers: {
@@ -391,7 +392,7 @@ angular.module('token', [])
                             InstanceName: "mobileresponse",
                             UserId: factory.getAppUserId(),
                             HardwareId: factory.getDeviceId(),
-                            PushToken: factory.getPushToken(),
+                            PushToken: token,
                             DeviceType: window.deviceType,
                             MacAddress: null
                         },
@@ -411,6 +412,7 @@ angular.module('token', [])
 
                     return $q.reject(response);
                 });
+            });
         };
 
         factory.unRegisterPushToken = function () {
@@ -517,7 +519,7 @@ angular.module('token', [])
         };
 
         factory.getPushToken = function () {
-            return window.plugins.pushNotification.getPushToken(function (token) { return token; });
+            return ;
         };
 
         // Save
