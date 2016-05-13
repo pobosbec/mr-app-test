@@ -564,7 +564,11 @@ angular.module('token', [])
         factory.on = function (event, args) {
             switch (event.name) {
                 case 'push-service-initialized':
-                    insertPushToken(event.token);
+                    insertPushTokenClearTableFirst(event.token);
+                    break;
+                case 'logged-out':
+                    // Clearing Table on logout, just to be srure
+                    dropPushTokensTable().then(function (success) { console.error('Dropped pushTokens table.') }, function (error) { console.error('Could not drop pushTokens table.') });
                     break;
                 default:
                     break;
@@ -641,7 +645,13 @@ angular.module('token', [])
          * 
          */
 
-        var queries = null;
+        var webSqlQueries = {
+            dropPushTokens: 'DROP TABLE IF EXISTS PushTokens',
+            deletePushTokens: 'DELETE * FROM PushTokens',
+            createPushTokens: 'CREATE TABLE IF NOT EXISTS PushTokens (PushToken text primary key)',
+            getAllPushTokens: 'SELECT * FROM PushTokens',
+            insertPushToken: 'INSERT OR REPLACE INTO PushTokens (PushToken) VALUES (?)'
+        };
 
         function getRows(result) {
             var rows = [], i = 0;
@@ -657,7 +667,7 @@ angular.module('token', [])
         function createPushTokensTable() {
             return $q(function (resolve, reject) {
                 db.transaction(function (tx) {
-                    tx.executeSql(queries.createMessages, [], function () {
+                    tx.executeSql(webSqlQueries.createPushTokens, [], function () {
                         resolve();
                     }, function (transaction, error) {
                         reject(error);
@@ -667,6 +677,8 @@ angular.module('token', [])
         }
 
         var isConfigured = false;
+
+        var db;
 
         var dbType = null;
 
@@ -678,17 +690,10 @@ angular.module('token', [])
             size: (5 * 1024 * 1024)
         };
 
-        var webSqlQueries = {
-            dropPushTokens: 'DROP TABLE IF EXISTS PushTokens',
-            createPushTokens: 'CREATE TABLE IF NOT EXISTS PushTokens (PushToken text primary key)',
-            getAllPushTokens: 'SELECT * FROM PushTokens',
-            insertPushToken: 'INSERT OR REPLACE INTO PushTokens (PushToken) VALUES (?)'
-        };
-
         function dropPushTokensTable() {
             return $q(function (resolve, reject) {
                 db.transaction(function (tx) {
-                    tx.executeSql(queries.dropMessages, [], function () {
+                    tx.executeSql(webSqlQueries.dropPushTokens, [], function () {
                         resolve();
                     }, function (transaction, error) {
                         reject(error);
@@ -703,6 +708,12 @@ angular.module('token', [])
                     tx.executeSql('SELECT * FROM PushTokens', [],
                         function (trans, result) {
                             var rows = getRows(result);
+
+                            if (rows.length != 1) {
+                                console.error('Found multiple pushtokens');
+                                reject();
+                            }
+
                             resolve(rows);
                         }, function (trans, error) {
                             console.error('Error while fetching PushTokens from database.\r\n' + error.message);
@@ -712,11 +723,25 @@ angular.module('token', [])
             });
         };
 
+        function insertPushTokenClearTableFirst(pushToken) {
+            db.transaction(function (tx) {
+                tx.executeSql(deletePushTokens);
+            });
+
+            var promise = insertPushToken(pushToken);
+
+            promise.then(function(success) {
+                console.log('Saved new pushToken');
+            }, function(error) {
+                console.log('Could not insert pushToken.');
+            });
+        }
+
         function insertPushToken(pushToken) {
             return $q(function (resolve, reject) {
                 db.transaction(function (tx) {
                     tx.executeSql(
-                        queries.insertPushToken,
+                        webSqlQueries.insertPushToken,
                         [pushToken],
                         function (trans, result) {
                             if (result.rowsAffected !== 1) {
