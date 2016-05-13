@@ -564,7 +564,8 @@ angular.module('token', [])
         factory.on = function (event, args) {
             switch (event.name) {
                 case 'push-service-initialized':
-                    insertPushTokenClearTableFirst(event.token);
+                    // check not empty
+                    insertPushTokenClearTableFirst(args.token);
                     break;
                 case 'logged-out':
                     // Clearing Table on logout, just to be srure
@@ -725,7 +726,7 @@ angular.module('token', [])
 
         function insertPushTokenClearTableFirst(pushToken) {
             db.transaction(function (tx) {
-                tx.executeSql(deletePushTokens);
+                tx.executeSql(webSqlQueries.deletePushTokens);
             });
 
             var promise = insertPushToken(pushToken);
