@@ -13,7 +13,7 @@
   </gap:config-file>
 
   <gap:config-file platform="android" parent="/manifest">
-    <application android:debuggable="false" />
+    <application android:debuggable="true" />
   </gap:config-file>
 
   <name>Bosbec-MR</name>
@@ -32,7 +32,6 @@
      permission on your app, which PhoneGap requires.
  -->
   <preference name="permissions"                value="none"/>
-
   <!-- Customize your app and platform with the preference element. -->
   <preference name="orientation"                value="default" />
   <!-- all: default means both landscape and portrait are enabled -->

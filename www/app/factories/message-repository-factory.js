@@ -70,7 +70,6 @@ angular.module('message', ['ngCordova'])
          * Initializes the factory.
          */
         factory.init = function () {
-            //console.log('Factory.init() was called in message repository.');
             configureDatabase();
         };
 

@@ -19,8 +19,6 @@
 function initPushwoosh() {
     if (window.isPhoneGap) {
         if (cordova !== null && typeof cordova !== "undefined" && cordova.require !== null && typeof cordova.require !== "undefined") {
-            var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
-            console.log(pushNotification);
             if (device.platform == "Android") {
                 registerPushwooshAndroid();
             }
@@ -46,8 +44,6 @@ var app = {
     // Bind any events that are required on startup. Common events are:
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function () {
-        //alert("index.js>binding events");
-        //document.addEventListener('deviceready', this.onDeviceReady, false);
     },
     // deviceready Event Handler
     //

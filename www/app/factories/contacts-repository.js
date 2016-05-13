@@ -2,7 +2,7 @@
  * Created by Kristofer on 2016-03-21.
  */
 angular.module('contacts', [])
-    .factory('contactsService', ['$http', '$rootScope', '$q', 'tokenService', '$cordovaSQLite', function ($http, $rootScope, $q, tokenService, $cordovaSQLite) {
+    .factory('contactsService', ['$http', '$rootScope', '$q', 'tokenService', function ($http, $rootScope, $q, tokenService) {
 
         var db;
         var factory = {};
