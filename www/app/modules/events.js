@@ -87,7 +87,7 @@ angular.module('event', [])
             //temp
             if ($scope.isPhoneGap) {
                 initPushwoosh();
-                //tokenService.registerPushToken();
+                tokenService.registerPushToken();
             }
 
             var onFocusDelay = setTimeout(function (event, args) {
