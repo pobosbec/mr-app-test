@@ -435,6 +435,9 @@ angular.module('conversations', [])
                 $scope.atBottom = true;
                 $scope.unseenMessages = !$scope.atBottom;
 
+            var scroller = document.getElementById('conversationMessagesBody');
+            scroller.scrollTop = scroller.scrollHeight;
+
                 $scope.openDefaultBrowserWindow = function(url) {
                     $window.open(url);
                 }

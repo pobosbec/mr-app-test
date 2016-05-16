@@ -114,7 +114,7 @@ mobileresponseWebbApp
             .state('pages.conversations', {
                 url: '/conversations',
                 templateUrl: 'views/conversations.html',
-                controller: 'conversationsCtrl as conversationsCtrl',
+               // controller: 'conversationsCtrl as conversationsCtrl',
                 onEnter: function ($rootScope) {
                     $rootScope.createButtonVisible = true;
                     $rootScope.snapperControl.close();
@@ -127,7 +127,7 @@ mobileresponseWebbApp
             .state('conversation', {
                 url: '/conversation/:conversationId',
                 templateUrl: 'template/conversation.html',
-                controller: 'conversationCtrl as conversationCtrl',
+                //controller: 'conversationCtrl as conversationCtrl',
                 onEnter: function ($rootScope) {
                     $rootScope.snapperControl.close();
                     $rootScope.header = false;

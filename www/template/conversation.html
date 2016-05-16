@@ -1,4 +1,4 @@
-<div class="card m-b-0" style="height: auto; overflow: hidden; margin-bottom: -12px !important; padding: 0px;">
+<div class="card m-b-0" style="height: auto; overflow: hidden; margin-bottom: -12px !important; padding: 0px;" data-ng-controller="conversationCtrl as conversationCtrl">
     <div class="ms-body">
         <div scroll-on-click href="#messagesBottom" ng-show="unseenMessages" class="btn btn-default waves-effect" style="background: #edecec; z-index: 999; position: absolute; bottom: 70px; left: calc(50% - 5em); text-align: center;">New messages <i class="zmdi zmdi-long-arrow-down"></i>
         </div>
@@ -63,16 +63,16 @@
         </div>
     </div>
 </div>
-<script language="javascript">
-    function fixRendering() {
-        $('<style></style>').appendTo($(document.body)).remove();
-    }
-    if (typeof renderFix !== 'undefined') {
-        clearInterval(renderFix);
-    }
-    var renderFix = setInterval(function () { fixRendering(); }, 100);
-    var clearRenderFix = setTimeout(function() {
-        clearInterval(renderFix);
-    },8000);
-</script>
-<style></style>
+<!--<script language="javascript">-->
+    <!--function fixRendering() {-->
+        <!--$('<style></style>').appendTo($(document.body)).remove();-->
+    <!--}-->
+    <!--if (typeof renderFix !== 'undefined') {-->
+        <!--clearInterval(renderFix);-->
+    <!--}-->
+    <!--var renderFix = setInterval(function () { fixRendering(); }, 100);-->
+    <!--var clearRenderFix = setTimeout(function() {-->
+        <!--clearInterval(renderFix);-->
+    <!--},8000);-->
+<!--</script>-->
+<!--<style></style>-->
