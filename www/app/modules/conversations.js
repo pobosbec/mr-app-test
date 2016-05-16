@@ -435,7 +435,6 @@ angular.module('conversations', [])
                 $scope.atBottom = true;
                 $scope.unseenMessages = !$scope.atBottom;
 
-
                 $scope.openDefaultBrowserWindow = function(url) {
                     $window.open(url);
                 }
