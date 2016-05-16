@@ -660,7 +660,7 @@ angular.module('conversations', [])
 
                             if ($scope.atBottom) {
                                 //$('#conversationMessagesBody').scrollTop($('#conversationMessagesBody')[0].scrollHeight);
-                               // $("#conversationMessagesBody").animate({ scrollTop: $("#conversationMessagesBody")[0].scrollHeight }, "slow");
+                                $("#conversationMessagesBody").animate({ scrollTop: $("#conversationMessagesBody")[0].scrollHeight }, "slow");
                             };
                         }
                     });
