@@ -412,6 +412,8 @@ angular.module('conversations', [])
                         });
                     });
             };
+
+            console.log("Running init()");
             init();
         }])
     .controller('conversationCtrl', [
