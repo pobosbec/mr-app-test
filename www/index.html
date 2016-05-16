@@ -159,9 +159,7 @@
                 }
 
                 document.addEventListener('deviceready', function () {
-                    //temp
-                    alert("deviceready");
-
+                    console.log("deviceready");
                     initPushwoosh();
                     StatusBar.overlaysWebView(false);
                     console.log("Device ready initiating Angular");

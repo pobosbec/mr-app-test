@@ -13,25 +13,23 @@ angular.module('event', [])
 
         // Native
         document.addEventListener('resume', function (event, args) {
+            console.log("resume");
             $rootScope.$broadcast('on-focus', args);
-            alert("resume");
         }, false);
         
         //iOS specific version of resume
         document.addEventListener('active', function (event, args) {
-            //$rootScope.$broadcast('on-focus', args);
-            alert("active");
+            console.log("active");
         }, false);
 
         document.addEventListener('pause', function (event, args) {
+            console.log("pause");
             $rootScope.$broadcast('on-blur', args);
-            alert("pause");
         }, false);
 
         //iOS specific version of pause
         document.addEventListener('resign', function (event, args) {
-            //$rootScope.$broadcast('on-blur', args);
-            alert("resign");
+            console.log("resign");
         }, false);
 
         document.addEventListener('online', function (event, args) {
@@ -83,7 +81,6 @@ angular.module('event', [])
 
         // Wrapped
         $scope.$on('on-focus', function (event, args) {
-            //temp
             console.log("on-focus");
 
             var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
