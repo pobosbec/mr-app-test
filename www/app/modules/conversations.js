@@ -435,8 +435,6 @@ angular.module('conversations', [])
                 $scope.atBottom = true;
                 $scope.unseenMessages = !$scope.atBottom;
 
-            var scroller = document.getElementById('conversationMessagesBody');
-            scroller.scrollTop = scroller.scrollHeight;
 
                 $scope.openDefaultBrowserWindow = function(url) {
                     $window.open(url);
@@ -663,7 +661,7 @@ angular.module('conversations', [])
 
                             if ($scope.atBottom) {
                                 //$('#conversationMessagesBody').scrollTop($('#conversationMessagesBody')[0].scrollHeight);
-                                $("#conversationMessagesBody").animate({ scrollTop: $("#conversationMessagesBody")[0].scrollHeight }, "slow");
+                               // $("#conversationMessagesBody").animate({ scrollTop: $("#conversationMessagesBody")[0].scrollHeight }, "slow");
                             };
                         }
                     });
@@ -877,8 +875,9 @@ angular.module('conversations', [])
                             function (conversationMessagesSuccess) {
                                 $scope.conversation.Messages = conversationMessagesSuccess;
                                 $timeout(function () {
-                                    var scroller = document.getElementById('conversationMessagesBody');
-                                    scroller.scrollTop = scroller.scrollHeight;
+                                    //test for not scrolling to bottom
+                                    //var scroller = document.getElementById('conversationMessagesBody');
+                                    //scroller.scrollTop = scroller.scrollHeight;
                                 }, 0, false);
                             },
                             function (error) {
