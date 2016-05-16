@@ -13,20 +13,24 @@ angular.module('event', [])
 
         // Native
         document.addEventListener('resume', function (event, args) {
+            console.log("resume");
             $rootScope.$broadcast('on-focus', args);
         }, false);
-
-        document.addEventListener('active', function (event, args) {
-            $rootScope.$broadcast('on-focus', args);
-        }, false);
+        
+        //iOS specific version of resume
+        //document.addEventListener('active', function (event, args) {
+        //    console.log("active");
+        //}, false);
 
         document.addEventListener('pause', function (event, args) {
+            console.log("pause");
             $rootScope.$broadcast('on-blur', args);
         }, false);
 
-        document.addEventListener('resign', function (event, args) {
-            $rootScope.$broadcast('on-blur', args);
-        }, false);
+        //iOS specific version of pause
+        //document.addEventListener('resign', function (event, args) {
+        //    console.log("resign");
+        //}, false);
 
         document.addEventListener('online', function (event, args) {
             $rootScope.$broadcast('online', args);
@@ -77,8 +81,18 @@ angular.module('event', [])
 
         // Wrapped
         $scope.$on('on-focus', function (event, args) {
+            console.log("on-focus");
+
             var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
             pushNotification.setApplicationIconBadgeNumber(0);
+
+            //if ($scope.isPhoneGap) {
+            //    //initPushwoosh();
+            //    tokenService.registerPushToken();
+            //}
+
+            $rootScope.$broadcast('logged-in', args);
+
             var onFocusDelay = setTimeout(function (event, args) {
                 args = args | {};
                 args.Sender = 'events';
@@ -115,7 +129,7 @@ angular.module('event', [])
             $rootScope.$broadcast('sync-conversations', args);
         });
 
-        $scope.$on('on-blur', function (event, args) { });
+        $scope.$on('on-blur', function(event, args) { });
 
         $scope.$on('online', function (event, args) {
             args.Sender = 'events';

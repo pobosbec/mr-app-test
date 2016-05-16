@@ -16,6 +16,7 @@ mobileresponseWebbApp
 
         $scope.logoutConfirm = function() {
             if(isPhoneGap){
+                console.log("Logout clicked on isPhoneGap device, calling notification.confirm");
                 navigator.notification.confirm(
                     'By loging out you will clear contacts and other local storage', // message
                     onConfirm,            // callback to invoke with index of button pressed

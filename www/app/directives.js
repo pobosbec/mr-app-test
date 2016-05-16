@@ -342,7 +342,7 @@ mobileresponseWebbApp
         link: function (scope, $elm, attrs) {
             var idToScroll = attrs.href;
             $elm.on('click', function () {
-                
+
                 var $target;
                 if (idToScroll) {
                     $target = $(idToScroll);

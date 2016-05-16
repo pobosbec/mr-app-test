@@ -389,24 +389,27 @@ angular.module('conversations', [])
                             if (!$scope.conversations.length) {
                                 // No messages from Database, Let's do a quick fetch to have at least something initial to show.
                                 var quickLoadPromise = quickLoad();
-                                quickLoadPromise.then(function (result) {
+                                quickLoadPromise.then(function(result) {
                                     resolve();
                                 });
                             } else {
-                                // Database seems to have data, let's try getting up to 200 conversations
-                                // Improvements can definately be done here. The function is paged after all.
-                                var moreConversationsFromDatabasePromise = messageRepository.getConversationsByTime(5, 0, 200);
-                                moreConversationsFromDatabasePromise.then(
-                                    function (conversationsPromiseSuccess) {
-                                        for (var cid in conversationsPromiseSuccess) {
-                                            var conversation = conversationsPromiseSuccess[cid];
-                                            if (!$scope.conversations.some(function (e) { return e.ConversationId === conversation.ConversationId })) {
-                                                $scope.conversations.push(conversation);
-                                            }
-                                        }
-                                        resolve();
-                                    });
+                                resolve();
                             }
+                            //else {
+                            //    // Database seems to have data, let's try getting up to 200 conversations
+                            //    // Improvements can definately be done here. The function is paged after all.
+                            //    var moreConversationsFromDatabasePromise = messageRepository.getConversationsByTime(5, 0, 200);
+                            //    moreConversationsFromDatabasePromise.then(
+                            //        function (conversationsPromiseSuccess) {
+                            //            for (var cid in conversationsPromiseSuccess) {
+                            //                var conversation = conversationsPromiseSuccess[cid];
+                            //                if (!$scope.conversations.some(function (e) { return e.ConversationId === conversation.ConversationId })) {
+                            //                    $scope.conversations.push(conversation);
+                            //                }
+                            //            }
+                            //            resolve();
+                            //        });
+                            //}
                         });
 
                         promise.then(function () {
@@ -415,6 +418,8 @@ angular.module('conversations', [])
                         });
                     });
             };
+
+            console.log("Running init()");
             init();
         }])
     .controller('conversationCtrl', [
@@ -433,7 +438,7 @@ angular.module('conversations', [])
                 $scope.atBottom = true;
                 $scope.unseenMessages = !$scope.atBottom;
 
-                $scope.openDefaultBrowserWindow = function (url) {
+                $scope.openDefaultBrowserWindow = function(url) {
                     $window.open(url);
                 }
 
@@ -665,7 +670,7 @@ angular.module('conversations', [])
 
                             if ($scope.atBottom) {
                                 //$('#conversationMessagesBody').scrollTop($('#conversationMessagesBody')[0].scrollHeight);
-                                $("#conversationMessagesBody").animate({ scrollTop: $("#conversationMessagesBody")[0].scrollHeight }, "slow");
+                               // $("#conversationMessagesBody").animate({ scrollTop: $("#conversationMessagesBody")[0].scrollHeight }, "slow");
                             };
                         }
                     });
@@ -685,7 +690,7 @@ angular.module('conversations', [])
                         }
 
                         if (!$scope.fetchingMore && value < 200) {
-                            console.log('Load more');
+                           // console.log('Load more');
                             var viewBody = $("#conversationMessagesBody");
                             $scope.fetchingMore = true;
                             var heightBeforeLoad = viewBody[0].scrollHeight;
@@ -693,7 +698,7 @@ angular.module('conversations', [])
                                 .then(function () {
                                     setTimeout(function () {
                                         var scrollTo = viewBody[0].scrollHeight - heightBeforeLoad - value;
-                                        console.log('Setting scroll to: ' + scrollTo + '. Before load: ' + heightBeforeLoad + '. New height: ' + viewBody[0].scrollHeight);
+                             //           console.log('Setting scroll to: ' + scrollTo + '. Before load: ' + heightBeforeLoad + '. New height: ' + viewBody[0].scrollHeight);
                                         viewBody.scrollTop(scrollTo);
                                     }, 300);
                                 });
@@ -918,8 +923,9 @@ angular.module('conversations', [])
                             function (conversationMessagesSuccess) {
                                 $scope.conversation.Messages = conversationMessagesSuccess;
                                 $timeout(function () {
-                                    var scroller = document.getElementById('conversationMessagesBody');
-                                    scroller.scrollTop = scroller.scrollHeight;
+                                    //test for not scrolling to bottom
+                                    //var scroller = document.getElementById('conversationMessagesBody');
+                                    //scroller.scrollTop = scroller.scrollHeight;
                                 }, 0, false);
                             },
                             function (error) {
