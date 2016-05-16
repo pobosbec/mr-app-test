@@ -79,8 +79,8 @@
     //fixRendering();
     //});
 
-    $('#conversationMessagesBody').bind("DOMSubtreeModified", function () {
-        fixRendering();
-    });
+    //$('#conversationMessagesBody').bind("DOMSubtreeModified", function () {
+    var renderFix = setInterval(function() { fixRendering(); },1000);
+    //});
 </script>
 <style></style>
