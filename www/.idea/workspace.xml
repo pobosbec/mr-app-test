@@ -81,16 +81,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/controllers/main.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-8.795455">
-              <caret line="18" column="16" selection-start-line="18" selection-start-column="16" selection-end-line="18" selection-end-column="46" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="token-factory.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/factories/token-factory.js">
           <provider selected="true" editor-type-id="text-editor">
@@ -101,11 +91,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="main.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/controllers/main.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.51428574">
+              <caret line="18" column="97" selection-start-line="18" selection-start-column="97" selection-end-line="18" selection-end-column="97" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.19738406">
-              <caret line="93" column="54" selection-start-line="93" selection-start-column="54" selection-end-line="93" selection-end-column="54" />
+            <state vertical-scroll-proportion="-18.852942">
+              <caret line="177" column="7" selection-start-line="177" selection-start-column="7" selection-end-line="177" selection-end-column="7" />
               <folding />
             </state>
           </provider>
@@ -178,7 +178,6 @@
         <option value="$PROJECT_DIR$/views/messages.html" />
         <option value="$PROJECT_DIR$/template/create-message-modal.html" />
         <option value="$PROJECT_DIR$/app/modules/login.js" />
-        <option value="$PROJECT_DIR$/app/controllers/main.js" />
         <option value="$PROJECT_DIR$/app/app.js" />
         <option value="$PROJECT_DIR$/bower_components/snapjs/snap.js" />
         <option value="$PROJECT_DIR$/css/custom.css" />
@@ -190,6 +189,7 @@
         <option value="$PROJECT_DIR$/template/conversation.html" />
         <option value="$PROJECT_DIR$/template/sidebar-left.html" />
         <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/app/controllers/main.js" />
       </list>
     </option>
   </component>
@@ -963,6 +963,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-18.852942">
+          <caret line="177" column="7" selection-start-line="177" selection-start-column="7" selection-end-line="177" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/template/sidebar-left.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-6.0897436">
@@ -981,16 +989,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/controllers/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-8.795455">
-          <caret line="18" column="16" selection-start-line="18" selection-start-column="16" selection-end-line="18" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.19738406">
-          <caret line="93" column="54" selection-start-line="93" selection-start-column="54" selection-end-line="93" selection-end-column="54" />
+        <state vertical-scroll-proportion="0.51428574">
+          <caret line="18" column="97" selection-start-line="18" selection-start-column="97" selection-end-line="18" selection-end-column="97" />
           <folding />
         </state>
       </provider>
