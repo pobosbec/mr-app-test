@@ -86,10 +86,10 @@ angular.module('event', [])
             pushNotification.setApplicationIconBadgeNumber(0);
 
             //temp
-            //if ($scope.isPhoneGap) {
-            //    initPushwoosh();
-            //    tokenService.registerPushToken();
-            //}
+            if ($scope.isPhoneGap) {
+                //initPushwoosh();
+                tokenService.registerPushToken();
+            }
 
             var onFocusDelay = setTimeout(function (event, args) {
                 args = args | {};
