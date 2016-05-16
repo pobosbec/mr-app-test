@@ -16,18 +16,19 @@ angular.module('event', [])
             $rootScope.$broadcast('on-focus', args);
         }, false);
 
-        //iOS specific
-        document.addEventListener('active', function (event, args) {
-            $rootScope.$broadcast('on-focus', args);
-        }, false);
+        //iOS specific version of resume
+        //document.addEventListener('active', function (event, args) {
+        //    $rootScope.$broadcast('on-focus', args);
+        //}, false);
 
         document.addEventListener('pause', function (event, args) {
             $rootScope.$broadcast('on-blur', args);
         }, false);
 
-        document.addEventListener('resign', function (event, args) {
-            $rootScope.$broadcast('on-blur', args);
-        }, false);
+        //iOS specific version of pause
+        //document.addEventListener('resign', function (event, args) {
+        //    $rootScope.$broadcast('on-blur', args);
+        //}, false);
 
         document.addEventListener('online', function (event, args) {
             $rootScope.$broadcast('online', args);
