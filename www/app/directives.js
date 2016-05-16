@@ -321,6 +321,9 @@ mobileresponseWebbApp
                 var raw = element[0];
 
                 element.bind('scroll', function () {
+                    scope.scrollTop = raw.scrollTop;
+                    scope.scrollBottom = raw.scrollHeight - raw.offsetHeight - raw.scrollTop;
+
                     if (raw.offsetHeight + raw.scrollTop >= raw.scrollHeight - 20) {
                         scope.atBottom = true;
                         scope.unseenMessages = false;

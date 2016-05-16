@@ -75,6 +75,9 @@ angular.module('conversations', [])
             $scope.loadUnprocessedConversations = function () {
                 var conversationToProcess = [];
 
+
+                console.log('Loading more conversations');
+
                 if ($scope.unProccessedConversations.length < 10) {
                     for (var i = 0; i < $scope.unProccessedConversations.length; i++) {
                         conversationToProcess.push($scope.unProccessedConversations.shift());
@@ -415,7 +418,7 @@ angular.module('conversations', [])
             init();
         }])
     .controller('conversationCtrl', [
-            '$scope', '$http', '$rootScope', 'tokenService', 'contactsService', 'communicationService', 'messageRepository', '$stateParams', '$uibModal', 'moment', '$timeout', '$window', function ($scope, $http, $rootScope, tokenService, contactsService, communicationService, messageRepository, $stateParams, $uibModal, angularMoment, $timeout, $window) {
+            '$scope', '$http', '$rootScope', 'tokenService', 'contactsService', 'communicationService', 'messageRepository', '$stateParams', '$uibModal', 'moment', '$timeout', '$window', '$q', function ($scope, $http, $rootScope, tokenService, contactsService, communicationService, messageRepository, $stateParams, $uibModal, angularMoment, $timeout, $window, $q) {
                 $scope.conversationId = $stateParams.conversationId;
                 $scope.userId = null;
                 $scope.conversation = {};
@@ -430,7 +433,7 @@ angular.module('conversations', [])
                 $scope.atBottom = true;
                 $scope.unseenMessages = !$scope.atBottom;
 
-                $scope.openDefaultBrowserWindow = function(url) {
+                $scope.openDefaultBrowserWindow = function (url) {
                     $window.open(url);
                 }
 
@@ -639,6 +642,13 @@ angular.module('conversations', [])
                         });
                 }
 
+                /**
+                 * Removes messages from provided list from the loaded conversations messages 
+                 * and adds the messages that aren't added to '$scope.conversation.Messages'
+                 * and when the messages are added angular will add the messages to the view 
+                 * @param {} messages 
+                 * @returns {} 
+                 */
                 function removeDuplicates(messages) {
                     messages.some(function (a) {
                         if (!$scope.conversation.Messages.some(
@@ -659,8 +669,38 @@ angular.module('conversations', [])
                             };
                         }
                     });
+
                     $scope.pageIndex = Math.floor($scope.conversation.Messages.length / $scope.pageSize);
                 }
+
+                /**
+                 * Loads older messages when reaching the top
+                 * Will also set scroll the the new messages are added above the screen
+                 */
+                $scope.$watch("scrollTop",
+                    function (value, lastValue, sender) {
+                        if (value > lastValue ||
+                            $scope.isLoading) {
+                            return;
+                        }
+
+                        if (!$scope.fetchingMore && value < 200) {
+                            console.log('Load more');
+                            var viewBody = $("#conversationMessagesBody");
+                            $scope.fetchingMore = true;
+                            var heightBeforeLoad = viewBody[0].scrollHeight;
+                            $scope.loadMoreForConversation()
+                                .then(function () {
+                                    setTimeout(function () {
+                                        var scrollTo = viewBody[0].scrollHeight - heightBeforeLoad - value;
+                                        console.log('Setting scroll to: ' + scrollTo + '. Before load: ' + heightBeforeLoad + '. New height: ' + viewBody[0].scrollHeight);
+                                        viewBody.scrollTop(scrollTo);
+                                    }, 300);
+                                });
+                        } else if ($scope.fetchingMore && value > 200) {
+                            $scope.fetchingMore = false;
+                        }
+                    });
 
                 $scope.formatMode = function (dateString) {
                     var then = angularMoment(dateString + "+00:00");
@@ -688,8 +728,10 @@ angular.module('conversations', [])
                     return returnV;
                 }
 
-                /* Gets more messages for the current conversation
-             */
+                /**
+                 * Gets more messages for the current conversation
+                 * Will return a promise if needed and will set the value $scope.isLoading while fetching messages
+                 */
                 $scope.loadMoreForConversation = function () {
 
                     //TODO: this might cause the user to have to press the load more button several times before old messages actually starts loading..
@@ -699,23 +741,30 @@ angular.module('conversations', [])
                     // be very easy to fetch new/old messages and keep track of what has been loaded 
                     //$scope.pageIndex++;
 
-                    $scope.isLoading = true;
+                    return $q(function (response, reject) {
+                        $scope.isLoading = true;
+                        if ($scope.pageIndex === 0) {
+                            $scope.pageIndex++;
+                        }
 
-                    var promise = messageRepository.getMessagesByConversation(
-                        $scope.conversationId,
-                        $scope.pageIndex,
-                        $scope.pageSize);
+                        var promise = messageRepository.getMessagesByConversation(
+                            $scope.conversationId,
+                            $scope.pageIndex,
+                            $scope.pageSize);
 
-                    promise.then(
-                        function (success) {
-                            removeDuplicates(success);
-                            $scope.isLoading = false;
-                        },
-                        function (error) {
-                            //$scope.pageIndex--;
-                            $scope.isLoading = false;
-                            console.log('Could not get older messages for conversation.');
-                        });
+                        promise.then(
+                            function (success) {
+                                removeDuplicates(success);
+                                response();
+                                $scope.isLoading = false;
+                            },
+                            function (error) {
+                                //$scope.pageIndex--;
+                                $scope.isLoading = false;
+                                console.log('Could not get older messages for conversation.');
+                                reject(error);
+                            });
+                    });
                 }
 
                 $scope.viewConversationInfo = function (size) {
