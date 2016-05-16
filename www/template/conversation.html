@@ -1,12 +1,7 @@
-<script language="javascript">
-    setTimeout(function() {
-        $('body').hide();
-        $('body').show(0);
-    }, 1);
-</script>
 <div class="card m-b-0" style="height: auto; overflow: hidden; margin-bottom: -12px !important; padding: 0px;">
     <div class="ms-body">
-        <div scroll-on-click href="#messagesBottom" ng-show="unseenMessages" class="btn btn-default waves-effect" style="background:#edecec; z-index:999; position:absolute; bottom:70px;    left: calc( 50% - 5em); text-align:center;">New messages <i class="zmdi zmdi-long-arrow-down"></i></div>
+        <div scroll-on-click href="#messagesBottom" ng-show="unseenMessages" class="btn btn-default waves-effect" style="background: #edecec; z-index: 999; position: absolute; bottom: 70px; left: calc(50% - 5em); text-align: center;">New messages <i class="zmdi zmdi-long-arrow-down"></i>
+        </div>
         <div class="listview lv-message">
             <div class="lv-header-alt clearfix" style="height: 100% !important;">
                 <div id="ms-menu-trigger" data-ng-class="{ 'open': mactrl.lvMenuStat }" data-ng-click="mactrl.lvMenuStat = (mactrl.lvMenuStat===true ? false : true )">
@@ -55,7 +50,7 @@
                         </small>
                     </div>
                 </div>
-                <span id="messagesBottom" style="line-height:0px;">&nbsp;</span>
+                <span id="messagesBottom" style="line-height: 0px;">&nbsp;</span>
             </div>
             <div class="clearfix"></div>
             <div></div>
@@ -68,3 +63,9 @@
         </div>
     </div>
 </div>
+<script language="javascript">
+    setTimeout(function() {
+        $('#conversationMessagesBody').hide();
+        $('#conversationMessagesBody').show(0);
+    }, 0);
+</script>
