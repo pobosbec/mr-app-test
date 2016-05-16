@@ -380,7 +380,10 @@ angular.module('token', [])
 
         factory.registerPushToken = function () {
 
-           return window.plugins.pushNotification.getPushToken(function(token) {
+            //temp
+            console.log("registerPushToken...");
+
+            return window.plugins.pushNotification.getPushToken(function(token) {
                 var req = {
                     method: 'POST',
                     url: factory.currentAppApiUrl + 'app/users/update-device',

@@ -16,6 +16,7 @@ angular.module('event', [])
             $rootScope.$broadcast('on-focus', args);
         }, false);
 
+        //iOS specific
         document.addEventListener('active', function (event, args) {
             $rootScope.$broadcast('on-focus', args);
         }, false);
@@ -77,8 +78,18 @@ angular.module('event', [])
 
         // Wrapped
         $scope.$on('on-focus', function (event, args) {
+            //temp
+            console.log("on-focus");
+
             var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
             pushNotification.setApplicationIconBadgeNumber(0);
+
+            //temp
+            if ($scope.isPhoneGap) {
+                initPushwoosh();
+                //tokenService.registerPushToken();
+            }
+
             var onFocusDelay = setTimeout(function (event, args) {
                 args = args | {};
                 args.Sender = 'events';
