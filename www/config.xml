@@ -103,6 +103,9 @@
   <!-- Ios statusbar plugin -->
   <gap:plugin name="cordova-plugin-statusbar" spec="2.1.3" source="npm" />
 
+  <gap:plugin name="cordova-plugin-dialogs"/>
+
+
   <!-- Define app icon for each platform. -->
   <icon src="icon.png" />
   <icon src="res/icon/android/icon-36-ldpi.png"   gap:platform="android"    gap:qualifier="ldpi" />
