@@ -64,15 +64,19 @@
     </div>
 </div>
 <script language="javascript">
+    //var sel = $('#conversationMessagesBody')[0];
+    //sel.style.display = 'none';
+
     function fixRendering() {
-    var sel = $('#conversationMessagesBody')[0];
-        sel.style.display = 'none';
-        sel.offsetHeight; // no need to store this anywhere, the reference is enough
-        sel.style.display = '';
+        $('<style></style>').appendTo($(document.body)).remove();
+        //var sel = $('#conversationMessagesBody')[0];
+        //sel.style.display = 'none';
+        //sel.offsetHeight; // no need to store this anywhere, the reference is enough
+        //sel.style.display = '';
     }
 
     //$('#conversationMessagesBody').load(function() {
-        //fixRendering();
+    //fixRendering();
     //});
 
     $('#conversationMessagesBody').bind("DOMSubtreeModified", function () {
