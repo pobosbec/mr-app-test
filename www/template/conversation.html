@@ -64,9 +64,19 @@
     </div>
 </div>
 <script language="javascript">
-    setTimeout(function() {
-        var elem = $('#conversationMessagesBody')[0];
-        elem.style.opacity = 0;
-        elem.style.opacity = 1;
-    }, 50);
+    function fixRendering() {
+    var sel = $('#conversationMessagesBody')[0];
+        sel.style.display = 'none';
+        sel.offsetHeight; // no need to store this anywhere, the reference is enough
+        sel.style.display = '';
+    }
+
+    //$('#conversationMessagesBody').load(function() {
+        //fixRendering();
+    //});
+
+    $('#conversationMessagesBody').bind("DOMSubtreeModified", function () {
+        fixRendering();
+    });
 </script>
+<style></style>
