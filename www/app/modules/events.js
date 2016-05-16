@@ -18,9 +18,9 @@ angular.module('event', [])
         }, false);
         
         //iOS specific version of resume
-        document.addEventListener('active', function (event, args) {
-            console.log("active");
-        }, false);
+        //document.addEventListener('active', function (event, args) {
+        //    console.log("active");
+        //}, false);
 
         document.addEventListener('pause', function (event, args) {
             console.log("pause");
@@ -28,9 +28,9 @@ angular.module('event', [])
         }, false);
 
         //iOS specific version of pause
-        document.addEventListener('resign', function (event, args) {
-            console.log("resign");
-        }, false);
+        //document.addEventListener('resign', function (event, args) {
+        //    console.log("resign");
+        //}, false);
 
         document.addEventListener('online', function (event, args) {
             $rootScope.$broadcast('online', args);
@@ -86,11 +86,12 @@ angular.module('event', [])
             var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
             pushNotification.setApplicationIconBadgeNumber(0);
 
-            //temp
-            if ($scope.isPhoneGap) {
-                //initPushwoosh();
-                tokenService.registerPushToken();
-            }
+            //if ($scope.isPhoneGap) {
+            //    //initPushwoosh();
+            //    tokenService.registerPushToken();
+            //}
+
+            $rootScope.$broadcast('logged-in', args);
 
             var onFocusDelay = setTimeout(function (event, args) {
                 args = args | {};
