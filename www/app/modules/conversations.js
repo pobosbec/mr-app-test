@@ -875,8 +875,8 @@ angular.module('conversations', [])
                                 $scope.conversation.Messages = conversationMessagesSuccess;
                                 $timeout(function () {
                                     //test for not scrolling to bottom
-                                    var scroller = document.getElementById('conversationMessagesBody');
-                                    scroller.scrollTop = scroller.scrollHeight;
+                                    //var scroller = document.getElementById('conversationMessagesBody');
+                                    //scroller.scrollTop = scroller.scrollHeight;
                                 }, 0, false);
                             },
                             function (error) {
