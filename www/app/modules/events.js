@@ -14,21 +14,25 @@ angular.module('event', [])
         // Native
         document.addEventListener('resume', function (event, args) {
             $rootScope.$broadcast('on-focus', args);
+            alert("resume");
         }, false);
-
+        
         //iOS specific version of resume
-        //document.addEventListener('active', function (event, args) {
-        //    $rootScope.$broadcast('on-focus', args);
-        //}, false);
+        document.addEventListener('active', function (event, args) {
+            //$rootScope.$broadcast('on-focus', args);
+            alert("active");
+        }, false);
 
         document.addEventListener('pause', function (event, args) {
             $rootScope.$broadcast('on-blur', args);
+            alert("pause");
         }, false);
 
         //iOS specific version of pause
-        //document.addEventListener('resign', function (event, args) {
-        //    $rootScope.$broadcast('on-blur', args);
-        //}, false);
+        document.addEventListener('resign', function (event, args) {
+            //$rootScope.$broadcast('on-blur', args);
+            alert("resign");
+        }, false);
 
         document.addEventListener('online', function (event, args) {
             $rootScope.$broadcast('online', args);
@@ -127,7 +131,7 @@ angular.module('event', [])
             $rootScope.$broadcast('sync-conversations', args);
         });
 
-        $scope.$on('on-blur', function (event, args) { });
+        $scope.$on('on-blur', function(event, args) { });
 
         $scope.$on('online', function (event, args) {
             args.Sender = 'events';
