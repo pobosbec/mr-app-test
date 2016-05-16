@@ -412,6 +412,7 @@ angular.module('conversations', [])
                         promise.then(function () {
                             $scope.isLoading = false;
                             console.log("Initial loading of conversations done.");
+                            $scope.apply();
                         });
                     });
             };
