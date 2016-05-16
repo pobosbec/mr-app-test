@@ -25,9 +25,10 @@ angular.module('event', [])
             $rootScope.$broadcast('on-blur', args);
         }, false);
 
-        document.addEventListener('resign', function (event, args) {
-            $rootScope.$broadcast('on-blur', args);
-        }, false);
+        //iOS specific version of pause
+        //document.addEventListener('resign', function (event, args) {
+        //    $rootScope.$broadcast('on-blur', args);
+        //}, false);
 
         document.addEventListener('online', function (event, args) {
             $rootScope.$broadcast('online', args);
