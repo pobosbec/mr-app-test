@@ -91,7 +91,7 @@ angular.module('event', [])
             //    tokenService.registerPushToken();
             //}
 
-            $rootScope.$broadcast('logged-in', args);
+            //$rootScope.$broadcast('logged-in', args);
 
             var onFocusDelay = setTimeout(function (event, args) {
                 args = args | {};
