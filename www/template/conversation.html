@@ -65,7 +65,8 @@
 </div>
 <script language="javascript">
     setTimeout(function() {
-        $('#conversationMessagesBody').hide();
-        $('#conversationMessagesBody').show(0);
-    }, 0);
+        var elem = $('#conversationMessagesBody')[0];
+        elem.style.opacity = 0;
+        elem.style.opacity = 1;
+    }, 50);
 </script>
