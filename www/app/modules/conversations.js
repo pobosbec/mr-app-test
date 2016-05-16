@@ -884,7 +884,6 @@ angular.module('conversations', [])
                     }
 
                     setupConversation($scope.conversationId);
-                    $scope.$apply();
                 };
 
                 init();
