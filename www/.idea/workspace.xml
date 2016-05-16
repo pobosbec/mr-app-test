@@ -21,32 +21,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="conversations.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/conversations.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-11.029411">
-              <caret line="15" column="62" selection-start-line="15" selection-start-column="62" selection-end-line="15" selection-end-column="62" />
-              <folding>
-                <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#a#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#img#0;n#div#0;n#a#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#!!top" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="conversation.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="conversation.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/template/conversation.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.58049536">
-              <caret line="23" column="152" selection-start-line="23" selection-start-column="152" selection-end-line="23" selection-end-column="152" />
+            <state vertical-scroll-proportion="-11.6470585">
+              <caret line="66" column="27" selection-start-line="66" selection-start-column="27" selection-end-line="66" selection-end-column="27" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#ul#0;n#div#1;n#div#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#li#0;n#ul#0;n#div#1;n#div#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#button#1;n#div#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#i#0;n#button#1;n#div#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#1;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#div#0;n#div#1;n#div#1;n#div#1;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
@@ -62,67 +49,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="conversations.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/modules/conversations.js">
+      <file leaf-file-name="sidebar-left.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/template/sidebar-left.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.681818">
-              <caret line="500" column="35" selection-start-line="500" selection-start-column="35" selection-end-line="500" selection-end-column="35" />
+            <state vertical-scroll-proportion="-6.0897436">
+              <caret line="19" column="17" selection-start-line="19" selection-start-column="17" selection-end-line="19" selection-end-column="17" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="directives.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/directives.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="327" column="47" selection-start-line="327" selection-start-column="47" selection-end-line="327" selection-end-column="47" />
-              <folding>
-                <marker date="1463391010910" expanded="true" signature="12715:12774" placeholder="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="config.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/config.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="18" column="28" selection-start-line="18" selection-start-column="28" selection-end-line="18" selection-end-column="28" />
-              <folding>
-                <marker date="1463385494533" expanded="true" signature="64:221" placeholder="{...}" />
-                <marker date="1463385494533" expanded="true" signature="109:214" placeholder="{&quot;disable&quot;: 'right'...}" />
-                <marker date="1463385494533" expanded="true" signature="365:462" placeholder="//..." />
-                <marker date="1463385494533" expanded="true" signature="490:937" placeholder="{&quot;url&quot;: '/home'...}" />
-                <marker date="1463385494533" expanded="true" signature="617:796" placeholder="{...}" />
-                <marker date="1463385494533" expanded="true" signature="844:923" placeholder="{...}" />
-                <marker date="1463385494533" expanded="true" signature="952:1057" placeholder="//..." />
-                <marker date="1463385494533" expanded="true" signature="1088:1422" placeholder="{&quot;url&quot;: '/profile'...}" />
-                <marker date="1463385494533" expanded="true" signature="1288:1408" placeholder="{...}" />
-                <marker date="1463385494533" expanded="true" signature="1437:1538" placeholder="//..." />
-                <marker date="1463385494533" expanded="true" signature="1570:1883" placeholder="{&quot;url&quot;: '/settings'...}" />
-                <marker date="1463385494533" expanded="true" signature="1749:1869" placeholder="{...}" />
-                <marker date="1463385494533" expanded="true" signature="1898:1998" placeholder="//..." />
-                <marker date="1463385494533" expanded="true" signature="2029:2128" placeholder="{&quot;url&quot;: '/headers'...}" />
-                <marker date="1463385494533" expanded="true" signature="2143:2241" placeholder="//..." />
-                <marker date="1463385494533" expanded="true" signature="2270:2810" placeholder="{&quot;url&quot;: '/login'...}" />
-                <marker date="1463385494533" expanded="true" signature="2449:2627" placeholder="{...}" />
-                <marker date="1463385494533" expanded="true" signature="2675:2796" placeholder="{...}" />
-                <marker date="1463385494533" expanded="true" signature="2825:2923" placeholder="//..." />
-                <marker date="1463385494533" expanded="true" signature="2952:3216" placeholder="{&quot;url&quot;: '/pages'...}" />
-                <marker date="1463385494533" expanded="true" signature="3082:3202" placeholder="{...}" />
-                <marker date="1463385494533" expanded="true" signature="3255:3637" placeholder="{&quot;url&quot;: '/messages'...}" />
-                <marker date="1463385494533" expanded="true" signature="3390:3510" placeholder="{...}" />
-                <marker date="1463385494533" expanded="true" signature="3558:3623" placeholder="{...}" />
-                <marker date="1463385494533" expanded="true" signature="3676:4118" placeholder="{&quot;url&quot;: '/contacts'...}" />
-                <marker date="1463385494533" expanded="true" signature="3871:3991" placeholder="{...}" />
-                <marker date="1463385494533" expanded="true" signature="4039:4104" placeholder="{...}" />
-                <marker date="1463385494533" expanded="true" signature="4162:4697" placeholder="{&quot;url&quot;: '/conversations'...}" />
-                <marker date="1463385494533" expanded="true" signature="4377:4556" placeholder="{...}" />
-                <marker date="1463385494533" expanded="true" signature="4604:4683" placeholder="{...}" />
-                <marker date="1463385494533" expanded="true" signature="4964:5085" placeholder="{...}" />
-                <marker date="1463385494533" expanded="true" signature="5133:5198" placeholder="{...}" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -130,13 +62,22 @@
       <file leaf-file-name="events.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/modules/events.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="40" column="18" selection-start-line="40" selection-start-column="18" selection-end-line="40" selection-end-column="18" />
+            <state vertical-scroll-proportion="-11.636364">
+              <caret line="231" column="28" selection-start-line="231" selection-start-column="27" selection-end-line="231" selection-end-column="28" />
               <folding>
                 <marker date="1463385494649" expanded="true" signature="10175:10536" placeholder="{...}" />
-                <marker date="1463385494649" expanded="true" signature="10201:10259" placeholder="{...}" />
                 <marker date="1463385494649" expanded="true" signature="10340:10400" placeholder="{...}" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="main.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/controllers/main.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.6084906">
+              <caret line="18" column="16" selection-start-line="18" selection-start-column="16" selection-end-line="18" selection-end-column="46" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -145,35 +86,17 @@
         <entry file="file://$PROJECT_DIR$/app/factories/token-factory.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="164" column="34" selection-start-line="164" selection-start-column="34" selection-end-line="164" selection-end-column="34" />
+              <caret line="56" column="46" selection-start-line="56" selection-start-column="46" selection-end-line="56" selection-end-column="46" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="login.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/login.html">
+      <file leaf-file-name="config.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/config.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.7352941">
-              <caret line="7" column="51" selection-start-line="7" selection-start-column="51" selection-end-line="7" selection-end-column="51" />
-              <folding>
-                <element signature="n#style#0;n#form#0;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#ul#0;n#form#0;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#li#0;n#ul#0;n#form#0;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#small#0;n#div#1;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#ul#0;n#form#0;n#div#1;n#div#0;n#section#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#li#0;n#ul#0;n#form#0;n#div#1;n#div#0;n#section#0;n#!!top" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.647059">
-              <caret line="145" column="13" selection-start-line="145" selection-start-column="13" selection-end-line="145" selection-end-column="13" />
+            <state vertical-scroll-proportion="91.29412">
+              <caret line="50" column="31" selection-start-line="50" selection-start-column="31" selection-end-line="50" selection-end-column="31" />
               <folding />
             </state>
           </provider>
@@ -208,7 +131,6 @@
         <option value="$PROJECT_DIR$/tests/conf.js" />
         <option value="$PROJECT_DIR$/js/snap.js" />
         <option value="$PROJECT_DIR$/css/snap.css" />
-        <option value="$PROJECT_DIR$/template/sidebar-left.html" />
         <option value="$PROJECT_DIR$/app/modules/template.js" />
         <option value="$PROJECT_DIR$/template/footer.html" />
         <option value="$PROJECT_DIR$/template/header.html" />
@@ -248,6 +170,7 @@
         <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/app/modules/conversations.js" />
         <option value="$PROJECT_DIR$/template/conversation.html" />
+        <option value="$PROJECT_DIR$/template/sidebar-left.html" />
       </list>
     </option>
   </component>
@@ -636,14 +559,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/img/logorezise.png">
       <provider selected="true" editor-type-id="images">
         <state />
@@ -830,13 +745,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/modules/login.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/factories/contacts-repository.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -848,13 +756,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.12648809">
           <caret line="5" column="11" selection-start-line="5" selection-start-column="11" selection-end-line="5" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/controllers/main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="124" column="40" selection-start-line="124" selection-start-column="40" selection-end-line="124" selection-end-column="40" />
         </state>
       </provider>
     </entry>
@@ -901,80 +802,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.035714287">
-          <caret line="29" column="39" selection-start-line="29" selection-start-column="39" selection-end-line="29" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/factories/message-repository-factory.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.03400309">
           <caret line="380" column="14" selection-start-line="380" selection-start-column="14" selection-end-line="380" selection-end-column="14" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/config.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="18" column="28" selection-start-line="18" selection-start-column="28" selection-end-line="18" selection-end-column="28" />
-          <folding>
-            <marker date="1463385494533" expanded="true" signature="64:221" placeholder="{...}" />
-            <marker date="1463385494533" expanded="true" signature="109:214" placeholder="{&quot;disable&quot;: 'right'...}" />
-            <marker date="1463385494533" expanded="true" signature="365:462" placeholder="//..." />
-            <marker date="1463385494533" expanded="true" signature="490:937" placeholder="{&quot;url&quot;: '/home'...}" />
-            <marker date="1463385494533" expanded="true" signature="617:796" placeholder="{...}" />
-            <marker date="1463385494533" expanded="true" signature="844:923" placeholder="{...}" />
-            <marker date="1463385494533" expanded="true" signature="952:1057" placeholder="//..." />
-            <marker date="1463385494533" expanded="true" signature="1088:1422" placeholder="{&quot;url&quot;: '/profile'...}" />
-            <marker date="1463385494533" expanded="true" signature="1288:1408" placeholder="{...}" />
-            <marker date="1463385494533" expanded="true" signature="1437:1538" placeholder="//..." />
-            <marker date="1463385494533" expanded="true" signature="1570:1883" placeholder="{&quot;url&quot;: '/settings'...}" />
-            <marker date="1463385494533" expanded="true" signature="1749:1869" placeholder="{...}" />
-            <marker date="1463385494533" expanded="true" signature="1898:1998" placeholder="//..." />
-            <marker date="1463385494533" expanded="true" signature="2029:2128" placeholder="{&quot;url&quot;: '/headers'...}" />
-            <marker date="1463385494533" expanded="true" signature="2143:2241" placeholder="//..." />
-            <marker date="1463385494533" expanded="true" signature="2270:2810" placeholder="{&quot;url&quot;: '/login'...}" />
-            <marker date="1463385494533" expanded="true" signature="2449:2627" placeholder="{...}" />
-            <marker date="1463385494533" expanded="true" signature="2675:2796" placeholder="{...}" />
-            <marker date="1463385494533" expanded="true" signature="2825:2923" placeholder="//..." />
-            <marker date="1463385494533" expanded="true" signature="2952:3216" placeholder="{&quot;url&quot;: '/pages'...}" />
-            <marker date="1463385494533" expanded="true" signature="3082:3202" placeholder="{...}" />
-            <marker date="1463385494533" expanded="true" signature="3255:3637" placeholder="{&quot;url&quot;: '/messages'...}" />
-            <marker date="1463385494533" expanded="true" signature="3390:3510" placeholder="{...}" />
-            <marker date="1463385494533" expanded="true" signature="3558:3623" placeholder="{...}" />
-            <marker date="1463385494533" expanded="true" signature="3676:4118" placeholder="{&quot;url&quot;: '/contacts'...}" />
-            <marker date="1463385494533" expanded="true" signature="3871:3991" placeholder="{...}" />
-            <marker date="1463385494533" expanded="true" signature="4039:4104" placeholder="{...}" />
-            <marker date="1463385494533" expanded="true" signature="4162:4697" placeholder="{&quot;url&quot;: '/conversations'...}" />
-            <marker date="1463385494533" expanded="true" signature="4377:4556" placeholder="{...}" />
-            <marker date="1463385494533" expanded="true" signature="4604:4683" placeholder="{...}" />
-            <marker date="1463385494533" expanded="true" signature="4964:5085" placeholder="{...}" />
-            <marker date="1463385494533" expanded="true" signature="5133:5198" placeholder="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/factories/token-factory.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="164" column="34" selection-start-line="164" selection-start-column="34" selection-end-line="164" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/modules/events.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="40" column="18" selection-start-line="40" selection-start-column="18" selection-end-line="40" selection-end-column="18" />
-          <folding>
-            <marker date="1463385494649" expanded="true" signature="10175:10536" placeholder="{...}" />
-            <marker date="1463385494649" expanded="true" signature="10201:10259" placeholder="{...}" />
-            <marker date="1463385494649" expanded="true" signature="10340:10400" placeholder="{...}" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1028,14 +860,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/modules/conversations.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.681818">
-          <caret line="500" column="35" selection-start-line="500" selection-start-column="35" selection-end-line="500" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/views/conversations.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-11.029411">
@@ -1050,15 +874,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/config.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="91.29412">
+          <caret line="50" column="31" selection-start-line="50" selection-start-column="31" selection-end-line="50" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/template/conversation.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.58049536">
-          <caret line="23" column="152" selection-start-line="23" selection-start-column="152" selection-end-line="23" selection-end-column="152" />
+        <state vertical-scroll-proportion="-11.6470585">
+          <caret line="66" column="27" selection-start-line="66" selection-start-column="27" selection-end-line="66" selection-end-column="27" />
           <folding>
             <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#ul#0;n#div#1;n#div#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#li#0;n#ul#0;n#div#1;n#div#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#button#1;n#div#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#i#0;n#button#1;n#div#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#1;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#0;n#div#1;n#div#1;n#div#1;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
@@ -1070,6 +905,65 @@
             <element signature="n#style#0;n#span#0;n#div#1;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#textarea#0;n#div#4;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/modules/conversations.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="703" column="0" selection-start-line="703" selection-start-column="0" selection-end-line="703" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/modules/login.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="3" selection-start-line="0" selection-start-column="3" selection-end-line="0" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/config.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="135" column="45" selection-start-line="135" selection-start-column="45" selection-end-line="135" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/modules/events.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-11.636364">
+          <caret line="231" column="28" selection-start-line="231" selection-start-column="27" selection-end-line="231" selection-end-column="28" />
+          <folding>
+            <marker date="1463385494649" expanded="true" signature="10175:10536" placeholder="{...}" />
+            <marker date="1463385494649" expanded="true" signature="10340:10400" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/template/sidebar-left.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.0897436">
+          <caret line="19" column="17" selection-start-line="19" selection-start-column="17" selection-end-line="19" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/factories/token-factory.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="56" column="46" selection-start-line="56" selection-start-column="46" selection-end-line="56" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controllers/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6084906">
+          <caret line="18" column="16" selection-start-line="18" selection-start-column="16" selection-end-line="18" selection-end-column="46" />
+          <folding />
         </state>
       </provider>
     </entry>
