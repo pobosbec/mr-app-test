@@ -234,6 +234,7 @@ angular.module('event', [])
         $scope.$on('logged-in', function (event, args) {
             if ($scope.isPhoneGap) {
                 initPushwoosh();
+                //Make sure initPushwoosh is done before running this:
                 tokenService.registerPushToken();
             }
             messageRepository.on(event, args);
@@ -250,7 +251,6 @@ angular.module('event', [])
         $scope.$on('app-token-available', function (event, args) {
             // Here we need to do the initial sync
         });
-
 
         $scope.$on('push-token-registered', function (event, args) {
             console.log('push-token-registered');
