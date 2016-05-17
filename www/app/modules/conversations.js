@@ -389,7 +389,7 @@ angular.module('conversations', [])
                             if (!$scope.conversations.length) {
                                 // No messages from Database, Let's do a quick fetch to have at least something initial to show.
                                 var quickLoadPromise = quickLoad();
-                                quickLoadPromise.then(function(result) {
+                                quickLoadPromise.then(function (result) {
                                     resolve();
                                 });
                             } else {
@@ -438,7 +438,7 @@ angular.module('conversations', [])
                 $scope.atBottom = true;
                 $scope.unseenMessages = !$scope.atBottom;
 
-                $scope.openDefaultBrowserWindow = function(url) {
+                $scope.openDefaultBrowserWindow = function (url) {
                     $window.open(url);
                 }
 
@@ -670,7 +670,7 @@ angular.module('conversations', [])
 
                             if ($scope.atBottom) {
                                 $('#conversationMessagesBody').scrollTop($('#conversationMessagesBody')[0].scrollHeight);
-                               // $("#conversationMessagesBody").animate({ scrollTop: $("#conversationMessagesBody")[0].scrollHeight }, "slow");
+                                // $("#conversationMessagesBody").animate({ scrollTop: $("#conversationMessagesBody")[0].scrollHeight }, "slow");
                             };
                         }
                     });
@@ -690,17 +690,27 @@ angular.module('conversations', [])
                         }
 
                         if (!$scope.fetchingMore && value < 200) {
-                           // console.log('Load more');
                             var viewBody = $("#conversationMessagesBody");
                             $scope.fetchingMore = true;
-                            var heightBeforeLoad = viewBody[0].scrollHeight;
+                            // var heightBeforeLoad = viewBody[0].scrollHeight;
+
+                            var $container = $('#conversationMessagesBody');
+                            var $topItem = $('.lv-item:first');
+                            var oScrollTop = $container.scrollTop();
+                            var oOffset = $topItem.length ? $topItem.position().top : 0;
+
+
                             $scope.loadMoreForConversation()
                                 .then(function () {
-                                    setTimeout(function () {
-                                        var scrollTo = viewBody[0].scrollHeight - heightBeforeLoad - value;
-                             //           console.log('Setting scroll to: ' + scrollTo + '. Before load: ' + heightBeforeLoad + '. New height: ' + viewBody[0].scrollHeight);
-                                        viewBody.scrollTop(scrollTo);
-                                    }, 300);
+                                    $scope.$$postDigest(function () {
+                                      //  var scrollTo = viewBody[0].scrollHeight - heightBeforeLoad - value;
+                                      ////  console.log('Setting scroll to: ' + scrollTo + '. Before load: ' + heightBeforeLoad + '. New height: ' + viewBody[0].scrollHeight);
+                                      //  viewBody.scrollTop(scrollTo);
+
+                                        if ($container.scrollTop() !== 0) {
+                                            $container.scrollTop(oScrollTop + ($topItem.length ? $topItem.position().top : 0) - oOffset);
+                                        }
+                                    });
                                 });
                         } else if ($scope.fetchingMore && value > 200) {
                             $scope.fetchingMore = false;
