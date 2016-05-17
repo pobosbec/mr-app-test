@@ -46,11 +46,6 @@ function registerPushwooshIOS() {
 		    //...and stops execution here. No event gets sent, and we never reach onPushwooshiOSInitialized.
 		    //evt.initCustomEvent("push-service-initialized", true, true, { token: deviceToken });
 		    //window.dispatchEvent(evt);
-            
-            //Testing old-fashined way
-		    var evt = document.createEvent('Event');
-		    evt.initEvent('push-service-initialized', true, true);
-		    document.dispatchEvent(evt);
 
 		    onPushwooshiOSInitialized(deviceToken);
 		},
@@ -90,4 +85,8 @@ function onPushwooshiOSInitialized(pushToken) {
 		    console.warn('Pushwoosh HWID: ' + token);
 		}
 	);
+
+    var evt = document.createEvent('Event');
+    evt.initEvent('push-service-initialized', true, true);
+    document.dispatchEvent(evt);
 }

@@ -171,7 +171,6 @@ angular.module('event', [])
         $scope.$on('menu-button', function (event, args) { });
 
         $scope.$on('push-service-initialized', function (event, args) {
-            console.log('push init');
             tokenService.registerPushToken();
         });
 
@@ -247,7 +246,6 @@ angular.module('event', [])
         });
 
         $scope.$on('push-token-registered', function (event, args) {
-            console.log('push-token-registered');
         });
 
         $scope.$on('slow-http-request-detected', function (event, args) {
