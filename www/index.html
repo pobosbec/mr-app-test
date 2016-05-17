@@ -26,30 +26,34 @@
         //logged.warn should contain all console.warn-messages,
         //logged.error should contain all console.error-messages
 
-        //var logged = {
-        //    log: new Array(),
-        //    info: new Array(),
-        //    warn:new Array(),
-        //    error: new Array()
-        //}
-        //window.console = {
-        //    log: function (message) {
-        //        logged.log.unshift(message);
-        //        console.log(message);
-        //    },
-        //    info: function (message) {
-        //        logged.info.unshift(message);
-        //        console.info(message);
-        //    },
-        //    warn : function(message) {
-        //        logged.warn.unshift(message);
-        //        console.warn(message);
-        //    },
-        //    error: function (message) {
-        //        logged.error.unshift(message);
-        //        console.error(message);
-        //    }
-        //}
+        var logged = {
+            log: new Array(),
+            info: new Array(),
+            warn: new Array(),
+            error: new Array()
+        }
+        var console = window.console;
+        if (console) {
+            function intercept(method) {
+                var original = console[method];
+                console[method] = function () {
+                    logged[method].unshift(arguments);
+                    if (original.apply) {
+                        // Do this for normal browsers
+                        original.apply(console, arguments);
+                    } else {
+                        // Do this for IE
+                        var message = Array.prototype.slice.apply(arguments).join(' ');
+                        original(message);
+                    }
+                }
+            }
+
+            var methods = ['log', 'warn', 'error'];
+            for (var i = 0; i < methods.length; i++) {
+                intercept(methods[i]);
+            }
+        }
     </script>
     <script src="js/version.js"></script>
     <!--<script src="https://s3-eu-west-1.amazonaws.com/app.aws.mobileresponse.se/www/js/version.js"></script> -->
