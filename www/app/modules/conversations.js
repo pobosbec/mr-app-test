@@ -71,10 +71,27 @@ angular.module('conversations', [])
                 }
                 return 0 - sortOrder;
             }
+            /**
+             * Fired when the page is scrolled to the bottom of the page
+             */
+            $scope.$watch("scrollBottom",
+                function(value, lastValue, sender) {
+                    if (value > lastValue ||
+                        $scope.isLoading) {
+                        return;
+                    }
+
+                    if (!$scope.fetchingMore && value < 200) {
+                        $scope.fetchingMore = true;
+                        $scope.loadUnprocessedConversations();
+
+                    } else if ($scope.fetchingMore && value > 200) {
+                        $scope.fetchingMore = false;
+                    }
+                });
 
             $scope.loadUnprocessedConversations = function () {
                 var conversationToProcess = [];
-
 
                 console.log('Loading more conversations');
 
@@ -692,21 +709,15 @@ angular.module('conversations', [])
                         if (!$scope.fetchingMore && value < 200) {
                             var viewBody = $("#conversationMessagesBody");
                             $scope.fetchingMore = true;
-                            // var heightBeforeLoad = viewBody[0].scrollHeight;
 
                             var $container = $('#conversationMessagesBody');
                             var $topItem = $('.lv-item:first');
                             var oScrollTop = $container.scrollTop();
                             var oOffset = $topItem.length ? $topItem.position().top : 0;
 
-
                             $scope.loadMoreForConversation()
                                 .then(function () {
                                     $scope.$$postDigest(function () {
-                                      //  var scrollTo = viewBody[0].scrollHeight - heightBeforeLoad - value;
-                                      ////  console.log('Setting scroll to: ' + scrollTo + '. Before load: ' + heightBeforeLoad + '. New height: ' + viewBody[0].scrollHeight);
-                                      //  viewBody.scrollTop(scrollTo);
-
                                         if ($container.scrollTop() !== 0) {
                                             $container.scrollTop(oScrollTop + ($topItem.length ? $topItem.position().top : 0) - oOffset);
                                         }
