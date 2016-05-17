@@ -1,6 +1,6 @@
 <div class="card m-b-0" style="height: auto; overflow: hidden; margin-bottom: -12px !important; padding: 0px;" data-ng-controller="conversationCtrl as conversationCtrl">
     <div class="ms-body">
-        <!--<div scroll-on-click href="#messagesBottom"--> <div ng-show="unseenMessages" class="btn btn-default waves-effect" style="background: #edecec; z-index: 999; position: absolute; bottom: 70px; left: calc(50% - 5em); text-align: center;">New messages <i class="zmdi zmdi-long-arrow-down"></i>
+       <!-- <div scroll-on-click href="#messagesBottom"--></div> <div ng-show="unseenMessages" class="btn btn-default waves-effect" style="background: #edecec; z-index: 999; position: absolute; bottom: 70px; left: calc(50% - 5em); text-align: center;">New messages <i class="zmdi zmdi-long-arrow-down"></i>
         </div>
         <div class="listview lv-message">
             <div class="lv-header-alt clearfix" style="height: 100% !important;">
@@ -18,6 +18,8 @@
                 <!--<div style="background-color: rgb(237, 236, 235); width: 100%; text-align: center; font-size: 1.2em !important" class="waves-effect">
             <div class="lv-body" style="height: calc(100vh - 123px) !important; overflow-y: scroll" id="conversationMessagesBody" > <!-- scroll-position-check> -->
                 <!--<div style="background-color: rgb(237, 236, 235); width: 100%; text-align: center; font-size: 1.2em !important" class="waves-effect">
+            <div class="lv-body" style="height: calc(100vh - 123px) !important; overflow-y: scroll" id="conversationMessagesBody" scroll-bottom="conversation.Messages" > <!--scroll-position-check> --><!-- scroll-bottom="conversation.Messages"-->
+                <div style="background-color: rgb(237, 236, 235); width: 100%; text-align: center; font-size: 1.2em !important" class="waves-effect">
                     <a href="" ng-click="loadMoreForConversation(conversation.ConversationId)"><i class="zmdi zmdi-refresh-alt"></i> Load More...</a>
                 </div>-->
                 <loading></loading>
@@ -25,7 +27,7 @@
                     <div class="lv-avatar" ng-class="message.Author === userId ? 'pull-right': 'pull-left'">
                         <img ng-src="{{ getAvatar(message.Author) || 'img/profile-pics/5.jpg' }}" alt="">
                     </div>
-                    <div class="media-body">
+                    <div class="media-body" >
                         <div class="ms-item">
                             {{ message.Content }}
                             <div ng-if="containsFormLink(message) === true" style="color: black; margin-top: 5px"> -
