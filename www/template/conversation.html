@@ -2,7 +2,7 @@
     <div class="ms-body">
         <!-- <div scroll-on-click href="#messagesBottom"-->
     </div>
-    <div ng-show="unseenMessages" class="btn btn-default waves-effect" style="background: #edecec; z-index: 999; position: absolute; bottom: 70px; left: calc(50% - 5em); text-align: center;">
+    <div ng-if="unseenMessages" ng-click="goToBottom()" class="btn btn-default waves-effect" style="background: #edecec; z-index: 999; position: absolute; bottom: 70px; left: calc(50% - 5em); text-align: center;">
         New messages <i class="zmdi zmdi-long-arrow-down"></i>
     </div>
     <div class="listview lv-message">
@@ -17,7 +17,7 @@
             </div>
             <button class="btn btn-default btn-icon waves-effect waves-circle" data-ng-click="viewConversationInfo('lg', conversation.Participants)" style="color: gray; position: absolute; right: 10px"><i class="zmdi zmdi-info-outline zmdi-hc-fw" style="font-size: 24px; color: gray"></i></button>
         </div>
-        <div class="lv-body" style="height: calc(100vh - 123px) !important; overflow-y: scroll" id="conversationMessagesBody" scroll-bottom="conversation.Messages" scroll-position-check>
+        <div class="lv-body" style="height: calc(100vh - 123px) !important; overflow-y: scroll" id="conversationMessagesBody" scroll-position-check>
             <loading></loading>
             <div class="lv-item" ng-repeat="message in conversation.Messages | orderBy: sortMessage track by message.MessageId" ng-class="message.Author === userId ? 'media right': 'media'">
                 <div class="lv-avatar" ng-class="message.Author === userId ? 'pull-right': 'pull-left'">
