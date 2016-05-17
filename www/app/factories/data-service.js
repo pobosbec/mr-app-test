@@ -1,5 +1,5 @@
 ﻿/**
- * Created by Kristofer on 2016-03-13.
+ * Created by Kristofer on 2016-05-16.
  */
 angular.module('services', [])
     .factory('dataService', [
@@ -10,8 +10,7 @@ angular.module('services', [])
             factory.userId = tokenService.getAppUserId();
             factory.pageSize = 10;
             factory.AppUsers = contactsService.appUsers;
-
-            // TODO: Temp variables, should not be used in future implementations
+            factory.moreConversationsAreAvailable = true;
             factory.unProccessedConversations = [];
 
             function handleConversation(databasePromise) {
@@ -81,7 +80,7 @@ angular.module('services', [])
                         factory.conversations.push(conversation);
                     } else {
                         factory.unProccessedConversations.push(conversation);
-                        //factory.moreConversationsAreAvailable = factory.unProccessedConversations.length > 0;
+                        factory.moreConversationsAreAvailable = factory.unProccessedConversations.length > 0;
                     }
                 });
 
@@ -141,6 +140,22 @@ angular.module('services', [])
                 });
             }
 
+            factory.loadUnprocessedConversations = function () {
+                var conversationToProcess = [];
+
+                if (factory.unProccessedConversations.length < 10) {
+                    for (var i = 0; i < factory.unProccessedConversations.length; i++) {
+                        conversationToProcess.push(factory.unProccessedConversations.shift());
+                    }
+                } else {
+                    for (var j = 0; j < 10; j++) {
+                        conversationToProcess.push(factory.unProccessedConversations.shift());
+                    }
+                }
+                factory.moreConversationsAreAvailable = factory.unProccessedConversations.length > 0;
+                addConversations(conversationToProcess);
+            }
+
             factory.loadConversations = function () {
                 var pageIndex = Math.floor(factory.conversations.length / factory.pageSize);
 
@@ -157,6 +172,8 @@ angular.module('services', [])
             factory.loadMessages = function (conversationId, pageIndex, pageSize) {
                 //TODO: defer to be able to show loading icon?
 
+                var deferred = $q.defer();
+
                 var promise = messageRepository.getMessagesByConversation(
                         conversationId,
                         pageIndex,
@@ -166,12 +183,14 @@ angular.module('services', [])
                     function (success) {
                         removeDuplicates(conversationId, success);
                         factory.isLoading = false;
+                        deferred.resolve();
                     },
                     function (error) {
-                        //factory.pageIndex--;
-                        factory.isLoading = false;
-                        console.log('Could not get older messages for conversation.');
+                        console.log(error);
+                        deferred.reject();
                     });
+
+                return deferred.promise;
             }
 
             factory.initializeConversations = function () {

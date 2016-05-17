@@ -8,6 +8,8 @@ angular.module('conversations', [])
             $scope.conversations = dataService.conversations;
             $scope.userId = tokenService.getAppUserId();
             $scope.appUsers = contactsService.appUsers;
+            $scope.isLoading = false;
+            $scope.fetchingMore = false;
 
             /* Gets the url for a user. Used in an ng-repeat to display the avatar.
             */
@@ -55,20 +57,27 @@ angular.module('conversations', [])
                 return 0 - sortOrder;
             }
 
-            $scope.loadUnprocessedConversations = function () {
-                var conversationToProcess = [];
+            /**
+             * Fired when the page is scrolled to the bottom of the page
+             */
+            $scope.$watch("scrollBottom",
+                function (value, lastValue, sender) {
+                    if (value > lastValue ||
+                        $scope.isLoading) {
+                        return;
+                    }
 
-                if ($scope.unProccessedConversations.length < 10) {
-                    for (var i = 0; i < $scope.unProccessedConversations.length; i++) {
-                        conversationToProcess.push($scope.unProccessedConversations.shift());
+                    if (!$scope.fetchingMore && value < 200) {
+                        $scope.fetchingMore = true;
+                        $scope.loadUnprocessedConversations();
+
+                    } else if ($scope.fetchingMore && value > 200) {
+                        $scope.fetchingMore = false;
                     }
-                } else {
-                    for (var j = 0; j < 10; j++) {
-                        conversationToProcess.push($scope.unProccessedConversations.shift());
-                    }
-                }
-                $scope.moreConversationsAreAvailable = $scope.unProccessedConversations.length > 0;
-                addConversations(conversationToProcess);
+                });
+
+            $scope.loadUnprocessedConversations = function () {
+                dataService.loadUnprocessedConversations();
             }
 
             $scope.formatMode = function (dateString) {
@@ -90,7 +99,7 @@ angular.module('conversations', [])
             }
         }])
     .controller('conversationCtrl', [
-            '$scope', '$http', '$rootScope', 'tokenService', 'contactsService', 'communicationService', 'messageRepository', '$stateParams', '$uibModal', 'moment', '$timeout', '$window', 'dataService', function ($scope, $http, $rootScope, tokenService, contactsService, communicationService, messageRepository, $stateParams, $uibModal, angularMoment, $timeout, $window, dataService) {
+            '$scope', '$http', '$rootScope', 'tokenService', 'contactsService', 'communicationService', 'messageRepository', '$stateParams', '$uibModal', 'moment', '$timeout', '$window', 'dataService', '$q', function ($scope, $http, $rootScope, tokenService, contactsService, communicationService, messageRepository, $stateParams, $uibModal, angularMoment, $timeout, $window, dataService, $q) {
                 $scope.conversationId = $stateParams.conversationId;
                 $scope.userId = tokenService.getAppUserId();
                 $scope.conversation = {};
@@ -104,25 +113,6 @@ angular.module('conversations', [])
                 $scope.advancedSettings = false;
                 $scope.atBottom = true;
                 $scope.unseenMessages = !$scope.atBottom;
-
-                //if (!conversation.Messages.some(
-                //    function (e) {
-                //        return e.messageId === a.MessageId;
-                //})) {
-                //    // TODO: magnus code
-                //    //if (!conversation.Messages.some(function (x) {
-                //    //    return x.CreatedOn > a.CreatedOn;
-                //    //})) {
-                //    //    factory.unseenMessages = factory.unseenMessages || !factory.atBottom;
-                //    //}
-
-                //    conversation.Messages.push(a);
-
-                //    // TODO: robins code 
-                //    //if (factory.atBottom) {
-                //    //    $('#conversationMessagesBody').scrollTop($('#conversationMessagesBody')[0].scrollHeight);
-                //    //};
-                //}
 
                 $scope.setConversation = function () {
                     // TODO: Handle if conversation is not in dataService? 
@@ -343,6 +333,35 @@ angular.module('conversations', [])
                         });
                 }
 
+                /**
+                 * Loads older messages when reaching the top
+                 * Will also set scroll the the new messages are added above the screen
+                 */
+                $scope.$watch("scrollTop",
+                    function (value, lastValue, sender) {
+                        if (value > lastValue ||
+                            $scope.isLoading) {
+                            return;
+                        }
+
+                        if (!$scope.fetchingMore && value < 200) {
+                            console.log('Load more');
+                            var viewBody = $("#conversationMessagesBody");
+                            $scope.fetchingMore = true;
+                            var heightBeforeLoad = viewBody[0].scrollHeight;
+                            $scope.loadMoreForConversation()
+                                .then(function () {
+                                    setTimeout(function () {
+                                        var scrollTo = viewBody[0].scrollHeight - heightBeforeLoad - value;
+                                        console.log('Setting scroll to: ' + scrollTo + '. Before load: ' + heightBeforeLoad + '. New height: ' + viewBody[0].scrollHeight);
+                                        viewBody.scrollTop(scrollTo);
+                                    }, 300);
+                                });
+                        } else if ($scope.fetchingMore && value > 200) {
+                            $scope.fetchingMore = false;
+                        }
+                    });
+
                 $scope.formatMode = function (dateString) {
                     var then = angularMoment(dateString + "+00:00");
                     var now = angularMoment();
@@ -371,7 +390,7 @@ angular.module('conversations', [])
 
                 $scope.loadMoreForConversation = function () {
                     $scope.pageIndex = Math.floor($scope.conversation.Messages.length / $scope.pageSize);
-                    dataService.loadMessages($scope.conversation.ConversationId, $scope.pageIndex, $scope.pageSize);
+                    return dataService.loadMessages($scope.conversation.ConversationId, $scope.pageIndex, $scope.pageSize);
                 }
 
                 $scope.viewConversationInfo = function (size) {
@@ -386,8 +405,8 @@ angular.module('conversations', [])
 
                                 var participants = [];
 
-                                $scope.conversation.Participants.some(function(participant) {
-                                    $scope.appUsers.some(function(appUser) {
+                                $scope.conversation.Participants.some(function (participant) {
+                                    $scope.appUsers.some(function (appUser) {
                                         if (participant === appUser.UserId) {
                                             participants.push(appUser);
                                             return true;
@@ -445,8 +464,6 @@ angular.module('conversations', [])
         .controller('conversationInfoCtrl', [
             '$scope', '$http', 'tokenService', 'contactsService', 'conversationInfo', '$uibModalInstance', 'communicationService', function ($scope, $http, tokenService, contactsService, conversationInfo, $uibModalInstance, communicationService) {
 
-                /* Gets the url for a user. Used in an ng-repeat to display the avatar.
-         */
                 $scope.getAvatar = function (appUserId) {
 
                     var found = null;

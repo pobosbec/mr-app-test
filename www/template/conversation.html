@@ -1,82 +1,64 @@
 <div class="card m-b-0" style="height: auto; overflow: hidden; margin-bottom: -12px !important; padding: 0px;" data-ng-controller="conversationCtrl as conversationCtrl">
     <div class="ms-body">
-       <!-- <div scroll-on-click href="#messagesBottom"--></div> <div ng-show="unseenMessages" class="btn btn-default waves-effect" style="background: #edecec; z-index: 999; position: absolute; bottom: 70px; left: calc(50% - 5em); text-align: center;">New messages <i class="zmdi zmdi-long-arrow-down"></i>
-        </div>
-        <div class="listview lv-message">
-            <div class="lv-header-alt clearfix" style="height: 100% !important;">
-                <div id="ms-menu-trigger" data-ng-class="{ 'open': mactrl.lvMenuStat }" data-ng-click="mactrl.lvMenuStat = (mactrl.lvMenuStat===true ? false : true )">
-                </div>
-                <button class="btn btn-default btn-icon waves-effect waves-circle" ui-sref="home"><i class="zmdi zmdi-arrow-back"></i></button>
-                <div class="lvh-label">
-                    <ul style="list-style-type: none; margin: 0; padding: 0; width: 230px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden">
-                        <li ng-repeat="id in conversation.Participants | filter: filterOutOwnUser" style="display: inline; margin-right: 10px">{{getUsername(id)}} {{$last ? '' : ' ,'}}</li>
-                    </ul>
-                </div>
-                <button class="btn btn-default btn-icon waves-effect waves-circle" data-ng-click="viewConversationInfo('lg', conversation.Participants)" style="color: gray; position: absolute; right: 10px"><i class="zmdi zmdi-info-outline zmdi-hc-fw" style="font-size: 24px; color: gray"></i></button>
+        <!-- <div scroll-on-click href="#messagesBottom"-->
+    </div> <div ng-show="unseenMessages" class="btn btn-default waves-effect" style="background: #edecec; z-index: 999; position: absolute; bottom: 70px; left: calc(50% - 5em); text-align: center;">
+        New messages <i class="zmdi zmdi-long-arrow-down"></i>
+    </div>
+    <div class="listview lv-message">
+        <div class="lv-header-alt clearfix" style="height: 100% !important;">
+            <div id="ms-menu-trigger" data-ng-class="{ 'open': mactrl.lvMenuStat }" data-ng-click="mactrl.lvMenuStat = (mactrl.lvMenuStat===true ? false : true )">
             </div>
-            <div class="lv-body" style="height: calc(100vh - 123px) !important; overflow-y: scroll" id="conversationMessagesBody" scroll-bottom="conversation.Messages" scroll-position-check>
-                <!--<div style="background-color: rgb(237, 236, 235); width: 100%; text-align: center; font-size: 1.2em !important" class="waves-effect">
-            <div class="lv-body" style="height: calc(100vh - 123px) !important; overflow-y: scroll" id="conversationMessagesBody" > <!-- scroll-position-check> -->
-                <!--<div style="background-color: rgb(237, 236, 235); width: 100%; text-align: center; font-size: 1.2em !important" class="waves-effect">
-            <div class="lv-body" style="height: calc(100vh - 123px) !important; overflow-y: scroll" id="conversationMessagesBody" scroll-bottom="conversation.Messages" > <!--scroll-position-check> --><!-- scroll-bottom="conversation.Messages"-->
-                <!--<div style="background-color: rgb(237, 236, 235); width: 100%; text-align: center; font-size: 1.2em !important" class="waves-effect">
-                    <a href="" ng-click="loadMoreForConversation(conversation.ConversationId)"><i class="zmdi zmdi-refresh-alt"></i> Load More...</a>
-                </div>-->
-                <loading></loading>
-                <div class="lv-item" ng-repeat="message in conversation.Messages | orderBy: sortMessage track by message.MessageId" ng-class="message.Author === userId ? 'media right': 'media'">
-                    <div class="lv-avatar" ng-class="message.Author === userId ? 'pull-right': 'pull-left'">
-                        <img ng-src="{{ getAvatar(message.Author) || 'img/profile-pics/5.jpg' }}" alt="">
-                    </div>
-                    <div class="media-body" >
-                        <div class="ms-item">
-                            {{ message.Content }}
-                            <div ng-if="containsFormLink(message) === true" style="color: black; margin-top: 5px"> -
-                                <a ng-click="openDefaultBrowserWindow(message.Form.Url)" style="font-size: 1.0em"><i class="zmdi zmdi-assignment zmdi-hc-fw" style="font-size: 1.8em !important; color: black"></i>{{ message.Form.name }}</a>
-                            </div>
-                            <div ng-if="message.Failed" style="font-size: 12px; display: inline-flex; padding-left: 10px" ng-click="resendMessage(message)">
-                                <button class="btn btn-default waves-effect"><i class="zmdi zmdi-refresh"></i></button>
-                                <div ng-if="message.Retrying" style="padding-left: 10px; display: inline-flex">
-                                    <div class="preloader pl-xs">
-                                        <svg class="pl-circular" viewBox="25 25 50 50">
-                                            <circle class="plc-path" cx="50" cy="50" r="20"></circle>
-                                        </svg>
-                                    </div>
+            <button class="btn btn-default btn-icon waves-effect waves-circle" ui-sref="home"><i class="zmdi zmdi-arrow-back"></i></button>
+            <div class="lvh-label">
+                <ul style="list-style-type: none; margin: 0; padding: 0; width: 230px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden">
+                    <li ng-repeat="id in conversation.Participants | filter: filterOutOwnUser" style="display: inline; margin-right: 10px">{{getUsername(id)}} {{$last ? '' : ' ,'}}</li>
+                </ul>
+            </div>
+            <button class="btn btn-default btn-icon waves-effect waves-circle" data-ng-click="viewConversationInfo('lg', conversation.Participants)" style="color: gray; position: absolute; right: 10px"><i class="zmdi zmdi-info-outline zmdi-hc-fw" style="font-size: 24px; color: gray"></i></button>
+        </div>
+        <div class="lv-body" style="height: calc(100vh - 123px) !important; overflow-y: scroll" id="conversationMessagesBody" scroll-bottom="conversation.Messages" scroll-position-check>
+            <loading></loading>
+            <div class="lv-item" ng-repeat="message in conversation.Messages | orderBy: sortMessage track by message.MessageId" ng-class="message.Author === userId ? 'media right': 'media'">
+                <div class="lv-avatar" ng-class="message.Author === userId ? 'pull-right': 'pull-left'">
+                    <img ng-src="{{ getAvatar(message.Author) || 'img/profile-pics/5.jpg' }}" alt="">
+                </div>
+                <div class="media-body">
+                    <div class="ms-item">
+                        {{ message.Content }}
+                        <div ng-if="containsFormLink(message) === true" style="color: black; margin-top: 5px">
+                            -
+                            <a ng-click="openDefaultBrowserWindow(message.Form.Url)" style="font-size: 1.0em"><i class="zmdi zmdi-assignment zmdi-hc-fw" style="font-size: 1.8em !important; color: black"></i>{{ message.Form.name }}</a>
+                        </div>
+                        <div ng-if="message.Failed" style="font-size: 12px; display: inline-flex; padding-left: 10px" ng-click="resendMessage(message)">
+                            <button class="btn btn-default waves-effect"><i class="zmdi zmdi-refresh"></i></button>
+                            <div ng-if="message.Retrying" style="padding-left: 10px; display: inline-flex">
+                                <div class="preloader pl-xs">
+                                    <svg class="pl-circular" viewBox="25 25 50 50">
+                                        <circle class="plc-path" cx="50" cy="50" r="20"></circle>
+                                    </svg>
                                 </div>
                             </div>
                         </div>
-                        <small class="ms-date">
-                            <span ng-if="isGroupConversation" style="margin-right: 5px">{{getUsername(message.Author)}}</span>
-                            <span ng-if="message.Failed"><small><i>Message could not be sent. Try again by pressing refresh button.</i></small></span>
-                            <i class="zmdi zmdi-time"></i>
-                            <span ng-show="formatMode(message.CreatedOn)==1">{{format(message.CreatedOn) | amTimeAgo}}</span>
-                            <span ng-show="formatMode(message.CreatedOn)==2">{{format(message.CreatedOn) | amDateFormat:'D MMM HH:mm'}}</span>
-                            <span ng-show="formatMode(message.CreatedOn)==3">{{format(message.CreatedOn) | amDateFormat:'YYYY-MM-DD HH:mm'}}</span>
-                        </small>
                     </div>
+                    <small class="ms-date">
+                        <span ng-if="isGroupConversation" style="margin-right: 5px">{{getUsername(message.Author)}}</span>
+                        <span ng-if="message.Failed"><small><i>Message could not be sent. Try again by pressing refresh button.</i></small></span>
+                        <i class="zmdi zmdi-time"></i>
+                        <span ng-show="formatMode(message.CreatedOn)==1">{{format(message.CreatedOn) | amTimeAgo}}</span>
+                        <span ng-show="formatMode(message.CreatedOn)==2">{{format(message.CreatedOn) | amDateFormat:'D MMM HH:mm'}}</span>
+                        <span ng-show="formatMode(message.CreatedOn)==3">{{format(message.CreatedOn) | amDateFormat:'YYYY-MM-DD HH:mm'}}</span>
+                    </small>
                 </div>
-                <span id="messagesBottom" style="line-height: 0px;">&nbsp;</span>
             </div>
-            <div class="clearfix"></div>
-            <div></div>
-            <div class="lv-footer ms-reply">
-                <textarea placeholder="Reply..." style="height: auto !important;" ng-model="currentReplyMessage"></textarea>
-                <button ng-click="reply()">
-                    <i class="zmdi zmdi-mail-send"></i>
-                </button>
-            </div>
+            <span id="messagesBottom" style="line-height: 0px;">&nbsp;</span>
+        </div>
+        <div class="clearfix"></div>
+        <div></div>
+        <div class="lv-footer ms-reply">
+            <textarea placeholder="Reply..." style="height: auto !important;" ng-model="currentReplyMessage"></textarea>
+            <button ng-click="reply()">
+                <i class="zmdi zmdi-mail-send"></i>
+            </button>
         </div>
     </div>
 </div>
-<!--<script language="javascript">-->
-    <!--function fixRendering() {-->
-        <!--$('<style></style>').appendTo($(document.body)).remove();-->
-    <!--}-->
-    <!--if (typeof renderFix !== 'undefined') {-->
-        <!--clearInterval(renderFix);-->
-    <!--}-->
-    <!--var renderFix = setInterval(function () { fixRendering(); }, 100);-->
-    <!--var clearRenderFix = setTimeout(function() {-->
-        <!--clearInterval(renderFix);-->
-    <!--},8000);-->
-<!--</script>-->
-<!--<style></style>-->
