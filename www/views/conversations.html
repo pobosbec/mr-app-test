@@ -7,7 +7,7 @@
                     <ul class="convParticipants">
                         <li>
                             <div>
-                                <small ng-repeat="participant in conversation.Participants | orderBy: selfFirst" class="username">{{$first ? "You" : getUsername(participant) || "unknown" }}{{$last ? '' : ', '}}</small>
+                                <small ng-repeat="participant in conversation.Participants | orderBy: selfFirst" class="username">{{$first ? "You" : getUsername(participant) || "..." }}{{$last ? '' : ', '}}</small>
                             </div>
                         </li>
                         <li ng-repeat="message in conversation.Messages | orderBy: messagesSorting | limitTo: 1 track by message.messageId">
@@ -23,10 +23,6 @@
                 </div>
             </a>
         </div>
-        <loading></loading>
-        <!--<div ng-click="loadUnprocessedConversations()" style="width: 100%; text-align: center; font-size: 1.3em !important;" ng-show="moreConversationsAreAvailable" class="btn btn-default waves-effect">
-            <i class="zmdi zmdi-refresh-alt"></i> Load older conversations...
-        </div>-->
         <div style="height: 25px;"></div>
     </div>
 </div>
