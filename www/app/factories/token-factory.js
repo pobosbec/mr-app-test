@@ -377,9 +377,7 @@ angular.module('token', [])
         };
 
         factory.registerPushToken = function () {
-
-            //temp
-            console.log("registerPushToken...");
+            console.log("registerPushToken");
 
             return window.plugins.pushNotification.getPushToken(function(token) {
                 var req = {

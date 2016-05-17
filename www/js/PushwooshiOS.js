@@ -18,6 +18,8 @@
  */
 
 function registerPushwooshIOS() {
+    console.log("registerPushwooshIOS");
+
     var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
 
     //set push notification callback before we initialize the plugin
@@ -35,11 +37,15 @@ function registerPushwooshIOS() {
     //register for pushes
     pushNotification.registerDevice(
 		function (token) {
-            var deviceToken = token.deviceToken;
+		    console.log("pushNotification.registerDevice, token: " + JSON.stringify(token));
 
-            evt.initCustomEvent("push-service-initialized", true, true, { token: deviceToken });
+		    var deviceToken = token.deviceToken;
 
-		    window.dispatchEvent(evt);
+		    //Throws the error:
+		    //"Error in Success callbackId: PushNotification1997628909 : ReferenceError: Can't find variable: evt"
+		    //...and stops execution here. No event gets sent, and we never reach onPushwooshiOSInitialized.
+		    //evt.initCustomEvent("push-service-initialized", true, true, { token: deviceToken });
+		    //window.dispatchEvent(evt);
 
 		    onPushwooshiOSInitialized(deviceToken);
 		},
@@ -53,6 +59,8 @@ function registerPushwooshIOS() {
 }
 
 function onPushwooshiOSInitialized(pushToken) {
+    console.log("onPushwooshiOSInitialized");
+
     var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
     //retrieve the tags for the device
     pushNotification.getTags(
@@ -77,4 +85,8 @@ function onPushwooshiOSInitialized(pushToken) {
 		    console.warn('Pushwoosh HWID: ' + token);
 		}
 	);
+
+    var evt = document.createEvent('Event');
+    evt.initEvent('push-service-initialized', true, true);
+    document.dispatchEvent(evt);
 }

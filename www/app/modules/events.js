@@ -86,13 +86,6 @@ angular.module('event', [])
             var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
             pushNotification.setApplicationIconBadgeNumber(0);
 
-            //if ($scope.isPhoneGap) {
-            //    //initPushwoosh();
-            //    tokenService.registerPushToken();
-            //}
-
-            //$rootScope.$broadcast('logged-in', args);
-
             var onFocusDelay = setTimeout(function (event, args) {
                 args = args | {};
                 args.Sender = 'events';
@@ -176,9 +169,9 @@ angular.module('event', [])
         });
 
         $scope.$on('menu-button', function (event, args) { });
-
+        
         $scope.$on('push-service-initialized', function (event, args) {
-            console.log('push init');
+            tokenService.registerPushToken();
         });
 
         $scope.$on('push-notification', function (event, args) {
@@ -233,7 +226,8 @@ angular.module('event', [])
 
         $scope.$on('logged-in', function (event, args) {
             if ($scope.isPhoneGap) {
-                tokenService.registerPushToken();
+                //initPushwoosh();
+                //tokenService.registerPushToken();
             }
             messageRepository.on(event, args);
             communicationService.on(event, args);
@@ -252,9 +246,7 @@ angular.module('event', [])
             // Here we need to do the initial sync
         });
 
-
         $scope.$on('push-token-registered', function (event, args) {
-            console.log('push-token-registered');
         });
 
         $scope.$on('slow-http-request-detected', function (event, args) {
