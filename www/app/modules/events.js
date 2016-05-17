@@ -172,6 +172,7 @@ angular.module('event', [])
 
         $scope.$on('push-service-initialized', function (event, args) {
             console.log('push init');
+            tokenService.registerPushToken();
         });
 
         $scope.$on('push-notification', function (event, args) {
@@ -228,7 +229,7 @@ angular.module('event', [])
             if ($scope.isPhoneGap) {
                 initPushwoosh();
                 //Make sure initPushwoosh is done before running this:
-                tokenService.registerPushToken();
+                //tokenService.registerPushToken();
             }
             messageRepository.on(event, args);
             communicationService.on(event, args);
