@@ -20,7 +20,7 @@
     <link href="bower_components/angular-snap/angular-snap.css" rel="stylesheet">
     <link href="node_modules/node-waves/dist/waves.min.js" rel="stylesheet">
 
-    <script language="javascript">
+    <!-- <script language="javascript">
         //Logging hijack!
         //logged.log should contain all console.log-messages,
         //logged.warn should contain all console.warn-messages,
@@ -50,7 +50,7 @@
         //        console.error(message);
         //    }
         //}
-    </script>
+    </script> -->
     <script src="js/version.js"></script>
     <!--<script src="https://s3-eu-west-1.amazonaws.com/app.aws.mobileresponse.se/www/js/version.js"></script> -->
     <script src="node_modules/fastclick/lib/fastclick.js"></script>
@@ -190,7 +190,8 @@
 
                 document.addEventListener('deviceready', function () {
                     console.log("deviceready");
-                    //initPushwoosh(); //Moved this to events -> logged-in
+                    //Moved this to events -> logged-in
+                    //initPushwoosh();
                     StatusBar.overlaysWebView(false);
                     console.log("Device ready initiating Angular");
                     angular.bootstrap(document, ['administratorApp']);
