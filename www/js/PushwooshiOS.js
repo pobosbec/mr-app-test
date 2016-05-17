@@ -41,8 +41,7 @@ function registerPushwooshIOS() {
 
 		    var deviceToken = token.deviceToken;
 
-		    //Throws the error:
-		    //"Error in Success callbackId: PushNotification1997628909 : ReferenceError: Can't find variable: evt"
+		    //Throws the error: "Error in Success callbackId: PushNotification1997628909 : ReferenceError: Can't find variable: evt"
 		    //...and stops execution here. No event gets sent, and we never reach onPushwooshiOSInitialized.
 		    //evt.initCustomEvent("push-service-initialized", true, true, { token: deviceToken });
 		    //window.dispatchEvent(evt);
@@ -61,30 +60,31 @@ function registerPushwooshIOS() {
 function onPushwooshiOSInitialized(pushToken) {
     console.log("onPushwooshiOSInitialized");
 
-    var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
-    //retrieve the tags for the device
-    pushNotification.getTags(
-		function (tags) {
-		    console.warn('tags for the device: ' + JSON.stringify(tags));
-		},
-		function (error) {
-		    console.warn('get tags error: ' + JSON.stringify(error));
-		}
-	);
+    //var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
 
-    //example how to get push token at a later time
-    pushNotification.getPushToken(
-		function (token) {
-		    console.warn('push token device: ' + token);
-		}
-	);
+    ////retrieve the tags for the device
+    //pushNotification.getTags(
+	//	function (tags) {
+	//	    console.warn('tags for the device: ' + JSON.stringify(tags));
+	//	},
+	//	function (error) {
+	//	    console.warn('get tags error: ' + JSON.stringify(error));
+	//	}
+	//);
 
-    //example how to get Pushwoosh HWID to communicate with Pushwoosh API
-    pushNotification.getPushwooshHWID(
-		function (token) {
-		    console.warn('Pushwoosh HWID: ' + token);
-		}
-	);
+    ////example how to get push token at a later time
+    //pushNotification.getPushToken(
+	//	function (token) {
+	//	    console.warn('push token device: ' + token);
+	//	}
+	//);
+
+    ////example how to get Pushwoosh HWID to communicate with Pushwoosh API
+    //pushNotification.getPushwooshHWID(
+	//	function (token) {
+	//	    console.warn('Pushwoosh HWID: ' + token);
+	//	}
+	//);
 
     var evt = document.createEvent('Event');
     evt.initEvent('push-service-initialized', true, true);
