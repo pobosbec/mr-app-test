@@ -334,6 +334,15 @@ angular.module('conversations', [])
                         });
                 }
 
+                $scope.$watch('conversation.Messages[0]', function (newValue, oldValue) {
+                    $scope.unseenMessages = $scope.unseenMessages || !$scope.atBottom;
+                });
+
+                $scope.goToBottom = function() {
+                    var viewBody = $("#conversationMessagesBody");
+                    viewBody[0].scrollTop = viewBody[0].scrollHeight;
+                }
+
                 /**
                  * Loads older messages when reaching the top
                  * Will also set scroll the the new messages are added above the screen
