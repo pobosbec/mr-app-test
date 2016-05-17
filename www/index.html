@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Security-Policy"/>
+    <meta http-equiv="Content-Security-Policy" />
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title></title>
 
@@ -27,29 +27,29 @@
         //logged.error should contain all console.error-messages
 
         var logged = {
-            log:new Array(),
+            log: new Array(),
+            info: new Array(),
             warn:new Array(),
             error: new Array()
         }
-        (function () {
-            var oldLog = console.log;
-            console.log = function (message) {
+        window.console = {
+            log: function (message) {
                 logged.log.unshift(message);
-                oldLog.apply(console, arguments);
-            };
-
-            var oldWarn = console.warn;
-            console.warn = function (message) {
+                console.log(message);
+            },
+            info: function (message) {
+                logged.info.unshift(message);
+                console.info(message);
+            },
+            warn : function(message) {
                 logged.warn.unshift(message);
-                oldWarn.apply(console, arguments);
-            };
-
-            var oldError = console.error;
-            console.error = function (message) {
+                console.warn(message);
+            },
+            error: function (message) {
                 logged.error.unshift(message);
-                oldError.apply(console, arguments);
-            };
-        })();
+                console.error(message);
+            }
+        }
     </script>
     <script src="js/version.js"></script>
     <!--<script src="https://s3-eu-west-1.amazonaws.com/app.aws.mobileresponse.se/www/js/version.js"></script> -->
