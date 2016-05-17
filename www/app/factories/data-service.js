@@ -82,20 +82,26 @@ angular.module('services', [])
                             messages[i].CreatedOn = messages[i].createdOn;
                             messages[i].Content = messages[i].content;
                             messages[i].IsRead = messages[i].isRead;
-                            conversation.Messages.push(messages[i]);
                         }
+
+                        messages.some(function (message) {
+                            var arr = [];
+                            arr.push(message);
+                            removeDuplicates(message.ConversationId, arr, false);
+                        });
                     });
                 }
 
                 function syncAppUserParticipant(participantId) {
                     var query = '';
 
-                    participantId.some(function (id) {
-                        query += "," + id;
-                    });
-
-                    query = query.slice(0, -1);
-                    query = query.slice(1, query.length);
+                    for (var i = 0; i < participantId.length; i++) {
+                        if (i === 0) {
+                            query = participantId[i];
+                        } else {
+                            query += ',' + participantId[i];
+                        }
+                    }
 
                     return contactsService.searchAppUser(query);
                 }
@@ -119,7 +125,7 @@ angular.module('services', [])
                     if (processedConvos <= conversationsLimit) {
                         conversation.Participants.some(function (participant) {
                             if (participant !== factory.userId)
-                            appUserExistsPromises.push(contactsService.userExists(participant));
+                                appUserExistsPromises.push(contactsService.userExists(participant));
                         });
 
                         syncConversationMessages(conversation, conversationMessages);
@@ -156,7 +162,7 @@ angular.module('services', [])
                 });
             }
 
-            function removeDuplicates(conversationId, messages) {
+            function removeDuplicates(conversationId, messages, newMessages) {
 
                 function check(message) {
                     for (var i = 0; i < factory.conversations.length; i++) {
@@ -172,7 +178,11 @@ angular.module('services', [])
                             }
 
                             if (shouldAdd) {
-                                factory.conversations[i].Messages.push(message);
+                                if (newMessages) {
+                                    factory.conversations[i].Messages.unshift(message);
+                                } else {
+                                    factory.conversations[i].Messages.push(message);
+                                }
                                 break;
                             }
                         }
@@ -225,7 +235,7 @@ angular.module('services', [])
 
                 promise.then(
                     function (success) {
-                        removeDuplicates(conversationId, success);
+                        removeDuplicates(conversationId, success, false);
                         factory.isLoading = false;
                         deferred.resolve();
                     },
@@ -300,7 +310,7 @@ angular.module('services', [])
                                 gotMessages.some(function (message) {
                                     var arr = [];
                                     arr.push(message);
-                                    removeDuplicates(message.ConversationId, arr);
+                                    removeDuplicates(message.ConversationId, arr, true);
                                 });
                             },
                             function (errorGettingMessages) {
