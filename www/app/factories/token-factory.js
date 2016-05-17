@@ -160,9 +160,7 @@ angular.module('token', [])
                     userDetails.emailAddress = greeting.data.emailAddress;
                 }
 
-                console.log(userDetails.displayName);
                 factory.saveToDb("userDetails", userDetails);
-                //  factory.saveToDb("pushToken", factory.getPushToken());
 
                 //TODO: logged in now transfer home
                 $rootScope.$broadcast("app-token-available");

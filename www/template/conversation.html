@@ -19,7 +19,7 @@
                     <a href="" ng-click="loadMoreForConversation(conversation.ConversationId)"><i class="zmdi zmdi-refresh-alt"></i> Load More...</a>
                 </div>
                 <loading></loading>
-                <div class="lv-item" ng-repeat="message in conversation.Messages | orderBy: sortMessage track by message.messageId" ng-class="message.Author === userId ? 'media right': 'media'">
+                <div class="lv-item" ng-repeat="message in conversation.Messages | orderBy: sortMessage track by message.MessageId" ng-class="message.Author === userId ? 'media right': 'media'">
                     <div class="lv-avatar" ng-class="message.Author === userId ? 'pull-right': 'pull-left'">
                         <img ng-src="{{ getAvatar(message.Author) || 'img/profile-pics/5.jpg' }}" alt="">
                     </div>
@@ -41,7 +41,7 @@
                             </div>
                         </div>
                         <small class="ms-date">
-                            <span ng-if="checkIfGroupConversation()" style="margin-right: 5px">{{getUsername(message.Author)}}</span>
+                            <span ng-if="isGroupConversation" style="margin-right: 5px">{{getUsername(message.Author)}}</span>
                             <span ng-if="message.Failed"><small><i>Message could not be sent. Try again by pressing refresh button.</i></small></span>
                             <i class="zmdi zmdi-time"></i>
                             <span ng-show="formatMode(message.CreatedOn)==1">{{format(message.CreatedOn) | amTimeAgo}}</span>

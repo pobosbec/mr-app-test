@@ -8,6 +8,15 @@ angular.module('contacts', [])
         var factory = {};
         var dbType = null;
         var queries = null;
+        var isConfigured = false;
+
+        var databaseConfiguration = {
+            name: "bosbec-mr.db",
+            location: 1,
+            version: "1.0",
+            displayName: "Bosbec-Mr",
+            size: (5 * 1024 * 1024)
+        };
 
         var webSqlQueries = {
             dropAppUsers: 'DROP TABLE IF EXISTS AppUsers',
@@ -32,6 +41,7 @@ angular.module('contacts', [])
                 if (typeof appUser !== "undefined" && appUser.hasOwnProperty("id")) {
                     if (appUser.id === appUserId) {
                         found = factory.appUsers[i].displayName;
+                        break;
                     }
                 }
             }
@@ -42,7 +52,21 @@ angular.module('contacts', [])
         };
 
         factory.init = function init() {
+
+            if (isConfigured) {
+                return;
+            }
+
+            isConfigured = true;
+
+            var conf = databaseConfiguration;
+
+            // Browser
+            db = window.openDatabase(conf.name, conf.version, conf.displayName, conf.size);
             queries = webSqlQueries;
+            dbType = 'webSQL';
+
+            createDatabase();
 
             var promise = factory.getAppUsers();
             promise.then(function (success) {
@@ -267,18 +291,19 @@ angular.module('contacts', [])
         factory.on = function (event, args) {
             switch (event.name) {
                 case 'logged-in':
-                    
+                    factory.init();
                     break;
                 case 'logged-out':
-                    //// localStorage.removeItem('latestWhatIsNewUpdate');
-                    //// Clearing Table on logout, just to be sure
-                    //dropDatabase().then(
-                    //    function () {
-                    //        console.log('Dropped appUsers database');
-                    //    },
-                    //    function (error) {
-                    //        console.error('Failed to drop database.\r\n' + error.message);
-                    //    });
+                    factory.appUsers.length = 0;
+                    // Clearing Table on logout, just to be sure
+                    isConfigured = false;
+                    dropDatabase().then(
+                        function () {
+                            console.log('Dropped appUsers database');
+                        },
+                        function (error) {
+                            console.error('Failed to drop database.\r\n' + error.message);
+                        });
                     break;
                 default:
                     break;
@@ -365,6 +390,15 @@ angular.module('contacts', [])
          * Creates a promise for dropping the database tables.
          */
         function dropDatabase() {
+            if (db === null || db === undefined) {
+                var conf = databaseConfiguration;
+
+                // Browser
+                db = window.openDatabase(conf.name, conf.version, conf.displayName, conf.size);
+                queries = webSqlQueries;
+                dbType = 'webSQL';
+            }
+
             return $q(function (resolve, reject) {
                 db.transaction(function (tx) {
                     tx.executeSql(queries.dropAppUsers, [], function () {

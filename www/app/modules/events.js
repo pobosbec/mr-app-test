@@ -245,6 +245,7 @@ angular.module('event', [])
             messageRepository.on(event, args);
             communicationService.on(event, args);
             contactsService.on(event, args);
+            dataService.on(event, args);
         });
 
         $scope.$on('app-token-available', function (event, args) {
@@ -289,5 +290,9 @@ angular.module('event', [])
 
         $scope.$on('download-messages', function (event, args) {
             communicationService.on(event, args);
+        });
+
+        $scope.$on('messages-added', function (event, args) {
+            dataService.on(event, args);
         });
     }]);

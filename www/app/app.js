@@ -25,4 +25,12 @@ var mobileresponseWebbApp = angular.module('administratorApp', [
     'services'
 ]).run(function () {
     FastClick.attach(document.body);
+
+    //var databaseConfiguration = {
+    //    name: "bosbec-mr.db",
+    //    location: 1,
+    //    version: "1.0",
+    //    displayName: "Bosbec-Mr",
+    //    size: (5 * 1024 * 1024)
+    //};
 });

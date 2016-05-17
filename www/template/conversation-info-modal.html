@@ -1,7 +1,7 @@
 ﻿<div class="modal-body" style="padding-top: 15px!important;">
     <div class="listview lv-bordered lv-lg">
         <div class="lv-body">
-            <div class="lv-item media" ng-repeat="participant in conversationParticipants">
+            <div class="lv-item media" ng-repeat="participant in conversationParticipants track by participant.UserId">
                 <div class="media-body" style="overflow: hidden; white-space: nowrap;">
                     <img class="lv-img-sm" ng-src="{{ participant.avatar || 'img/profile-pics/5.jpg' }}" alt="">
                     <ul class="convParticipants">
@@ -16,20 +16,6 @@
                         </li>
                     </ul>
                 </div>
-            </div>
-            <button class="btn btn-primary waves-effect" ng-click="advancedSettings = !advancedSettings" style="margin-bottom: 10px;width: 100%">Advanced settings</button>
-            <div ng-show="advancedSettings" style="height: auto;">
-                    <h1>Sync messages</h1>
-                    <br>
-                    From
-                    <input type="date" ng-model="sync.From" placeholder="From.." style="margin-top: 10px; color: black !important">
-                    <br>
-                    To
-                    <input type="date" ng-model="sync.To" placeholder="Too.." style="margin-top: 10px; color: black !important">
-                    <br>
-                    <li class="btn btn-sm btn-primary waves-effect" style="width: 100%" data-ng-click="syncMessages(sync.From, sync.To)" style="margin-top: 10px; margin-bottom: 10px">
-                        Sync messages
-                    </li>
             </div>
             <button class="btn btn-sm btn-primary waves-effect" ng-click="close()" style="width: 100%">Close</button>
         </div>

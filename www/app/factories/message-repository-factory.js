@@ -3,8 +3,8 @@
  */
 
 angular.module('message', ['ngCordova'])
-    .factory('messageRepository', ['$http', '$window', '$rootScope', '$location', '$q', '$state', 'tokenService', '$cordovaSQLite', 'communicationService', 'baseRepository', function ($http, win, $rootScope, $location, $q, $state, tokenService, $cordovaSQLite, communicationService, baseRepository) {
-        var db = baseRepository.db;
+    .factory('messageRepository', ['$http', '$window', '$rootScope', '$location', '$q', '$state', 'tokenService', '$cordovaSQLite', 'communicationService', function ($http, win, $rootScope, $location, $q, $state, tokenService, $cordovaSQLite, communicationService, baseRepository) {
+        var db;
 
         var factory = {};
 
@@ -25,23 +25,6 @@ angular.module('message', ['ngCordova'])
             version: "1.0",
             displayName: "Bosbec-Mr",
             size: (5 * 1024 * 1024)
-        };
-
-        var sqliteQueries = {
-            dropMessages: 'DROP TABLE IF EXISTS Messages',
-            createMessages: 'CREATE TABLE IF NOT EXISTS Messages (MessageId text primary key, CreatedOn integer, ConversationId text, Author text, JSON text)',
-            getMessagesByTime: 'SELECT MessageId, JSON FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
-            getConversations: 'SELECT DISTINCT ConversationId FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
-            getMessagesByConversation: 'SELECT MessageId, JSON FROM Messages WHERE ConversationId = ? ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
-            insertMessage: 'INSERT INTO Messages (MessageId, CreatedOn, ConversationId, Author, JSON) VALUES (?, ?, ?, ?, ?)',
-            deleteConversation: 'DELETE FROM Messages WHERE ConversationId=?',
-            doesMessageExist: 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?',
-            doMessagesExist: 'SELECT MessageId FROM Messages WHERE MessageId IN ',
-            dropConversationPartisipantsTable: 'DROP TABLE IF EXISTS ConversationParticipants',
-            createConversationParticipants: 'CREATE TABLE IF NOT EXISTS ConversationParticipants (ConversationId text primary key, Participants text)',
-            getConversationParticipants: 'SELECT Participants FROM ConversationParticipants WHERE ConversationId = ?',
-            getAllConversationsAndParticipants: 'SELECT * FROM ConversationParticipants',
-            insertConversationParticipants: 'INSERT OR REPLACE INTO ConversationParticipants (ConversationId, Participants) VALUES (?, ?)'
         };
 
         var webSqlQueries = {
@@ -83,34 +66,28 @@ angular.module('message', ['ngCordova'])
 
             queries = webSqlQueries;
 
-            //var conf = databaseConfiguration;
-            //if (false && window.isPhoneGap) {
-            //    // Mobile Device
-            //    db = window.sqlitePlugin.openDatabase({ name: conf.name, location: conf.location });
-            //    queries = sqliteQueries;
-            //    dbType = 'sqlite';
-            //    console.log('Opened up sqlite connection');
-            //} else {
-            //    // Browser
-            //    db = window.openDatabase(conf.name, conf.version, conf.displayName, conf.size);
-            //    queries = webSqlQueries;
-            //    dbType = 'webSQL';
-            //    console.log('Opened up web SQL connection');
-            //}
+            var conf = databaseConfiguration;
 
-            //createMessagesTable()
-            //    .then(
-            //        function () {
-            //            console.log('The messages table was successfully created.');
-            //        }, function (error) {
-            //            console.error('Failed to create the table.\r\n' + error.message);
-            //        });
-            //createConversationParticipantsTable().then(
-            //        function () {
-            //            console.log('The conversation participants table was successfully created.');
-            //        }, function (error) {
-            //            console.error('Failed to create the table.\r\n' + error.message);
-            //        });
+            // Browser
+            db = window.openDatabase(conf.name, conf.version, conf.displayName, conf.size);
+            queries = webSqlQueries;
+            dbType = 'webSQL';
+            console.log('Opened up web SQL connection');
+
+
+            createMessagesTable()
+                .then(
+                    function () {
+                        console.log('The messages table was successfully created.');
+                    }, function (error) {
+                        console.error('Failed to create the table.\r\n' + error.message);
+                    });
+            createConversationParticipantsTable().then(
+                    function () {
+                        console.log('The conversation participants table was successfully created.');
+                    }, function (error) {
+                        console.error('Failed to create the table.\r\n' + error.message);
+                    });
         }
 
         factory.reMapMessage = function (message) {
@@ -126,7 +103,7 @@ angular.module('message', ['ngCordova'])
             return reMapped;
         }
 
-        
+
         /**
          * Creates a promise for creating the database tables.
          */
@@ -176,6 +153,15 @@ angular.module('message', ['ngCordova'])
          * Creates a promise for dropping the database tables.
          */
         function dropMessagesTable() {
+            if (db === null || db === undefined) {
+                var conf = databaseConfiguration;
+
+                // Browser
+                db = window.openDatabase(conf.name, conf.version, conf.displayName, conf.size);
+                queries = webSqlQueries;
+                dbType = 'webSQL';
+            }
+
             return $q(function (resolve, reject) {
                 db.transaction(function (tx) {
                     tx.executeSql(queries.dropMessages, [], function () {
@@ -188,6 +174,15 @@ angular.module('message', ['ngCordova'])
         }
 
         function dropConversationPartisipantsTable() {
+            if (db === null || db === undefined) {
+                var conf = databaseConfiguration;
+
+                // Browser
+                db = window.openDatabase(conf.name, conf.version, conf.displayName, conf.size);
+                queries = webSqlQueries;
+                dbType = 'webSQL';
+            }
+
             return $q(function (resolve, reject) {
                 db.transaction(function (tx) {
                     tx.executeSql(queries.dropConversationPartisipantsTable, [], function () {
@@ -884,6 +879,7 @@ angular.module('message', ['ngCordova'])
                 case 'device-ready':
                     break;
                 case 'logged-out':
+                    isConfigured = false;
                     dropMessagesTable().then(function () {
                         return dropConversationPartisipantsTable();
                     }).then(
@@ -895,13 +891,12 @@ angular.module('message', ['ngCordova'])
                         });
                     break;
                 case 'logged-in':
-                    
+                    factory.init();
                     break;
                 default:
                     break;
             }
         };
 
-        factory.init();
         return factory;
     }]);
