@@ -190,7 +190,7 @@
 
                 document.addEventListener('deviceready', function () {
                     console.log("deviceready");
-                    //initPushwoosh();
+                    //initPushwoosh(); //Moved this to events -> logged-in
                     StatusBar.overlaysWebView(false);
                     console.log("Device ready initiating Angular");
                     angular.bootstrap(document, ['administratorApp']);
