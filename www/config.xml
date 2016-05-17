@@ -5,11 +5,11 @@
         xmlns:gap = "http://phonegap.com/ns/1.0"
         xmlns:android = "http://schemas.android.com/apk/res/android"
         id        = "com.bosbec.test-app"
-        version   = "0.2.5"> <!-- VERSION HERE -->
+        version   = "0.2.5b"> <!-- VERSION HERE -->
   <!--id        = "com.phonegap.hello-world"-->
 
   <gap:config-file platform="ios" parent="CFBundleShortVersionString">
-    <string>0.2.4</string> <!-- VERSION HERE -->
+    <string>0.2.5b</string> <!-- VERSION HERE -->
   </gap:config-file>
 
   <gap:config-file platform="android" parent="/manifest">
@@ -84,7 +84,6 @@
   <gap:plugin name="org.apache.cordova.device" />
   <gap:plugin name="org.apache.cordova.device-motion" />
   <gap:plugin name="org.apache.cordova.device-orientation" />
-  <gap:plugin name="org.apache.cordova.dialogs" />
   <gap:plugin name="org.apache.cordova.file" />
   <gap:plugin name="org.apache.cordova.file-transfer" />
   <gap:plugin name="org.apache.cordova.geolocation" />
@@ -103,6 +102,9 @@
 
   <!-- Ios statusbar plugin -->
   <gap:plugin name="cordova-plugin-statusbar" spec="2.1.3" source="npm" />
+
+  <gap:plugin name="cordova-plugin-dialogs"/>
+
 
   <!-- Define app icon for each platform. -->
   <icon src="icon.png" />

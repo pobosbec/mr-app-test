@@ -461,8 +461,8 @@ angular.module('conversations', [])
                             $scope.conversation.Messages.push(a);
 
                             if ($scope.atBottom) {
-                                //$('#conversationMessagesBody').scrollTop($('#conversationMessagesBody')[0].scrollHeight);
-                                $("#conversationMessagesBody").animate({ scrollTop: $("#conversationMessagesBody")[0].scrollHeight }, "slow");
+                                $('#conversationMessagesBody').scrollTop($('#conversationMessagesBody')[0].scrollHeight);
+                               // $("#conversationMessagesBody").animate({ scrollTop: $("#conversationMessagesBody")[0].scrollHeight }, "slow");
                             };
                         }
                     });
@@ -689,7 +689,6 @@ angular.module('conversations', [])
                 //   };
 
                 //   init();
-
             }
     ])
         .controller('conversationInfoCtrl', [

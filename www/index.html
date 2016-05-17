@@ -103,6 +103,8 @@
 
     <script language="javascript">
 
+        console.log("running script in index..");
+
         Waves.init();
 
         function isAndroid() {
@@ -159,6 +161,7 @@
                 }
 
                 document.addEventListener('deviceready', function () {
+                    console.log("deviceready");
                     initPushwoosh();
                     StatusBar.overlaysWebView(false);
                     console.log("Device ready initiating Angular");
