@@ -7,11 +7,12 @@ angular.module('services', [])
             var factory = {};
 
             factory.conversations = [];
-            factory.userId = tokenService.getAppUserId();
+            factory.userId = null;
             factory.pageSize = 10;
             factory.AppUsers = contactsService.appUsers;
             factory.moreConversationsAreAvailable = true;
             factory.unProccessedConversations = [];
+            factory.unidentifiedAppUsers = [];
 
             function handleConversation(databasePromise) {
                 for (var cid in databasePromise) {
@@ -28,7 +29,7 @@ angular.module('services', [])
                 var promise = $q(function (resolve, reject) {
                     var quickLoadConversationsSize = 10;
                     var quickLoadMessagesSize = 10;
-                    console.log("QUICK LOADING");
+
                     var conversationsFromApiPromise = communicationService.getAllConversations(null);
                     conversationsFromApiPromise.then(
                         function (conversationsPromiseSuccess) {
@@ -46,7 +47,6 @@ angular.module('services', [])
                                     Participants: conversationsPromiseSuccess.data.usersInConversations[convo]
                                 };
 
-                                contactsService.usersExists(conversation.Participants);
                                 conversations.push(conversation);
                             }
 
@@ -59,30 +59,6 @@ angular.module('services', [])
             }
 
             function addConversations(conversations, conversationsLimit, conversationMessages) {
-                if (typeof conversationsLimit != "number") {
-                    conversationsLimit = 1000;
-                }
-                if (typeof conversationMessages != "number") {
-                    conversationMessages = 10;
-                }
-
-                var processedConvos = 0;
-
-                conversations.some(function (conversation) {
-                    if (typeof conversation === "undefined" || conversation === null) {
-                        return;
-                    }
-                    processedConvos++;
-
-                    // Break after fetching the desired ammount of conversations.
-                    if (processedConvos <= conversationsLimit) {
-                        syncConversationMessages(conversation, conversationMessages);
-                        factory.conversations.push(conversation);
-                    } else {
-                        factory.unProccessedConversations.push(conversation);
-                        factory.moreConversationsAreAvailable = factory.unProccessedConversations.length > 0;
-                    }
-                });
 
                 function syncConversationMessages(conversation, amount) {
                     var messagesPromise = communicationService.downloadMessagesForConversation(conversation.ConversationId, false, 0, amount);
@@ -110,6 +86,74 @@ angular.module('services', [])
                         }
                     });
                 }
+
+                function syncAppUserParticipant(participantId) {
+                    var query = '';
+
+                    participantId.some(function (id) {
+                        query += "," + id;
+                    });
+
+                    query = query.slice(0, -1);
+                    query = query.slice(1, query.length);
+
+                    return contactsService.searchAppUser(query);
+                }
+
+                if (typeof conversationsLimit != "number") {
+                    conversationsLimit = 1000;
+                }
+                if (typeof conversationMessages != "number") {
+                    conversationMessages = 10;
+                }
+
+                var processedConvos = 0;
+                var appUserExistsPromises = [];
+
+                conversations.some(function (conversation) {
+                    if (typeof conversation === "undefined" || conversation === null) {
+                        return;
+                    }
+                    processedConvos++;
+
+                    if (processedConvos <= conversationsLimit) {
+                        conversation.Participants.some(function (participant) {
+                            if (participant !== factory.userId)
+                            appUserExistsPromises.push(contactsService.userExists(participant));
+                        });
+
+                        syncConversationMessages(conversation, conversationMessages);
+                        factory.conversations.push(conversation);
+                    } else {
+                        factory.unProccessedConversations.push(conversation);
+                        factory.moreConversationsAreAvailable = factory.unProccessedConversations.length > 0;
+                    }
+                });
+
+                $q.all(appUserExistsPromises).then(function (values) {
+                    for (var i = 0; i < values.length; i++) {
+                        if (values[i].Found === false) {
+                            factory.unidentifiedAppUsers.push(values[i].Id);
+                        }
+                    }
+
+                    if (factory.unidentifiedAppUsers.length > 0) {
+                        var promise = syncAppUserParticipant(factory.unidentifiedAppUsers);
+
+                        promise.then(
+                            function (success) {
+                                if (success.data.items != null) {
+                                    success.data.items.some(function (appUser) {
+                                        factory.unidentifiedAppUsers.splice(factory.unidentifiedAppUsers.indexOf(appUser.id), 1);
+                                        contactsService.addAppUser(appUser);
+                                    });
+                                }
+                            },
+                            function (error) {
+                                console.error('Could not sync user: ' + JSON.stringify(error));
+                            });
+                    }
+                });
             }
 
             function removeDuplicates(conversationId, messages) {
@@ -242,8 +286,10 @@ angular.module('services', [])
                     case 'logged-out':
                         factory.conversations.length = 0;
                         factory.unProccessedConversations.length = 0;
+                        factory.unidentifiedAppUsers.length = 0;
                         break;
                     case 'logged-in':
+                        factory.userId = tokenService.getAppUserId();
                         factory.quickLoad();
                         break;
                     case 'messages-added':

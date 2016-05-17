@@ -216,10 +216,43 @@ angular.module('contacts', [])
             });
         }
 
-        factory.usersExists = function(appUserIds) {
-            appUserIds.some(function(appUserId) {
-                factory.getAppUser(appUserId);
+        factory.userExists = function (appUserId) {
+
+            var deferred = $q.defer();
+
+            var found = factory.appUsers.some(function (appUser) {
+                if (appUserId === appUser.UserId) {
+                    return true;
+                }
             });
+
+            var returnResult = { Found: false, Id: null };
+
+            if (found) {
+                returnResult.Found = true;
+                deferred.resolve(returnResult);
+            } else {
+                var foundPromise = factory.getAppUser();
+
+                foundPromise.then(function (success) {
+                    if (success.length === 1) {
+                        factory.appUsers.push(success);
+                        returnResult.Found = true;
+                        deferred.resolve(returnResult);
+                    } else {
+                        returnResult.Found = false;
+                        returnResult.Id = appUserId;
+                        deferred.resolve(returnResult);
+                    }
+                    
+                }, function (error) {
+                    returnResult.Found = false;
+                    returnResult.Id = appUserId;
+                    deferred.resolve(returnResult);
+                });
+            }
+
+            return deferred.promise;
         }
 
         factory.getAppUser = function (appUserId) {
@@ -236,15 +269,15 @@ angular.module('contacts', [])
                                     reject('Not a valid appUserId');
                                 }
 
-                                var promise = factory.searchAppUser(appUserId);
+                                //var promise = factory.searchAppUser(appUserId);
 
-                                promise.then(function (success) {
-                                    if (success.data.items != null) {
-                                        success.data.items.some(function (appUser) {
-                                            factory.addAppUser(appUser);
-                                        });
-                                    }
-                                });
+                                //promise.then(function (success) {
+                                //    if (success.data.items != null) {
+                                //        success.data.items.some(function (appUser) {
+                                //            factory.addAppUser(appUser);
+                                //        });
+                                //    }
+                                //});
                             }
 
                             for (var i = 0; i < rows.length; i++) {
