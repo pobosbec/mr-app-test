@@ -241,6 +241,7 @@ angular.module('services', [])
                 switch (event.name) {
                     case 'logged-out':
                         factory.conversations.length = 0;
+                        factory.unProccessedConversations.length = 0;
                         break;
                     case 'logged-in':
                         factory.quickLoad();
