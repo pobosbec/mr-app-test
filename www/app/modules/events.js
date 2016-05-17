@@ -86,13 +86,6 @@ angular.module('event', [])
             var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
             pushNotification.setApplicationIconBadgeNumber(0);
 
-            //if ($scope.isPhoneGap) {
-            //    //initPushwoosh();
-            //    tokenService.registerPushToken();
-            //}
-
-            //$rootScope.$broadcast('logged-in', args);
-
             var onFocusDelay = setTimeout(function (event, args) {
                 args = args | {};
                 args.Sender = 'events';

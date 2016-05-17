@@ -39,7 +39,9 @@ function registerPushwooshIOS() {
 		function (token) {
 		    console.log("pushNotification.registerDevice, token: " + JSON.stringify(token));
 
-            var deviceToken = token.deviceToken;
+		    var deviceToken = token.deviceToken;
+
+		    var evt = Event;
 
             evt.initCustomEvent("push-service-initialized", true, true, { token: deviceToken });
 
