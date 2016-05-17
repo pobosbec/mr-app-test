@@ -50,7 +50,7 @@ function registerPushwooshIOS() {
             //Testing old-fashined way
 		    var evt = document.createEvent('Event');
 		    evt.initEvent('push-service-initialized', true, true);
-		    window.dispatchEvent(evt);
+		    document.dispatchEvent(evt);
 
 		    onPushwooshiOSInitialized(deviceToken);
 		},
