@@ -120,6 +120,7 @@ angular.module('conversations', [])
                     dataService.conversations.some(function (conversation) {
                         if (conversation.ConversationId === $scope.conversationId) {
                             $scope.conversation = conversation;
+                            return true;
                         }
                     });
                 }
