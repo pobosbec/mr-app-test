@@ -43,9 +43,13 @@ function registerPushwooshIOS() {
 
 		    //Throws the error:
 		    //"Error in Success callbackId: PushNotification1997628909 : ReferenceError: Can't find variable: evt"
-            //and stops execution here (?)
-            evt.initCustomEvent("push-service-initialized", true, true, { token: deviceToken });
-
+		    //...and stops execution here. No event gets sent, and we never reach onPushwooshiOSInitialized.
+		    //evt.initCustomEvent("push-service-initialized", true, true, { token: deviceToken });
+		    //window.dispatchEvent(evt);
+            
+            //Testing old-fashined way
+		    var evt = document.createEvent('Event');
+		    evt.initEvent('push-service-initialized', true, true);
 		    window.dispatchEvent(evt);
 
 		    onPushwooshiOSInitialized(deviceToken);
