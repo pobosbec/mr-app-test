@@ -171,7 +171,7 @@ angular.module('event', [])
         $scope.$on('menu-button', function (event, args) { });
         
         $scope.$on('push-service-initialized', function (event, args) {
-            //tokenService.registerPushToken();
+            tokenService.registerPushToken();
         });
 
         $scope.$on('push-notification', function (event, args) {
