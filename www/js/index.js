@@ -18,6 +18,7 @@
  */
 function initPushwoosh() {
     if (window.isPhoneGap) {
+        console.log("initPushwoosh, isPhoneGap");
         if (cordova !== null && typeof cordova !== "undefined" && cordova.require !== null && typeof cordova.require !== "undefined") {
             if (device.platform == "Android") {
                 registerPushwooshAndroid();
