@@ -21,7 +21,8 @@ var mobileresponseWebbApp = angular.module('administratorApp', [
     'conversations',
     'modalcontroll',
     'profile',
-    'settings'
+    'settings',
+    'services'
 ]).run(function () {
     FastClick.attach(document.body);
 });

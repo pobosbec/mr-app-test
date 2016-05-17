@@ -9,116 +9,108 @@ angular.module('contacts', [])
         var dbType = null;
         var queries = null;
 
-        factory.appUsers = [];
-        factory.contacts = [];
-        factory.inboxId = '8a0958a2-a163-4a20-8afa-e7315012e2d8';
-
-        // Indicates if appUsers are added but event isn't fired yet
-        var evtappUsersAdded = false;
-
-        // Indicates if the database is configured
-        var isConfigured = false;
-
-        var databaseConfiguration = {
-            name: "bosbec-mr.db",
-            location: 1,
-            version: "1.0",
-            displayName: "Bosbec-Mr",
-            size: (5 * 1024 * 1024)
-        };
-
-        var sqliteQueries = {
-            dropAppUsers: 'DROP TABLE IF EXISTS AppUsers',
-            createAppUsers: 'CREATE TABLE IF NOT EXISTS AppUsers (AppUserId text primary key, DisplayName text, JSON text)',
-            getAppUsers: 'SELECT * FROM AppUsers',
-            //getMessagesByTime : 'SELECT MessageId, JSON FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
-            //getConversations : 'SELECT DISTINCT ConversationId FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
-            //getMessagesByConversation : 'SELECT MessageId, JSON FROM Messages WHERE ConversationId = ? ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
-            /**/  //getAllMessages: 'SELECT * FROM Messages ORDER BY CreatedOn DESC',
-            /**/  //getLatestMessages: 'SELECT * FROM Messages ORDER BY CreatedOn DESC LIMIT ?',
-            /**/  //getAllMessagesFromAuthor: 'SELECT * FROM Messages WHERE Author=?',
-            /**/  //getAllMessagesFromConversation: 'SELECT * FROM Messages WHERE ConversationId=?',
-            insertAppUser: 'INSERT OR REPLACE INTO AppUsers (AppUserId, DisplayName, JSON) VALUES (?, ?, ?)',
-            //doesMessageExist : 'SELECT COUNT(*) AS cnt FROM Messages WHERE MessageId=?',
-            doesAppUserExist : 'SELECT COUNT(*) AS cnt FROM AppUsers WHERE AppUserId=?',
-            //doMessagesExist : 'SELECT MessageId FROM Messages WHERE MessageId IN '
-            updateAppUser: 'UPDATE AppUsers SET JSON=? WHERE AppUserId =?'
-        };
-
         var webSqlQueries = {
             dropAppUsers: 'DROP TABLE IF EXISTS AppUsers',
             createAppUsers: 'CREATE TABLE IF NOT EXISTS AppUsers (AppUserId text primary key, DisplayName text, JSON text)',
             getAppUsers: 'SELECT * FROM AppUsers',
             insertAppUser: 'INSERT OR REPLACE INTO AppUsers (AppUserId, DisplayName, JSON) VALUES (?, ?, ?)',
-            doesAppUserExist : 'SELECT COUNT(*) AS cnt FROM AppUsers WHERE AppUserId=?',
+            doesAppUserExist: 'SELECT COUNT(*) AS cnt FROM AppUsers WHERE AppUserId=?',
             updateAppUser: 'UPDATE AppUsers SET JSON=? WHERE AppUserId=?',
             getAppUser: 'SELECT * FROM AppUsers WHERE AppUserId=?',
             deleteAppUser: 'DELETE FROM AppUsers WHERE AppUserId=?'
         };
 
+        factory.appUsers = [];
+        factory.contacts = [];
+        factory.inboxId = '8a0958a2-a163-4a20-8afa-e7315012e2d8';
+
+        factory.getUsername = function (appUserId) {
+            var found = null;
+
+            for (var i = 0; i < factory.appUsers.length; i++) {
+                var appUser = factory.appUsers[i];
+                if (typeof appUser !== "undefined" && appUser.hasOwnProperty("id")) {
+                    if (appUser.id === appUserId) {
+                        found = factory.appUsers[i].displayName;
+                    }
+                }
+            }
+
+            if (found != null) {
+                return found;
+            }
+        };
+
         factory.init = function init() {
-            configureDatabase();
+            queries = webSqlQueries;
+
+            var promise = factory.getAppUsers();
+            promise.then(function (success) {
+                factory.appUsers = success;
+            }, function (error) {
+                factory.appUsers = [];
+            });
         }
 
-        factory.findAppUsersFromAllContacts = function(){
+        factory.findAppUsersFromAllContacts = function () {
             var query = ['+46704738757', 'bjorn@bosbec.se'];
 
-            if(contacts == null || contacts == undefined){
+            if (contacts == null || contacts == undefined) {
                 return;
             }
 
             var promise = factory.loadContacts();
 
             promise.then(
-                function(success){
-                for(var i = 0; i < contacts.length; i++){
-                    var contact = contacts[i];
+                function (success) {
+                    for (var i = 0; i < contacts.length; i++) {
+                        var contact = contacts[i];
 
-                    if(contact.phoneNumbers != null || contact.phoneNumbers != undefined){
-                        for(var j = 0; j < contact.phoneNumbers.length; j++){
-                            query.push(contact.phoneNumbers[j].value);
+                        if (contact.phoneNumbers != null || contact.phoneNumbers != undefined) {
+                            for (var j = 0; j < contact.phoneNumbers.length; j++) {
+                                query.push(contact.phoneNumbers[j].value);
+                            }
+                        }
+
+                        if (contact.emails != null || contact.emails != undefined) {
+                            for (var k = 0; k < contact.emails.length; k++) {
+                                query.push(contact.emails[k].value);
+                            }
                         }
                     }
 
-                    if(contact.emails != null || contact.emails != undefined){
-                        for(var k = 0; k < contact.emails.length; k++){
-                            query.push(contact.emails[k].value);
-                        }
-                    }
-                }
-
-                var req = {
-                    method: 'POST',
-                    ignoreLoadingBar: true,
-                    url: tokenService.currentAppApiUrl + 'app/inboxes/search-multiple',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    data: {
-                        Data: {
-                            InboxId: inboxId,
-                            Queries: query
+                    var req = {
+                        method: 'POST',
+                        ignoreLoadingBar: true,
+                        url: tokenService.currentAppApiUrl + 'app/inboxes/search-multiple',
+                        headers: {
+                            'Content-Type': 'application/json'
                         },
-                        AuthenticationToken: tokenService.getAppAuthToken()
-                    }
-                };
+                        data: {
+                            Data: {
+                                InboxId: inboxId,
+                                Queries: query
+                            },
+                            AuthenticationToken: tokenService.getAppAuthToken()
+                        }
+                    };
 
-                var promise = tokenService.httpPost(req);
+                    var promise = tokenService.httpPost(req);
 
-                promise.then(function(success){
-                    for(var i = 0; i < success.data.length; i++){
-                        factory.addOrUpdateAppUser(success.data[i]);
-                    }
-                }, function(error){
-                    console.log('Could not get app-users.')
+                    promise.then(function (success) {
+                        for (var i = 0; i < success.data.length; i++) {
+                            factory.addOrUpdateAppUser(success.data[i]);
+                        }
+                    }, function (error) {
+                        console.log('Could not get app-users.')
+                    });
+                },
+                function (error) {
+                    console.log('Could not get phone contacts.')
                 });
-            },
-                function(error){
-                console.log('Could not get phone contacts.')
-            });
         }
 
-        factory.searchAppUser = function(query){
+        factory.searchAppUser = function (query) {
 
             var deferred = $q.defer();
 
@@ -140,9 +132,9 @@ angular.module('contacts', [])
 
             var promise = tokenService.httpPost(req);
 
-            promise.then(function(success){
+            promise.then(function (success) {
                 deferred.resolve(success);
-            }, function(error){
+            }, function (error) {
                 deferred.reject(error);
             });
 
@@ -154,18 +146,18 @@ angular.module('contacts', [])
             var deferred = $q.defer();
 
             try {
-                var options      = new ContactFindOptions();
+                var options = new ContactFindOptions();
                 options.multiple = true;
-                var fields       = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
+                var fields = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
                 navigator.contacts.find(fields,
-                    function(phoneContacts){
+                    function (phoneContacts) {
                         contacts = phoneContacts;
                     },
-                    function(){
+                    function () {
                         console.log('Could not get contacts!')
                     }, options);
                 deferred.resolve("Success");
-            } catch (error){
+            } catch (error) {
                 console.log('Could not get contacts from phone.')
                 deferred.reject("Fail");
             }
@@ -173,15 +165,15 @@ angular.module('contacts', [])
             return deferred.promise;
         };
 
-        factory.getAppUsers = function() {
-            return $q(function(resolve, reject){
+        factory.getAppUsers = function () {
+            return $q(function (resolve, reject) {
                 db.transaction(function (tx) {
                     tx.executeSql(queries.getAppUsers, [],
-                        function(trans, result){
+                        function (trans, result) {
                             var appUsers = [];
                             var rows = getRows(result);
 
-                            for(var i = 0; i < rows.length; i++){
+                            for (var i = 0; i < rows.length; i++) {
                                 var row = rows[i];
                                 if (row !== null && typeof row !== "undefined" && row.hasOwnProperty('JSON')) {
                                     try {
@@ -192,11 +184,17 @@ angular.module('contacts', [])
                                 }
                             }
                             resolve(appUsers);
-                        }, function(trans, error){
+                        }, function (trans, error) {
                             console.error('Error while fetching appUsers from database.\r\n' + error.message);
                             reject(error);
                         });
                 });
+            });
+        }
+
+        factory.usersExists = function(appUserIds) {
+            appUserIds.some(function(appUserId) {
+                factory.getAppUser(appUserId);
             });
         }
 
@@ -207,6 +205,23 @@ angular.module('contacts', [])
                         function (trans, result) {
                             var appUsers = [];
                             var rows = getRows(result);
+
+                            if (rows.length === 0) {
+
+                                if (appUserId === '' || appUserId === null || appUserId === ' ' || appUserId === 'undefined' || appUserId === undefined) {
+                                    reject('Not a valid appUserId');
+                                }
+
+                                var promise = factory.searchAppUser(appUserId);
+
+                                promise.then(function (success) {
+                                    if (success.data.items != null) {
+                                        success.data.items.some(function (appUser) {
+                                            factory.addAppUser(appUser);
+                                        });
+                                    }
+                                });
+                            }
 
                             for (var i = 0; i < rows.length; i++) {
                                 var row = rows[i];
@@ -227,7 +242,7 @@ angular.module('contacts', [])
             });
         }
 
-        factory.removeUser = function(appUserId) {
+        factory.removeUser = function (appUserId) {
             return $q(function (resolve, reject) {
                 db.transaction(function (tx) {
                     tx.executeSql(queries.deleteAppUser, [appUserId],
@@ -245,31 +260,25 @@ angular.module('contacts', [])
             });
         }
 
-        factory.dropUsersTable = function() {
+        factory.dropUsersTable = function () {
             dropDatabase();
         }
 
         factory.on = function (event, args) {
             switch (event.name) {
                 case 'logged-in':
-                    createDatabase().then(
-                        function(){
-                            console.log('Created database after login');
-                        },
-                        function(error){
-                            console.error('Failed to create database after login.\r\n' + error.message);
-                        });
+                    
                     break;
                 case 'logged-out':
-                    // localStorage.removeItem('latestWhatIsNewUpdate');
-                    // Clearing Table on logout, just to be sure
-                    dropDatabase().then(
-                        function(){
-                            console.log('Dropped appUsers database');
-                        },
-                        function(error){
-                            console.error('Failed to drop database.\r\n' + error.message);
-                        });
+                    //// localStorage.removeItem('latestWhatIsNewUpdate');
+                    //// Clearing Table on logout, just to be sure
+                    //dropDatabase().then(
+                    //    function () {
+                    //        console.log('Dropped appUsers database');
+                    //    },
+                    //    function (error) {
+                    //        console.error('Failed to drop database.\r\n' + error.message);
+                    //    });
                     break;
                 default:
                     break;
@@ -288,27 +297,27 @@ angular.module('contacts', [])
             }
             if (!appUser.hasOwnProperty('id')) {
                 //console.log("repaired app user");
-                appUser.id = appUser.UserId;}
+                appUser.id = appUser.UserId;
+            }
             db.transaction(function (tx) {
                 console.log('Checking if app-user with id \'' + appUser.id + '\' exists.');
                 tx.executeSql(queries.doesAppUserExist, [appUser.id], function (transaction, resultData) {
                     var rows = getRows(resultData);
-                    if(rows.length !== 1){
+                    if (rows.length !== 1) {
                         console.error('Unexpected number of rows returned (' + rows.length + '). Check sql statement!');
                         return;
                     }
 
                     // TODO: update user instead?
-                    if(rows.length && rows[0] !== null && typeof rows[0] !== "undefined" && rows[0].hasOwnProperty('cnt') && rows[0].cnt !== 0){
+                    if (rows.length && rows[0] !== null && typeof rows[0] !== "undefined" && rows[0].hasOwnProperty('cnt') && rows[0].cnt !== 0) {
                         console.log('AppUser width id \'' + appUser.id + '\' exists, won\'t insert.');
                         return;
                     }
                     factory.insertAppUser(appUser)
-                        .then(function(){
-                            // factory.appUserAdded();
+                        .then(function () {
+                            factory.appUsers.push(appUser);
                             console.log('Added appUser with id \'' + appUser.UserId + '\'');
-                            console.log(appUser);
-                        }, function(error){
+                        }, function (error) {
                             console.error('Error while inserting appUser with id \'' + appUser.UserId + '\'.\r\n' + error.message);
                         });
                 }, function (t, error) {
@@ -318,45 +327,10 @@ angular.module('contacts', [])
         };
 
         /**
-         * Configures the database, sets up the db object and creates tables if needed.
-         */
-        function configureDatabase(){
-            if(isConfigured){
-                return;
-            }
-
-            console.log('Going to configure the database');
-            isConfigured = true;
-
-            var conf = databaseConfiguration;
-            if (false && window.isPhoneGap) {
-                // Mobile Device
-                db = window.sqlitePlugin.openDatabase({ name: conf.name, location: conf.location });
-                queries = sqliteQueries;
-                dbType = 'sqlite';
-                console.log('Opened up sqlite connection');
-            } else {
-                // Browser
-                db = window.openDatabase(conf.name, conf.version, conf.displayName, conf.size);
-                queries = webSqlQueries;
-                dbType = 'webSQL';
-                console.log('Opened up web SQL connection');
-            }
-
-            createDatabase()
-                .then(
-                    function(){
-                        console.log('The database is successfully created.');
-                    }, function(error){
-                        console.error('Failed to create the database.\r\n' + error.message);
-                    });
-        }
-
-        /**
          * Creates a promise for creating the database tables.
          */
-        function createDatabase(){
-            return $q(function(resolve, reject) {
+        function createDatabase() {
+            return $q(function (resolve, reject) {
                 db.transaction(function (tx) {
                     tx.executeSql(queries.createAppUsers, [], function () {
                         resolve();
@@ -371,10 +345,10 @@ angular.module('contacts', [])
          * Gets the rows from a sql query result and returns them as an array
          * @param {sqlResult} the result from a sql query
          */
-        function getRows(result){
+        function getRows(result) {
             var rows = [];
 
-            if(dbType === 'webSQL'){
+            if (dbType === 'webSQL') {
                 for (var i = 0; i < result.rows.length; i++) {
                     rows.push(result.rows.item(i));
                 }
@@ -390,8 +364,8 @@ angular.module('contacts', [])
         /**
          * Creates a promise for dropping the database tables.
          */
-        function dropDatabase(){
-            return $q(function(resolve, reject) {
+        function dropDatabase() {
+            return $q(function (resolve, reject) {
                 db.transaction(function (tx) {
                     tx.executeSql(queries.dropAppUsers, [], function () {
                         resolve();
@@ -408,8 +382,8 @@ angular.module('contacts', [])
          * @param appUser to insert
          * @returns {promise} returns a promise
          */
-        factory.insertAppUser = function (appUser){
-            return $q(function(resolve, reject) {
+        factory.insertAppUser = function (appUser) {
+            return $q(function (resolve, reject) {
                 db.transaction(function (tx) {
                     tx.executeSql(
                         queries.insertAppUser,
@@ -421,7 +395,8 @@ angular.module('contacts', [])
                             if (result.rowsAffected !== 1) {
                                 console.error('');
                                 reject(new {
-                                    message : 'The appUser width id \'' + appUser.id + '\' doesn\'t seem to be added properly'});
+                                    message: 'The appUser width id \'' + appUser.id + '\' doesn\'t seem to be added properly'
+                                });
                                 return;
                             }
 
@@ -433,8 +408,6 @@ angular.module('contacts', [])
                 });
             });
         }
-
-        factory.init();
 
         return factory;
     }])

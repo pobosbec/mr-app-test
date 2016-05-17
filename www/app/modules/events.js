@@ -2,7 +2,7 @@
  * Created by robinpipirs on 09/12/15.
  */
 angular.module('event', [])
-    .controller('eventCtrl', ['$scope', '$rootScope', '$location', '$http', 'tokenService', 'communicationService', 'messageRepository', 'contactsService', function ($scope, $rootScope, $location, $http, tokenService, communicationService, messageRepository, contactsService) {
+    .controller('eventCtrl', ['$scope', '$rootScope', '$location', '$http', 'tokenService', 'communicationService', 'messageRepository', 'contactsService', 'dataService', function ($scope, $rootScope, $location, $http, tokenService, communicationService, messageRepository, contactsService, dataService) {
 
         $scope.deviceReady = true;
         $scope.isPhoneGap = window.isPhoneGap;
@@ -209,7 +209,7 @@ angular.module('event', [])
         // Wrapped
         $scope.$on('load', function(event, args) {
             console.log('load!');
-            $rootScope.$broadcast('sync-conversations', args);
+            //$rootScope.$broadcast('sync-conversations', args);
         });
 
 
@@ -224,6 +224,7 @@ angular.module('event', [])
             messageRepository.on(event, args);
             communicationService.on(event, args);
             contactsService.on(event, args);
+            dataService.on(event, args);
         });
 
         $scope.$on('logged-out', function (event, args) {

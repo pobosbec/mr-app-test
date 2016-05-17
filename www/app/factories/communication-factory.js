@@ -104,11 +104,7 @@ angular.module('communication', [])
         }
 
         factory.getAllConversations = function (conversationIds) {
-            var conversations = getAllConversations(conversationIds);
-            conversations.then(function (success) {
-                factory.conversationsDownloaded(success.data.usersInConversations);
-            });
-            return conversations;
+            return getAllConversations(conversationIds);
         }
 
         factory.downloadMessagesForConversation = function (conversationId, sortAscending, pageIndex, pageSize, broadcastAfterFetch) {

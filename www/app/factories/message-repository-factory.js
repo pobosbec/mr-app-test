@@ -3,19 +3,16 @@
  */
 
 angular.module('message', ['ngCordova'])
-    .factory('messageRepository', ['$http', '$window', '$rootScope', '$location', '$q', '$state', 'tokenService', '$cordovaSQLite', 'communicationService', function ($http, win, $rootScope, $location, $q, $state, tokenService, $cordovaSQLite, communicationService) {
-        var db;
+    .factory('messageRepository', ['$http', '$window', '$rootScope', '$location', '$q', '$state', 'tokenService', '$cordovaSQLite', 'communicationService', 'baseRepository', function ($http, win, $rootScope, $location, $q, $state, tokenService, $cordovaSQLite, communicationService, baseRepository) {
+        var db = baseRepository.db;
 
         var factory = {};
 
         // Indicates if messages are added but event isn't fired yet
         var evtMessagesAdded = false;
 
-        var addedMessages = [];
-
         // Indicates if conversations are added but event isn't fired yet
         var evtConversationsAdded = false;
-
 
         // Indicates if the database is configured
         var isConfigured = false;
@@ -43,6 +40,7 @@ angular.module('message', ['ngCordova'])
             dropConversationPartisipantsTable: 'DROP TABLE IF EXISTS ConversationParticipants',
             createConversationParticipants: 'CREATE TABLE IF NOT EXISTS ConversationParticipants (ConversationId text primary key, Participants text)',
             getConversationParticipants: 'SELECT Participants FROM ConversationParticipants WHERE ConversationId = ?',
+            getAllConversationsAndParticipants: 'SELECT * FROM ConversationParticipants',
             insertConversationParticipants: 'INSERT OR REPLACE INTO ConversationParticipants (ConversationId, Participants) VALUES (?, ?)'
         };
 
@@ -59,12 +57,11 @@ angular.module('message', ['ngCordova'])
             dropConversationPartisipantsTable: 'DROP TABLE IF EXISTS ConversationParticipants',
             createConversationParticipants: 'CREATE TABLE IF NOT EXISTS ConversationParticipants (ConversationId unique, Participants)',
             getConversationParticipants: 'SELECT Participants FROM ConversationParticipants WHERE ConversationId = ?',
+            getAllConversationsAndParticipants: 'SELECT * FROM ConversationParticipants',
             insertConversationParticipants: 'INSERT OR REPLACE INTO ConversationParticipants (ConversationId, Participants) VALUES (?, ?)'
         };
 
         var queries = null;
-
-        factory.messages = [];
 
         /**
          * Initializes the factory.
@@ -84,34 +81,36 @@ angular.module('message', ['ngCordova'])
             //console.log('Going to configure the database');
             isConfigured = true;
 
-            var conf = databaseConfiguration;
-            if (false && window.isPhoneGap) {
-                // Mobile Device
-                db = window.sqlitePlugin.openDatabase({ name: conf.name, location: conf.location });
-                queries = sqliteQueries;
-                dbType = 'sqlite';
-                console.log('Opened up sqlite connection');
-            } else {
-                // Browser
-                db = window.openDatabase(conf.name, conf.version, conf.displayName, conf.size);
-                queries = webSqlQueries;
-                dbType = 'webSQL';
-                console.log('Opened up web SQL connection');
-            }
+            queries = webSqlQueries;
 
-            createMessagesTable()
-                .then(
-                    function () {
-                        console.log('The messages table was successfully created.');
-                    }, function (error) {
-                        console.error('Failed to create the table.\r\n' + error.message);
-                    });
-            createConversationParticipantsTable().then(
-                    function () {
-                        console.log('The conversation participants table was successfully created.');
-                    }, function (error) {
-                        console.error('Failed to create the table.\r\n' + error.message);
-                    });
+            //var conf = databaseConfiguration;
+            //if (false && window.isPhoneGap) {
+            //    // Mobile Device
+            //    db = window.sqlitePlugin.openDatabase({ name: conf.name, location: conf.location });
+            //    queries = sqliteQueries;
+            //    dbType = 'sqlite';
+            //    console.log('Opened up sqlite connection');
+            //} else {
+            //    // Browser
+            //    db = window.openDatabase(conf.name, conf.version, conf.displayName, conf.size);
+            //    queries = webSqlQueries;
+            //    dbType = 'webSQL';
+            //    console.log('Opened up web SQL connection');
+            //}
+
+            //createMessagesTable()
+            //    .then(
+            //        function () {
+            //            console.log('The messages table was successfully created.');
+            //        }, function (error) {
+            //            console.error('Failed to create the table.\r\n' + error.message);
+            //        });
+            //createConversationParticipantsTable().then(
+            //        function () {
+            //            console.log('The conversation participants table was successfully created.');
+            //        }, function (error) {
+            //            console.error('Failed to create the table.\r\n' + error.message);
+            //        });
         }
 
         factory.reMapMessage = function (message) {
@@ -127,7 +126,7 @@ angular.module('message', ['ngCordova'])
             return reMapped;
         }
 
-
+        
         /**
          * Creates a promise for creating the database tables.
          */
@@ -261,6 +260,7 @@ angular.module('message', ['ngCordova'])
 
             /// Adds the messages within the promise to a conversation
             var addMessagesToConversation = function (conversation, itmsPerConv) {
+
                 return factory.getMessagesByConversation(conversation.Id, 0, itmsPerConv).then(function (items) {
                     var newMessages = [];
                     for (var i = 0; i < items.length; i++) {
@@ -305,16 +305,18 @@ angular.module('message', ['ngCordova'])
                         }
                         result.push(conversation);
 
-                        addMessagesToConversation(conversation, itemsPerConversation).then(function (res) {
-                            addParticipantsToConversation(res).then(function () {
-                                res.ConversationId = res.Id;
-                                handledConversations++;
+                        addMessagesToConversation(conversation, itemsPerConversation)
+                            .then(function (res) {
+                                addParticipantsToConversation(res)
+                                    .then(function () {
+                                        res.ConversationId = res.Id;
+                                        handledConversations++;
 
-                                if (handledConversations === numberOfConversations) {
-                                    resolve(result);
-                                }
+                                        if (handledConversations === numberOfConversations) {
+                                            resolve(result);
+                                        }
+                                    });
                             });
-                        });
                     }
                     if (!conversations.length) {
                         resolve(result);
@@ -545,6 +547,36 @@ angular.module('message', ['ngCordova'])
             });
         };
 
+        factory.getAllConversationsAndParticipants = function () {
+            return $q(function (resolve, reject) {
+                db.transaction(function (tx) {
+                    tx.executeSql(queries.getAllConversationsAndParticipants, [],
+                        function (trans, result) {
+                            var rows = getRows(result);
+                            var participants = "";
+                            if (rows.length) {
+                                if (rows[0] !== null && typeof rows[0] !== "undefined" && rows[0].hasOwnProperty("Participants")) {
+                                    participants = JSON.parse(rows[0].Participants);
+                                }
+                            } else if (rows.length < 1) {
+                                var promise = communicationService.getAllConversations(null);
+
+                                promise.then(function (success) {
+                                    factory.addConversations(success.data.items);
+                                    resolve(success.data.items);
+                                }, function (error) {
+                                    console.error('Error while inserting ConversationParticipants from database.\r\n' + error.message);
+                                });
+                            }
+
+                        }, function (trans, error) {
+                            console.error('Error while fetching AllConversationsAndParticipants from database.\r\n' + error.message);
+                            reject(error);
+                        });
+                });
+            });
+        };
+
         /**
          * Creates a promise for adding a message to the database
          * @param {object} message - the message to add
@@ -674,7 +706,6 @@ angular.module('message', ['ngCordova'])
                     return;
                 }
 
-                var timer = new Date();
                 var errorMsg;
 
                 var queryIn = [];
@@ -682,16 +713,7 @@ angular.module('message', ['ngCordova'])
                     queryIn.push('\'' + conversations[i].ConversationId + '\'');
                 }
 
-                //console.log('queryIn took ' + (new Date() - timer) + 'ms to create!');
-
-                timer = new Date();
-
                 db.transaction(function (tx) {
-                    //console.log('Transaction took ' + (new Date() - timer) + 'ms to open!');
-
-                    //console.log('Checking if any of the ' + conversations.length + ' exist');
-
-                    timer = new Date();
                     var inserted = 0;
                     for (var j = 0; j < conversations.length; j++) {
                         var conv = conversations[j];
@@ -699,7 +721,6 @@ angular.module('message', ['ngCordova'])
                         insertConversation(conv).then(function () {
                             inserted++;
                             if (inserted === conversations.length) {
-                                //console.log('All conversations are added in ' + (new Date() - timer) + 'ms!');
                                 factory.conversationsAdded();
                                 resolve();
                             }
@@ -854,17 +875,15 @@ angular.module('message', ['ngCordova'])
                     break;
                 case 'new-conversations':
                     if (data != null) {
-                        //console.log("Received new conversations: " + data.length);
                         factory.addConversations(data);
                     }
                     break;
                 case 'sync-conversations':
-                    factory.quickSync();
+                    //factory.quickSync();
                     break;
                 case 'device-ready':
                     break;
                 case 'logged-out':
-                    // Clearing Table on logout, just to be srure
                     dropMessagesTable().then(function () {
                         return dropConversationPartisipantsTable();
                     }).then(
@@ -876,15 +895,7 @@ angular.module('message', ['ngCordova'])
                         });
                     break;
                 case 'logged-in':
-                    createMessagesTable().then(function () {
-                        return createConversationParticipantsTable();
-                    }).then(
-                        function () {
-                            console.log('Created databases after login');
-                        },
-                        function (error) {
-                            console.error('Failed to create databases after login.\r\n' + error.message);
-                        });
+                    
                     break;
                 default:
                     break;
