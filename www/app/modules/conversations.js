@@ -113,17 +113,17 @@ angular.module('conversations', [])
                 $scope.advancedSettings = false;
                 $scope.atBottom = true;
                 $scope.unseenMessages = !$scope.atBottom;
+                $scope.scrollBottomEnabled = true;
 
                 $scope.setConversation = function () {
-                    // TODO: Handle if conversation is not in dataService? 
-
+                    // TODO: Handle if conversation is not in dataService?
                     dataService.conversations.some(function (conversation) {
                         if (conversation.ConversationId === $scope.conversationId) {
                             $scope.conversation = conversation;
                             return true;
                         }
                     });
-                }
+                };
 
                 $scope.setConversation();
 
@@ -399,6 +399,8 @@ angular.module('conversations', [])
                 }
 
                 $scope.loadMoreForConversation = function () {
+                    $scope.scrollBottomEnabled = false;
+                  //  console.log("scrollBottomEnabled: "+ $scope.scrollBottomEnabled);
                     $scope.pageIndex = Math.floor($scope.conversation.Messages.length / $scope.pageSize);
                     return dataService.loadMessages($scope.conversation.ConversationId, $scope.pageIndex, $scope.pageSize);
                 }
@@ -466,6 +468,8 @@ angular.module('conversations', [])
 
                 // This is required for ng-repeat order by date
                 $scope.sortMessage = function (message) {
+                    $scope.scrollBottomEnabled = false;
+                  //  console.log("scrollBottomEnabled: "+ $scope.scrollBottomEnabled);
                     var date = new Date(message.CreatedOn);
                     return date;
                 };
