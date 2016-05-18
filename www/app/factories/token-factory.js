@@ -555,11 +555,11 @@ angular.module('token', [])
             switch (event.name) {
                 case 'push-service-initialized':
                     // check not empty
-                    insertPushTokenClearTableFirst(args.token);
+                  //  insertPushTokenClearTableFirst(args.token);
                     break;
                 case 'logged-out':
                     // Clearing Table on logout, just to be srure
-                    dropPushTokensTable().then(function (success) { console.error('Dropped pushTokens table.') }, function (error) { console.error('Could not drop pushTokens table.') });
+                 //   dropPushTokensTable().then(function (success) { console.error('Dropped pushTokens table.') }, function (error) { console.error('Could not drop pushTokens table.') });
                     break;
                 default:
                     break;

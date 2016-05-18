@@ -171,6 +171,7 @@ angular.module('event', [])
         $scope.$on('menu-button', function (event, args) { });
         
         $scope.$on('push-service-initialized', function (event, args) {
+            console.log("Push-service-initialized event");
             tokenService.registerPushToken();
         });
 
@@ -228,7 +229,10 @@ angular.module('event', [])
         // ------------------------------------
 
         $scope.$on('logged-in', function (event, args) {
+
+            console.log("Event.. logged-in");
             if ($scope.isPhoneGap) {
+                console.log("device isPhoneGap -> initPushwoosh() in index.js");
                 initPushwoosh();
             }
             messageRepository.on(event, args);
