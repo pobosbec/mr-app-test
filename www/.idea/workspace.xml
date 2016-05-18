@@ -24,8 +24,8 @@
       <file leaf-file-name="events.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/modules/events.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-141.77777">
-              <caret line="232" column="28" selection-start-line="232" selection-start-column="28" selection-end-line="232" selection-end-column="28" />
+            <state vertical-scroll-proportion="-7.5">
+              <caret line="175" column="33" selection-start-line="175" selection-start-column="33" selection-end-line="175" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -71,21 +71,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="token-factory.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="token-factory.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/factories/token-factory.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7604938">
-              <caret line="88" column="26" selection-start-line="88" selection-start-column="26" selection-end-line="88" selection-end-column="26" />
+            <state vertical-scroll-proportion="-7.5">
+              <caret line="453" column="74" selection-start-line="453" selection-start-column="53" selection-end-line="453" selection-end-column="74" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PushwooshiOS.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="PushwooshiOS.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/PushwooshiOS.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="36" column="21" selection-start-line="36" selection-start-column="21" selection-end-line="36" selection-end-column="35" />
+            <state vertical-scroll-proportion="0.33333334">
+              <caret line="38" column="70" selection-start-line="38" selection-start-column="70" selection-end-line="38" selection-end-column="70" />
               <folding />
             </state>
           </provider>
@@ -95,7 +95,7 @@
         <entry file="file://$PROJECT_DIR$/js/PushwooshWP.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="35" column="3" selection-start-line="35" selection-start-column="3" selection-end-line="35" selection-end-column="36" />
+              <caret line="38" column="40" selection-start-line="38" selection-start-column="40" selection-end-line="38" selection-end-column="40" />
               <folding />
             </state>
           </provider>
@@ -166,10 +166,10 @@
         <option value="$PROJECT_DIR$/template/conversation.html" />
         <option value="$PROJECT_DIR$/app/directives.js" />
         <option value="$PROJECT_DIR$/app/modules/conversations.js" />
-        <option value="$PROJECT_DIR$/js/PushwooshiOS.js" />
-        <option value="$PROJECT_DIR$/app/modules/events.js" />
         <option value="$PROJECT_DIR$/js/PushwooshWP.js" />
         <option value="$PROJECT_DIR$/app/factories/token-factory.js" />
+        <option value="$PROJECT_DIR$/js/PushwooshiOS.js" />
+        <option value="$PROJECT_DIR$/app/modules/events.js" />
       </list>
     </option>
   </component>
@@ -494,7 +494,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-9" width="2418" height="1468" extended-state="7" />
+    <frame x="-9" y="-9" width="2418" height="1468" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16772018" sideWeight="0.48722044" order="0" side_tool="false" content_ui="combo" />
@@ -808,6 +808,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-3.525641">
           <caret line="32" column="16" selection-start-line="32" selection-start-column="16" selection-end-line="32" selection-end-column="16" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -892,18 +893,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/modules/events.js">
+    <entry file="file://$PROJECT_DIR$/app/modules/login.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-141.77777">
-          <caret line="232" column="28" selection-start-line="232" selection-start-column="28" selection-end-line="232" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/PushwooshWP.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="35" column="3" selection-start-line="35" selection-start-column="3" selection-end-line="35" selection-end-column="36" />
+        <state vertical-scroll-proportion="-33.0">
+          <caret line="54" column="19" selection-start-line="54" selection-start-column="16" selection-end-line="54" selection-end-column="19" />
           <folding />
         </state>
       </provider>
@@ -916,26 +909,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/PushwooshiOS.js">
+    <entry file="file://$PROJECT_DIR$/app/modules/events.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="36" column="21" selection-start-line="36" selection-start-column="21" selection-end-line="36" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/modules/login.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-33.0">
-          <caret line="54" column="19" selection-start-line="54" selection-start-column="16" selection-end-line="54" selection-end-column="19" />
+        <state vertical-scroll-proportion="-7.5">
+          <caret line="175" column="33" selection-start-line="175" selection-start-column="33" selection-end-line="175" selection-end-column="33" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/factories/token-factory.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7604938">
-          <caret line="88" column="26" selection-start-line="88" selection-start-column="26" selection-end-line="88" selection-end-column="26" />
+        <state vertical-scroll-proportion="-7.5">
+          <caret line="453" column="74" selection-start-line="453" selection-start-column="53" selection-end-line="453" selection-end-column="74" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/PushwooshWP.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="38" column="40" selection-start-line="38" selection-start-column="40" selection-end-line="38" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/PushwooshiOS.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33333334">
+          <caret line="38" column="70" selection-start-line="38" selection-start-column="70" selection-end-line="38" selection-end-column="70" />
           <folding />
         </state>
       </provider>

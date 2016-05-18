@@ -49,6 +49,7 @@ angular.module('event', [])
         }, false);
 
         document.addEventListener('push-service-initialized', function (event, args) {
+            console.log("push-service-initialized events.js");
             $rootScope.$broadcast('push-service-initialized', event);
         }, false);
 
