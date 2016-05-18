@@ -124,7 +124,7 @@ angular.module('services', [])
                         messages.some(function (message) {
                             var arr = [];
                             arr.push(message);
-                            removeDuplicates(message.ConversationId, arr, false);
+                            processMessages(message.ConversationId, arr, false);
                         });
                     });
                 }
@@ -162,11 +162,16 @@ angular.module('services', [])
                 resolveUnidentifiedAppUsers(appUserExistsPromises);
             }
 
-            function removeDuplicates(conversationId, messages, newMessages) {
+            function processMessages(conversationId, messages, newMessages) {
 
                 function check(message) {
+
+                    var newConversation = true;
+
                     for (var i = 0; i < factory.conversations.length; i++) {
                         if (factory.conversations[i].ConversationId === conversationId) {
+
+                            newConversation = false;
 
                             var shouldAdd = true;
 
@@ -186,6 +191,41 @@ angular.module('services', [])
                                 break;
                             }
                         }
+                    }
+
+                    if (newConversation) {
+                        var conversationsFromApiPromise = communicationService.getAllConversations([conversationId]);
+                        conversationsFromApiPromise.then(
+                            function (conversationsPromiseSuccess) {
+
+                                var conversations = [];
+                                var appUserExistsPromises = [];
+
+                                for (var convo in conversationsPromiseSuccess.data.usersInConversations) {
+                                    // Check if conversation is already present in factory.conversations.
+                                    if (factory.conversations.filter(function (e) { return e.ConversationId === convo; }).length > 0) {
+                                        continue;
+                                    }
+
+                                    var conversation = {
+                                        ConversationId: convo,
+                                        Messages: messages,
+                                        Participants: conversationsPromiseSuccess.data.usersInConversations[convo]
+                                    };
+
+                                    conversation.Participants.some(function (participant) {
+                                        if (participant !== factory.userId)
+                                            appUserExistsPromises.push(contactsService.userExists(participant));
+                                    });
+
+                                    factory.conversations.unshift(conversation);
+                                    messageRepository.addMessages(conversation.Messages);
+                                    conversations.push(conversation);
+                                }
+
+                                resolveUnidentifiedAppUsers(appUserExistsPromises);
+                                messageRepository.addConversations(conversations);                                
+                            });
                     }
                 }
 
@@ -235,7 +275,7 @@ angular.module('services', [])
 
                 promise.then(
                     function (success) {
-                        removeDuplicates(conversationId, success, false);
+                        processMessages(conversationId, success, false);
                         factory.isLoading = false;
                         deferred.resolve();
                     },
@@ -321,7 +361,7 @@ angular.module('services', [])
                                 gotMessages.some(function (message) {
                                     var arr = [];
                                     arr.push(message);
-                                    removeDuplicates(message.ConversationId, arr, true);
+                                    processMessages(message.ConversationId, arr, true);
                                 });
                             },
                             function (errorGettingMessages) {
