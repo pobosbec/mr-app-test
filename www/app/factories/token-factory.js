@@ -76,6 +76,8 @@ angular.module('token', [])
             factory.clearLoginCredentials();
             factory.clearTokenData();
             $state.go('login');
+            var push = cordova.require("pushwoosh-cordova-plugin.PushNotification");
+            push.unRegisterPushToken();
 
             $('#template-2').hide();
             factory.abandonToken($rootScope.token);

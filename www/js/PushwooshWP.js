@@ -36,6 +36,7 @@ function registerPushwooshWP() {
     pushNotification.registerDevice(
         function (status) {
             var deviceToken = status;
+            console.log("deviceToken in registerdevice.PushwooshWP is: " + JSON.stringify(deviceToken));
             localStorage.setItem("pushToken", JSON.stringify(deviceToken));
             evt.initCustomEvent("push-service-initialized", true, true, { token: deviceToken });
             window.dispatchEvent(evt);
