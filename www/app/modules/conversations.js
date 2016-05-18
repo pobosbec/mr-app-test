@@ -320,10 +320,10 @@ angular.module('conversations', [])
                                 PageSize: 50
                             };
 
-                            $timeout(function () {
-                                var scroller = document.getElementById('conversationMessagesBody');
-                                scroller.scrollTop = scroller.scrollHeight;
-                            }, 0, false);
+                            //$timeout(function () {
+                            //    var scroller = document.getElementById('conversationMessagesBody');
+                            //    scroller.scrollTop = scroller.scrollHeight;
+                            //}, 0, false);
 
                             $rootScope.$broadcast('download-messages', args);
                         },
