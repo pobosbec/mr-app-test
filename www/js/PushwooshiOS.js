@@ -26,7 +26,6 @@ function registerPushwooshIOS() {
     document.addEventListener('push-notification',
 		function (event) {
 		    var notification = event.notification;
-
 		    pushNotification.setApplicationIconBadgeNumber(0);
 		}
 	);
