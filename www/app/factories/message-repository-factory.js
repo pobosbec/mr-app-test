@@ -90,6 +90,22 @@ angular.module('message', ['ngCordova'])
                     });
         }
 
+        function dropTablesOnLogin() {
+            queries = webSqlQueries;
+
+            var conf = databaseConfiguration;
+
+            // Browser
+            db = window.openDatabase(conf.name, conf.version, conf.displayName, conf.size);
+            queries = webSqlQueries;
+            dbType = 'webSQL';
+            console.log('Opened up web SQL connection');
+
+            dropMessagesTable();
+            dropConversationPartisipantsTable();
+            
+        }
+
         factory.reMapMessage = function (message) {
             var reMapped = {};
             reMapped.messageId = message.MessageId;
@@ -102,7 +118,6 @@ angular.module('message', ['ngCordova'])
             reMapped.isRead = message.IsRead;
             return reMapped;
         }
-
 
         /**
          * Creates a promise for creating the database tables.
@@ -165,6 +180,7 @@ angular.module('message', ['ngCordova'])
             return $q(function (resolve, reject) {
                 db.transaction(function (tx) {
                     tx.executeSql(queries.dropMessages, [], function () {
+                        console.info(queries.dropMessages + ' success.'); 
                         resolve();
                     }, function (transaction, error) {
                         reject(error);
@@ -186,6 +202,7 @@ angular.module('message', ['ngCordova'])
             return $q(function (resolve, reject) {
                 db.transaction(function (tx) {
                     tx.executeSql(queries.dropConversationPartisipantsTable, [], function () {
+                        console.info(queries.dropConversationPartisipantsTable + ' success.');
                         resolve();
                     }, function (transaction, error) {
                         reject(error);
@@ -875,6 +892,7 @@ angular.module('message', ['ngCordova'])
                         });
                     break;
                 case 'logged-in':
+                    dropTablesOnLogin();
                     factory.init();
                     break;
                 //case 'load':

@@ -324,6 +324,14 @@ angular.module('contacts', [])
         factory.on = function (event, args) {
             switch (event.name) {
                 case 'logged-in':
+                    factory.appUsers.length = 0;
+                    dropDatabase().then(
+                        function () {
+                            console.log('Dropped appUsers database');
+                        },
+                        function (error) {
+                            console.error('Failed to drop database.\r\n' + error.message);
+                        });
                     factory.init();
                     break;
                 case 'logged-out':

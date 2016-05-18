@@ -350,6 +350,9 @@ angular.module('services', [])
                         factory.unidentifiedAppUsers.length = 0;
                         break;
                     case 'logged-in':
+                        factory.conversations.length = 0;
+                        factory.unProccessedConversations.length = 0;
+                        factory.unidentifiedAppUsers.length = 0;
                         factory.userId = tokenService.getAppUserId();
                         factory.quickLoad();
                         break;
