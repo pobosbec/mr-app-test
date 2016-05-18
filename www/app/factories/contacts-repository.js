@@ -339,7 +339,10 @@ angular.module('contacts', [])
                         });
                     break;
                 case 'load':
-                    factory.init();
+                    //factory.init();
+                    break;
+                case 'on-focus':
+                    //factory.init();
                     break;
                 default:
                     break;

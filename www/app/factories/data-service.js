@@ -329,7 +329,10 @@ angular.module('services', [])
                             });
                         break;
                     case 'load':
-                        factory.quickLoad();
+                        //factory.quickLoad();
+                        break;
+                    case 'on-focus':
+                        //factory.quickLoad();
                         break;
                     default:
                         break;

@@ -23,14 +23,11 @@ var mobileresponseWebbApp = angular.module('administratorApp', [
     'profile',
     'settings',
     'services'
-]).run(function () {
+]).run(function (contactsService, messageRepository, dataService) {
     FastClick.attach(document.body);
 
-    //var databaseConfiguration = {
-    //    name: "bosbec-mr.db",
-    //    location: 1,
-    //    version: "1.0",
-    //    displayName: "Bosbec-Mr",
-    //    size: (5 * 1024 * 1024)
-    //};
+    contactsService.init();
+    messageRepository.init();
+    dataService.quickLoad();
+
 });

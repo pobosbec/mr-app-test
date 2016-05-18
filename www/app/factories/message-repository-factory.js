@@ -877,9 +877,12 @@ angular.module('message', ['ngCordova'])
                 case 'logged-in':
                     factory.init();
                     break;
-                case 'load':
-                    factory.init();
-                    break;
+                //case 'load':
+                //    factory.init();
+                //    break;
+                //case 'on-focus':
+                //    factory.init();
+                //    break;
                 default:
                     break;
             }
