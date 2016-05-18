@@ -283,12 +283,15 @@ mobileresponseWebbApp
     .directive('scrollBottom', function () {
         return {
             scope: {
-                scrollBottom: "="
+                scrollBottom: "=",
+                scrollBottomEnabled: "="
             },
             link: function (scope, element) {
+
               //  $(element).scrollTop($(element)[0].scrollHeight);
+               // console.log("Scroll bottom enabled: "+scope.scrollBottomEnabled);
                 scope.$watchCollection('scrollBottom', function (newValue) {
-                    if (newValue) {
+                    if (newValue && scope.scrollBottomEnabled) {
                         $(element).scrollTop($(element)[0].scrollHeight);
                     }
                 });
