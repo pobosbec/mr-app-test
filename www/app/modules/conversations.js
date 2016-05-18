@@ -320,10 +320,10 @@ angular.module('conversations', [])
                                 PageSize: 50
                             };
 
-                            $timeout(function () {
-                                var scroller = document.getElementById('conversationMessagesBody');
-                                scroller.scrollTop = scroller.scrollHeight;
-                            }, 0, false);
+                            //$timeout(function () {
+                            //    var scroller = document.getElementById('conversationMessagesBody');
+                            //    scroller.scrollTop = scroller.scrollHeight;
+                            //}, 0, false);
 
                             $rootScope.$broadcast('download-messages', args);
                         },
@@ -338,10 +338,10 @@ angular.module('conversations', [])
                     $scope.unseenMessages = $scope.unseenMessages || !$scope.atBottom;
                 });
 
-                $scope.goToBottom = function() {
-                    var viewBody = $("#conversationMessagesBody");
-                    viewBody[0].scrollTop = viewBody[0].scrollHeight;
-                }
+                //$scope.goToBottom = function() {
+                //    var viewBody = $("#conversationMessagesBody");
+                //    viewBody[0].scrollTop = viewBody[0].scrollHeight;
+                //}
 
                 /**
                  * Loads older messages when reaching the top
