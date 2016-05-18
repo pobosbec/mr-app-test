@@ -257,23 +257,7 @@ angular.module('message', ['ngCordova'])
             var addMessagesToConversation = function (conversation, itmsPerConv) {
 
                 return factory.getMessagesByConversation(conversation.Id, 0, itmsPerConv).then(function (items) {
-                    var newMessages = [];
-                    for (var i = 0; i < items.length; i++) {
-                        var msg = items[i];
-                        var newMessage = {};
-                        newMessage.messageId = msg.MessageId;
-                        newMessage.participantId = msg.ParticipantId;
-                        newMessage.conversationId = msg.ConversationId;
-                        newMessage.authorDisplayName = msg.AuthorDisplayName;
-                        newMessage.author = msg.AuthorId;
-                        newMessage.createdOn = msg.CreatedOn;
-                        newMessage.content = msg.Content;
-                        newMessage.isRead = msg.IsRead;
-                        newMessage.MetaData = msg.MetaData;
-                        newMessages.push(newMessage);
-                    }
-
-                    conversation.Messages = newMessages;
+                    conversation.Messages = items;
                     return conversation;
                 });
             }
@@ -891,6 +875,9 @@ angular.module('message', ['ngCordova'])
                         });
                     break;
                 case 'logged-in':
+                    factory.init();
+                    break;
+                case 'load':
                     factory.init();
                     break;
                 default:

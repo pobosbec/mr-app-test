@@ -14,14 +14,6 @@ angular.module('services', [])
             factory.unProccessedConversations = [];
             factory.unidentifiedAppUsers = [];
 
-            function handleConversation(databasePromise) {
-                for (var cid in databasePromise) {
-                    var conversation = databasePromise[cid];
-                    contactsService.usersExists(conversation.Participants);
-                    factory.conversations.push(conversation);
-                }
-            }
-
             /**
              * Sets first quickload data (10*10 messages) 
              */
@@ -33,11 +25,12 @@ angular.module('services', [])
                     var conversationsFromApiPromise = communicationService.getAllConversations(null);
                     conversationsFromApiPromise.then(
                         function (conversationsPromiseSuccess) {
+
                             var conversations = [];
 
                             for (var convo in conversationsPromiseSuccess.data.usersInConversations) {
                                 // Check if conversation is already present in factory.conversations.
-                                if (factory.conversations.filter(function (e) { return e.ConversationId == convo; }).length > 0) {
+                                if (factory.conversations.filter(function (e) { return e.ConversationId === convo; }).length > 0) {
                                     continue;
                                 }
 
@@ -50,12 +43,56 @@ angular.module('services', [])
                                 conversations.push(conversation);
                             }
 
+                            messageRepository.addConversations(conversations);
+
                             addConversations(conversations, quickLoadConversationsSize, quickLoadMessagesSize);
                             resolve();
                         });
 
                 });
                 return promise;
+            }
+
+            function resolveUnidentifiedAppUsers(appUserExistsPromises) {
+
+                function syncAppUserParticipant(participantId) {
+                    var query = '';
+
+                    for (var i = 0; i < participantId.length; i++) {
+                        if (i === 0) {
+                            query = participantId[i];
+                        } else {
+                            query += ',' + participantId[i];
+                        }
+                    }
+
+                    return contactsService.searchAppUser(query);
+                }
+
+                $q.all(appUserExistsPromises).then(function (values) {
+                    for (var i = 0; i < values.length; i++) {
+                        if (values[i].Found === false) {
+                            factory.unidentifiedAppUsers.push(values[i].Id);
+                        }
+                    }
+
+                    if (factory.unidentifiedAppUsers.length > 0) {
+                        var promise = syncAppUserParticipant(factory.unidentifiedAppUsers);
+
+                        promise.then(
+                            function (success) {
+                                if (success.data.items != null) {
+                                    success.data.items.some(function (appUser) {
+                                        factory.unidentifiedAppUsers.splice(factory.unidentifiedAppUsers.indexOf(appUser.id), 1);
+                                        contactsService.addAppUser(appUser);
+                                    });
+                                }
+                            },
+                            function (error) {
+                                console.error('Could not sync user: ' + JSON.stringify(error));
+                            });
+                    }
+                });
             }
 
             function addConversations(conversations, conversationsLimit, conversationMessages) {
@@ -92,20 +129,6 @@ angular.module('services', [])
                     });
                 }
 
-                function syncAppUserParticipant(participantId) {
-                    var query = '';
-
-                    for (var i = 0; i < participantId.length; i++) {
-                        if (i === 0) {
-                            query = participantId[i];
-                        } else {
-                            query += ',' + participantId[i];
-                        }
-                    }
-
-                    return contactsService.searchAppUser(query);
-                }
-
                 if (typeof conversationsLimit != "number") {
                     conversationsLimit = 1000;
                 }
@@ -136,30 +159,7 @@ angular.module('services', [])
                     }
                 });
 
-                $q.all(appUserExistsPromises).then(function (values) {
-                    for (var i = 0; i < values.length; i++) {
-                        if (values[i].Found === false) {
-                            factory.unidentifiedAppUsers.push(values[i].Id);
-                        }
-                    }
-
-                    if (factory.unidentifiedAppUsers.length > 0) {
-                        var promise = syncAppUserParticipant(factory.unidentifiedAppUsers);
-
-                        promise.then(
-                            function (success) {
-                                if (success.data.items != null) {
-                                    success.data.items.some(function (appUser) {
-                                        factory.unidentifiedAppUsers.splice(factory.unidentifiedAppUsers.indexOf(appUser.id), 1);
-                                        contactsService.addAppUser(appUser);
-                                    });
-                                }
-                            },
-                            function (error) {
-                                console.error('Could not sync user: ' + JSON.stringify(error));
-                            });
-                    }
-                });
+                resolveUnidentifiedAppUsers(appUserExistsPromises);
             }
 
             function removeDuplicates(conversationId, messages, newMessages) {
@@ -263,11 +263,22 @@ angular.module('services', [])
                 //Let's load the initial 10
                 conversationsFromDatabasePromise.then(
                     function (conversationsPromiseSuccess) {
+                        var appUserExistsPromises = [];
+
                         for (var cid in conversationsPromiseSuccess) {
                             var conversation = conversationsPromiseSuccess[cid];
-                            contactsService.usersExists(conversation.Participants);
+
+                            if (conversation.Participants.constructor === Array) {
+                                conversation.Participants.some(function (participant) {
+                                    if (participant !== factory.userId)
+                                        appUserExistsPromises.push(contactsService.userExists(participant));
+                                });
+                            }
+                            
                             factory.conversations.push(conversation);
                         }
+
+                        resolveUnidentifiedAppUsers(appUserExistsPromises);
                     }, function (conversationsPromiseError) {
                         console.warn(conversationsPromiseError);
                     }).then(function () {
@@ -316,6 +327,9 @@ angular.module('services', [])
                             function (errorGettingMessages) {
                                 console.warn('Could not get messages.');
                             });
+                        break;
+                    case 'load':
+                        factory.quickLoad();
                         break;
                     default:
                         break;

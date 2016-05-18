@@ -216,6 +216,9 @@ angular.module('event', [])
         // Wrapped
         $scope.$on('load', function(event, args) {
             console.log('load!');
+            messageRepository.on(event, args);
+            dataService.on(event, args);
+            contactsService.on(event, args);
             //$rootScope.$broadcast('sync-conversations', args);
         });
 
