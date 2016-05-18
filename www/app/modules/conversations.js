@@ -338,10 +338,10 @@ angular.module('conversations', [])
                     $scope.unseenMessages = $scope.unseenMessages || !$scope.atBottom;
                 });
 
-                //$scope.goToBottom = function() {
-                //    var viewBody = $("#conversationMessagesBody");
-                //    viewBody[0].scrollTop = viewBody[0].scrollHeight;
-                //}
+                $scope.goToBottom = function() {
+                    var viewBody = $("#conversationMessagesBody");
+                    viewBody[0].scrollTop = viewBody[0].scrollHeight;
+                }
 
                 /**
                  * Loads older messages when reaching the top
