@@ -286,12 +286,12 @@ mobileresponseWebbApp
                 scrollBottom: "="
             },
             link: function (scope, element) {
-                $(element).scrollTop($(element)[0].scrollHeight);
-                //scope.$watchCollection('scrollBottom', function (newValue) {
-                //    if (newValue) {
-                //        $(element).scrollTop($(element)[0].scrollHeight);
-                //    }
-                //});
+              //  $(element).scrollTop($(element)[0].scrollHeight);
+                scope.$watchCollection('scrollBottom', function (newValue) {
+                    if (newValue) {
+                        $(element).scrollTop($(element)[0].scrollHeight);
+                    }
+                });
             }
         }
     })
