@@ -84,8 +84,9 @@ angular.module('event', [])
         $scope.$on('on-focus', function (event, args) {
             console.log("on-focus");
 
-            var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
-            pushNotification.setApplicationIconBadgeNumber(0);
+            //test without
+            //var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
+            //pushNotification.setApplicationIconBadgeNumber(0);
 
             var onFocusDelay = setTimeout(function (event, args) {
                 args = args | {};
@@ -123,7 +124,9 @@ angular.module('event', [])
             $rootScope.$broadcast('sync-conversations', args);
         });
 
-        $scope.$on('on-blur', function(event, args) { });
+        $scope.$on('on-blur', function(event, args) {
+
+        });
 
         $scope.$on('online', function (event, args) {
             args.Sender = 'events';
