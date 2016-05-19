@@ -23,13 +23,13 @@ angular.module('event', [])
 
             console.log("re-register app in event.js on resume");
             //test if this crashes the app
-           var pushToken = pushNotification.getPushToken();
+           var pushToken = JSON.stringify(pushNotification.getPushToken());
             if (pushToken != null) {
-                console.log("pushToken is not null: " + pushToken);
+                console.log("pushToken is not null: " + JSON.stringify(pushToken));
             }
             else {
 
-                console.log("pushToken is null re register: " + pushToken);
+                console.log("pushToken is null re register: " +JSON.stringify(pushToken));
             pushNotification.registerDevice(
                 function (token) {
                     console.log("pushNotification.registerDevice, from PushwooshiOS.js, token: " + JSON.stringify(token));
