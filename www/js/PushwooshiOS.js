@@ -70,24 +70,24 @@ function registerPushwooshIOS() {
 		}
 	);
 
-    //register for pushes
-    pushNotification.registerDevice(
-		function (token) {
-		    console.log("pushNotification.registerDevice, from PushwooshiOS.js, token: " + JSON.stringify(token));
-
-		    var deviceToken = token.deviceToken;
-
-		    //Throws the error: "Error in Success callbackId: PushNotification1997628909 : ReferenceError: Can't find variable: evt"
-		    //...and stops execution here. No event gets sent, and we never reach onPushwooshiOSInitialized.
-		    //evt.initCustomEvent("push-service-initialized", true, true, { token: deviceToken });
-		    //window.dispatchEvent(evt);
-
-		    onPushwooshiOSInitialized(deviceToken);
-		},
-		function (status) {
-		    console.warn('failed to register : ' + JSON.stringify(status));
-		}
-	);
+    ////register for pushes
+    //pushNotification.registerDevice(
+	//	function (token) {
+	//	    console.log("pushNotification.registerDevice, from PushwooshiOS.js, token: " + JSON.stringify(token));
+    //
+	//	    var deviceToken = token.deviceToken;
+    //
+	//	    //Throws the error: "Error in Success callbackId: PushNotification1997628909 : ReferenceError: Can't find variable: evt"
+	//	    //...and stops execution here. No event gets sent, and we never reach onPushwooshiOSInitialized.
+	//	    //evt.initCustomEvent("push-service-initialized", true, true, { token: deviceToken });
+	//	    //window.dispatchEvent(evt);
+    //
+	//	    onPushwooshiOSInitialized(deviceToken);
+	//	},
+	//	function (status) {
+	//	    console.warn('failed to register : ' + JSON.stringify(status));
+	//	}
+	//);
 
     //reset badges on start
     pushNotification.setApplicationIconBadgeNumber(0);
