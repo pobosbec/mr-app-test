@@ -18,6 +18,9 @@ angular.module('event', [])
             var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
             pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
 
+            //test if this crashes the app
+            pushNotification.setApplicationIconBadgeNumber(0);
+
             $rootScope.$broadcast('on-focus', args);
         }, false);
         
