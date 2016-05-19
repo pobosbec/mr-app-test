@@ -84,6 +84,8 @@ angular.module('event', [])
         $scope.$on('on-focus', function (event, args) {
             console.log("on-focus");
 
+            tokenService.registerPushToken();
+
             //test without
             //var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
             //pushNotification.setApplicationIconBadgeNumber(0);
