@@ -23,6 +23,13 @@ angular.module('event', [])
 
             console.log("re-register app in event.js on resume");
             //test if this crashes the app
+           var pushToken = PushNotification.getPushToken();
+            if (pushToken != null) {
+                console.log("pushToken is not null: " + pushToken);
+            }
+            else {
+
+                console.log("pushToken is null re register: " + pushToken);
             pushNotification.registerDevice(
                 function (token) {
                     console.log("pushNotification.registerDevice, from PushwooshiOS.js, token: " + JSON.stringify(token));
@@ -40,6 +47,7 @@ angular.module('event', [])
                     console.warn('failed to register : ' + JSON.stringify(status));
                 }
             );
+            }
 
 
             $rootScope.$broadcast('on-focus', args);
