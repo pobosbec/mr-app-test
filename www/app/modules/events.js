@@ -21,41 +21,41 @@ angular.module('event', [])
             console.log("set app badge nr 0");
             pushNotification.setApplicationIconBadgeNumber(0);
 
-            console.log("re-register app in event.js on resume");
-            var pushToken = null;
-            //test if this crashes the app
-            pushNotification.getPushToken(
-                function(token)
-                {
-                    console.log("pushToken is not null: " + JSON.stringify(token));
-                    console.warn('push token: ' + token);
-                    puthToken = token;
-                }
-            );
-            if (pushToken != null) {
-                console.log("pushToken is not null");
-            }
-            else {
+            //console.log("re-register app in event.js on resume");
+            ////test if this crashes the app
+            //pushNotification.getPushToken(
+            //    function(token)
+            //    {
+            //        console.log("pushToken is not null: " + JSON.stringify(token));
+            //        console.warn('push token: ' + token);
+            //
+            //        if (token != null) {
+            //            console.log("pushToken is not null");
+            //        }
+            //        else {
+            //
+            //            console.log("pushToken is null re register: ");
+            //            pushNotification.registerDevice(
+            //                function (token) {
+            //                    console.log("pushNotification.registerDevice, from PushwooshiOS.js, token: " + JSON.stringify(token));
+            //
+            //                    var deviceToken = token.deviceToken;
+            //
+            //                    //Throws the error: "Error in Success callbackId: PushNotification1997628909 : ReferenceError: Can't find variable: evt"
+            //                    //...and stops execution here. No event gets sent, and we never reach onPushwooshiOSInitialized.
+            //                    //evt.initCustomEvent("push-service-initialized", true, true, { token: deviceToken });
+            //                    //window.dispatchEvent(evt);
+            //
+            //                    onPushwooshiOSInitialized(deviceToken);
+            //                },
+            //                function (status) {
+            //                    console.warn('failed to register : ' + JSON.stringify(status));
+            //                }
+            //            );
+            //        }
+            //    }
+            //);
 
-                console.log("pushToken is null re register: ");
-            pushNotification.registerDevice(
-                function (token) {
-                    console.log("pushNotification.registerDevice, from PushwooshiOS.js, token: " + JSON.stringify(token));
-
-                    var deviceToken = token.deviceToken;
-
-                    //Throws the error: "Error in Success callbackId: PushNotification1997628909 : ReferenceError: Can't find variable: evt"
-                    //...and stops execution here. No event gets sent, and we never reach onPushwooshiOSInitialized.
-                    //evt.initCustomEvent("push-service-initialized", true, true, { token: deviceToken });
-                    //window.dispatchEvent(evt);
-
-                    onPushwooshiOSInitialized(deviceToken);
-                },
-                function (status) {
-                    console.warn('failed to register : ' + JSON.stringify(status));
-                }
-            );
-            }
 
 
             $rootScope.$broadcast('on-focus', args);

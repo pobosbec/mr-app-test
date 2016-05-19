@@ -34,6 +34,42 @@ function registerPushwooshIOS() {
 	console.log("initing plugin with on device ready, pushwoshios");
     pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
 
+
+	console.log("check if token is registeredpushwooshios.js on resume");
+	//test if this crashes the app
+	pushNotification.getPushToken(
+		function(token)
+		{
+			console.log("pushToken is not null: " + JSON.stringify(token));
+			console.warn('push token: ' + token);
+
+			if (token != null) {
+				console.log("pushToken is not null");
+			}
+			else {
+
+				console.log("pushToken is null re register: ");
+				pushNotification.registerDevice(
+					function (token) {
+						console.log("pushNotification.registerDevice, from PushwooshiOS.js, token: " + JSON.stringify(token));
+
+						var deviceToken = token.deviceToken;
+
+						//Throws the error: "Error in Success callbackId: PushNotification1997628909 : ReferenceError: Can't find variable: evt"
+						//...and stops execution here. No event gets sent, and we never reach onPushwooshiOSInitialized.
+						//evt.initCustomEvent("push-service-initialized", true, true, { token: deviceToken });
+						//window.dispatchEvent(evt);
+
+						onPushwooshiOSInitialized(deviceToken);
+					},
+					function (status) {
+						console.warn('failed to register : ' + JSON.stringify(status));
+					}
+				);
+			}
+		}
+	);
+
     //register for pushes
     pushNotification.registerDevice(
 		function (token) {
