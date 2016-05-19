@@ -23,7 +23,7 @@ angular.module('event', [])
 
             console.log("re-register app in event.js on resume");
             //test if this crashes the app
-           var pushToken = PushNotification.getPushToken();
+           var pushToken = pushNotification.getPushToken();
             if (pushToken != null) {
                 console.log("pushToken is not null: " + pushToken);
             }
