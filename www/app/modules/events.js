@@ -234,7 +234,7 @@ angular.module('event', [])
             console.log("Event.. logged-in");
             if ($scope.isPhoneGap) {
                 console.log("device isPhoneGap -> initPushwoosh() in index.js");
-                initPushwoosh();
+                //initPushwoosh();
             }
             messageRepository.on(event, args);
             communicationService.on(event, args);

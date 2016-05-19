@@ -183,14 +183,17 @@
                 loadScript("cordova.js");
                 // now add plugins
                 if (isIOS()) {
+                    console.log("phone is ios");
                     loadScript("js/PushwooshiOS.js");
                 }
                 if (isAndroid()) {
                     loadScript("js/PushwooshAndroid.js");
+                    console.log("phone is android");
                 }
 
                 document.addEventListener('deviceready', function () {
                     console.log("deviceready");
+                    initPushwoosh();
                     //initPushwoosh(); //Moved to events --> logged-in
                     StatusBar.overlaysWebView(false);
                     console.log("Device ready initiating Angular");
