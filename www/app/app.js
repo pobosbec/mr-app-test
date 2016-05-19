@@ -22,7 +22,8 @@ var mobileresponseWebbApp = angular.module('administratorApp', [
     'modalcontroll',
     'profile',
     'settings',
-    'services'
+    'services',
+    'ngSanitize'
 ]).run(function (contactsService, messageRepository, dataService) {
     FastClick.attach(document.body);
 
