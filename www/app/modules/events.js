@@ -22,14 +22,22 @@ angular.module('event', [])
             pushNotification.setApplicationIconBadgeNumber(0);
 
             console.log("re-register app in event.js on resume");
+            var pushToken = null;
             //test if this crashes the app
-           var pushToken = pushNotification.getPushToken();
+            pushNotification.getPushToken(
+                function(token)
+                {
+                    console.log("pushToken is not null: " + JSON.stringify(token));
+                    console.warn('push token: ' + token);
+                    puthToken = token;
+                }
+            );
             if (pushToken != null) {
-                console.log("pushToken is not null: " + JSON.stringify(pushToken));
+                console.log("pushToken is not null");
             }
             else {
 
-                console.log("pushToken is null re register: " +JSON.stringify(pushToken));
+                console.log("pushToken is null re register: ");
             pushNotification.registerDevice(
                 function (token) {
                     console.log("pushNotification.registerDevice, from PushwooshiOS.js, token: " + JSON.stringify(token));
