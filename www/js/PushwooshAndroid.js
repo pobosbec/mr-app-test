@@ -34,7 +34,7 @@ function registerPushwooshAndroid() {
 
     pushNotification.onDeviceReady({ projectid: "482590317251", appid: "A014B-AC83E" });
 
-	//test if this crashes the app
+	//check so that we have a token or not before registering. if we register with a present token then we will disable the push service..
 	pushNotification.getPushToken(
 		function(token)
 		{

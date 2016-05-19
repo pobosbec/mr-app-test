@@ -34,9 +34,9 @@ function registerPushwooshIOS() {
 	console.log("initing plugin with on device ready, pushwoshios");
     pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
 
-
 	console.log("check if token is registeredpushwooshios.js on resume");
-	//test if this crashes the app
+
+	//check so that we have a token or not before registering. if we register with a present token then we will disable the push service..
 	pushNotification.getPushToken(
 		function(token)
 		{

@@ -83,11 +83,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PushwooshiOS.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="PushwooshiOS.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/PushwooshiOS.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-18.764706">
-              <caret line="70" column="6" selection-start-line="32" selection-start-column="4" selection-end-line="70" selection-end-column="6" />
+            <state vertical-scroll-proportion="0.37931034">
+              <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -103,11 +103,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PushwooshAndroid.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="PushwooshAndroid.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/PushwooshAndroid.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.40640393">
-              <caret line="32" column="6" selection-start-line="32" selection-start-column="6" selection-end-line="32" selection-end-column="6" />
+            <state vertical-scroll-proportion="-12.294118">
+              <caret line="36" column="4" selection-start-line="36" selection-start-column="4" selection-end-line="36" selection-end-column="138" />
               <folding />
             </state>
           </provider>
@@ -178,10 +178,10 @@
         <option value="$PROJECT_DIR$/js/PushwooshWP.js" />
         <option value="$PROJECT_DIR$/js/index.js" />
         <option value="$PROJECT_DIR$/index.html" />
-        <option value="$PROJECT_DIR$/js/PushwooshiOS.js" />
         <option value="$PROJECT_DIR$/app/factories/token-factory.js" />
         <option value="$PROJECT_DIR$/app/modules/events.js" />
         <option value="$PROJECT_DIR$/js/PushwooshAndroid.js" />
+        <option value="$PROJECT_DIR$/js/PushwooshiOS.js" />
       </list>
     </option>
   </component>
@@ -930,6 +930,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/js/PushwooshAndroid.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-12.294118">
+          <caret line="36" column="4" selection-start-line="36" selection-start-column="4" selection-end-line="36" selection-end-column="138" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/js/PushwooshWP.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -940,16 +948,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/PushwooshiOS.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-18.764706">
-          <caret line="70" column="6" selection-start-line="32" selection-start-column="4" selection-end-line="70" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/PushwooshAndroid.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.40640393">
-          <caret line="32" column="6" selection-start-line="32" selection-start-column="6" selection-end-line="32" selection-end-column="6" />
+        <state vertical-scroll-proportion="0.37931034">
+          <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
           <folding />
         </state>
       </provider>
