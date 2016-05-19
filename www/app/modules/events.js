@@ -235,6 +235,7 @@ angular.module('event', [])
             if ($scope.isPhoneGap) {
                 console.log("device isPhoneGap -> initPushwoosh() in index.js");
                 //initPushwoosh();
+                $rootScope.$broadcast('push-service-initialized', event);
             }
             messageRepository.on(event, args);
             communicationService.on(event, args);

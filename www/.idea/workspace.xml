@@ -21,11 +21,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="events.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="events.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/modules/events.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-7.5">
-              <caret line="236" column="18" selection-start-line="236" selection-start-column="18" selection-end-line="236" selection-end-column="34" />
+            <state vertical-scroll-proportion="0.3802469">
+              <caret line="233" column="45" selection-start-line="233" selection-start-column="45" selection-end-line="233" selection-end-column="45" />
               <folding />
             </state>
           </provider>
@@ -51,11 +51,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="login.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="login.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/modules/login.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5382716">
-              <caret line="195" column="9" selection-start-line="195" selection-start-column="9" selection-end-line="195" selection-end-column="9" />
+            <state vertical-scroll-proportion="-15.166667">
+              <caret line="200" column="38" selection-start-line="200" selection-start-column="38" selection-end-line="200" selection-end-column="38" />
               <folding />
             </state>
           </provider>
@@ -95,7 +95,7 @@
         <entry file="file://$PROJECT_DIR$/js/PushwooshiOS.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="49" column="27" selection-start-line="49" selection-start-column="27" selection-end-line="49" selection-end-column="27" />
+              <caret line="82" column="26" selection-start-line="82" selection-start-column="26" selection-end-line="82" selection-end-column="26" />
               <folding />
             </state>
           </provider>
@@ -178,8 +178,8 @@
         <option value="$PROJECT_DIR$/js/PushwooshiOS.js" />
         <option value="$PROJECT_DIR$/app/factories/token-factory.js" />
         <option value="$PROJECT_DIR$/js/index.js" />
-        <option value="$PROJECT_DIR$/app/modules/events.js" />
         <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/app/modules/events.js" />
       </list>
     </option>
   </component>
@@ -912,22 +912,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/PushwooshiOS.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="49" column="27" selection-start-line="49" selection-start-column="27" selection-end-line="49" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/modules/events.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.5">
-          <caret line="236" column="18" selection-start-line="236" selection-start-column="18" selection-end-line="236" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-5.0597014">
@@ -946,8 +930,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/modules/login.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5382716">
-          <caret line="195" column="9" selection-start-line="195" selection-start-column="9" selection-end-line="195" selection-end-column="9" />
+        <state vertical-scroll-proportion="-15.166667">
+          <caret line="200" column="38" selection-start-line="200" selection-start-column="38" selection-end-line="200" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/PushwooshiOS.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="82" column="26" selection-start-line="82" selection-start-column="26" selection-end-line="82" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/modules/events.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3802469">
+          <caret line="233" column="45" selection-start-line="233" selection-start-column="45" selection-end-line="233" selection-end-column="45" />
           <folding />
         </state>
       </provider>
