@@ -193,6 +193,8 @@
 
                 document.addEventListener('deviceready', function () {
                     console.log("deviceready");
+                    var pushNotification = window.plugins.pushNotification;
+                    pushNotification.onDeviceReady();
                     initPushwoosh();
                     //initPushwoosh(); //Moved to events --> logged-in
                     StatusBar.overlaysWebView(false);
