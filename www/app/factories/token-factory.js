@@ -72,7 +72,7 @@ angular.module('token', [])
             $rootScope.token = null;
             token = null;
             clearInterval(refreshTokenIntervall);
-            //factory.unRegisterPushToken();
+            factory.unRegisterPushToken();
             factory.clearLoginCredentials();
             factory.clearTokenData();
             $state.go('login');
