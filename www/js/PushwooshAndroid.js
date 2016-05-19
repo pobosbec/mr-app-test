@@ -34,19 +34,38 @@ function registerPushwooshAndroid() {
 
     pushNotification.onDeviceReady({ projectid: "482590317251", appid: "A014B-AC83E" });
 
-    //register for push notifications
-    pushNotification.registerDevice(
-		function (token) {
-		    document.dispatchEvent(new CustomEvent("push-service-initialized", { token: token }));
+	//test if this crashes the app
+	pushNotification.getPushToken(
+		function(token)
+		{
+			console.log("pushToken is not null: " + JSON.stringify(token));
+			console.warn('push token: ' + token);
 
-		    //callback when pushwoosh is ready
-		    onPushwooshAndroidInitialized(token);
-		},
-		function (status) {
-		    alert("failed to register: " + status);
-		    console.warn(JSON.stringify(['failed to register ', status]));
+			if (token != null) {
+				console.log("pushToken is not null");
+			}
+			else {
+
+				console.log("pushToken is null re register: ");
+				//register for push notifications
+				pushNotification.registerDevice(
+					function (token) {
+						document.dispatchEvent(new CustomEvent("push-service-initialized, from PushwooshAndroid.js, token:", { token: token }));
+
+						//callback when pushwoosh is ready
+						onPushwooshAndroidInitialized(token);
+					},
+					function (status) {
+						alert("failed to register: " + status);
+						console.warn(JSON.stringify(['failed to register ', status]));
+					}
+				);
+			}
 		}
 	);
+
+
+
 }
 
 function onPushwooshAndroidInitialized(pushToken) {
