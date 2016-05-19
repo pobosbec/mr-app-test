@@ -14,6 +14,8 @@ angular.module('event', [])
         // Native
         document.addEventListener('resume', function (event, args) {
             console.log("resume");
+            var pushNotification = window.plugins.pushNotification;
+            pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
             $rootScope.$broadcast('on-focus', args);
         }, false);
         
