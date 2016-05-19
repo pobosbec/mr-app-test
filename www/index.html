@@ -193,8 +193,8 @@
 
                 document.addEventListener('deviceready', function () {
                     console.log("deviceready");
-                    var pushNotification = window.plugins.pushNotification;
-                    pushNotification.onDeviceReady();
+                    console.log("initing plugin with on device ready");
+                    pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
                     initPushwoosh();
                     //initPushwoosh(); //Moved to events --> logged-in
                     StatusBar.overlaysWebView(false);
