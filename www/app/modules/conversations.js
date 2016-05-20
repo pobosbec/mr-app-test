@@ -10,6 +10,7 @@ angular.module('conversations', [])
             $scope.appUsers = contactsService.appUsers;
             $scope.isLoading = false;
             $scope.fetchingMore = false;
+            $scope.quickLoading = dataService.quickLoading;
 
             /* Gets the url for a user. Used in an ng-repeat to display the avatar.
             */

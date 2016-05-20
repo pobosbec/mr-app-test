@@ -695,6 +695,10 @@ angular.module('message', ['ngCordova'])
             });
         };
 
+        factory.deleteConversation = function(conversationId) {
+            deleteConversation(conversationId);
+        }
+
         factory.addConversations = function (conversations) {
             return $q(function (resolve, reject) {
                 if (conversations.length === 0) {

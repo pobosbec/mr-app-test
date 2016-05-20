@@ -13,6 +13,7 @@ angular.module('services', [])
             factory.moreConversationsAreAvailable = true;
             factory.unProccessedConversations = [];
             factory.unidentifiedAppUsers = [];
+            factory.quickLoading = false;
 
             function resolveUnidentifiedAppUsers(appUserExistsPromises) {
 
@@ -337,6 +338,9 @@ angular.module('services', [])
             }
 
             factory.quickLoad = function () {
+
+                factory.quickLoading = true;
+
                 // Deliver what ever data we have asap:
                 var conversationsFromDatabasePromise = messageRepository.getConversationsByTime(10, 0, 10);
                 //Let's load the initial 10
@@ -379,7 +383,7 @@ angular.module('services', [])
                         });
 
                         promise.then(function () {
-                            factory.isLoading = false;
+                            factory.quickLoading = false;
                             console.log("Initial loading of conversations done.");
                         });
                     });
