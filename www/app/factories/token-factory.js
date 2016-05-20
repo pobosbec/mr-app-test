@@ -72,12 +72,10 @@ angular.module('token', [])
             $rootScope.token = null;
             token = null;
             clearInterval(refreshTokenIntervall);
-            //factory.unRegisterPushToken();
+            factory.unRegisterPushToken();
             factory.clearLoginCredentials();
             factory.clearTokenData();
             $state.go('login');
-           // var push = cordova.require("pushwoosh-cordova-plugin.PushNotification");
-           // push.unregisterDevice(console.log("successfully unregistered device from push",console.log("failed unregistering device from push")));
             $('#template-2').hide();
             factory.abandonToken($rootScope.token);
         };

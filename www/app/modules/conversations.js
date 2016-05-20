@@ -129,8 +129,22 @@ angular.module('conversations', [])
                 $scope.setConversation();
 
                 $scope.openDefaultBrowserWindow = function (url) {
-                    $window.open(url);
-                }
+                   // $window.open(url);
+
+                    console.log("openDefaultBrowserwindow called with url: "+url);
+
+                    var modalInstance = $uibModal.open({
+                            animation: $scope.animationsEnabled,
+                            templateUrl: 'template/forms-modal.html',
+                            controller: 'viewFormsCtrl',
+                            resolve: {
+                                url: function () {
+                                    return url;
+                                }
+                            }
+
+                        });
+                    };
 
                 $scope.containsFormLink = function (message) {
 
@@ -476,7 +490,14 @@ angular.module('conversations', [])
                 };
             }
     ])
-        .controller('conversationInfoCtrl', [
+    .controller('viewFormsCtrl', function ($scope, $uibModalInstance,$sce, url) {
+
+            $scope.url = $sce.trustAsResourceUrl(url);
+
+            console.log("forms modal open with url: "+ url);
+        })
+
+            .controller('conversationInfoCtrl', [
             '$scope', '$http', 'tokenService', 'contactsService', 'conversationInfo', '$uibModalInstance', 'communicationService', function ($scope, $http, tokenService, contactsService, conversationInfo, $uibModalInstance, communicationService) {
 
                 $scope.getAvatar = function (appUserId) {

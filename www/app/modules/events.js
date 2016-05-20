@@ -14,6 +14,11 @@ angular.module('event', [])
         // Native
         document.addEventListener('resume', function (event, args) {
             console.log("resume");
+            console.log("initing plugin with on device ready, events.js");
+            var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
+            pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
+            console.log("set app badge nr 0");
+            pushNotification.setApplicationIconBadgeNumber(0);
             $rootScope.$broadcast('on-focus', args);
         }, false);
         
@@ -84,8 +89,11 @@ angular.module('event', [])
         $scope.$on('on-focus', function (event, args) {
             console.log("on-focus");
 
-            var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
-            pushNotification.setApplicationIconBadgeNumber(0);
+            tokenService.registerPushToken();
+
+            //test without
+            //var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
+            //pushNotification.setApplicationIconBadgeNumber(0);
 
             var onFocusDelay = setTimeout(function (event, args) {
                 args = args | {};
@@ -123,7 +131,9 @@ angular.module('event', [])
             $rootScope.$broadcast('sync-conversations', args);
         });
 
-        $scope.$on('on-blur', function(event, args) { });
+        $scope.$on('on-blur', function(event, args) {
+
+        });
 
         $scope.$on('online', function (event, args) {
             args.Sender = 'events';
@@ -234,7 +244,8 @@ angular.module('event', [])
             console.log("Event.. logged-in");
             if ($scope.isPhoneGap) {
                 console.log("device isPhoneGap -> initPushwoosh() in index.js");
-                initPushwoosh();
+                //initPushwoosh();
+                $rootScope.$broadcast('push-service-initialized', event);
             }
             messageRepository.on(event, args);
             communicationService.on(event, args);

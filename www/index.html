@@ -101,6 +101,7 @@
     <script src="node_modules/angular-moment/node_modules/moment/moment.js"></script>
     <script src="node_modules/angular-moment/angular-moment.min.js"></script>
     <script src='node_modules/fastclick/lib/fastclick.js'></script>
+    <script src="js/angular-sanitize/angular-sanitize.min.js"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and res queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -183,14 +184,23 @@
                 loadScript("cordova.js");
                 // now add plugins
                 if (isIOS()) {
+                    console.log("phone is ios");
                     loadScript("js/PushwooshiOS.js");
                 }
                 if (isAndroid()) {
                     loadScript("js/PushwooshAndroid.js");
+                    console.log("phone is android");
                 }
 
                 document.addEventListener('deviceready', function () {
                     console.log("deviceready");
+
+                    console.log("initing plugin with on device ready, index.html");
+                    var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
+                    pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
+
+
+                    initPushwoosh();
                     //initPushwoosh(); //Moved to events --> logged-in
                     StatusBar.overlaysWebView(false);
                     console.log("Device ready initiating Angular");
