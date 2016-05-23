@@ -189,7 +189,8 @@ angular.module('event', [])
 
         $scope.$on('push-notification', function (event, args) {
             communicationService.on(event, args);
-            console.log("$on, push-notification, event.js 192");
+            console.log("$on, push-notification, event.js 192: " + event);
+
         });
 
         // ------------------------------------

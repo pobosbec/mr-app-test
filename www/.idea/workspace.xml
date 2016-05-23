@@ -10,7 +10,9 @@
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/angular-sanitize/index.js" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/angular-sanitize/package.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/app.js" afterPath="$PROJECT_DIR$/app/app.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/factories/communication-factory.js" afterPath="$PROJECT_DIR$/app/factories/communication-factory.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/factories/contacts-repository.js" afterPath="$PROJECT_DIR$/app/factories/contacts-repository.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/factories/data-service.js" afterPath="$PROJECT_DIR$/app/factories/data-service.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/factories/message-repository-factory.js" afterPath="$PROJECT_DIR$/app/factories/message-repository-factory.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/modules/conversations.js" afterPath="$PROJECT_DIR$/app/modules/conversations.js" />
@@ -69,8 +71,8 @@
       <file leaf-file-name="events.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/modules/events.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.18321227">
-              <caret line="269" column="11" selection-start-line="269" selection-start-column="11" selection-end-line="269" selection-end-column="11" />
+            <state vertical-scroll-proportion="0.60936236">
+              <caret line="191" column="63" selection-start-line="191" selection-start-column="63" selection-end-line="191" selection-end-column="63" />
               <folding />
             </state>
           </provider>
@@ -946,8 +948,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/modules/events.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.18321227">
-          <caret line="269" column="11" selection-start-line="269" selection-start-column="11" selection-end-line="269" selection-end-column="11" />
+        <state vertical-scroll-proportion="0.60936236">
+          <caret line="191" column="63" selection-start-line="191" selection-start-column="63" selection-end-line="191" selection-end-column="63" />
           <folding />
         </state>
       </provider>
