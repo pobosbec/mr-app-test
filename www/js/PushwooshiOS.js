@@ -50,7 +50,7 @@ function registerPushwooshIOS() {
 
 				console.log("pushToken is null re register: ");
 				pushNotification.registerDevice(
-					function (token) {
+						function (token) {
 						console.log("pushNotification.registerDevice, from PushwooshiOS.js, token: " + JSON.stringify(token));
 
 						var deviceToken = token.deviceToken;
