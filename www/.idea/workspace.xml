@@ -40,11 +40,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="conversations.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="conversations.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/modules/conversations.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-11.472222">
-              <caret line="381" column="33" selection-start-line="381" selection-start-column="27" selection-end-line="381" selection-end-column="33" />
+            <state vertical-scroll-proportion="1.5052462">
+              <caret line="210" column="76" selection-start-line="210" selection-start-column="76" selection-end-line="210" selection-end-column="76" />
               <folding />
             </state>
           </provider>
@@ -59,88 +59,6 @@
                 <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#1;n#div#0;n#!!top" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PushwooshAndroid.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/js/PushwooshAndroid.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.30056405">
-              <caret line="46" column="18" selection-start-line="46" selection-start-column="18" selection-end-line="46" selection-end-column="18" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PushwooshiOS.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/PushwooshiOS.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-8.411765">
-              <caret line="30" column="6" selection-start-line="30" selection-start-column="6" selection-end-line="30" selection-end-column="6" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/index.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="23" column="48" selection-start-line="23" selection-start-column="48" selection-end-line="23" selection-end-column="48" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="events.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/modules/events.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-8.75">
-              <caret line="271" column="45" selection-start-line="271" selection-start-column="45" selection-end-line="271" selection-end-column="45" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="forms-modal.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/template/forms-modal.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.0">
-              <caret line="0" column="53" selection-start-line="0" selection-start-column="53" selection-end-line="0" selection-end-column="53" />
-              <folding>
-                <element signature="n#style#0;n#iframe#0;n#div#0;n#!!top" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-26.64516">
-              <caret line="205" column="55" selection-start-line="205" selection-start-column="55" selection-end-line="205" selection-end-column="55" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="css-override.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/css/css-override.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.0">
-              <caret line="48" column="19" selection-start-line="48" selection-start-column="18" selection-end-line="48" selection-end-column="19" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="custom.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/css/custom.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-9.283582">
-              <caret line="140" column="5" selection-start-line="140" selection-start-column="5" selection-end-line="140" selection-end-column="5" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -210,10 +128,10 @@
         <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/template/forms-modal.html" />
         <option value="$PROJECT_DIR$/js/PushwooshiOS.js" />
-        <option value="$PROJECT_DIR$/app/modules/conversations.js" />
         <option value="$PROJECT_DIR$/app/modules/events.js" />
         <option value="$PROJECT_DIR$/template/conversation.html" />
         <option value="$PROJECT_DIR$/js/PushwooshAndroid.js" />
+        <option value="$PROJECT_DIR$/app/modules/conversations.js" />
       </list>
     </option>
   </component>
@@ -223,7 +141,7 @@
     <detection-done>true</detection-done>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-9" />
+    <option name="x" value="2391" />
     <option name="y" value="-9" />
     <option name="width" value="2418" />
     <option name="height" value="1468" />
@@ -542,7 +460,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-9" width="2418" height="1468" extended-state="6" />
+    <frame x="2391" y="-9" width="2418" height="1468" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20986094" sideWeight="0.48722044" order="0" side_tool="false" content_ui="combo" />
@@ -599,11 +517,6 @@
           <url>file://$PROJECT_DIR$/template/sidebar-drawer.html</url>
           <line>30</line>
           <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/app/modules/conversations.js</url>
-          <line>161</line>
-          <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
       <option name="time" value="3" />
@@ -929,14 +842,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/css/css-override.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.0">
-          <caret line="48" column="19" selection-start-line="48" selection-start-column="18" selection-end-line="48" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/css/custom.css">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-9.283582">
@@ -953,14 +858,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="23" column="48" selection-start-line="23" selection-start-column="48" selection-end-line="23" selection-end-column="48" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/PushwooshiOS.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-8.411765">
@@ -969,18 +866,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/modules/events.js">
+    <entry file="file://$PROJECT_DIR$/js/PushwooshAndroid.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-8.75">
-          <caret line="271" column="45" selection-start-line="271" selection-start-column="45" selection-end-line="271" selection-end-column="45" />
+        <state vertical-scroll-proportion="0.30056405">
+          <caret line="46" column="18" selection-start-line="46" selection-start-column="18" selection-end-line="46" selection-end-column="18" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/modules/conversations.js">
+    <entry file="file://$PROJECT_DIR$/js/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-11.472222">
-          <caret line="381" column="33" selection-start-line="381" selection-start-column="27" selection-end-line="381" selection-end-column="33" />
+        <state vertical-scroll-proportion="0.10352941">
+          <caret line="23" column="48" selection-start-line="23" selection-start-column="48" selection-end-line="23" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/modules/events.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.2542373">
+          <caret line="266" column="45" selection-start-line="266" selection-start-column="45" selection-end-line="266" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/css/css-override.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33278146">
+          <caret line="48" column="19" selection-start-line="48" selection-start-column="18" selection-end-line="48" selection-end-column="19" />
           <folding />
         </state>
       </provider>
@@ -996,10 +909,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/PushwooshAndroid.js">
+    <entry file="file://$PROJECT_DIR$/app/modules/conversations.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.30056405">
-          <caret line="46" column="18" selection-start-line="46" selection-start-column="18" selection-end-line="46" selection-end-column="18" />
+        <state vertical-scroll-proportion="1.5052462">
+          <caret line="210" column="76" selection-start-line="210" selection-start-column="76" selection-end-line="210" selection-end-column="76" />
           <folding />
         </state>
       </provider>

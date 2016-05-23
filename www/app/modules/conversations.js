@@ -227,6 +227,9 @@ angular.module('conversations', [])
                         Retrying: false
                     };
 
+                    if ($scope.conversations.Messages = undefined){
+                        $scope.conversations.Messages = [];
+                    }
                     $scope.conversation.Messages.push(msg);
 
                     // ugly solution, should be a directive
