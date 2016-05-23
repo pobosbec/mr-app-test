@@ -59,6 +59,7 @@ angular.module('event', [])
         }, false);
 
         document.addEventListener('push-notification', function (event, args) {
+            console.log("push-notification, events.js");
             // TODO: fix code smell..
             var notificationConversations = JSON.parse(localStorage.getItem("pushConversations"));
 
@@ -184,6 +185,8 @@ angular.module('event', [])
 
         $scope.$on('push-notification', function (event, args) {
             communicationService.on(event, args);
+            console.log("$on, push-notification, event.js 192: " + event);
+
         });
 
         // ------------------------------------

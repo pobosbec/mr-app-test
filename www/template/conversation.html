@@ -17,7 +17,7 @@
             </div>
             <button class="btn btn-default btn-icon waves-effect waves-circle" data-ng-click="viewConversationInfo('lg', conversation.Participants)" style="color: gray; position: absolute; right: 10px"><i class="zmdi zmdi-info-outline zmdi-hc-fw" style="font-size: 24px; color: gray"></i></button>
         </div>
-        <div class="lv-body" style="height: calc(100vh - 123px) !important; overflow-y: scroll" id="conversationMessagesBody" scroll-position-check scroll-bottom="conversation.Messages" scroll-bottom-enabled="scrollBottomEnabled">
+        <div class="lv-body" style="height: calc(100vh - 123px) !important; overflow-y: scroll" id="conversationMessagesBody" scroll-position-check scroll-bottom="conversation.Messages" scroll-bottom-enabled="!unseenMessages">
             <loading></loading>
             <div class="lv-item" ng-repeat="message in conversation.Messages | orderBy: sortMessage track by message.MessageId" ng-class="message.Author === userId ? 'media right': 'media'">
                 <div class="lv-avatar" ng-class="message.Author === userId ? 'pull-right': 'pull-left'">
