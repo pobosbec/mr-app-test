@@ -438,13 +438,8 @@ angular.module('services', [])
                                 console.warn('Could not get messages.');
                             });
                         break;
-                    case 'load':
-                        // TODO: should we do a fetch if the user has closed the browser/had the app in the background and brings it back? 
-                        //factory.quickLoad();
-                        break;
-                    case 'on-focus':
-                        //factory.quickLoad();
-                        break;
+                    case 'sync-conversations':
+                        factory.quickLoad();
                     default:
                         break;
                 }
