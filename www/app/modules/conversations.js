@@ -165,7 +165,7 @@ angular.module('conversations', [])
 
                     var modalInstance = $uibModal.open({
                             animation: $scope.animationsEnabled,
-                            appendTo: 'body',
+                            appendTo: '#content',
                             templateUrl: 'template/forms-modal.html',
                             controller: 'viewFormsCtrl',
                             resolve: {
@@ -530,6 +530,11 @@ angular.module('conversations', [])
             $scope.url = $sce.trustAsResourceUrl(url);
 
             console.log("forms modal open with url: "+ url);
+
+        $scope.close = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
+
         })
 
             .controller('conversationInfoCtrl', [
@@ -571,6 +576,7 @@ angular.module('conversations', [])
                 $scope.conversationParticipants = conversationInfo.Participants;
 
                 $scope.close = function () {
+                    console.log("closing modal");
                     $uibModalInstance.dismiss('cancel');
                 };
             }
