@@ -254,8 +254,18 @@ angular.module('services', [])
                     conversationMessages = 10;
                 }
 
-                var processedConvos = 0;
                 var appUserExistsPromises = [];
+
+                for (var j = 0; j < conversations.length; j++) {
+                    conversations[j].Participants.some(function (participant) {
+                        if (participant !== factory.userId)
+                            appUserExistsPromises.push(contactsService.userExists(participant));
+                    });
+                }
+
+                resolveUnidentifiedAppUsers(appUserExistsPromises);
+
+                var processedConvos = 0;
 
                 conversations.some(function (conversation) {
                     if (typeof conversation === "undefined" || conversation === null) {
@@ -264,10 +274,7 @@ angular.module('services', [])
                     processedConvos++;
 
                     if (processedConvos <= conversationsLimit) {
-                        conversation.Participants.some(function (participant) {
-                            if (participant !== factory.userId)
-                                appUserExistsPromises.push(contactsService.userExists(participant));
-                        });
+
 
                         syncConversationMessages(conversation, conversationMessages);
                         factory.conversations.push(conversation);
@@ -276,8 +283,6 @@ angular.module('services', [])
                         factory.moreConversationsAreAvailable = factory.unProccessedConversations.length > 0;
                     }
                 });
-
-                resolveUnidentifiedAppUsers(appUserExistsPromises);
             }
 
             function processMessages(conversationId, messages, newMessages) {

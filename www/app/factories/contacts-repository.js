@@ -208,7 +208,7 @@ angular.module('contacts', [])
                 returnResult.Found = true;
                 deferred.resolve(returnResult);
             } else {
-                var foundPromise = factory.getAppUser();
+                var foundPromise = factory.getAppUser(appUserId);
 
                 foundPromise.then(function (success) {
                     if (success.length === 1) {
