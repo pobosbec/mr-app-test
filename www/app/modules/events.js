@@ -59,8 +59,7 @@ angular.module('event', [])
         }, false);
 
         document.addEventListener('push-notification', function (event, args) {
-            console.log('events.js push-notification');
-            // TODO: fix code smell.. 
+            // TODO: fix code smell..
             var notificationConversations = JSON.parse(localStorage.getItem("pushConversations"));
 
             if (notificationConversations != null) {
