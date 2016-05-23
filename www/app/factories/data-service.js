@@ -90,7 +90,7 @@ angular.module('services', [])
                                 var apiMessage = messagesFromApi[j];
                                 var dbMessage = messagesFromDatabase[j];
 
-                                if (apiMessage.messageId !== dbMessage.messageId) {
+                                if (apiMessage.messageId !== dbMessage.MessageId) {
                                     intersect = false;
                                 }
                             }
