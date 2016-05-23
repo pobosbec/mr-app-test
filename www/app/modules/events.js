@@ -91,10 +91,6 @@ angular.module('event', [])
 
             tokenService.registerPushToken();
 
-            //test without
-            //var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
-            //pushNotification.setApplicationIconBadgeNumber(0);
-
             var onFocusDelay = setTimeout(function (event, args) {
                 args = args | {};
                 args.Sender = 'events';

@@ -86,13 +86,17 @@ angular.module('services', [])
 
                             var intersect = true;
 
-                            for (var j = 0; j < messagesFromApi.length; j++) {
-                                var apiMessage = messagesFromApi[j];
-                                var dbMessage = messagesFromDatabase[j];
+                            if (messagesFromDatabase.length === messagesFromApi.length) {
+                                for (var j = 0; j < messagesFromApi.length; j++) {
+                                    var apiMessage = messagesFromApi[j];
+                                    var dbMessage = messagesFromDatabase[j];
 
-                                if (apiMessage.messageId !== dbMessage.MessageId) {
-                                    intersect = false;
+                                    if (apiMessage.messageId !== dbMessage.MessageId) {
+                                        intersect = false;
+                                    }
                                 }
+                            } else {
+                                intersect = false;
                             }
 
                             //var intersect = messagesFromDatabase.some(function (messageFromDb) {
@@ -100,6 +104,7 @@ angular.module('services', [])
                             //        return messageFromDb.MessageId === messageFromApi.messageId;
                             //    });
                             //});
+
                             if (!intersect) {
                                 if (typeof messagesFromApi[0] !== "undefined" && messagesFromApi[0] !== null && messagesFromApi[0].hasOwnProperty("conversationId")) {
                                     console.log("- CLEARED CONVO (" + messagesFromApi[0].conversationId + ") IN DB BECAUSE OF TOO MANY MISSING MESSAGES -");
