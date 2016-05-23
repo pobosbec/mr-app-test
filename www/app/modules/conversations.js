@@ -163,7 +163,7 @@ angular.module('conversations', [])
 
                     var modalInstance = $uibModal.open({
                             animation: $scope.animationsEnabled,
-                            appendTo: 'head',
+                            appendTo: 'body',
                             templateUrl: 'template/forms-modal.html',
                             controller: 'viewFormsCtrl',
                             resolve: {
