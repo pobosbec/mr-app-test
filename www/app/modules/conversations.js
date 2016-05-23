@@ -100,7 +100,35 @@ angular.module('conversations', [])
             }
         }])
     .controller('conversationCtrl', [
-            '$scope', '$http', '$rootScope', 'tokenService', 'contactsService', 'communicationService', 'messageRepository', '$stateParams', '$uibModal', 'moment', '$timeout', '$window', 'dataService', '$q', function ($scope, $http, $rootScope, tokenService, contactsService, communicationService, messageRepository, $stateParams, $uibModal, angularMoment, $timeout, $window, dataService, $q) {
+            '$scope',
+        '$http',
+        '$rootScope',
+        'tokenService',
+        'contactsService',
+        'communicationService',
+        'messageRepository',
+        '$stateParams',
+        '$uibModal',
+        'moment',
+        '$timeout',
+        '$window',
+        'dataService',
+        '$q',
+        function ($scope,
+                  $http,
+                  $rootScope,
+                  tokenService,
+                  contactsService,
+                  communicationService,
+                  messageRepository,
+                  $stateParams,
+                  $uibModal,
+                  angularMoment,
+                  $timeout,
+                  $window,
+                  dataService,
+                  $q,
+                  $document) {
                 $scope.conversationId = $stateParams.conversationId;
                 $scope.userId = tokenService.getAppUserId();
                 $scope.conversation = {};
@@ -135,6 +163,7 @@ angular.module('conversations', [])
 
                     var modalInstance = $uibModal.open({
                             animation: $scope.animationsEnabled,
+                            appendTo: 'head',
                             templateUrl: 'template/forms-modal.html',
                             controller: 'viewFormsCtrl',
                             resolve: {
