@@ -118,7 +118,7 @@ angular.module('event', [])
                             $location.path('/conversation/' + convoId);
                         } else if (conversationIds.length > 1) {
                             resetData();
-                            $location.path('/conversation/');
+                            $location.path('/conversations/');
                         }
                     } else {
                         resetData();

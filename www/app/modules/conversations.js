@@ -148,9 +148,11 @@ angular.module('conversations', [])
                     // TODO: Handle if conversation is not in dataService?
                     dataService.conversations.some(function (conversation) {
                         if (conversation.ConversationId === $scope.conversationId) {
+                            console.log("setConversation = true");
                             $scope.conversation = conversation;
                             return true;
                         }
+                    console.log("setConversation = False");
                     });
                 };
 
@@ -163,7 +165,7 @@ angular.module('conversations', [])
 
                     var modalInstance = $uibModal.open({
                             animation: $scope.animationsEnabled,
-                            appendTo: 'body',
+                            appendTo: '#content',
                             templateUrl: 'template/forms-modal.html',
                             controller: 'viewFormsCtrl',
                             resolve: {
@@ -227,6 +229,10 @@ angular.module('conversations', [])
                         Retrying: false
                     };
 
+                    if ($scope.conversations === undefined){
+                        $scope.conversations = {};
+                        $scope.conversations.Messages = [];
+                    }
                     $scope.conversation.Messages.push(msg);
 
                     // ugly solution, should be a directive
@@ -524,6 +530,11 @@ angular.module('conversations', [])
             $scope.url = $sce.trustAsResourceUrl(url);
 
             console.log("forms modal open with url: "+ url);
+
+        $scope.close = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
+
         })
 
             .controller('conversationInfoCtrl', [
@@ -565,6 +576,7 @@ angular.module('conversations', [])
                 $scope.conversationParticipants = conversationInfo.Participants;
 
                 $scope.close = function () {
+                    console.log("closing modal");
                     $uibModalInstance.dismiss('cancel');
                 };
             }
