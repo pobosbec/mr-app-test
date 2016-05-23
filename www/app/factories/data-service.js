@@ -83,11 +83,23 @@ angular.module('services', [])
                         var messagesFromDatabasePromise = messageRepository.getMessagesFromLocalDatabase(messagesFromApi[0].conversationId, 10, 0);
 
                         messagesFromDatabasePromise.then(function (messagesFromDatabase) {
-                            var intersect = messagesFromDatabase.some(function (messageFromDb) {
-                                return messagesFromApi.some(function (messageFromApi) {
-                                    return messageFromDb.MessageId === messageFromApi.messageId;
-                                });
-                            });
+
+                            var intersect = true;
+
+                            for (var j = 0; j < messagesFromApi.length; j++) {
+                                var apiMessage = messagesFromApi[j];
+                                var dbMessage = messagesFromDatabase[j];
+
+                                if (apiMessage.messageId !== dbMessage.messageId) {
+                                    intersect = false;
+                                }
+                            }
+
+                            //var intersect = messagesFromDatabase.some(function (messageFromDb) {
+                            //    return messagesFromApi.some(function (messageFromApi) {
+                            //        return messageFromDb.MessageId === messageFromApi.messageId;
+                            //    });
+                            //});
                             if (!intersect) {
                                 if (typeof messagesFromApi[0] !== "undefined" && messagesFromApi[0] !== null && messagesFromApi[0].hasOwnProperty("conversationId")) {
                                     console.log("- CLEARED CONVO (" + messagesFromApi[0].conversationId + ") IN DB BECAUSE OF TOO MANY MISSING MESSAGES -");
