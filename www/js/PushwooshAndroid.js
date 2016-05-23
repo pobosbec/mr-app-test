@@ -41,7 +41,7 @@ function registerPushwooshAndroid() {
 			console.log("pushToken is not null: " + JSON.stringify(token));
 			console.warn('push token: ' + token);
 
-			if (token != null) {
+			if (JSON.stringify(token).length() > 0) {
 				console.log("pushToken is not null");
 			}
 			else {
