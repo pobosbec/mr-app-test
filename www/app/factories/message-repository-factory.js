@@ -878,9 +878,6 @@ angular.module('message', ['ngCordova'])
                         factory.addConversations(data);
                     }
                     break;
-                case 'sync-conversations':
-                    //factory.quickSync();
-                    break;
                 case 'device-ready':
                     break;
                 case 'logged-out':
@@ -899,12 +896,6 @@ angular.module('message', ['ngCordova'])
                     dropTablesOnLogin();
                     factory.init();
                     break;
-                //case 'load':
-                //    factory.init();
-                //    break;
-                //case 'on-focus':
-                //    factory.init();
-                //    break;
                 default:
                     break;
             }

@@ -346,12 +346,6 @@ angular.module('contacts', [])
                             console.error('Failed to drop database.\r\n' + error.message);
                         });
                     break;
-                case 'load':
-                    //factory.init();
-                    break;
-                case 'on-focus':
-                    //factory.init();
-                    break;
                 default:
                     break;
             }

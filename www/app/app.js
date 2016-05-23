@@ -30,5 +30,4 @@ var mobileresponseWebbApp = angular.module('administratorApp', [
     contactsService.init();
     messageRepository.init();
     dataService.quickLoad();
-
 });

@@ -57,6 +57,49 @@ angular.module('services', [])
                 });
             }
 
+            factory.onFocusOrResume = function () {
+
+                var maxConversationsToCheck = 10;
+
+                if (factory.conversations.length < 10) {
+                    maxConversationsToCheck = factory.conversations.length;
+                }
+
+                for (var i = 0; i < maxConversationsToCheck; i++) {
+                    var conversation = factory.conversations[i];
+
+                    var messagesPromise = communicationService.downloadMessagesForConversation(conversation.ConversationId, false, 0, 10, false);
+                    messagesPromise.then(function (result) {
+                        var messagesFromApi = result.data.items.sort(function (a, b) {
+                            if (a.CreatedOn > b.CreatedOn) {
+                                return 1;
+                            }
+                            if (a.CreatedOn < b.CreatedOn) {
+                                return -1;
+                            }
+                            return 0;
+                        });
+
+                        var messagesFromDatabasePromise = messageRepository.getMessagesFromLocalDatabase(messagesFromApi[0].conversationId, 10, 0);
+
+                        messagesFromDatabasePromise.then(function (messagesFromDatabase) {
+                            var intersect = messagesFromDatabase.some(function (messageFromDb) {
+                                return messagesFromApi.some(function (messageFromApi) {
+                                    return messageFromDb.MessageId === messageFromApi.messageId;
+                                });
+                            });
+                            if (!intersect) {
+                                if (typeof messagesFromApi[0] !== "undefined" && messagesFromApi[0] !== null && messagesFromApi[0].hasOwnProperty("conversationId")) {
+                                    console.log("- CLEARED CONVO (" + messagesFromApi[0].conversationId + ") IN DB BECAUSE OF TOO MANY MISSING MESSAGES -");
+                                    messageRepository.deleteConversation(messagesFromApi[0].conversationId);
+                                    communicationService.messagesDownloaded(messagesFromApi);
+                                }
+                            }
+                        });
+                    });
+                }
+            }
+
             /**
              * Sets first quickload data (10*10 messages) 
              */
@@ -100,8 +143,8 @@ angular.module('services', [])
                                 if (processedConvos <= quickSyncConversationsSize) {
                                     // Gets 10 latest messages for conversation
                                     var messagesPromise = communicationService.downloadMessagesForConversation(conversation.ConversationId, false, 0, quickSyncMessagesSize, false);
-                                    messagesPromise.then(function(result) {
-                                        var messagesFromApi = result.data.items.sort(function(a, b) {
+                                    messagesPromise.then(function (result) {
+                                        var messagesFromApi = result.data.items.sort(function (a, b) {
                                             if (a.CreatedOn > b.CreatedOn) {
                                                 return 1;
                                             }
@@ -113,9 +156,9 @@ angular.module('services', [])
 
                                         var messagesFromDatabasePromise = messageRepository.getMessagesFromLocalDatabase(messagesFromApi[0].conversationId, quickSyncMessagesSize, 0);
 
-                                        messagesFromDatabasePromise.then(function(messagesFromDatabase) {
-                                            var intersect = messagesFromDatabase.some(function(messageFromDb) {
-                                                return messagesFromApi.some(function(messageFromApi) {
+                                        messagesFromDatabasePromise.then(function (messagesFromDatabase) {
+                                            var intersect = messagesFromDatabase.some(function (messageFromDb) {
+                                                return messagesFromApi.some(function (messageFromApi) {
                                                     return messageFromDb.MessageId === messageFromApi.messageId;
                                                 });
                                             });
@@ -131,7 +174,7 @@ angular.module('services', [])
                                         });
                                     });
 
-                                    conversation.Participants.some(function(participant) {
+                                    conversation.Participants.some(function (participant) {
                                         if (participant !== factory.userId)
                                             appUserExistsPromises.push(contactsService.userExists(participant));
                                     });
@@ -346,40 +389,41 @@ angular.module('services', [])
                 //Let's load the initial 10
                 conversationsFromDatabasePromise.then(
                     function (conversationsPromiseSuccess) {
-                        //var appUserExistsPromises = [];
+                        var appUserExistsPromises = [];
 
-                        //for (var cid in conversationsPromiseSuccess) {
-                        //    var conversation = conversationsPromiseSuccess[cid];
+                        for (var cid in conversationsPromiseSuccess) {
+                            var conversation = conversationsPromiseSuccess[cid];
 
-                        //    if (conversation.Participants.constructor === Array) {
-                        //        conversation.Participants.some(function (participant) {
-                        //            if (participant !== factory.userId)
-                        //                appUserExistsPromises.push(contactsService.userExists(participant));
-                        //        });
-                        //    }
+                            if (conversation.Participants.constructor === Array) {
+                                conversation.Participants.some(function (participant) {
+                                    if (participant !== factory.userId)
+                                        appUserExistsPromises.push(contactsService.userExists(participant));
+                                });
+                            }
 
-                        //    factory.conversations.push(conversation);
-                        //}
+                            factory.conversations.push(conversation);
+                        }
 
-                        //resolveUnidentifiedAppUsers(appUserExistsPromises);
+                        resolveUnidentifiedAppUsers(appUserExistsPromises);
                     }, function (conversationsPromiseError) {
                         console.warn(conversationsPromiseError);
                     }).then(function () {
                         var promise = $q(function (resolve, reject) {
 
-                            var quickLoadPromise = quickLoad();
-                            quickLoadPromise.then(function (result) {
-                                resolve();
-                            });
-
-                            //if (!factory.conversations.length) {
-                            //    var quickLoadPromise = quickLoad();
-                            //    quickLoadPromise.then(function (result) {
-                            //        resolve();
-                            //    });
-                            //} else {
+                            //var quickLoadPromise = quickLoad();
+                            //quickLoadPromise.then(function (result) {
                             //    resolve();
-                            //}
+                            //});
+
+                            if (!factory.conversations.length) {
+                                var quickLoadPromise = quickLoad();
+                                quickLoadPromise.then(function (result) {
+                                    resolve();
+                                });
+                            } else {
+                                factory.onFocusOrResume();
+                                resolve();
+                            }
                         });
 
                         promise.then(function () {
@@ -439,7 +483,10 @@ angular.module('services', [])
                             });
                         break;
                     case 'sync-conversations':
-                        factory.quickLoad();
+                        factory.onFocusOrResume();
+                    case 'load':
+                        //factory.onFocusOrResume();
+                        break;
                     default:
                         break;
                 }
