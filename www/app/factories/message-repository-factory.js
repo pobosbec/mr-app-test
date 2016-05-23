@@ -3,7 +3,7 @@
  */
 
 angular.module('message', ['ngCordova'])
-    .factory('messageRepository', ['$http', '$window', '$rootScope', '$location', '$q', '$state', 'tokenService', '$cordovaSQLite', 'communicationService', function ($http, win, $rootScope, $location, $q, $state, tokenService, $cordovaSQLite, communicationService, baseRepository) {
+    .factory('messageRepository', ['$http', '$window', '$rootScope', '$location', '$q', '$state', 'tokenService', '$cordovaSQLite', 'communicationService', 'databaseService', function ($http, win, $rootScope, $location, $q, $state, tokenService, $cordovaSQLite, communicationService, databaseService) {
         var db;
 
         var factory = {};
@@ -14,20 +14,7 @@ angular.module('message', ['ngCordova'])
         // Indicates if conversations are added but event isn't fired yet
         var evtConversationsAdded = false;
 
-        // Indicates if the database is configured
-        var isConfigured = false;
-
-        var dbType = null;
-
-        var databaseConfiguration = {
-            name: "bosbec-mr.db",
-            location: 1,
-            version: "1.0",
-            displayName: "Bosbec-Mr",
-            size: (5 * 1024 * 1024)
-        };
-
-        var webSqlQueries = {
+        var queries = {
             dropMessages: 'DROP TABLE IF EXISTS Messages',
             createMessages: 'CREATE TABLE IF NOT EXISTS Messages (MessageId unique, CreatedOn, ConversationId, Author, JSON)',
             getMessagesByTime: 'SELECT MessageId, JSON FROM Messages ORDER BY CreatedOn DESC LIMIT ? OFFSET ?',
@@ -44,66 +31,114 @@ angular.module('message', ['ngCordova'])
             insertConversationParticipants: 'INSERT OR REPLACE INTO ConversationParticipants (ConversationId, Participants) VALUES (?, ?)'
         };
 
-        var queries = null;
-
         /**
-         * Initializes the factory.
+         * Inserts the message to the database
+         * @param message to insert
+         * @returns {promise} returns a promise
          */
-        factory.init = function () {
-            configureDatabase();
-        };
+        function insertMessage(message) {
+            return $q(function (resolve, reject) {
+                db.transaction(function (tx) {
+                    tx.executeSql(
+                        queries.insertMessage,
+                        [
+                            message.MessageId,
+                            //moment(message.CreatedOn).unix(),
+                            message.CreatedOn,
+                            message.ConversationId,
+                            message.Author,
+                            JSON.stringify(message)],
+                        function (trans, result) {
+                            if (result.rowsAffected !== 1) {
+                                var errorMessage;
+                                if (message.hasOwnProperty("MessageId")) {
+                                    errorMessage = 'The message with id \'' + message.MessageId + '\' doesn\'t seem to be added properly';
+                                } else {
+                                    errorMessage = 'The message has an undefined id';
+                                }
+                                reject(new {
+                                    message: errorMessage
+                                });
+                                return;
+                            }
 
-        /**
-         * Configures the database, sets up the db object and creates tables if needed.
-         */
-        function configureDatabase() {
-            if (isConfigured) {
-                return;
-            }
-
-            //console.log('Going to configure the database');
-            isConfigured = true;
-
-            queries = webSqlQueries;
-
-            var conf = databaseConfiguration;
-
-            // Browser
-            db = window.openDatabase(conf.name, conf.version, conf.displayName, conf.size);
-            queries = webSqlQueries;
-            dbType = 'webSQL';
-            console.log('Opened up web SQL connection');
-
-
-            createMessagesTable()
-                .then(
-                    function () {
-                        console.log('The messages table was successfully created.');
-                    }, function (error) {
-                        console.error('Failed to create the table.\r\n' + error.message);
-                    });
-            createConversationParticipantsTable().then(
-                    function () {
-                        console.log('The conversation participants table was successfully created.');
-                    }, function (error) {
-                        console.error('Failed to create the table.\r\n' + error.message);
-                    });
+                            resolve();
+                        },
+                        function (t, error) {
+                            reject(error);
+                        });
+                });
+            });
         }
 
-        function dropTablesOnLogin() {
-            queries = webSqlQueries;
+        /**
+         * Inserts the converation to the database
+         * @param conversation to insert
+         * @returns {promise} returns a promise
+         */
+        function insertConversation(conversation) {
+            return $q(function (resolve, reject) {
+                db.transaction(function (tx) {
+                    tx.executeSql(
+                        queries.insertConversationParticipants,
+                        [
+                            conversation.ConversationId,
+                            JSON.stringify(conversation.Participants)],
+                        function (trans, result) {
+                            if (result.rowsAffected !== 1) {
+                                var errorMessage;
+                                if (conversation.hasOwnProperty("ConversationId")) {
+                                    errorMessage = 'The conversation with id \'' + conversation.ConversationId + '\' doesn\'t seem to be added properly';
+                                } else {
+                                    errorMessage = 'The conversation has an undefined id';
+                                }
+                                reject(new {
+                                    message: errorMessage
+                                });
+                                return;
+                            }
 
-            var conf = databaseConfiguration;
+                            resolve();
+                        },
+                        function (t, error) {
+                            reject(error);
+                        });
+                });
+            });
+        }
 
-            // Browser
-            db = window.openDatabase(conf.name, conf.version, conf.displayName, conf.size);
-            queries = webSqlQueries;
-            dbType = 'webSQL';
-            console.log('Opened up web SQL connection');
+        function deleteConversation(conversationId) {
+            return $q(function (resolve, reject) {
+                db.transaction(function (tx) {
+                    tx.executeSql(
+                        queries.deleteConversation,
+                        [conversationId],
+                        function (trans, result) {
+                            resolve();
+                        },
+                        function (t, error) {
+                            reject(error);
+                        });
+                });
+            });
+        }
 
-            dropMessagesTable();
-            dropConversationPartisipantsTable();
-            
+        /**
+         * Gets the rows from a sql query result and returns them as an array
+         * @param {object} result - The result from a sql query
+         */
+        function getRows(result) {
+            var rows = [], i = 0;
+
+            for (i = 0; i < result.rows.length; i++) {
+                rows.push(result.rows.item(i));
+            }
+
+            return rows;
+        }
+
+        factory.init = function () {
+            db = databaseService.db;
         }
 
         factory.reMapMessage = function (message) {
@@ -117,98 +152,6 @@ angular.module('message', ['ngCordova'])
             reMapped.content = message.Content;
             reMapped.isRead = message.IsRead;
             return reMapped;
-        }
-
-        /**
-         * Creates a promise for creating the database tables.
-         */
-        function createMessagesTable() {
-            return $q(function (resolve, reject) {
-                db.transaction(function (tx) {
-                    tx.executeSql(queries.createMessages, [], function () {
-                        resolve();
-                    }, function (transaction, error) {
-                        reject(error);
-                    });
-                });
-            });
-        }
-
-        /**
-         * Creates a promise for creating the database tables.
-         */
-        function createConversationParticipantsTable() {
-            return $q(function (resolve, reject) {
-                db.transaction(function (tx) {
-                    tx.executeSql(queries.createConversationParticipants, [], function () {
-                        resolve();
-                    }, function (transaction, error) {
-                        reject(error);
-                    });
-                });
-            });
-        }
-
-        /**
-         * Gets the rows from a sql query result and returns them as an array
-         * @param {object} result - The result from a sql query
-         */
-        function getRows(result) {
-            var rows = [], i = 0;
-
-            if (dbType === 'webSQL') {
-                for (i = 0; i < result.rows.length; i++) {
-                    rows.push(result.rows.item(i));
-                }
-            }
-            return rows;
-        }
-
-        /**
-         * Creates a promise for dropping the database tables.
-         */
-        function dropMessagesTable() {
-            if (db === null || db === undefined) {
-                var conf = databaseConfiguration;
-
-                // Browser
-                db = window.openDatabase(conf.name, conf.version, conf.displayName, conf.size);
-                queries = webSqlQueries;
-                dbType = 'webSQL';
-            }
-
-            return $q(function (resolve, reject) {
-                db.transaction(function (tx) {
-                    tx.executeSql(queries.dropMessages, [], function () {
-                        console.info(queries.dropMessages + ' success.'); 
-                        resolve();
-                    }, function (transaction, error) {
-                        reject(error);
-                    });
-                });
-            });
-        }
-
-        function dropConversationPartisipantsTable() {
-            if (db === null || db === undefined) {
-                var conf = databaseConfiguration;
-
-                // Browser
-                db = window.openDatabase(conf.name, conf.version, conf.displayName, conf.size);
-                queries = webSqlQueries;
-                dbType = 'webSQL';
-            }
-
-            return $q(function (resolve, reject) {
-                db.transaction(function (tx) {
-                    tx.executeSql(queries.dropConversationPartisipantsTable, [], function () {
-                        console.info(queries.dropConversationPartisipantsTable + ' success.');
-                        resolve();
-                    }, function (transaction, error) {
-                        reject(error);
-                    });
-                });
-            });
         }
 
         /**
@@ -695,7 +638,7 @@ angular.module('message', ['ngCordova'])
             });
         };
 
-        factory.deleteConversation = function(conversationId) {
+        factory.deleteConversation = function (conversationId) {
             deleteConversation(conversationId);
         }
 
@@ -733,97 +676,6 @@ angular.module('message', ['ngCordova'])
                 });
             });
         };
-        /**
-         * Inserts the message to the database
-         * @param message to insert
-         * @returns {promise} returns a promise
-         */
-        function insertMessage(message) {
-            return $q(function (resolve, reject) {
-                db.transaction(function (tx) {
-                    tx.executeSql(
-                        queries.insertMessage,
-                        [
-                            message.MessageId,
-                            //moment(message.CreatedOn).unix(),
-                            message.CreatedOn,
-                            message.ConversationId,
-                            message.Author,
-                            JSON.stringify(message)],
-                        function (trans, result) {
-                            if (result.rowsAffected !== 1) {
-                                var errorMessage;
-                                if (message.hasOwnProperty("MessageId")) {
-                                    errorMessage = 'The message with id \'' + message.MessageId + '\' doesn\'t seem to be added properly';
-                                } else {
-                                    errorMessage = 'The message has an undefined id';
-                                }
-                                reject(new {
-                                    message: errorMessage
-                                });
-                                return;
-                            }
-
-                            resolve();
-                        },
-                        function (t, error) {
-                            reject(error);
-                        });
-                });
-            });
-        }
-
-        /**
-         * Inserts the converation to the database
-         * @param conversation to insert
-         * @returns {promise} returns a promise
-         */
-        function insertConversation(conversation) {
-            return $q(function (resolve, reject) {
-                db.transaction(function (tx) {
-                    tx.executeSql(
-                        queries.insertConversationParticipants,
-                        [
-                            conversation.ConversationId,
-                            JSON.stringify(conversation.Participants)],
-                        function (trans, result) {
-                            if (result.rowsAffected !== 1) {
-                                var errorMessage;
-                                if (conversation.hasOwnProperty("ConversationId")) {
-                                    errorMessage = 'The conversation with id \'' + conversation.ConversationId + '\' doesn\'t seem to be added properly';
-                                } else {
-                                    errorMessage = 'The conversation has an undefined id';
-                                }
-                                reject(new {
-                                    message: errorMessage
-                                });
-                                return;
-                            }
-
-                            resolve();
-                        },
-                        function (t, error) {
-                            reject(error);
-                        });
-                });
-            });
-        }
-
-        function deleteConversation(conversationId) {
-            return $q(function (resolve, reject) {
-                db.transaction(function (tx) {
-                    tx.executeSql(
-                        queries.deleteConversation,
-                        [conversationId],
-                        function (trans, result) {
-                            resolve();
-                        },
-                        function (t, error) {
-                            reject(error);
-                        });
-                });
-            });
-        }
 
         factory.messageAdded = function () {
 
@@ -880,20 +732,7 @@ angular.module('message', ['ngCordova'])
                     break;
                 case 'device-ready':
                     break;
-                case 'logged-out':
-                    isConfigured = false;
-                    dropMessagesTable().then(function () {
-                        return dropConversationPartisipantsTable();
-                    }).then(
-                        function () {
-                            console.log('Dropped databases');
-                        },
-                        function (error) {
-                            console.error('Failed to drop database.\r\n' + error.message);
-                        });
-                    break;
                 case 'logged-in':
-                    dropTablesOnLogin();
                     factory.init();
                     break;
                 default:

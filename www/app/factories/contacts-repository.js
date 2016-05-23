@@ -2,21 +2,11 @@
  * Created by Kristofer on 2016-03-21.
  */
 angular.module('contacts', [])
-    .factory('contactsService', ['$http', '$rootScope', '$q', 'tokenService', function ($http, $rootScope, $q, tokenService) {
+    .factory('contactsService', ['$http', '$rootScope', '$q', 'tokenService', 'databaseService', function ($http, $rootScope, $q, tokenService, databaseService) {
 
         var db;
         var factory = {};
-        var dbType = null;
         var queries = null;
-        var isConfigured = false;
-
-        var databaseConfiguration = {
-            name: "bosbec-mr.db",
-            location: 1,
-            version: "1.0",
-            displayName: "Bosbec-Mr",
-            size: (5 * 1024 * 1024)
-        };
 
         var webSqlQueries = {
             dropAppUsers: 'DROP TABLE IF EXISTS AppUsers',
@@ -52,22 +42,8 @@ angular.module('contacts', [])
         };
 
         factory.init = function init() {
-
-            if (isConfigured) {
-                return;
-            }
-
-            isConfigured = true;
-
-            var conf = databaseConfiguration;
-
-            // Browser
-            db = window.openDatabase(conf.name, conf.version, conf.displayName, conf.size);
             queries = webSqlQueries;
-            dbType = 'webSQL';
-
-            createDatabase();
-
+            db = databaseService.db;
             var promise = factory.getAppUsers();
             promise.then(function (success) {
                 factory.appUsers = success;
@@ -244,7 +220,7 @@ angular.module('contacts', [])
                         returnResult.Id = appUserId;
                         deferred.resolve(returnResult);
                     }
-                    
+
                 }, function (error) {
                     returnResult.Found = false;
                     returnResult.Id = appUserId;
@@ -325,26 +301,10 @@ angular.module('contacts', [])
             switch (event.name) {
                 case 'logged-in':
                     factory.appUsers.length = 0;
-                    dropDatabase().then(
-                        function () {
-                            console.log('Dropped appUsers database');
-                        },
-                        function (error) {
-                            console.error('Failed to drop database.\r\n' + error.message);
-                        });
                     factory.init();
                     break;
                 case 'logged-out':
                     factory.appUsers.length = 0;
-                    // Clearing Table on logout, just to be sure
-                    isConfigured = false;
-                    dropDatabase().then(
-                        function () {
-                            console.log('Dropped appUsers database');
-                        },
-                        function (error) {
-                            console.error('Failed to drop database.\r\n' + error.message);
-                        });
                     break;
                 default:
                     break;
@@ -393,96 +353,51 @@ angular.module('contacts', [])
         };
 
         /**
-         * Creates a promise for creating the database tables.
-         */
-        function createDatabase() {
-            return $q(function (resolve, reject) {
-                db.transaction(function (tx) {
-                    tx.executeSql(queries.createAppUsers, [], function () {
-                        resolve();
-                    }, function (transaction, error) {
-                        reject(error);
-                    });
-                });
-            });
-        }
-
-        /**
          * Gets the rows from a sql query result and returns them as an array
          * @param {sqlResult} the result from a sql query
          */
         function getRows(result) {
             var rows = [];
 
-            if (dbType === 'webSQL') {
-                for (var i = 0; i < result.rows.length; i++) {
-                    rows.push(result.rows.item(i));
-                }
+            for (var i = 0; i < result.rows.length; i++) {
+                rows.push(result.rows.item(i));
             }
-            else {
-                for (var i = 0; i < result.rows.length; i++) {
-                    rows.push(result.rows.item(i));
-                }
-            }
+
             return rows;
         }
 
+
         /**
-         * Creates a promise for dropping the database tables.
-         */
-        function dropDatabase() {
-            if (db === null || db === undefined) {
-                var conf = databaseConfiguration;
+             * Inserts the appUser to the database
+             * @param appUser to insert
+             * @returns {promise} returns a promise
+             */
+            factory.insertAppUser = function (appUser) {
+                return $q(function (resolve, reject) {
+                    db.transaction(function (tx) {
+                        tx.executeSql(
+                            queries.insertAppUser,
+                            [
+                                appUser.id,
+                                appUser.displayName,
+                                JSON.stringify(appUser)],
+                            function (trans, result) {
+                                if (result.rowsAffected !== 1) {
+                                    console.error('');
+                                    reject(new {
+                                        message: 'The appUser width id \'' + appUser.id + '\' doesn\'t seem to be added properly'
+                                    });
+                                    return;
+                                }
 
-                // Browser
-                db = window.openDatabase(conf.name, conf.version, conf.displayName, conf.size);
-                queries = webSqlQueries;
-                dbType = 'webSQL';
-            }
-
-            return $q(function (resolve, reject) {
-                db.transaction(function (tx) {
-                    tx.executeSql(queries.dropAppUsers, [], function () {
-                        resolve();
-                    }, function (transaction, error) {
-                        reject(error);
+                                resolve();
+                            },
+                            function (t, error) {
+                                reject(error);
+                            });
                     });
                 });
-            });
-        }
+            }
 
-        // TODO: Move to better location
-        /**
-         * Inserts the appUser to the database
-         * @param appUser to insert
-         * @returns {promise} returns a promise
-         */
-        factory.insertAppUser = function (appUser) {
-            return $q(function (resolve, reject) {
-                db.transaction(function (tx) {
-                    tx.executeSql(
-                        queries.insertAppUser,
-                        [
-                            appUser.id,
-                            appUser.displayName,
-                            JSON.stringify(appUser)],
-                        function (trans, result) {
-                            if (result.rowsAffected !== 1) {
-                                console.error('');
-                                reject(new {
-                                    message: 'The appUser width id \'' + appUser.id + '\' doesn\'t seem to be added properly'
-                                });
-                                return;
-                            }
-
-                            resolve();
-                        },
-                        function (t, error) {
-                            reject(error);
-                        });
-                });
-            });
-        }
-
-        return factory;
-    }])
+            return factory;
+        }])

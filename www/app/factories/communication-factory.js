@@ -183,9 +183,6 @@ angular.module('communication', [])
                     fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5);
                     factory.syncPeriodMessages(fiveMinutesAgo.toJSON(), new Date().toJSON(), 0, 50);
                     break;
-                case 'download-conversation-messages':
-                    factory.downloadMessagesForConversation(args.ConversationId, false, args.PageIndex, args.PageSize);
-                    break;
                 case 'logged-in':
                     if (!window.isPhoneGap) {
                         clearInterval(fetchMessagesInterval);
@@ -195,9 +192,9 @@ angular.module('communication', [])
                             factory.syncPeriodMessages(oneMinuteAgo.toJSON(), new Date().toJSON(), 0, 20);
                         }, 5000);
                     }
-                    var fiveMinutesAgo = new Date();
-                    fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5);
-                    factory.syncPeriodMessages(fiveMinutesAgo.toJSON(), new Date().toJSON(), 0, 50);
+                    //var fiveMinutesAgo = new Date();
+                    //fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5);
+                    //factory.syncPeriodMessages(fiveMinutesAgo.toJSON(), new Date().toJSON(), 0, 50);
                     break;
                 default:
                     break;

@@ -128,7 +128,7 @@
     <script src="app/factories/communication-factory.js"></script>
     <script src="app/factories/contacts-repository.js"></script>
     <script src="app/factories/data-service.js"></script>
-    <script src="app/factories/base-repository.js"></script>
+    <script src="app/factories/database-factory.js"></script>
     <script src="app/filters.js"></script>
 
     <script language="javascript">
@@ -201,7 +201,6 @@
 
 
                     initPushwoosh();
-                    //initPushwoosh(); //Moved to events --> logged-in
                     StatusBar.overlaysWebView(false);
                     console.log("Device ready initiating Angular");
                     angular.bootstrap(document, ['administratorApp']);
@@ -210,7 +209,6 @@
                 document.addEventListener('DOMContentLoaded', function () {
                     FastClick.attach(document.body);
                 }, false);
-
             }
         }
     </script>

@@ -2,7 +2,7 @@
  * Created by robinpipirs on 09/12/15.
  */
 angular.module('event', [])
-    .controller('eventCtrl', ['$scope', '$rootScope', '$location', '$http', 'tokenService', 'communicationService', 'messageRepository', 'contactsService', 'dataService', function ($scope, $rootScope, $location, $http, tokenService, communicationService, messageRepository, contactsService, dataService) {
+    .controller('eventCtrl', ['$scope', '$rootScope', '$location', '$http', 'tokenService', 'communicationService', 'messageRepository', 'contactsService', 'dataService', 'databaseService', function ($scope, $rootScope, $location, $http, tokenService, communicationService, messageRepository, contactsService, dataService, databaseService) {
 
         $scope.deviceReady = true;
         $scope.isPhoneGap = window.isPhoneGap;
@@ -21,7 +21,7 @@ angular.module('event', [])
             pushNotification.setApplicationIconBadgeNumber(0);
             $rootScope.$broadcast('on-focus', args);
         }, false);
-        
+
         //iOS specific version of resume
         //document.addEventListener('active', function (event, args) {
         //    console.log("active");
@@ -110,6 +110,7 @@ angular.module('event', [])
                     resetData();
                     return;
                 } else {
+                    // TODO: what if several elements contain same conversationId
                     if (conversationIds.constructor === Array) {
                         if (conversationIds.length === 1) {
                             var convoId = conversationIds[0];
@@ -128,7 +129,7 @@ angular.module('event', [])
             $rootScope.$broadcast('sync-conversations', args);
         });
 
-        $scope.$on('on-blur', function(event, args) {
+        $scope.$on('on-blur', function (event, args) {
 
         });
 
@@ -177,7 +178,7 @@ angular.module('event', [])
         });
 
         $scope.$on('menu-button', function (event, args) { });
-        
+
         $scope.$on('push-service-initialized', function (event, args) {
             console.log("Push-service-initialized event");
             tokenService.registerPushToken();
@@ -225,7 +226,7 @@ angular.module('event', [])
 
 
         // Wrapped
-        $scope.$on('load', function(event, args) {
+        $scope.$on('load', function (event, args) {
             console.log('load!');
             dataService.on(event, args);
         });
@@ -240,20 +241,21 @@ angular.module('event', [])
             console.log("Event.. logged-in");
             if ($scope.isPhoneGap) {
                 console.log("device isPhoneGap -> initPushwoosh() in index.js");
-                //initPushwoosh();
                 $rootScope.$broadcast('push-service-initialized', event);
             }
-            messageRepository.on(event, args);
-            communicationService.on(event, args);
-            contactsService.on(event, args);
-            dataService.on(event, args);
+            databaseService.on(event, args).then(function (success) {
+                dataService.on(event, args);
+                communicationService.on(event, args);
+            }, function(error) {
+                console.error(error);
+            });
         });
 
         $scope.$on('logged-out', function (event, args) {
             messageRepository.on(event, args);
-            communicationService.on(event, args);
             contactsService.on(event, args);
             dataService.on(event, args);
+            databaseService.on(event, args);
         });
 
         $scope.$on('app-token-available', function (event, args) {
@@ -288,10 +290,6 @@ angular.module('event', [])
 
         $scope.$on('sync-conversations', function (event, args) {
             dataService.on(event, args);
-        });
-
-        $scope.$on('download-conversation-messages', function (event, args) {
-            communicationService.on(event, args);
         });
 
         $scope.$on('download-messages', function (event, args) {
