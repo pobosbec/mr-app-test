@@ -34,73 +34,30 @@ function registerPushwooshAndroid() {
 
     pushNotification.onDeviceReady({ projectid: "482590317251", appid: "A014B-AC83E" });
 
-	//check so that we have a token or not before registering. if we register with a present token then we will disable the push service..
-	//pushNotification.getPushToken(
-	//	function(token)
-	//	{
-	//		console.log("pushToken is not null: " + JSON.stringify(token));
-	//		console.warn('push token: ' + token);
-
-	//		if (JSON.stringify(token).length > 0) {
-	//			console.log("pushToken is not null");
-	//		}
-	//		else {
-
-	//			console.log("pushToken is null re register: ");
-	//			//register for push notifications
-	//			pushNotification.registerDevice(
-	//				function (token) {
-	//					document.dispatchEvent(new CustomEvent("push-service-initialized, from PushwooshAndroid.js, token:", { token: token }));
-
-	//					//callback when pushwoosh is ready
-	//					onPushwooshAndroidInitialized(token);
-	//				},
-	//				function (status) {
-	//					alert("failed to register: " + status);
-	//					console.warn(JSON.stringify(['failed to register ', status]));
-	//				}
-	//			);
-	//		}
-	//	}
-	//);
-
-
-
+    //register for push notifications
+    pushNotification.registerDevice(
+		function(token) {
+		    console.log('pushNotification.registerDevice token: ' + token);
+		    //callback when pushwoosh is ready
+		    onPushwooshAndroidInitialized(token);
+		},
+		function(status)
+		{
+		    alert("failed to register: " +  status);
+		    console.warn(JSON.stringify(['failed to register ', status]));
+		}
+	);
 }
 
 function onPushwooshAndroidInitialized(pushToken) {
-    //output the token to the console
-    console.warn('push token: ' + pushToken);
+    console.log('onPushwooshAndroidInitialized push token: ' + pushToken);
 
     var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
 
     //if you need push token at a later time you can always get it from Pushwoosh plugin
     pushNotification.getPushToken(
 		function (token) {
-		    console.log("pushToken is not null: " + JSON.stringify(token));
-		    console.warn('push token: ' + token);
-
-		    if (JSON.stringify(token).length > 0) {
-		        console.log("pushToken is not null");
-		    }
-		    else {
-
-		        console.log("pushToken is null re register: ");
-		        //register for push notifications
-		        pushNotification.registerDevice(
-					function (token) {
-					    document.dispatchEvent(new CustomEvent("push-service-initialized, from PushwooshAndroid.js, token:", { token: token }));
-
-					    //callback when pushwoosh is ready
-					    onPushwooshAndroidInitialized(token);
-					},
-					function (status) {
-					    alert("failed to register: " + status);
-					    console.warn(JSON.stringify(['failed to register ', status]));
-					}
-				);
-		    }
-		    console.warn('push token: ' + token);
+		    console.log('push token: ' + token);
 		}
 	);
 
