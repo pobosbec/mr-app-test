@@ -148,9 +148,11 @@ angular.module('conversations', [])
                     // TODO: Handle if conversation is not in dataService?
                     dataService.conversations.some(function (conversation) {
                         if (conversation.ConversationId === $scope.conversationId) {
+                            console.log("setConversation = true");
                             $scope.conversation = conversation;
                             return true;
                         }
+                    console.log("setConversation = False");
                     });
                 };
 
