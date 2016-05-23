@@ -227,7 +227,7 @@ angular.module('conversations', [])
                         Retrying: false
                     };
 
-                    if ($scope.conversations.Messages = undefined){
+                    if ($scope.conversations.Messages == undefined){
                         $scope.conversations.Messages = [];
                     }
                     $scope.conversation.Messages.push(msg);
