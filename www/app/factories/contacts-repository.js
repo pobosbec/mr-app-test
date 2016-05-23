@@ -46,9 +46,11 @@ angular.module('contacts', [])
             db = databaseService.db;
             var promise = factory.getAppUsers();
             promise.then(function (success) {
-                factory.appUsers = success;
+                success.some(function(appUser) {
+                    factory.appUsers.push(appUser);
+                });
             }, function (error) {
-                factory.appUsers = [];
+                
             });
         }
 
@@ -239,23 +241,6 @@ angular.module('contacts', [])
                             var appUsers = [];
                             var rows = getRows(result);
 
-                            if (rows.length === 0) {
-
-                                if (appUserId === '' || appUserId === null || appUserId === ' ' || appUserId === 'undefined' || appUserId === undefined) {
-                                    reject('Not a valid appUserId');
-                                }
-
-                                //var promise = factory.searchAppUser(appUserId);
-
-                                //promise.then(function (success) {
-                                //    if (success.data.items != null) {
-                                //        success.data.items.some(function (appUser) {
-                                //            factory.addAppUser(appUser);
-                                //        });
-                                //    }
-                                //});
-                            }
-
                             for (var i = 0; i < rows.length; i++) {
                                 var row = rows[i];
                                 if (row !== null && typeof row !== "undefined" && row.hasOwnProperty('JSON')) {
@@ -266,6 +251,7 @@ angular.module('contacts', [])
                                     }
                                 }
                             }
+
                             resolve(appUsers);
                         }, function (trans, error) {
                             console.error('Error while fetching appUsers from database.\r\n' + error.message);
@@ -372,32 +358,32 @@ angular.module('contacts', [])
              * @param appUser to insert
              * @returns {promise} returns a promise
              */
-            factory.insertAppUser = function (appUser) {
-                return $q(function (resolve, reject) {
-                    db.transaction(function (tx) {
-                        tx.executeSql(
-                            queries.insertAppUser,
-                            [
-                                appUser.id,
-                                appUser.displayName,
-                                JSON.stringify(appUser)],
-                            function (trans, result) {
-                                if (result.rowsAffected !== 1) {
-                                    console.error('');
-                                    reject(new {
-                                        message: 'The appUser width id \'' + appUser.id + '\' doesn\'t seem to be added properly'
-                                    });
-                                    return;
-                                }
+        factory.insertAppUser = function (appUser) {
+            return $q(function (resolve, reject) {
+                db.transaction(function (tx) {
+                    tx.executeSql(
+                        queries.insertAppUser,
+                        [
+                            appUser.id,
+                            appUser.displayName,
+                            JSON.stringify(appUser)],
+                        function (trans, result) {
+                            if (result.rowsAffected !== 1) {
+                                console.error('');
+                                reject(new {
+                                    message: 'The appUser width id \'' + appUser.id + '\' doesn\'t seem to be added properly'
+                                });
+                                return;
+                            }
 
-                                resolve();
-                            },
-                            function (t, error) {
-                                reject(error);
-                            });
-                    });
+                            resolve();
+                        },
+                        function (t, error) {
+                            reject(error);
+                        });
                 });
-            }
+            });
+        }
 
-            return factory;
-        }])
+        return factory;
+    }])

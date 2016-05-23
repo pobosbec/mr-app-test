@@ -9,7 +9,7 @@ angular.module('services', [])
             factory.conversations = [];
             factory.userId = null;
             factory.pageSize = 10;
-            factory.AppUsers = contactsService.appUsers;
+            factory.appUsers = contactsService.appUsers;
             factory.moreConversationsAreAvailable = true;
             factory.unProccessedConversations = [];
             factory.unidentifiedAppUsers = [];
@@ -425,6 +425,20 @@ angular.module('services', [])
 
                             factory.conversations.push(conversation);
                         }
+
+                        messageRepository.getAllConversationsAndParticipants().then(function (success) {
+                            success.some(function(conversation) {
+                                var processed = false;
+
+                                if (factory.conversations.some(function(convo) { return conversation.ConversationId === convo.ConversationId })) {
+                                    processed = true;
+                                }
+
+                                if (!processed) {
+                                    factory.unProccessedConversations.push(conversation);
+                                }
+                            });
+                        });
 
                         resolveUnidentifiedAppUsers(appUserExistsPromises);
                     }, function (conversationsPromiseError) {
