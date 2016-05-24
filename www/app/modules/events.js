@@ -227,8 +227,7 @@ angular.module('event', [])
 
         // Wrapped
         $scope.$on('load', function (event, args) {
-            console.log('load!');
-            dataService.on(event, args);
+            $rootScope.$broadcast('sync-conversations', args);
         });
 
 
@@ -288,7 +287,7 @@ angular.module('event', [])
             messageRepository.on(event, args);
         });
 
-        $scope.$on('sync-conversations', function (event, args) {
+        $scope.$on('services-started', function (event, args) {
             dataService.on(event, args);
         });
 

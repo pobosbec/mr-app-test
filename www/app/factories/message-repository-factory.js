@@ -492,21 +492,20 @@ angular.module('message', ['ngCordova'])
                     tx.executeSql(queries.getAllConversationsAndParticipants, [],
                         function (trans, result) {
                             var rows = getRows(result);
-                            var participants = "";
-                            if (rows.length) {
-                                if (rows[0] !== null && typeof rows[0] !== "undefined" && rows[0].hasOwnProperty("Participants")) {
-                                    participants = JSON.parse(rows[0].Participants);
-                                }
-                            } else if (rows.length < 1) {
-                                var promise = communicationService.getAllConversations(null);
 
-                                promise.then(function (success) {
-                                    factory.addConversations(success.data.items);
-                                    resolve(success.data.items);
-                                }, function (error) {
-                                    console.error('Error while inserting ConversationParticipants from database.\r\n' + error.message);
+                            var conversations = [];
+
+                            if (rows.length) {
+
+                                rows.some(function (row) {
+                                    if (row.hasOwnProperty("Participants")) {
+                                        var participants = JSON.parse(row.Participants);
+                                        conversations.push({ ConversationId: row.ConversationId, Participants: participants, Messages: [] });
+                                    }
                                 });
                             }
+
+                            resolve(conversations);
 
                         }, function (trans, error) {
                             console.error('Error while fetching AllConversationsAndParticipants from database.\r\n' + error.message);

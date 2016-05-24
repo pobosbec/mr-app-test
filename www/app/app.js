@@ -25,13 +25,13 @@ var mobileresponseWebbApp = angular.module('administratorApp', [
     'services',
     'ngSanitize',
     'database'
-]).run(function (contactsService, messageRepository, dataService, databaseService) {
+]).run(function (contactsService, messageRepository, dataService, databaseService, $rootScope) {
     FastClick.attach(document.body);
 
     databaseService.init().then(function() {
         contactsService.init();
         messageRepository.init();
-        dataService.quickLoad();
+        $rootScope.$broadcast('services-started');
     }, function() {
         console.error('Could not initiate database service.');
     });
