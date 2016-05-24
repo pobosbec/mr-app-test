@@ -8,5 +8,10 @@ angular.module('debug', [])
             $scope.capturedLogs = logService.capturedLogs;
 
             $scope.targets = logService.options.targets;
+
+            $scope.logSorting = function (log) {
+                var date = new Date(log.createdOn);
+                return date;
+            };
         }
     ]);

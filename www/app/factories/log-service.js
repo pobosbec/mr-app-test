@@ -17,9 +17,9 @@ angular.module('logging', [])
 
         factory.options = {
             targets: {
-                console: true,
-                database: true,
-                eventView: true
+                console: false,
+                database: false,
+                eventView: false
             },
             saveToDbLevel: []
         }
