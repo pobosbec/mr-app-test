@@ -117,8 +117,24 @@ angular.module('event', [])
                             resetData();
                             $location.path('/conversation/' + convoId);
                         } else if (conversationIds.length > 1) {
+
+                            var sameConversation = false;
+
+                            var firstConversationId = conversationIds[0];
+
+                            for (var i = 1; i < conversationIds.length; i++) {
+                                if (conversationIds[i] === firstConversationId) {
+                                    sameConversation = true;
+                                    break;
+                                }
+                            }
+
                             resetData();
-                            $location.path('/conversations/');
+                            if (sameConversation) {
+                                $location.path('/conversation/' + firstConversationId);
+                            } else {
+                                $location.path('/conversations/');
+                            }
                         }
                     } else {
                         resetData();
