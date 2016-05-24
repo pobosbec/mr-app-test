@@ -282,7 +282,7 @@ angular.module('event', [])
         });
 
         $scope.$on('slow-http-request-detected', function (event, args) {
-            logService.warn('slow-http-request-detected: ' + args.url + ' (' + args.elapsedTime + ' ms)');
+            logService.warn(new LogObject('slow-http-request-detected: ' + args.url + ' (' + args.elapsedTime + ' ms)'));
             $rootScope.slowConnection = true;
             clearTimeout($scope.slowConnectionResetTimer);
             $scope.slowConnectionResetTimer = setTimeout(function () { $rootScope.slowConnection = false; }, 3000);

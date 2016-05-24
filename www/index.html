@@ -137,6 +137,26 @@
 
         console.log("running script in index..");
 
+        function LogObject(text, metadata, level) {
+
+            this.text = null;
+            this.createdOn = new Date().toJSON();
+            this.metadata = metadata;
+            this.level = level;
+
+            if (this.metadata === null || this.metadata === undefined) {
+                this.metadata = {};
+            }
+
+            this.metadata.stack = new Error().stack.replace('Error', '');
+
+            if (text.constructor === Object) {
+                this.metadata.text = text;
+            } else {
+                this.text = text;
+            }
+        }
+
         Waves.init();
 
         function isAndroid() {

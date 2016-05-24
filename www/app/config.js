@@ -152,4 +152,84 @@ mobileresponseWebbApp
     })
     .config(['$compileProvider', function ($compileProvider) {
         $compileProvider.debugInfoEnabled(false);
-    }]);
+    }])
+    .config(['$provide', function ($provide) {
+        $provide.decorator('$log', ['$delegate', 'Logging', function ($delegate, Logging) {
+            Logging.enabled = true;
+            var methods = {
+                error: function () {
+                    if (Logging.enabled) {
+                        $delegate.error.apply($delegate, arguments);
+                        Logging.error.apply(null, arguments);
+                    }
+                },
+                log: function () {
+                    if (Logging.enabled) {
+                        $delegate.log.apply($delegate, arguments);
+                        Logging.log.apply(null, arguments);
+                    }
+                },
+                info: function () {
+                    if (Logging.enabled) {
+                        $delegate.info.apply($delegate, arguments);
+                        Logging.info.apply(null, arguments);
+                    }
+                },
+                warn: function () {
+                    if (Logging.enabled) {
+                        $delegate.warn.apply($delegate, arguments);
+                        Logging.warn.apply(null, arguments);
+                    }
+                }
+            };
+            return methods;
+        }]);
+    }])
+    .service('Logging', function ($injector) {
+
+        var customLogService;
+        
+        var service = {
+            error: function () {
+                self.type = 'error';
+                log.apply(self, arguments);
+            },
+            warn: function () {
+                self.type = 'warn';
+                log.apply(self, arguments);
+            },
+            info: function () {
+                self.type = 'info';
+                log.apply(self, arguments);
+            },
+            log: function () {
+                self.type = 'log';
+                log.apply(self, arguments);
+            },
+            enabled: false
+        };
+
+        var log = function () {
+
+            args = [];
+            if (typeof arguments === 'object') {
+                for (var i = 0; i < arguments.length; i++) {
+                    arg = arguments[i];
+                    var exception = {};
+                    exception.message = arg.message;
+                    exception.stack = arg.stack;
+                    args.push(JSON.stringify(exception));
+                }
+            }
+
+            var logItem = {
+                message: args.join('\n'),
+                type: type
+            };
+
+            customLogService = $injector.get('logService');
+            customLogService.logMessage('(Angular exception)', null, logItem.message, logItem.type);
+        };
+
+        return service;
+    });

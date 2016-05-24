@@ -466,10 +466,8 @@ angular.module('services', [])
 
                         promise.then(function () {
                             factory.quickLoading = false;
-                            logService.log({
-                                text: "Initial loading of conversations done.",
-                                metadata: { stacktrace: error.stack }
-                            });
+                            
+                            logService.log(new LogObject("Initial loading of conversations done."));
                         });
                     });
 

@@ -7,24 +7,78 @@ angular.module('logging', [])
         var factory = {};
 
         var db = null;
-        
+
         factory.capturedLogs = null;
 
         factory.init = function () {
             db = databaseService.db;
             factory.capturedLogs = [];
+
+            db.transaction(function (tx) {
+                tx.executeSql(
+                    'SELECT * FROM LogTargets WHERE Target = ?', ['console'],
+                    function (trans, result) {
+                        var rows = getRows(result);
+
+                        if (rows.length === 1) {
+                            if (rows[0].State === "true") {
+                                factory.options.targets.console = true;
+                            } else {
+                                factory.options.targets.console = false;
+                            }
+                        }
+                    },
+                    function (t, error) {
+                        factory.error(error);
+                    });
+                tx.executeSql(
+                    'SELECT * FROM LogTargets WHERE Target = ?', ['database'],
+                    function (trans, result) {
+                        var rows = getRows(result);
+                        if (rows.length === 1) {
+                            if (rows[0].State === "true") {
+                                factory.options.targets.database = true;
+                            } else {
+                                factory.options.targets.database = false;
+                            }
+                        }
+                    },
+                    function (t, error) {
+                        factory.error(error);
+                    });
+                tx.executeSql(
+                    'SELECT * FROM LogTargets WHERE Target = ?', ['eventView'],
+                    function (trans, result) {
+                        var rows = getRows(result);
+                        if (rows.length === 1) {
+                            if (rows[0].State === "true") {
+                                factory.options.targets.eventView = true;
+                            } else {
+                                factory.options.targets.eventView = false;
+                            }
+                        }
+                        factory.options.ready = true;
+                    },
+                    function (t, error) {
+                        factory.error(error);
+                    });
+            });
         }
 
         factory.options = {
             targets: {
-                console: false,
-                database: false,
-                eventView: false
+                console: true,
+                database: true,
+                eventView: true
             },
-            saveToDbLevel: []
+            ready: false
         }
 
         factory.logMessage = function (text, createdOn, metadata, level) {
+
+            if (!factory.options.ready) {
+                return;
+            }
 
             var logLevel = determineLogLevel(level);
 
@@ -47,9 +101,9 @@ angular.module('logging', [])
                 var line = '';
 
                 if (message.metadata === undefined || message.metadata === null) {
-                    line = message.createdOn + ':' + message.text;
+                    line = '[' + message.createdOn + ']:' + message.text;
                 } else {
-                    line = message.createdOn + ':' + message.text + ':' + JSON.stringify(message.metadata);
+                    line = '[' + message.createdOn + ']:' + message.text + ':' + JSON.stringify(message.metadata);
                 }
 
                 switch (level) {
@@ -132,13 +186,11 @@ angular.module('logging', [])
         function formatMessage(input) {
             var returnV = null;
 
-            if (input.constructor === Object) {
-                if (input.type === 'logMessage') {
-                    returnV = input;
-                } else {
-                    returnV = {
-                        metadata: JSON.stringify(input)
-                    }
+            if (input instanceof LogObject) {
+                returnV = input;
+            } else if (input.constructor === Object) {
+                returnV = {
+                    metadata: JSON.stringify(input)
                 }
             } else if (input.constructor === String) {
                 returnV = {
@@ -174,14 +226,14 @@ angular.module('logging', [])
             factory.logMessage(message.text, message.createdOn, message.metadata, 'debug');
         }
 
-        factory.getLogsFromDb = function() {
+        factory.getLogsFromDb = function () {
             return $q(function (resolve, reject) {
                 db.transaction(function (tx) {
                     tx.executeSql(
                         'SELECT * FROM Logs ORDER BY CreatedOn DESC', [],
                         function (trans, result) {
                             var rows = getRows(result);
-                            
+
                             resolve(rows);
                         },
                         function (t, error) {
@@ -197,6 +249,51 @@ angular.module('logging', [])
 
         factory.clearLogTable = function () {
 
+        }
+
+        factory.updateTargetState = function (target, state) {
+            if (!factory.options.ready) {
+                return;
+            }
+            switch (target) {
+                case 'console':
+                    db.transaction(function (tx) {
+                        tx.executeSql(
+                            'INSERT OR REPLACE INTO LogTargets (Target, State) VALUES (?, ?)', [target, state],
+                            function (trans, result) {
+
+                            },
+                            function (t, error) {
+
+                            });
+                    });
+                    break;
+                case 'database':
+                    db.transaction(function (tx) {
+                        tx.executeSql(
+                            'INSERT OR REPLACE INTO LogTargets (Target, State) VALUES (?, ?)', [target, state],
+                            function (trans, result) {
+
+                            },
+                            function (t, error) {
+
+                            });
+                    });
+                    break;
+                case 'eventView':
+                    db.transaction(function (tx) {
+                        tx.executeSql(
+                            'INSERT OR REPLACE INTO LogTargets (Target, State) VALUES (?, ?)', [target, state],
+                            function (trans, result) {
+
+                            },
+                            function (t, error) {
+
+                            });
+                    });
+                    break;
+                default:
+            }
         }
 
         /**

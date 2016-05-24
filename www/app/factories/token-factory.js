@@ -29,7 +29,7 @@ angular.module('token', [])
 
             var refreshTokenSuccess = function (greeting) {
                 //Success
-                logService.log({ text: 'Success refreshing token', metadata: greeting });
+                logService.log(new LogObject('Success refreshing token', greeting));
             };
 
             var refreshTokenFailed = function (reason) {

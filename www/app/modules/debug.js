@@ -13,5 +13,17 @@ angular.module('debug', [])
                 var date = new Date(log.createdOn);
                 return date;
             };
+
+            $scope.$watch("targets.console", function (state) {
+                logService.updateTargetState('console', state);
+            }, true);
+
+            $scope.$watch("targets.database", function (state) {
+                logService.updateTargetState('database', state);
+            }, true);
+
+            $scope.$watch("targets.eventView", function (state) {
+                logService.updateTargetState('eventView', state);
+            }, true);
         }
     ]);

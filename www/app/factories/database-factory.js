@@ -85,6 +85,7 @@ angular.module('database', [])
                 tx.executeSql('CREATE TABLE IF NOT EXISTS AppUsers (AppUserId text primary key, DisplayName text, JSON text)');
                 tx.executeSql('CREATE TABLE IF NOT EXISTS ConversationParticipants (ConversationId primary key, Participants)');
                 tx.executeSql('CREATE TABLE IF NOT EXISTS Logs (CreatedOn, Message, Metadata, Level)');
+                tx.executeSql('CREATE TABLE IF NOT EXISTS LogTargets (Target primary key, State BOOLEAN)');
                 console.log('All tables created.');
                 deferred.resolve();
             }, function (transaction, error) {

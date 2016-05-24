@@ -215,11 +215,11 @@ angular.module('communication', [])
                         } else if (success.data.pageIndex === success.data.maxPages) {
                             factory.messagesDownloaded(success.data.items);
                         } else if (success.data.pageIndex > success.data.maxPages) {
-                            logService.error('Tried to list messages with pageIndex higher than maxPages.');
+                            logService.error(new LogObject('Tried to list messages with pageIndex higher than maxPages.'));
                         }
                     } else {
                         // Error....
-                        logService.error(success);
+                        logService.error(new LogObject(success));
                     }
                 },
                 function (error) {
