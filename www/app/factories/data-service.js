@@ -518,8 +518,8 @@ angular.module('services', [])
                                 console.warn('Could not get messages.');
                             });
                         break;
-                    case 'sync-conversations':
-                        factory.onFocusOrResume();
+                    case 'services-started':
+                        factory.quickLoad();
                     case 'load':
                         //factory.onFocusOrResume();
                         break;
