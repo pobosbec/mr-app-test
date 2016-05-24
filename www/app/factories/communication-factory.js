@@ -2,7 +2,7 @@
  * Created by Kristofer on 2016-03-13.
  */
 angular.module('communication', [])
-    .factory('communicationService', ['$http', '$window', '$rootScope', '$location', '$q', '$state', 'tokenService', 'contactsService', function ($http, win, $rootScope, $location, $q, $state, tokenService, contactsService) {
+    .factory('communicationService', ['$http', '$window', '$rootScope', '$location', '$q', '$state', 'tokenService', 'contactsService', 'logService', function ($http, win, $rootScope, $location, $q, $state, tokenService, contactsService, logService) {
         var factory = {};
         var inboxId = '8a0958a2-a163-4a20-8afa-e7315012e2d8';
 
@@ -215,15 +215,15 @@ angular.module('communication', [])
                         } else if (success.data.pageIndex === success.data.maxPages) {
                             factory.messagesDownloaded(success.data.items);
                         } else if (success.data.pageIndex > success.data.maxPages) {
-                            console.error('Tried to list messages with pageIndex higher than maxPages.');
+                            logService.error('Tried to list messages with pageIndex higher than maxPages.');
                         }
                     } else {
                         // Error....
-                        console.error(success);
+                        logService.error(success);
                     }
                 },
                 function (error) {
-                    console.error('Error when making request to list-messages. Error: ' + JSON.stringify(error));
+                    logService.error('Error when making request to list-messages. Error: ' + JSON.stringify(error));
                 });
         }
 
@@ -241,15 +241,15 @@ angular.module('communication', [])
                         } else if (success.data.pageIndex === success.data.maxPages) {
                             factory.messagesDownloaded(success.data.items);
                         } else if (success.data.pageIndex > success.data.maxPages) {
-                            console.error('Tried to list messages with pageIndex higher than maxPages.');
+                            logService.error('Tried to list messages with pageIndex higher than maxPages.');
                         }
                     } else {
                         // Error....
-                        console.error(success);
+                        logService.error(success);
                     }
                 },
                 function (error) {
-                    console.error('Error when making request to list-messages. Error: ' + JSON.stringify(error));
+                    logService.error('Error when making request to list-messages. Error: ' + JSON.stringify(error));
                 });
         }
 
@@ -277,9 +277,9 @@ angular.module('communication', [])
 
             $http(req
             ).then(function successCallback(response) {
-                console.log('Message sent.');
+                logService.log('Message sent.');
             }, function errorCallback(response) {
-                console.log('Message could not be sent.');
+                logService.log('Message could not be sent.');
             });
         }
 

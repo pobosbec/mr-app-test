@@ -2,7 +2,7 @@
  * Created by Kristofer on 2016-03-17.
  */
 angular.module('contact', [])
-    .controller('contactsCtrl', ['$scope', '$http', 'tokenService', 'contactsService', '$q', function ($scope, $http, tokenService, contactsService, $q) {
+    .controller('contactsCtrl', ['$scope', '$http', 'tokenService', 'contactsService', '$q', 'logService', function ($scope, $http, tokenService, contactsService, $q, logService) {
 
         $scope.contacts = [];
         $scope.appUsers = [];
@@ -58,10 +58,10 @@ angular.module('contact', [])
                     var findUserPromise = contactsService.getAppUser(user.id);
                     return findUserPromise;
                 }, function (error) {
-                    console.error('Could not fetch user.');
+                    logService.error('Could not fetch user.');
                 }).then(function (findUserPromise) {
                     if (findUserPromise.length === 0) {
-                        console.error('Could not fetch user.');
+                        logService.error('Could not fetch user.');
                     }
                     var index = -1;
 
@@ -77,7 +77,7 @@ angular.module('contact', [])
                     }
 
                     var found = findUserPromise[0];
-                    console.log(found);
+                    logService.log(found);
 
                     $scope.appUsers.push(findUserPromise[0]);
                 });
@@ -118,7 +118,7 @@ angular.module('contact', [])
 
                 },
                 function (error) {
-                    console.log('Could not get appUsers!');
+                    logService.log('Could not get appUsers!');
                 }
             );
         };

@@ -2,7 +2,7 @@
  * Created by robinpipirs on 09/12/15.
  */
 angular.module('event', [])
-    .controller('eventCtrl', ['$scope', '$rootScope', '$location', '$http', 'tokenService', 'communicationService', 'messageRepository', 'contactsService', 'dataService', 'databaseService', function ($scope, $rootScope, $location, $http, tokenService, communicationService, messageRepository, contactsService, dataService, databaseService) {
+    .controller('eventCtrl', ['$scope', '$rootScope', '$location', '$http', 'tokenService', 'communicationService', 'messageRepository', 'contactsService', 'dataService', 'databaseService', 'logService', function ($scope, $rootScope, $location, $http, tokenService, communicationService, messageRepository, contactsService, dataService, databaseService, logService) {
 
         $scope.deviceReady = true;
         $scope.isPhoneGap = window.isPhoneGap;
@@ -13,28 +13,28 @@ angular.module('event', [])
 
         // Native
         document.addEventListener('resume', function (event, args) {
-            console.log("resume");
-            console.log("initing plugin with on device ready, events.js");
+            logService.log("resume");
+            logService.log("initing plugin with on device ready, events.js");
             var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
             pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
-            console.log("set app badge nr 0");
+            logService.log("set app badge nr 0");
             pushNotification.setApplicationIconBadgeNumber(0);
             $rootScope.$broadcast('on-focus', args);
         }, false);
 
         //iOS specific version of resume
         //document.addEventListener('active', function (event, args) {
-        //    console.log("active");
+        //    logService.log("active");
         //}, false);
 
         document.addEventListener('pause', function (event, args) {
-            console.log("pause");
+            logService.log("pause");
             $rootScope.$broadcast('on-blur', args);
         }, false);
 
         //iOS specific version of pause
         //document.addEventListener('resign', function (event, args) {
-        //    console.log("resign");
+        //    logService.log("resign");
         //}, false);
 
         document.addEventListener('online', function (event, args) {
@@ -54,12 +54,12 @@ angular.module('event', [])
         }, false);
 
         document.addEventListener('push-service-initialized', function (event, args) {
-            console.log("push-service-initialized events.js");
+            logService.log("push-service-initialized events.js");
             $rootScope.$broadcast('push-service-initialized', event);
         }, false);
 
         document.addEventListener('push-notification', function (event, args) {
-            console.log("push-notification, events.js");
+            logService.log("push-notification, events.js");
             // TODO: fix code smell..
             var notificationConversations = JSON.parse(localStorage.getItem("pushConversations"));
 
@@ -88,7 +88,7 @@ angular.module('event', [])
 
         // Wrapped
         $scope.$on('on-focus', function (event, args) {
-            console.log("on-focus");
+            logService.log("on-focus");
 
             tokenService.registerPushToken();
 
@@ -142,7 +142,7 @@ angular.module('event', [])
                     }
                 }
             }, 10);
-            $rootScope.$broadcast('sync-conversations', args);
+            //$rootScope.$broadcast('sync-conversations', args);
         });
 
         $scope.$on('on-blur', function (event, args) {
@@ -189,20 +189,20 @@ angular.module('event', [])
                     return;
                 }
             } else {
-                console.log('back pressed before device-ready');
+                logService.log('back pressed before device-ready');
             }
         });
 
         $scope.$on('menu-button', function (event, args) { });
 
         $scope.$on('push-service-initialized', function (event, args) {
-            console.log("Push-service-initialized event");
+            logService.log("Push-service-initialized event");
             tokenService.registerPushToken();
         });
 
         $scope.$on('push-notification', function (event, args) {
             communicationService.on(event, args);
-            console.log("$on, push-notification, event.js 192: " + event);
+            logService.log("$on, push-notification, event.js 192: " + event);
 
         });
 
@@ -221,7 +221,7 @@ angular.module('event', [])
         $scope.$on('version-information', function (event, args) {
             $rootScope.version = args.detail;
             //if (!version.upToDate) {
-            //    console.warn("\n    A newer version of mr-app is available, please update. ("+version.local.fullVersion+" > "+version.remote.fullVersion+") \n ");
+            //    logService.warn("\n    A newer version of mr-app is available, please update. ("+version.local.fullVersion+" > "+version.remote.fullVersion+") \n ");
             //}
         });
 
@@ -253,16 +253,17 @@ angular.module('event', [])
 
         $scope.$on('logged-in', function (event, args) {
 
-            console.log("Event.. logged-in");
+            logService.logMessage("Event.. logged-in");
+
             if ($scope.isPhoneGap) {
-                console.log("device isPhoneGap -> initPushwoosh() in index.js");
+                logService.log("device isPhoneGap -> initPushwoosh() in index.js");
                 $rootScope.$broadcast('push-service-initialized', event);
             }
             databaseService.on(event, args).then(function (success) {
                 dataService.on(event, args);
                 communicationService.on(event, args);
             }, function(error) {
-                console.error(error);
+                logService.error(error);
             });
         });
 
@@ -281,7 +282,7 @@ angular.module('event', [])
         });
 
         $scope.$on('slow-http-request-detected', function (event, args) {
-            console.warn('slow-http-request-detected: ' + args.url + ' (' + args.elapsedTime + ' ms)');
+            logService.warn('slow-http-request-detected: ' + args.url + ' (' + args.elapsedTime + ' ms)');
             $rootScope.slowConnection = true;
             clearTimeout($scope.slowConnectionResetTimer);
             $scope.slowConnectionResetTimer = setTimeout(function () { $rootScope.slowConnection = false; }, 3000);

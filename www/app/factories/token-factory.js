@@ -4,7 +4,7 @@
  */
 
 angular.module('token', [])
-    .factory('tokenService', ['$http', '$window', '$rootScope', '$location', '$q', '$state', function ($http, win, $rootScope, $location, $q, $state) {
+    .factory('tokenService', ['$http', '$window', '$rootScope', '$location', '$q', '$state', 'logService', function ($http, win, $rootScope, $location, $q, $state, logService) {
         $rootScope.token = null;
 
         var token = null;
@@ -29,21 +29,20 @@ angular.module('token', [])
 
             var refreshTokenSuccess = function (greeting) {
                 //Success
-                console.log('Sucess refreshing token');
-                console.log(greeting);
+                logService.log({ text: 'Success refreshing token', metadata: greeting });
             };
 
             var refreshTokenFailed = function (reason) {
                 //failed attempt
-                console.log('Failed refreshing token');
-                console.log(reason);
+                logService.log('Failed refreshing token');
+                logService.log(reason);
 
                 var credentials = factory.keepLoggedInCredentialsFromDatabase();
                 if (credentials.keepLoggedIn) {
-                    console.log("Keep Logged in is active, attempting to re-authenticate");
+                    logService.log("Keep Logged in is active, attempting to re-authenticate");
                     factory.authenticate(credentials.username, credentials.password, credentials.keepLoggedIn);
                 } else {
-                    console.log("Logging out");
+                    logService.log("Logging out");
                     $rootScope.logout();
                 }
             }
@@ -96,20 +95,20 @@ angular.module('token', [])
             var promise = factory.httpPost(req);
             promise.then(function (greeting) {
                 //Success
-                console.log('Success abandoned usertoken');
-                console.log(greeting);
+                logService.log('Success abandoned usertoken');
+                logService.log(greeting);
             }, function (reason) {
                 //failed try
-                console.log('Failed abandoning token');
-                console.log(reason);
+                logService.log('Failed abandoning token');
+                logService.log(reason);
 
             });
         };
 
         //set user credentials
         function setCredentialsAndLogin(greeting) {
-            console.log("setting credentials for following user:");
-            console.log(greeting);
+            logService.log("setting credentials for following user:");
+            logService.log(greeting);
             //fetch user details
             userDetails = {
                 token: greeting.data.id,
@@ -136,8 +135,8 @@ angular.module('token', [])
             var promise = factory.httpPost(userDetailRequest);
             promise.then(function (greeting) {
                 //Success
-                console.log('Success fetched userdetails');
-                console.log(greeting);
+                logService.log('Success fetched userdetails');
+                logService.log(greeting);
                 if (greeting.data.displayName != null) {
                     userDetails.displayName = greeting.data.displayName;
                 }
@@ -171,8 +170,8 @@ angular.module('token', [])
 
             }, function (reason) {
                 //failed try authenticate against admin->app
-                console.log('Failed getting userdetails');
-                console.log(reason);
+                logService.log('Failed getting userdetails');
+                logService.log(reason);
                 //TODO: set username to something different
                 $state.go('login');
                 //we are logged in show navbar and redirect
@@ -200,8 +199,8 @@ angular.module('token', [])
             var promise = factory.httpPost(userDetailRequest);
             promise.then(function (greeting) {
                 //Success
-                console.log('Success fetched userdetails');
-                console.log(greeting);
+                logService.log('Success fetched userdetails');
+                logService.log(greeting);
                 if (greeting.data.displayName != null) {
                     userDetails.displayName = greeting.data.displayName;
                 }
@@ -214,12 +213,12 @@ angular.module('token', [])
                 if (greeting.data.phoneNumber != null) {
                     userDetails.phoneNumber = greeting.data.phoneNumber;
                 }
-                console.log(userDetails.displayName);
+                logService.log(userDetails.displayName);
                 factory.saveToDb("userDetails", userDetails);
             }, function (reason) {
                 //failed try authenticate against admin->app
-                console.log('Failed getting userdetails');
-                console.log(reason);
+                logService.log('Failed getting userdetails');
+                logService.log(reason);
             });
         };
 
@@ -267,21 +266,21 @@ angular.module('token', [])
             var promise = factory.httpPost(appAuthenticate);
             promise.then(function (greeting) {
                 //Success
-                console.log('Success appuser authentication');
-                console.log(greeting);
+                logService.log('Success appuser authentication');
+                logService.log(greeting);
                 //TODO: logged in now
                 factory.saveLoginCredentials(username, password, true);
                 setCredentialsAndLogin(greeting);
                 $rootScope.$broadcast('authentication-success');
             }, function (reason) {
                 //failed try authenticate against admin
-                console.log('Failed App authentication, trying with admin');
-                console.log(reason);
+                logService.log('Failed App authentication, trying with admin');
+                logService.log(reason);
                 promise = factory.httpPost(adminAuthenticate);
                 promise.then(function (greeting) {
                     //Admin authenticate success
-                    console.log('Success admin authenticate now authenticating towards app');
-                    console.log(greeting);
+                    logService.log('Success admin authenticate now authenticating towards app');
+                    logService.log(greeting);
                     var authenticationTokenAdmin = greeting.data.id;
                     appTokenAuthentication = {
                         method: 'POST',
@@ -299,16 +298,16 @@ angular.module('token', [])
                     promise = factory.httpPost(appTokenAuthentication);
                     promise.then(function (greeting) {
                         //Success
-                        console.log('Success admin-> app');
-                        console.log(greeting);
+                        logService.log('Success admin-> app');
+                        logService.log(greeting);
                         //TODO: logged in now
                         factory.saveLoginCredentials(username, password, true);
                         setCredentialsAndLogin(greeting);
                         $rootScope.$broadcast('authentication-success');
                     }, function (reason) {
                         //failed try authenticate against admin->app
-                        console.log('Failed login admin-> app');
-                        console.log(reason);
+                        logService.log('Failed login admin-> app');
+                        logService.log(reason);
                         //TODO:go back to login
                         $state.go('login');
                         //we are logged in show navbar and redirect
@@ -318,8 +317,8 @@ angular.module('token', [])
 
                 }, function (reason) {
                     //failed try authenticate against admin
-                    console.log('Failed login admin');
-                    console.log(reason);
+                    logService.log('Failed login admin');
+                    logService.log(reason);
                     //go back to login
                     //TODO:go back to login
                     $state.go('login');
@@ -369,17 +368,17 @@ angular.module('token', [])
             }, function errorCallback(response) {
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
-                //console.log(response); // TODO: REMOVE! only for debugging.
+                //logService.log(response); // TODO: REMOVE! only for debugging.
                 deferred.reject(response.data);
             });
             return deferred.promise;
         };
 
         factory.registerPushToken = function () {
-            console.log("registerPushToken");
+            logService.log("registerPushToken");
 
             return window.plugins.pushNotification.getPushToken(function(token) {
-                console.log("registering pushtoken: "+token);
+                logService.log("registering pushtoken: "+token);
                 var req = {
                     method: 'POST',
                     url: factory.currentAppApiUrl + 'app/users/update-device',
@@ -401,13 +400,13 @@ angular.module('token', [])
                 };
 
                 return $http(req).then(function successCallback(response) {
-                    console.log("registerPushToken update success");
+                    logService.log("registerPushToken update success");
                     $rootScope.$broadcast('push-token-registered', response);
                     return response;
                 }, function errorCallback(response) {
 
-                    console.error("registerPushToken update error");
-                    console.error(response);
+                    logService.error("registerPushToken update error");
+                    logService.error(response);
 
                     return $q.reject(response);
                 });
@@ -435,8 +434,8 @@ angular.module('token', [])
                     return response;
                 }, function errorCallback(response) {
 
-                    console.log("unRegisterPushToken error");
-                    console.log(response);
+                    logService.log("unRegisterPushToken error");
+                    logService.log(response);
 
                     return $q.reject(response);
                 });
@@ -559,7 +558,7 @@ angular.module('token', [])
                     break;
                 case 'logged-out':
                     // Clearing Table on logout, just to be srure
-                 //   dropPushTokensTable().then(function (success) { console.error('Dropped pushTokens table.') }, function (error) { console.error('Could not drop pushTokens table.') });
+                 //   dropPushTokensTable().then(function (success) { logService.error('Dropped pushTokens table.') }, function (error) { logService.error('Could not drop pushTokens table.') });
                     break;
                 default:
                     break;
@@ -659,10 +658,10 @@ var listHttpTimers = function (limit, sortAscending) {
     });
     resultArr = sorted.slice().splice(0, limit);
 
-    console.log("\n---- Listing top [" + resultArr.length + "] http requests by execution time " + (sortAscending ? "ASCENDING" : "DESCENDING") + "----\n\n");
+    logService.log("\n---- Listing top [" + resultArr.length + "] http requests by execution time " + (sortAscending ? "ASCENDING" : "DESCENDING") + "----\n\n");
     for (var entry in resultArr) {
         result += new Date(resultArr[entry].timeStamp) + " [" + resultArr[entry].elapsedTime + " ms] > " + resultArr[entry].url + "\n";
     }
     result += "\n\n";
-    console.log(result);
+    logService.log(result);
 };

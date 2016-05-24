@@ -3,7 +3,7 @@
  */
 
 angular.module('message', ['ngCordova'])
-    .factory('messageRepository', ['$http', '$window', '$rootScope', '$location', '$q', '$state', 'tokenService', '$cordovaSQLite', 'communicationService', 'databaseService', function ($http, win, $rootScope, $location, $q, $state, tokenService, $cordovaSQLite, communicationService, databaseService) {
+    .factory('messageRepository', ['$http', '$window', '$rootScope', '$location', '$q', '$state', 'tokenService', '$cordovaSQLite', 'communicationService', 'databaseService', 'logService', function ($http, win, $rootScope, $location, $q, $state, tokenService, $cordovaSQLite, communicationService, databaseService, logService) {
         var db;
 
         var factory = {};
@@ -186,16 +186,16 @@ angular.module('message', ['ngCordova'])
                                 }
                                 catch (err) {
                                     if (row === null || typeof row === "undefined") {
-                                        console.error('Failed to parse message, row is undefined. ' + err);
+                                        logService.error('Failed to parse message, row is undefined. ' + err);
                                     } else {
-                                        console.error('Failed to parse message \'' + row['MessageId'] + '\'.\r\n' + err);
+                                        logService.error('Failed to parse message \'' + row['MessageId'] + '\'.\r\n' + err);
                                     }
                                 }
                             }
 
                             resolve(messages);
                         }, function (trans, error) {
-                            console.error('Error while fetching messages from database.\r\n' + error.message);
+                            logService.error('Error while fetching messages from database.\r\n' + error.message);
                             reject(error);
                         });
                 });
@@ -270,7 +270,7 @@ angular.module('message', ['ngCordova'])
             var promise = $q(function (resolve, reject) {
                 var quickSyncConversationsSize = 10;
                 var quickSyncMessagesSize = 10;
-                console.log("QUICK SYNC");
+                logService.log("QUICK SYNC");
                 var conversationsFromApiPromise = communicationService.getAllConversations(null);
                 conversationsFromApiPromise.then(
                     function (conversationsPromiseSuccess) {
@@ -315,12 +315,12 @@ angular.module('message', ['ngCordova'])
                                         //intersect = Math.random() < .5;
                                         if (!intersect) {
                                             if (typeof messagesFromApi[0] !== "undefined" && messagesFromApi[0] !== null && messagesFromApi[0].hasOwnProperty("conversationId")) {
-                                                console.log("- CLEARED CONVO (" + messagesFromApi[0].conversationId + ") IN DB BECAUSE OF TOO MANY MISSING MESSAGES -");
+                                                logService.log("- CLEARED CONVO (" + messagesFromApi[0].conversationId + ") IN DB BECAUSE OF TOO MANY MISSING MESSAGES -");
                                                 deleteConversation(messagesFromApi[0].conversationId);
                                             }
                                         }
                                         communicationService.messagesDownloaded(messagesFromApi);
-                                        //console.log(intersect);
+                                        //logService.log(intersect);
                                     });
                                 });
                             }
@@ -349,16 +349,16 @@ angular.module('message', ['ngCordova'])
                                 }
                                 catch (err) {
                                     if (row === null || typeof row === "undefined") {
-                                        console.error('Failed to parse message, row is undefined. ' + err);
+                                        logService.error('Failed to parse message, row is undefined. ' + err);
                                     } else {
-                                        console.error('Failed to parse message \'' + row.MessageId + '\'.\r\n' + err);
+                                        logService.error('Failed to parse message \'' + row.MessageId + '\'.\r\n' + err);
                                     }
                                 }
                             }
 
                             resolve(messages);
                         }, function (trans, error) {
-                            console.error('Error while fetching messages from database.\r\n' + error.message);
+                            logService.error('Error while fetching messages from database.\r\n' + error.message);
                             reject(error);
                         });
                 });
@@ -452,7 +452,7 @@ angular.module('message', ['ngCordova'])
 
                         deferred.resolve(ids);
                     }, function (trans, error) {
-                        console.error('Error while fetching messages from database.\r\n' + error.message);
+                        logService.error('Error while fetching messages from database.\r\n' + error.message);
                         deferred.reject(error);
                     });
             });
@@ -479,7 +479,7 @@ angular.module('message', ['ngCordova'])
 
                             resolve(participants);
                         }, function (trans, error) {
-                            console.error('Error while fetching Participants from database.\r\n' + error.message);
+                            logService.error('Error while fetching Participants from database.\r\n' + error.message);
                             reject(error);
                         });
                 });
@@ -508,7 +508,7 @@ angular.module('message', ['ngCordova'])
                             resolve(conversations);
 
                         }, function (trans, error) {
-                            console.error('Error while fetching AllConversationsAndParticipants from database.\r\n' + error.message);
+                            logService.error('Error while fetching AllConversationsAndParticipants from database.\r\n' + error.message);
                             reject(error);
                         });
                 });
@@ -523,25 +523,25 @@ angular.module('message', ['ngCordova'])
             return $q(function (resolve, reject) {
                 db.transaction(function (tx) {
                     var error;
-                    //console.log('Checking if message message with id \'' + message.MessageId + '\' exists.');
+                    //logService.log('Checking if message message with id \'' + message.MessageId + '\' exists.');
                     tx.executeSql(queries.doesMessageExist, [message.MessageId], function (transaction, resultData) {
                         var rows = getRows(resultData);
                         if (rows.length !== 1) {
                             error = 'Unexpected number of rows returned (' + rows.length + '). Check sql statement!';
-                            console.error(error);
+                            logService.error(error);
                             reject(error);
                             return;
                         }
 
                         if (rows[0]['cnt'] !== 0) {
-                            // console.log('Message width id \'' + message.MessageId + '\' exists, won\'t insert.');
+                            // logService.log('Message width id \'' + message.MessageId + '\' exists, won\'t insert.');
                             return;
                         }
 
                         insertMessage(message)
                             .then(function () {
                                 factory.messageAdded();
-                                // console.log('Added message with id \'' + message.MessageId + '\'');
+                                // logService.log('Added message with id \'' + message.MessageId + '\'');
                                 resolve();
                             }, function (error) {
                                 if (message.hasOwnProperty("MessageId")) {
@@ -549,12 +549,12 @@ angular.module('message', ['ngCordova'])
                                 } else {
                                     error = 'Error while inserting message with undefined id.\r\n' + error.message;
                                 }
-                                console.error(error);
+                                logService.error(error);
                                 reject(error);
                             });
                     }, function (t, error) {
                         error = 'Error while checking if message exists.\r\n' + error.message;
-                        console.error(error);
+                        logService.error(error);
                         reject(error);
                     });
                 });
@@ -580,19 +580,19 @@ angular.module('message', ['ngCordova'])
                     queryIn.push('\'' + messages[i].MessageId + '\'');
                 }
 
-                //console.log('queryIn took ' + (new Date() - timer) + 'ms to create!');
+                //logService.log('queryIn took ' + (new Date() - timer) + 'ms to create!');
 
                 timer = new Date();
 
                 db.transaction(function (tx) {
-                    //console.log('Transaction took ' + (new Date() - timer) + 'ms to open!');
+                    //logService.log('Transaction took ' + (new Date() - timer) + 'ms to open!');
 
-                    //console.log('Checking if any of the ' + messages.length + ' exist');
+                    //logService.log('Checking if any of the ' + messages.length + ' exist');
                     tx.executeSql(queries.doMessagesExist + '(' + queryIn.join(',') + ')', [],
                         function (transaction, resultData) {
                             var rows = getRows(resultData);
 
-                            //console.log('Found ' + rows.length + ' messages already in db');
+                            //logService.log('Found ' + rows.length + ' messages already in db');
 
                             var inserted = 0;
                             var expected = 0;
@@ -617,20 +617,20 @@ angular.module('message', ['ngCordova'])
 
                                     inserted++;
                                     if (inserted === expected) {
-                                        console.log('All messages are added in ' + (new Date() - timer) + 'ms!');
+                                        logService.log('All messages are added in ' + (new Date() - timer) + 'ms!');
                                         factory.messageAdded();
                                         resolve();
                                     }
                                 }, function (error) {
                                     errorMsg = 'Error while saving message.\r\n' + error.message;
-                                    console.error(errorMsg);
+                                    logService.error(errorMsg);
                                     reject(errorMsg);
                                 });
                             }
                         },
                         function (transaction, error) {
                             errorMsg = 'Error while checking if messages exist.\r\n' + error.message;
-                            console.error(errorMsg);
+                            logService.error(errorMsg);
                             reject(errorMsg);
                         });
                 });
@@ -668,7 +668,7 @@ angular.module('message', ['ngCordova'])
                             }
                         }, function (error) {
                             errorMsg = 'Error while saving conversation.\r\n' + error.message;
-                            console.error(errorMsg);
+                            logService.error(errorMsg);
                             reject(errorMsg);
                         });
                     }
@@ -699,7 +699,7 @@ angular.module('message', ['ngCordova'])
             evtConversationsAdded = true;
 
             setTimeout(function () {
-                //console.log("conversations-added event");
+                //logService.log("conversations-added event");
                 $rootScope.$broadcast('conversations-added', {});
                 evtConversationsAdded = false;
             },
@@ -720,7 +720,7 @@ angular.module('message', ['ngCordova'])
                     break;
                 case 'new-messages':
                     if (data != null) {
-                        //console.log("Received new messages: " + data.length);
+                        //logService.log("Received new messages: " + data.length);
                         factory.addMessages(data);
                     }
                     break;

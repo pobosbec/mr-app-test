@@ -2,7 +2,7 @@
  * Created by robinpipirs on 09/12/15.
  */
 angular.module('login', [])
-    .controller('loginCtrl', ['$scope', '$rootScope', '$http', 'tokenService','$q', function ($scope, $rootScope, $http, tokenService,$q) {
+    .controller('loginCtrl', ['$scope', '$rootScope', '$http', 'tokenService','$q', 'logService', function ($scope, $rootScope, $http, tokenService,$q, logService) {
 
 
         //taken from main.js
@@ -69,7 +69,7 @@ angular.module('login', [])
             var promise = httpPost(registerRequest);
             promise.then(function (greeting) {
                 //Success
-                console.log(greeting);
+                logService.log(greeting);
                 //TODO: wait and go login
                 setTimeout(function(){
                     $scope.registerview = false;
@@ -78,7 +78,7 @@ angular.module('login', [])
                     window.location.reload();
                 }, 1500);
             }, function (reason) {
-                console.log(reason);
+                logService.log(reason);
                 $scope.message = reason.errors[0].errorMessage;
                 //failed try authenticate against admin->app
                 $scope.message = "Can't find a user connected to the email provided";
@@ -133,7 +133,7 @@ angular.module('login', [])
             }, function errorCallback(response) {
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
-                console.log(response); // TODO: REMOVE! only for debugging.
+                logService.log(response); // TODO: REMOVE! only for debugging.
                 deferred.reject(response.data);
             });
             return deferred.promise;
@@ -196,8 +196,8 @@ angular.module('login', [])
         }
 
         if (tokenService.keepLoggedInCredentialsFromDatabase().keepLoggedIn) {
-            console.warn("auto-logging in");
-            console.log(tokenService.keepLoggedInCredentialsFromDatabase());
+            logService.warn("auto-logging in");
+            logService.log(tokenService.keepLoggedInCredentialsFromDatabase());
             $scope.login(tokenService.keepLoggedInCredentialsFromDatabase());
         } else {
             // In non-keepLoggedIn MR-App, localStorage Clears YOU!

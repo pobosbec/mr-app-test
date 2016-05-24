@@ -1,0 +1,27 @@
+﻿<div style="background-color: white; width: 100%; height: 100%">
+    <div style="padding-bottom: 1em">
+        <div class="checkbox" style="padding-bottom: 1em">
+            Log to this view
+            <input type="checkbox" ng-model="targets.eventView">
+            <i class="input-helper"></i>
+        </div>
+        <div class="checkbox" style="padding-bottom: 1em">
+            Log to database
+            <input type="checkbox" ng-model="targets.database">
+            <i class="input-helper"></i>
+        </div>
+        <div class="checkbox" style="padding-bottom: 1em">
+            <label>
+                Log to console
+                <input type="checkbox" ng-model="targets.console">
+                <i class="input-helper"></i>
+            </label>
+        </div>
+    </div>
+    <hr/>
+    <div ng-repeat="log in capturedLogs track by $index" style="margin-top: 10px">
+        <div style="font-size: 1.5em">{{log.createdOn}} - level:{{log.level}}</div>
+        <p>{{log.text}}</p>
+        <p>{{log.metadata}}</p>
+    </div>
+</div>

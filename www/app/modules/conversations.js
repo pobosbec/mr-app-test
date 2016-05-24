@@ -3,7 +3,7 @@
  */
 angular.module('conversations', [])
     .controller('conversationsCtrl', [
-        '$scope', '$http', '$rootScope', 'tokenService', 'contactsService', '$q', 'communicationService', 'messageRepository', 'moment', 'dataService', function ($scope, $http, $rootScope, tokenService, contactsService, $q, communicationService, messageRepository, angularMoment, dataService) {
+        '$scope', '$http', '$rootScope', 'tokenService', 'contactsService', '$q', 'communicationService', 'messageRepository', 'moment', 'dataService', 'logService', function ($scope, $http, $rootScope, tokenService, contactsService, $q, communicationService, messageRepository, angularMoment, dataService, logService) {
             $scope.isPhoneGap = window.isPhoneGap;
             $scope.conversations = dataService.conversations;
             $scope.userId = tokenService.getAppUserId();
@@ -42,13 +42,19 @@ angular.module('conversations', [])
                 }
             }
 
+            //$scope.conversationsSorting = function (convo) {
+            //    var sortOrder = 0;
+            //    if (convo.Messages.length) {
+            //        sortOrder = new Date(convo.Messages[0].CreatedOn);
+            //    }
+            //    return 0 - sortOrder;
+            //}
+
+            // This is required for ng-repeat order by date
             $scope.conversationsSorting = function (convo) {
-                var sortOrder = 0;
-                if (convo.Messages.length) {
-                    sortOrder = new Date(convo.Messages[0].CreatedOn);
-                }
-                return 0 - sortOrder;
-            }
+                var date = new Date(convo.Messages[0].CreatedOn);
+                return date;
+            };
 
             $scope.messagesSorting = function (message) {
                 var sortOrder = 0;
@@ -114,6 +120,7 @@ angular.module('conversations', [])
         '$window',
         'dataService',
         '$q',
+        'logService',
         function ($scope,
                   $http,
                   $rootScope,
@@ -128,7 +135,7 @@ angular.module('conversations', [])
                   $window,
                   dataService,
                   $q,
-                  $document) {
+                  logService) {
                 $scope.conversationId = $stateParams.conversationId;
                 $scope.userId = tokenService.getAppUserId();
                 $scope.conversation = {};
@@ -148,11 +155,11 @@ angular.module('conversations', [])
                     // TODO: Handle if conversation is not in dataService?
                     dataService.conversations.some(function (conversation) {
                         if (conversation.ConversationId === $scope.conversationId) {
-                            console.log("setConversation = true");
+                            logService.log("setConversation = true");
                             $scope.conversation = conversation;
                             return true;
                         }
-                    console.log("setConversation = False");
+                    logService.log("setConversation = False");
                     });
                 };
 
@@ -161,7 +168,7 @@ angular.module('conversations', [])
                 $scope.openDefaultBrowserWindow = function (url) {
                    // $window.open(url);
 
-                    console.log("openDefaultBrowserwindow called with url: "+url);
+                    logService.log("openDefaultBrowserwindow called with url: "+url);
 
                     var modalInstance = $uibModal.open({
                             animation: $scope.animationsEnabled,
@@ -266,7 +273,7 @@ angular.module('conversations', [])
 
                             if (success.errors.length > 0) {
                                 for (var j = 0; j < success.errors.length; j++) {
-                                    console.error(success.errors[j].errorMessage);
+                                    logService.error(success.errors[j].errorMessage);
                                 }
                                 msg.Failed = true;
                                 return;
@@ -303,7 +310,7 @@ angular.module('conversations', [])
                         },
                         function (error) {
                             msg.Failed = true;
-                            console.log('Could not reply to conversation.');
+                            logService.log('Could not reply to conversation.');
                         });
                 }
 
@@ -336,7 +343,7 @@ angular.module('conversations', [])
 
                             if (success.errors.length > 0) {
                                 for (var j = 0; j < success.errors.length; j++) {
-                                    console.error(success.errors[j].errorMessage);
+                                    logService.error(success.errors[j].errorMessage);
                                 }
                                 message.Failed = true;
                                 return;
@@ -380,7 +387,7 @@ angular.module('conversations', [])
                         function (error) {
                             message.Retrying = false;
                             msg.Failed = true;
-                            console.log('Could not reply to conversation.');
+                            logService.log('Could not reply to conversation.');
                         });
                 }
 
@@ -405,7 +412,7 @@ angular.module('conversations', [])
                         }
 
                         if (!$scope.fetchingMore && value < 200) {
-                            console.log('Load more');
+                            logService.log('Load more');
                             var viewBody = $("#conversationMessagesBody");
                             $scope.fetchingMore = true;
                             var heightBeforeLoad = viewBody[0].scrollHeight;
@@ -413,7 +420,7 @@ angular.module('conversations', [])
                                 .then(function () {
                                     setTimeout(function () {
                                         var scrollTo = viewBody[0].scrollHeight - heightBeforeLoad - value;
-                                        console.log('Setting scroll to: ' + scrollTo + '. Before load: ' + heightBeforeLoad + '. New height: ' + viewBody[0].scrollHeight);
+                                        logService.log('Setting scroll to: ' + scrollTo + '. Before load: ' + heightBeforeLoad + '. New height: ' + viewBody[0].scrollHeight);
                                         viewBody.scrollTop(scrollTo);
                                     }, 300);
                                 });
@@ -450,7 +457,7 @@ angular.module('conversations', [])
 
                 $scope.loadMoreForConversation = function () {
                     $scope.scrollBottomEnabled = false;
-                  //  console.log("scrollBottomEnabled: "+ $scope.scrollBottomEnabled);
+                  //  logService.log("scrollBottomEnabled: "+ $scope.scrollBottomEnabled);
                     $scope.pageIndex = Math.floor($scope.conversation.Messages.length / $scope.pageSize);
                     return dataService.loadMessages($scope.conversation.ConversationId, $scope.pageIndex, $scope.pageSize);
                 }
@@ -519,7 +526,7 @@ angular.module('conversations', [])
                 // This is required for ng-repeat order by date
                 $scope.sortMessage = function (message) {
                     $scope.scrollBottomEnabled = false;
-                  //  console.log("scrollBottomEnabled: "+ $scope.scrollBottomEnabled);
+                  //  logService.log("scrollBottomEnabled: "+ $scope.scrollBottomEnabled);
                     var date = new Date(message.CreatedOn);
                     return date;
                 };
@@ -529,7 +536,7 @@ angular.module('conversations', [])
 
             $scope.url = $sce.trustAsResourceUrl(url);
 
-            console.log("forms modal open with url: "+ url);
+            logService.log("forms modal open with url: "+ url);
 
         $scope.close = function () {
             $uibModalInstance.dismiss('cancel');
@@ -576,7 +583,7 @@ angular.module('conversations', [])
                 $scope.conversationParticipants = conversationInfo.Participants;
 
                 $scope.close = function () {
-                    console.log("closing modal");
+                    logService.log("closing modal");
                     $uibModalInstance.dismiss('cancel');
                 };
             }

@@ -3,7 +3,7 @@
  */
 angular.module('services', [])
     .factory('dataService', [
-        'contactsService', 'messageRepository', 'communicationService', 'tokenService', '$q', function (contactsService, messageRepository, communicationService, tokenService, $q) {
+        'contactsService', 'messageRepository', 'communicationService', 'tokenService', '$q', 'logService', function (contactsService, messageRepository, communicationService, tokenService, $q, logService) {
             var factory = {};
 
             factory.conversations = [];
@@ -51,7 +51,7 @@ angular.module('services', [])
                                 }
                             },
                             function (error) {
-                                console.error('Could not sync user: ' + JSON.stringify(error));
+                                logService.error('Could not sync user: ' + JSON.stringify(error));
                             });
                     }
                 });
@@ -107,7 +107,7 @@ angular.module('services', [])
 
                             if (!intersect) {
                                 if (typeof messagesFromApi[0] !== "undefined" && messagesFromApi[0] !== null && messagesFromApi[0].hasOwnProperty("conversationId")) {
-                                    console.log("- CLEARED CONVO (" + messagesFromApi[0].conversationId + ") IN DB BECAUSE OF TOO MANY MISSING MESSAGES -");
+                                    logService.log("- CLEARED CONVO (" + messagesFromApi[0].conversationId + ") IN DB BECAUSE OF TOO MANY MISSING MESSAGES -");
                                     messageRepository.deleteConversation(messagesFromApi[0].conversationId);
                                     communicationService.messagesDownloaded(messagesFromApi);
                                 }
@@ -181,7 +181,7 @@ angular.module('services', [])
                                             });
                                             if (!intersect) {
                                                 if (typeof messagesFromApi[0] !== "undefined" && messagesFromApi[0] !== null && messagesFromApi[0].hasOwnProperty("conversationId")) {
-                                                    console.log("- CLEARED CONVO (" + messagesFromApi[0].conversationId + ") IN DB BECAUSE OF TOO MANY MISSING MESSAGES -");
+                                                    logService.log("- CLEARED CONVO (" + messagesFromApi[0].conversationId + ") IN DB BECAUSE OF TOO MANY MISSING MESSAGES -");
                                                     messageRepository.deleteConversation(messagesFromApi[0].conversationId);
                                                     communicationService.messagesDownloaded(messagesFromApi);
                                                 }
@@ -395,7 +395,7 @@ angular.module('services', [])
                         deferred.resolve();
                     },
                     function (error) {
-                        console.log(error);
+                        logService.log(error);
                         deferred.reject();
                     });
 
@@ -427,10 +427,10 @@ angular.module('services', [])
                         }
 
                         messageRepository.getAllConversationsAndParticipants().then(function (success) {
-                            success.some(function(conversation) {
+                            success.some(function (conversation) {
                                 var processed = false;
 
-                                if (factory.conversations.some(function(convo) { return conversation.ConversationId === convo.ConversationId })) {
+                                if (factory.conversations.some(function (convo) { return conversation.ConversationId === convo.ConversationId })) {
                                     processed = true;
                                 }
 
@@ -442,7 +442,7 @@ angular.module('services', [])
 
                         resolveUnidentifiedAppUsers(appUserExistsPromises);
                     }, function (conversationsPromiseError) {
-                        console.warn(conversationsPromiseError);
+                        logService.warn(conversationsPromiseError);
                     }).then(function () {
                         var promise = $q(function (resolve, reject) {
 
@@ -462,9 +462,14 @@ angular.module('services', [])
                             }
                         });
 
+                        var error = new Error();
+
                         promise.then(function () {
                             factory.quickLoading = false;
-                            console.log("Initial loading of conversations done.");
+                            logService.log({
+                                text: "Initial loading of conversations done.",
+                                metadata: { stacktrace: error.stack }
+                            });
                         });
                     });
 
@@ -515,13 +520,12 @@ angular.module('services', [])
                                 });
                             },
                             function (errorGettingMessages) {
-                                console.warn('Could not get messages.');
+                                logService.warn('Could not get messages.');
                             });
                         break;
                     case 'services-started':
                         factory.quickLoad();
                     case 'load':
-                        //factory.onFocusOrResume();
                         break;
                     default:
                         break;

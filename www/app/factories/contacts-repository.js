@@ -2,7 +2,7 @@
  * Created by Kristofer on 2016-03-21.
  */
 angular.module('contacts', [])
-    .factory('contactsService', ['$http', '$rootScope', '$q', 'tokenService', 'databaseService', function ($http, $rootScope, $q, tokenService, databaseService) {
+    .factory('contactsService', ['$http', '$rootScope', '$q', 'tokenService', 'databaseService', 'logService', function ($http, $rootScope, $q, tokenService, databaseService, logService) {
 
         var db;
         var factory = {};
@@ -104,11 +104,11 @@ angular.module('contacts', [])
                             factory.addOrUpdateAppUser(success.data[i]);
                         }
                     }, function (error) {
-                        console.log('Could not get app-users.')
+                        logService.log('Could not get app-users.')
                     });
                 },
                 function (error) {
-                    console.log('Could not get phone contacts.')
+                    logService.log('Could not get phone contacts.')
                 });
         }
 
@@ -156,11 +156,11 @@ angular.module('contacts', [])
                         contacts = phoneContacts;
                     },
                     function () {
-                        console.log('Could not get contacts!')
+                        logService.log('Could not get contacts!')
                     }, options);
                 deferred.resolve("Success");
             } catch (error) {
-                console.log('Could not get contacts from phone.')
+                logService.log('Could not get contacts from phone.')
                 deferred.reject("Fail");
             }
 
@@ -181,13 +181,13 @@ angular.module('contacts', [])
                                     try {
                                         appUsers.push(JSON.parse(row.JSON));
                                     } catch (err) {
-                                        console.error('Failed to parse appUser \'' + row[i].userId + '\'.\r\n' + err);
+                                        logService.error('Failed to parse appUser \'' + row[i].userId + '\'.\r\n' + err);
                                     }
                                 }
                             }
                             resolve(appUsers);
                         }, function (trans, error) {
-                            console.error('Error while fetching appUsers from database.\r\n' + error.message);
+                            logService.error('Error while fetching appUsers from database.\r\n' + error.message);
                             reject(error);
                         });
                 });
@@ -247,14 +247,14 @@ angular.module('contacts', [])
                                     try {
                                         appUsers.push(JSON.parse(row['JSON']));
                                     } catch (err) {
-                                        console.error('Failed to parse appUser \'' + row[i].userId + '\'.\r\n' + err);
+                                        logService.error('Failed to parse appUser \'' + row[i].userId + '\'.\r\n' + err);
                                     }
                                 }
                             }
 
                             resolve(appUsers);
                         }, function (trans, error) {
-                            console.error('Error while fetching appUsers from database.\r\n' + error.message);
+                            logService.error('Error while fetching appUsers from database.\r\n' + error.message);
                             reject(error);
                         });
                 });
@@ -267,12 +267,12 @@ angular.module('contacts', [])
                     tx.executeSql(queries.deleteAppUser, [appUserId],
                         function (trans, result) {
                             if (result.rowsAffected !== 1) {
-                                console.error('Error while fetching appUsers from database.\r\n' + error.message);
+                                logService.error('Error while fetching appUsers from database.\r\n' + error.message);
                                 reject();
                             }
                             resolve(result);
                         }, function (trans, error) {
-                            console.error('Error while fetching appUsers from database.\r\n' + error.message);
+                            logService.error('Error while fetching appUsers from database.\r\n' + error.message);
                             reject(error);
                         });
                 });
@@ -304,36 +304,36 @@ angular.module('contacts', [])
          */
         factory.addAppUser = function (appUser) {
             if (!appUser.hasOwnProperty('UserId')) {
-                //console.log("repaired app user");
+                //logService.log("repaired app user");
                 appUser.UserId = appUser.id;
             }
             if (!appUser.hasOwnProperty('id')) {
-                //console.log("repaired app user");
+                //logService.log("repaired app user");
                 appUser.id = appUser.UserId;
             }
             db.transaction(function (tx) {
-                console.log('Checking if app-user with id \'' + appUser.id + '\' exists.');
+                logService.log('Checking if app-user with id \'' + appUser.id + '\' exists.');
                 tx.executeSql(queries.doesAppUserExist, [appUser.id], function (transaction, resultData) {
                     var rows = getRows(resultData);
                     if (rows.length !== 1) {
-                        console.error('Unexpected number of rows returned (' + rows.length + '). Check sql statement!');
+                        logService.error('Unexpected number of rows returned (' + rows.length + '). Check sql statement!');
                         return;
                     }
 
                     // TODO: update user instead?
                     if (rows.length && rows[0] !== null && typeof rows[0] !== "undefined" && rows[0].hasOwnProperty('cnt') && rows[0].cnt !== 0) {
-                        console.log('AppUser width id \'' + appUser.id + '\' exists, won\'t insert.');
+                        logService.log('AppUser width id \'' + appUser.id + '\' exists, won\'t insert.');
                         return;
                     }
                     factory.insertAppUser(appUser)
                         .then(function () {
                             factory.appUsers.push(appUser);
-                            console.log('Added appUser with id \'' + appUser.UserId + '\'');
+                            logService.log('Added appUser with id \'' + appUser.UserId + '\'');
                         }, function (error) {
-                            console.error('Error while inserting appUser with id \'' + appUser.UserId + '\'.\r\n' + error.message);
+                            logService.error('Error while inserting appUser with id \'' + appUser.UserId + '\'.\r\n' + error.message);
                         });
                 }, function (t, error) {
-                    console.error("Error while checking if appUser exists.\r\n" + error.message);
+                    logService.error("Error while checking if appUser exists.\r\n" + error.message);
                 });
             });
         };
@@ -369,7 +369,7 @@ angular.module('contacts', [])
                             JSON.stringify(appUser)],
                         function (trans, result) {
                             if (result.rowsAffected !== 1) {
-                                console.error('');
+                                logService.error('');
                                 reject(new {
                                     message: 'The appUser width id \'' + appUser.id + '\' doesn\'t seem to be added properly'
                                 });

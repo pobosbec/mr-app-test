@@ -1,7 +1,7 @@
 // Please note that $uibModalInstance represents a modal window (instance) dependency.
 // It is not the same as the $uibModal service used above.
 angular.module('modalcontroll',[])
-    .controller('createMessageCtrl', function ($scope, $uibModalInstance, contactsService, communicationService, tokenService) {
+    .controller('createMessageCtrl', function ($scope, $uibModalInstance, contactsService, communicationService, tokenService, logService) {
 
         $scope.users = [];
         $scope.selectedUsers = [];
@@ -14,8 +14,8 @@ angular.module('modalcontroll',[])
                 function(success){
                    $scope.users = success;
                 },
-                function(error){
-                    console.log('Could not get appUsers.')
+                function(error) {
+                    logService.log('Could not get appUsers.');
                 });
         };
 
@@ -30,7 +30,7 @@ angular.module('modalcontroll',[])
 
         $scope.find = function (data) {
             alert(data);
-            console.log(contactsService.getAppUsers());
+            logService.log(contactsService.getAppUsers());
         };
 
         $scope.onSelect = function($item, $model, $label){

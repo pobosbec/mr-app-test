@@ -114,7 +114,7 @@ mobileresponseWebbApp
             .state('pages.conversations', {
                 url: '/conversations',
                 templateUrl: 'views/conversations.html',
-               // controller: 'conversationsCtrl as conversationsCtrl',
+                // controller: 'conversationsCtrl as conversationsCtrl',
                 onEnter: function ($rootScope) {
                     $rootScope.createButtonVisible = true;
                     $rootScope.snapperControl.close();
@@ -135,8 +135,21 @@ mobileresponseWebbApp
                 onExit: function ($rootScope) {
                     $rootScope.header = true;
                 }
-            });
+            })
+            .state('pages.debug', {
+                url: '/debug/',
+                templateUrl: 'views/debug-view.html',
+                controller: 'debugCtrl as debugCtrl',
+                onEnter: function ($rootScope) {
+                    $rootScope.snapperControl.close();
+                    $rootScope.header = true;
+                },
+                onExit: function ($rootScope) {
+                    $rootScope.createButtonVisible = false;
+                }
+            });;
+
     })
     .config(['$compileProvider', function ($compileProvider) {
-    $compileProvider.debugInfoEnabled(false);
-}]);
+        $compileProvider.debugInfoEnabled(false);
+    }]);

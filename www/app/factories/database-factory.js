@@ -14,6 +14,8 @@ angular.module('database', [])
             size: (5 * 1024 * 1024)
         };
 
+        factory.console = console;
+
         factory.db = {};
 
         factory.isReady = false;
@@ -82,6 +84,7 @@ angular.module('database', [])
                 tx.executeSql('CREATE TABLE IF NOT EXISTS Messages (MessageId primary key, CreatedOn, ConversationId, Author, JSON)');
                 tx.executeSql('CREATE TABLE IF NOT EXISTS AppUsers (AppUserId text primary key, DisplayName text, JSON text)');
                 tx.executeSql('CREATE TABLE IF NOT EXISTS ConversationParticipants (ConversationId primary key, Participants)');
+                tx.executeSql('CREATE TABLE IF NOT EXISTS Logs (CreatedOn, Message, Metadata, Level)');
                 console.log('All tables created.');
                 deferred.resolve();
             }, function (transaction, error) {
