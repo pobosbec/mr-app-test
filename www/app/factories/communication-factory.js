@@ -132,25 +132,18 @@ angular.module('communication', [])
 
             for (var i = 0; i < data.length; i++) {
                 var msg = data[i];
-                // AuthorDisplayName is not provided from API.
-                //fixAuthorForMessage(data[i])
-                //    .then(function (msg) {
+                
                 var newMessage = {};
                 newMessage.MessageId = msg.messageId;
                 newMessage.ParticipantId = msg.participantId;
                 newMessage.ConversationId = msg.conversationId;
-                newMessage.AuthorDisplayName = msg.authorDisplayName;
+                newMessage.AuthorDisplayName = contactsService.getUsername(msg.participantId);
                 newMessage.Author = msg.authorId;
                 newMessage.CreatedOn = msg.createdOn;
                 newMessage.Content = msg.content;
                 newMessage.IsRead = msg.isRead;
                 newMessage.MetaData = msg.metaData;
                 newMessages.push(newMessage);
-                //if (newMessages.length === data.length) {
-                //    return newMessages;
-                //}
-                //}).then(function (newMessages) {
-                //});
             }
 
             $rootScope.$broadcast('new-messages', newMessages);

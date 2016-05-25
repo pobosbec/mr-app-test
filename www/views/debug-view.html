@@ -36,6 +36,14 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-sm-4 m-b-20">
+            <button class="btn btn-danger waves-effect" ng-click="clearDebugView()">Clear debug-view</button>
+        </div>
+        <div class="col-sm-4 m-b-20">
+            <button class="btn btn-danger waves-effect" ng-click="clearDatabase()">Clear database log</button>
+        </div>
+    </div>
 </div>
 <div style="background-color: white; width: 100%; height: 100%;">
     <div ng-repeat="log in capturedLogs | orderBy: logSorting track by $index" style="margin-top: 10px">

@@ -39,6 +39,8 @@ angular.module('contacts', [])
             if (found != null) {
                 return found;
             }
+
+            return '..';
         };
 
         factory.init = function init() {

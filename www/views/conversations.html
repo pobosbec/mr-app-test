@@ -1,6 +1,6 @@
 <div class="listview lv-bordered lv-lg" style="padding-bottom: 100px;" data-ng-controller="conversationsCtrl as conversationsCtrl">
     <div class="lv-body">
-        <div class="lv-item media" ng-repeat="conversation in conversations | orderBy: -conversationsSorting track by conversation.ConversationId" ng-class="{'lastConversation':$last, 'hoverOverride':isPhoneGap}">
+        <div class="lv-item media" ng-repeat="conversation in conversations | orderBy: conversationsSorting : true track by conversation.ConversationId" ng-class="{'lastConversation':$last, 'hoverOverride':isPhoneGap}" ng-if="conversation.Messages">
             <a ui-sref="conversation({conversationId: conversation.ConversationId})">
                 <div class="media-body waves-effect" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                     <img class="lv-img-sm avatar" style="margin-right: -18px;" ng-class="{'lastAvatar':$last}" ng-repeat="participant in conversation.Participants | orderBy: selfFirst" ng-src="{{ getAvatar(participant) || 'img/profile-pics/5.jpg' }}" alt="">
@@ -11,7 +11,7 @@
                             </div>
                         </li>
                         <li ng-repeat="message in conversation.Messages | orderBy: messagesSorting | limitTo: 1 track by message.messageId">
-                            <small class="latestMessage" ng-class="{'unreadMessage':! message.IsRead}">{{message.AuthorDisplayName}}: {{message.Content}}</small>&nbsp;
+                            <small class="latestMessage" ng-class="{'unreadMessage':! message.IsRead}">{{getUsername(message.Author)}}: {{message.Content}}</small>&nbsp;
                             <small class="ms-date">
                                 <i class="zmdi zmdi-time"></i>
                                 <span ng-show="formatMode(message.CreatedOn)==1">{{format(message.CreatedOn) | amTimeAgo}}</span>

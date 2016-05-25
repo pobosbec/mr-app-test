@@ -248,7 +248,16 @@ angular.module('logging', [])
         }
 
         factory.clearLogTable = function () {
+            db.transaction(function (tx) {
+                tx.executeSql(
+                    'DELETE FROM Logs', [],
+                    function (trans, result) {
 
+                    },
+                    function (t, error) {
+
+                    });
+            });
         }
 
         factory.updateTargetState = function (target, state) {

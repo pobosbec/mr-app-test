@@ -33,7 +33,8 @@ angular.module('conversations', [])
             };
 
             $scope.getUsername = function (appUserId) {
-                return contactsService.getUsername(appUserId);
+                var username = contactsService.getUsername(appUserId);
+                return username;
             };
 
             $scope.selfFirst = function (appUserId) {
@@ -52,8 +53,9 @@ angular.module('conversations', [])
 
             // This is required for ng-repeat order by date
             $scope.conversationsSorting = function (convo) {
-                var date = new Date(convo.Messages[0].CreatedOn);
-                return date;
+                if (convo.Messages.length > 0) {
+                    return new Date(convo.Messages[0].CreatedOn);
+                }
             };
 
             $scope.messagesSorting = function (message) {

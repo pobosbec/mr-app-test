@@ -70,6 +70,12 @@ angular.module('services', [])
 
                     var messagesPromise = communicationService.downloadMessagesForConversation(conversation.ConversationId, false, 0, 10, false);
                     messagesPromise.then(function (result) {
+
+                        if (result.data.items.length === 0) {
+                            logService.log('Got 0 messages from api.');
+                            return;
+                        }
+
                         var messagesFromApi = result.data.items.sort(function (a, b) {
                             if (a.CreatedOn > b.CreatedOn) {
                                 return 1;

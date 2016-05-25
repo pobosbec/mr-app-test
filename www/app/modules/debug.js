@@ -14,6 +14,14 @@ angular.module('debug', [])
                 return date;
             };
 
+            $scope.clearDebugView = function() {
+                $scope.capturedLogs.length = 0;
+            }
+
+            $scope.clearDatabase = function() {
+                logService.clearLogTable();
+            }
+
             $scope.$watch("targets.console", function (state) {
                 logService.updateTargetState('console', state);
             }, true);
