@@ -14,11 +14,19 @@ angular.module('debug', [])
                 return date;
             };
 
-            $scope.clearDebugView = function() {
+            $scope.clearDebugView = function () {
                 $scope.capturedLogs.length = 0;
             }
 
-            $scope.clearDatabase = function() {
+            $scope.getLogsFromDb = function () {
+                logService.getLogsFromDb().then(function (success) {
+                    success.some(function (log) {
+                        $scope.capturedLogs.unshift(log);
+                    });
+                });
+            }
+
+            $scope.clearDatabase = function () {
                 logService.clearLogTable();
             }
 

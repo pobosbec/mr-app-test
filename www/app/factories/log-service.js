@@ -8,6 +8,13 @@ angular.module('logging', [])
 
         var db = null;
 
+        factory.queries = {
+            getAllLogs: 'SELECT * FROM Logs',
+            getAllLogsWithLevel: 'SELECT * FROM Logs WHERE Level = ?',
+            getAllLogsOrderDescending: 'SELECT * FROM Logs ORDERBY DESC',
+            getAllLogsOrderAscending: 'SELECT * FROM Logs ORDERBY ASC'
+        }
+
         factory.capturedLogs = null;
 
         factory.init = function () {
