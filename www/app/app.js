@@ -28,10 +28,10 @@ var mobileresponseWebbApp = angular.module('administratorApp', [
     'logging',
     'debug'
 ]).run(function (contactsService, messageRepository, dataService, databaseService, $rootScope, logService) {
-    if (window.isPhoneGap) {
-        var fastClick = require('fastclick');
-        fastClick.attach(document.body);
-    }
+    //if (window.isPhoneGap) {
+    //    var fastClick = require('fastclick');
+    //    fastClick.attach(document.body);
+    //}
 
     databaseService.init().then(function () {
         contactsService.init();
