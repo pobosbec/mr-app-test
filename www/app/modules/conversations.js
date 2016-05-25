@@ -43,18 +43,17 @@ angular.module('conversations', [])
                 }
             }
 
-            //$scope.conversationsSorting = function (convo) {
-            //    var sortOrder = 0;
-            //    if (convo.Messages.length) {
-            //        sortOrder = new Date(convo.Messages[0].CreatedOn);
-            //    }
-            //    return 0 - sortOrder;
-            //}
-
             // This is required for ng-repeat order by date
             $scope.conversationsSorting = function (convo) {
-                if (convo.Messages.length > 0) {
-                    return new Date(convo.Messages[0].CreatedOn);
+                if (convo.Messages !== null || convo.Messages !== undefined) {
+                    var dates = [];
+
+                    convo.Messages.some(function (msg) {
+                        dates.push(new Date(msg.CreatedOn));
+                    });
+
+                    var date = new Date(Math.max.apply(Math, dates));
+                    return date;
                 }
             };
 
@@ -138,413 +137,411 @@ angular.module('conversations', [])
                   dataService,
                   $q,
                   logService) {
-                $scope.conversationId = $stateParams.conversationId;
-                $scope.userId = tokenService.getAppUserId();
-                $scope.conversation = {};
-                $scope.appUsers = contactsService.appUsers;
-                $scope.pageIndex = 0;
-                $scope.pageSize = 10;
-                $scope.isGroupConversation = false;
-                $scope.isLoading = false;
-                $scope.unConfirmedIds = 0;
-                $scope.currentReplyMessage = null;
-                $scope.advancedSettings = false;
-                $scope.atBottom = true;
-                $scope.unseenMessages = !$scope.atBottom;
-                $scope.scrollBottomEnabled = true;
+            $scope.conversationId = $stateParams.conversationId;
+            $scope.userId = tokenService.getAppUserId();
+            $scope.conversation = {};
+            $scope.appUsers = contactsService.appUsers;
+            $scope.pageIndex = 0;
+            $scope.pageSize = 10;
+            $scope.isGroupConversation = false;
+            $scope.isLoading = false;
+            $scope.unConfirmedIds = 0;
+            $scope.currentReplyMessage = null;
+            $scope.advancedSettings = false;
+            $scope.atBottom = true;
+            $scope.unseenMessages = !$scope.atBottom;
+            $scope.scrollBottomEnabled = true;
 
-                $scope.setConversation = function () {
-                    // TODO: Handle if conversation is not in dataService?
-                    dataService.conversations.some(function (conversation) {
-                        if (conversation.ConversationId === $scope.conversationId) {
-                            logService.log("setConversation = true");
-                            $scope.conversation = conversation;
-                            return true;
-                        }
-                    logService.log("setConversation = False");
-                    });
-                };
-
-                $scope.setConversation();
-
-                $scope.openDefaultBrowserWindow = function (url) {
-                   // $window.open(url);
-
-                    logService.log("openDefaultBrowserwindow called with url: "+url);
-
-                    var modalInstance = $uibModal.open({
-                            animation: $scope.animationsEnabled,
-                            appendTo: '#content',
-                            templateUrl: 'template/forms-modal.html',
-                            controller: 'viewFormsCtrl',
-                            resolve: {
-                                url: function () {
-                                    return url;
-                                }
-                            }
-
-                        });
-                    };
-
-                $scope.containsFormLink = function (message) {
-
-                    if (message.MetaData === null || message.MetaData === undefined || !(message.MetaData.constructor === Array)) {
-                        return false;
-                    }
-
-                    if (message.Form != null || message.Form != undefined) {
+            $scope.setConversation = function () {
+                // TODO: Handle if conversation is not in dataService?
+                dataService.conversations.some(function (conversation) {
+                    if (conversation.ConversationId === $scope.conversationId) {
+                        $scope.conversation = conversation;
                         return true;
                     }
+                });
+            };
 
-                    var found = false;
+            $scope.setConversation();
 
-                    message.MetaData.some(function (element) {
-                        if (element.contentType === 'application/vnd.bosbec.form') {
-                            message.Form = element;
-                            message.Form.Value = JSON.parse(element.value);
-                            message.Form.Url = "http://m.mobileresponse.se/?formId=" + message.Form.Value.id;
-                            found = true;
-                            return true;
+            $scope.openDefaultBrowserWindow = function (url) {
+                // $window.open(url);
+
+                logService.log("openDefaultBrowserwindow called with url: " + url);
+
+                var modalInstance = $uibModal.open({
+                    animation: $scope.animationsEnabled,
+                    appendTo: '#content',
+                    templateUrl: 'template/forms-modal.html',
+                    controller: 'viewFormsCtrl',
+                    resolve: {
+                        url: function () {
+                            return url;
                         }
-                    });
-
-                    return found;
-                };
-
-                $scope.reply = function () {
-
-                    if ($scope.currentReplyMessage === null || $scope.currentReplyMessage === '' || $scope.currentReplyMessage === undefined) {
-                        return;
                     }
 
-                    function guid() {
-                        function s4() {
-                            return Math.floor((1 + Math.random()) * 0x10000)
-                              .toString(16)
-                              .substring(1);
-                        }
-                        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-                          s4() + '-' + s4() + s4() + s4();
-                    }
+                });
+            };
 
-                    var msg = {
-                        MessageId: guid(),
-                        ConversationId: $scope.conversationId,
-                        CreatedOn: new Date().toJSON(),
-                        Content: $scope.currentReplyMessage,
-                        Author: $scope.userId,
-                        Failed: false,
-                        tmpMessage: true,
-                        Retrying: false
-                    };
+            $scope.containsFormLink = function (message) {
 
-                    if ($scope.conversations === undefined){
-                        $scope.conversations = {};
-                        $scope.conversations.Messages = [];
-                    }
-                    $scope.conversation.Messages.push(msg);
-
-                    // ugly solution, should be a directive
-                    $timeout(function () {
-                        var scroller = document.getElementById('conversationMessagesBody');
-                        scroller.scrollTop = scroller.scrollHeight;
-                    }, 0, false);
-
-                    var req = {
-                        method: 'POST',
-                        url: tokenService.currentAppApiUrl + 'app/conversations/reply',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        data: {
-                            Data: {
-                                ConversationId: $scope.conversationId,
-                                Message: $scope.currentReplyMessage,
-                                MetaData: []
-                            },
-                            AuthenticationToken: tokenService.getAppAuthToken()
-                        }
-                    };
-
-                    $scope.currentReplyMessage = null;
-
-                    var promise = tokenService.httpPost(req);
-
-                    promise.then(
-                        function (success) {
-
-                            if (success.errors.length > 0) {
-                                for (var j = 0; j < success.errors.length; j++) {
-                                    logService.error(success.errors[j].errorMessage);
-                                }
-                                msg.Failed = true;
-                                return;
-                            }
-
-                            var foundIndex = -1;
-
-                            for (var i = 0; i < $scope.conversation.Messages.length; i++) {
-                                var msgInArray = $scope.conversation.Messages[i];
-                                if (msgInArray.MessageId === msg.MessageId) {
-                                    foundIndex = i;
-                                    continue;
-                                }
-                            }
-
-                            $scope.conversation.Messages[foundIndex].MessageId = success.data.messageId;
-                            $scope.conversation.Messages[foundIndex].CreatedOn = success.data.createdOn;
-                            $scope.conversation.Messages[foundIndex].ParticipantId = success.data.participantId;
-                            $scope.conversation.Messages[foundIndex].ConversationId = success.data.conversationId;
-                            $scope.conversation.Messages[foundIndex].AuthorDisplayName = success.data.authorDisplayName;
-                            $scope.conversation.Messages[foundIndex].Author = success.data.authorId;
-                            $scope.conversation.Messages[foundIndex].Author = success.data.authorId;
-                            $scope.conversation.Messages[foundIndex].tmpMessage = false;
-
-                            var fiveMinutesAgo = new Date();
-                            fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5);
-                            var args = {
-                                PeriodStart: fiveMinutesAgo,
-                                PeriodEnd: new Date().toJSON(),
-                                PageIndex: 0,
-                                PageSize: 50
-                            };
-                            $rootScope.$broadcast('download-messages', args);
-                        },
-                        function (error) {
-                            msg.Failed = true;
-                            logService.log('Could not reply to conversation.');
-                        });
+                if (message.MetaData === null || message.MetaData === undefined || !(message.MetaData.constructor === Array)) {
+                    return false;
                 }
 
-                $scope.resendMessage = function (message) {
-
-                    message.Retrying = true;
-
-                    var req = {
-                        method: 'POST',
-                        url: tokenService.currentAppApiUrl + 'app/conversations/reply',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        data: {
-                            Data: {
-                                ConversationId: $scope.conversationId,
-                                Message: message.Content,
-                                MetaData: []
-                            },
-                            AuthenticationToken: tokenService.getAppAuthToken()
-                        }
-                    };
-
-                    var promise = tokenService.httpPost(req);
-
-                    promise.then(
-                        function (success) {
-
-                            message.Retrying = false;
-
-                            if (success.errors.length > 0) {
-                                for (var j = 0; j < success.errors.length; j++) {
-                                    logService.error(success.errors[j].errorMessage);
-                                }
-                                message.Failed = true;
-                                return;
-                            }
-
-                            var foundIndex = -1;
-
-                            for (var i = 0; i < $scope.conversation.Messages.length; i++) {
-                                var msgInArray = $scope.conversation.Messages[i];
-                                if (msgInArray.MessageId === message.MessageId) {
-                                    foundIndex = i;
-                                    continue;
-                                }
-                            }
-
-                            $scope.conversation.Messages[foundIndex].MessageId = success.data.messageId;
-                            $scope.conversation.Messages[foundIndex].CreatedOn = success.data.createdOn;
-                            $scope.conversation.Messages[foundIndex].ParticipantId = success.data.participantId;
-                            $scope.conversation.Messages[foundIndex].ConversationId = success.data.conversationId;
-                            $scope.conversation.Messages[foundIndex].AuthorDisplayName = success.data.authorDisplayName;
-                            $scope.conversation.Messages[foundIndex].Author = success.data.authorId;
-                            $scope.conversation.Messages[foundIndex].tmpMessage = false;
-                            $scope.conversation.Messages[foundIndex].Failed = false;
-
-                            var fiveMinutesAgo = new Date();
-                            fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5);
-                            var args = {
-                                PeriodStart: fiveMinutesAgo,
-                                PeriodEnd: new Date().toJSON(),
-                                PageIndex: 0,
-                                PageSize: 50
-                            };
-
-                            //$timeout(function () {
-                            //    var scroller = document.getElementById('conversationMessagesBody');
-                            //    scroller.scrollTop = scroller.scrollHeight;
-                            //}, 0, false);
-
-                            $rootScope.$broadcast('download-messages', args);
-                        },
-                        function (error) {
-                            message.Retrying = false;
-                            msg.Failed = true;
-                            logService.log('Could not reply to conversation.');
-                        });
+                if (message.Form != null || message.Form != undefined) {
+                    return true;
                 }
 
-                $scope.$watch('conversation.Messages[0]', function (newValue, oldValue) {
-                    $scope.unseenMessages = $scope.unseenMessages || !$scope.atBottom;
+                var found = false;
+
+                message.MetaData.some(function (element) {
+                    if (element.contentType === 'application/vnd.bosbec.form') {
+                        message.Form = element;
+                        message.Form.Value = JSON.parse(element.value);
+                        message.Form.Url = "http://m.mobileresponse.se/?formId=" + message.Form.Value.id;
+                        found = true;
+                        return true;
+                    }
                 });
 
-                $scope.goToBottom = function() {
-                    var viewBody = $("#conversationMessagesBody");
-                    viewBody[0].scrollTop = viewBody[0].scrollHeight;
+                return found;
+            };
+
+            $scope.reply = function () {
+
+                if ($scope.currentReplyMessage === null || $scope.currentReplyMessage === '' || $scope.currentReplyMessage === undefined) {
+                    return;
                 }
 
-                /**
-                 * Loads older messages when reaching the top
-                 * Will also set scroll the the new messages are added above the screen
-                 */
-                $scope.$watch("scrollTop",
-                    function (value, lastValue, sender) {
-                        if (value > lastValue ||
-                            $scope.isLoading) {
+                function guid() {
+                    function s4() {
+                        return Math.floor((1 + Math.random()) * 0x10000)
+                          .toString(16)
+                          .substring(1);
+                    }
+                    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                      s4() + '-' + s4() + s4() + s4();
+                }
+
+                var msg = {
+                    MessageId: guid(),
+                    ConversationId: $scope.conversationId,
+                    CreatedOn: new Date().toJSON(),
+                    Content: $scope.currentReplyMessage,
+                    Author: $scope.userId,
+                    Failed: false,
+                    tmpMessage: true,
+                    Retrying: false
+                };
+
+                if ($scope.conversations === undefined) {
+                    $scope.conversations = {};
+                    $scope.conversations.Messages = [];
+                }
+                $scope.conversation.Messages.push(msg);
+
+                // ugly solution, should be a directive
+                $timeout(function () {
+                    var scroller = document.getElementById('conversationMessagesBody');
+                    scroller.scrollTop = scroller.scrollHeight;
+                }, 0, false);
+
+                var req = {
+                    method: 'POST',
+                    url: tokenService.currentAppApiUrl + 'app/conversations/reply',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    data: {
+                        Data: {
+                            ConversationId: $scope.conversationId,
+                            Message: $scope.currentReplyMessage,
+                            MetaData: []
+                        },
+                        AuthenticationToken: tokenService.getAppAuthToken()
+                    }
+                };
+
+                $scope.currentReplyMessage = null;
+
+                var promise = tokenService.httpPost(req);
+
+                promise.then(
+                    function (success) {
+
+                        if (success.errors.length > 0) {
+                            for (var j = 0; j < success.errors.length; j++) {
+                                logService.error(success.errors[j].errorMessage);
+                            }
+                            msg.Failed = true;
                             return;
                         }
 
-                        if (!$scope.fetchingMore && value < 200) {
-                            logService.log('Load more');
-                            var viewBody = $("#conversationMessagesBody");
-                            $scope.fetchingMore = true;
-                            var heightBeforeLoad = viewBody[0].scrollHeight;
-                            $scope.loadMoreForConversation()
-                                .then(function () {
-                                    setTimeout(function () {
-                                        var scrollTo = viewBody[0].scrollHeight - heightBeforeLoad - value;
-                                        logService.log('Setting scroll to: ' + scrollTo + '. Before load: ' + heightBeforeLoad + '. New height: ' + viewBody[0].scrollHeight);
-                                        viewBody.scrollTop(scrollTo);
-                                    }, 300);
-                                });
-                        } else if ($scope.fetchingMore && value > 200) {
-                            $scope.fetchingMore = false;
-                        }
-                    });
+                        var foundIndex = -1;
 
-                $scope.formatMode = function (dateString) {
-                    var then = angularMoment(dateString + "+00:00");
-                    var now = angularMoment();
-                    if (now.subtract(1, 'day') < then) {
-                        return 1;
-                    } else if (now.subtract(1, 'year') < then) {
-                        return 2;
-                    } else {
-                        return 3;
-                    }
-                }
-
-                $scope.filterOutOwnUser = function (id) {
-                    if (id === $scope.userId) {
-                        return false;
-                    } else {
-                        return true;
-                    }
-                }
-
-                $scope.format = function (dateString) {
-                    var parsed = angularMoment(dateString + "+00:00");
-                    var returnV = parsed.format('YYYY-MM-DD HH:mm:ss Z');
-                    return returnV;
-                }
-
-                $scope.loadMoreForConversation = function () {
-                    $scope.scrollBottomEnabled = false;
-                  //  logService.log("scrollBottomEnabled: "+ $scope.scrollBottomEnabled);
-                    $scope.pageIndex = Math.floor($scope.conversation.Messages.length / $scope.pageSize);
-                    return dataService.loadMessages($scope.conversation.ConversationId, $scope.pageIndex, $scope.pageSize);
-                }
-
-                $scope.viewConversationInfo = function (size) {
-
-                    $uibModal.open({
-                        animation: $scope.animationsEnabled,
-                        templateUrl: 'template/conversation-info-modal.html',
-                        controller: 'conversationInfoCtrl',
-                        size: size,
-                        resolve: {
-                            conversationInfo: function () {
-
-                                var participants = [];
-
-                                $scope.conversation.Participants.some(function (participant) {
-                                    $scope.appUsers.some(function (appUser) {
-                                        if (participant === appUser.UserId) {
-                                            participants.push(appUser);
-                                            return true;
-                                        }
-                                    });
-                                });
-
-                                return { Participants: participants, ConversationId: $scope.conversationId };
+                        for (var i = 0; i < $scope.conversation.Messages.length; i++) {
+                            var msgInArray = $scope.conversation.Messages[i];
+                            if (msgInArray.MessageId === msg.MessageId) {
+                                foundIndex = i;
+                                continue;
                             }
                         }
+
+                        $scope.conversation.Messages[foundIndex].MessageId = success.data.messageId;
+                        $scope.conversation.Messages[foundIndex].CreatedOn = success.data.createdOn;
+                        $scope.conversation.Messages[foundIndex].ParticipantId = success.data.participantId;
+                        $scope.conversation.Messages[foundIndex].ConversationId = success.data.conversationId;
+                        $scope.conversation.Messages[foundIndex].AuthorDisplayName = success.data.authorDisplayName;
+                        $scope.conversation.Messages[foundIndex].Author = success.data.authorId;
+                        $scope.conversation.Messages[foundIndex].Author = success.data.authorId;
+                        $scope.conversation.Messages[foundIndex].tmpMessage = false;
+
+                        var fiveMinutesAgo = new Date();
+                        fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5);
+                        var args = {
+                            PeriodStart: fiveMinutesAgo,
+                            PeriodEnd: new Date().toJSON(),
+                            PageIndex: 0,
+                            PageSize: 50
+                        };
+                        $rootScope.$broadcast('download-messages', args);
+                    },
+                    function (error) {
+                        msg.Failed = true;
+                        logService.log('Could not reply to conversation.');
                     });
-                };
-
-                $scope.getAvatar = function (appUserId) {
-
-                    var found = null;
-
-                    for (var i = 0; i < $scope.appUsers.length; i++) {
-                        var appUser = $scope.appUsers[i];
-
-                        if (appUser.id === appUserId) {
-                            found = $scope.appUsers[i].avatar;
-                        }
-                    }
-
-                    if (found != null) {
-                        return found;
-                    }
-                };
-
-                $scope.getUsername = function (appUserId) {
-
-                    if (appUserId === $scope.userId) {
-                        return 'you';
-                    }
-
-                    var displayName = '';
-
-                    $scope.appUsers.some(function (appUser) {
-                        if (appUser.id === appUserId) {
-                            displayName = appUser.displayName;
-                        }
-                    });
-
-                    return displayName;
-                };
-
-                // This is required for ng-repeat order by date
-                $scope.sortMessage = function (message) {
-                    $scope.scrollBottomEnabled = false;
-                  //  logService.log("scrollBottomEnabled: "+ $scope.scrollBottomEnabled);
-                    var date = new Date(message.CreatedOn);
-                    return date;
-                };
             }
+
+            $scope.resendMessage = function (message) {
+
+                message.Retrying = true;
+
+                var req = {
+                    method: 'POST',
+                    url: tokenService.currentAppApiUrl + 'app/conversations/reply',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    data: {
+                        Data: {
+                            ConversationId: $scope.conversationId,
+                            Message: message.Content,
+                            MetaData: []
+                        },
+                        AuthenticationToken: tokenService.getAppAuthToken()
+                    }
+                };
+
+                var promise = tokenService.httpPost(req);
+
+                promise.then(
+                    function (success) {
+
+                        message.Retrying = false;
+
+                        if (success.errors.length > 0) {
+                            for (var j = 0; j < success.errors.length; j++) {
+                                logService.error(success.errors[j].errorMessage);
+                            }
+                            message.Failed = true;
+                            return;
+                        }
+
+                        var foundIndex = -1;
+
+                        for (var i = 0; i < $scope.conversation.Messages.length; i++) {
+                            var msgInArray = $scope.conversation.Messages[i];
+                            if (msgInArray.MessageId === message.MessageId) {
+                                foundIndex = i;
+                                continue;
+                            }
+                        }
+
+                        $scope.conversation.Messages[foundIndex].MessageId = success.data.messageId;
+                        $scope.conversation.Messages[foundIndex].CreatedOn = success.data.createdOn;
+                        $scope.conversation.Messages[foundIndex].ParticipantId = success.data.participantId;
+                        $scope.conversation.Messages[foundIndex].ConversationId = success.data.conversationId;
+                        $scope.conversation.Messages[foundIndex].AuthorDisplayName = success.data.authorDisplayName;
+                        $scope.conversation.Messages[foundIndex].Author = success.data.authorId;
+                        $scope.conversation.Messages[foundIndex].tmpMessage = false;
+                        $scope.conversation.Messages[foundIndex].Failed = false;
+
+                        var fiveMinutesAgo = new Date();
+                        fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5);
+                        var args = {
+                            PeriodStart: fiveMinutesAgo,
+                            PeriodEnd: new Date().toJSON(),
+                            PageIndex: 0,
+                            PageSize: 50
+                        };
+
+                        //$timeout(function () {
+                        //    var scroller = document.getElementById('conversationMessagesBody');
+                        //    scroller.scrollTop = scroller.scrollHeight;
+                        //}, 0, false);
+
+                        $rootScope.$broadcast('download-messages', args);
+                    },
+                    function (error) {
+                        message.Retrying = false;
+                        msg.Failed = true;
+                        logService.log('Could not reply to conversation.');
+                    });
+            }
+
+            $scope.$watch('conversation.Messages[0]', function (newValue, oldValue) {
+                $scope.unseenMessages = $scope.unseenMessages || !$scope.atBottom;
+            });
+
+            $scope.goToBottom = function () {
+                var viewBody = $("#conversationMessagesBody");
+                viewBody[0].scrollTop = viewBody[0].scrollHeight;
+            }
+
+            /**
+             * Loads older messages when reaching the top
+             * Will also set scroll the the new messages are added above the screen
+             */
+            $scope.$watch("scrollTop",
+                function (value, lastValue, sender) {
+                    if (value > lastValue ||
+                        $scope.isLoading) {
+                        return;
+                    }
+
+                    if (!$scope.fetchingMore && value < 200) {
+                        logService.log('Load more');
+                        var viewBody = $("#conversationMessagesBody");
+                        $scope.fetchingMore = true;
+                        var heightBeforeLoad = viewBody[0].scrollHeight;
+                        $scope.loadMoreForConversation()
+                            .then(function () {
+                                setTimeout(function () {
+                                    var scrollTo = viewBody[0].scrollHeight - heightBeforeLoad - value;
+                                    logService.log('Setting scroll to: ' + scrollTo + '. Before load: ' + heightBeforeLoad + '. New height: ' + viewBody[0].scrollHeight);
+                                    viewBody.scrollTop(scrollTo);
+                                }, 300);
+                            });
+                    } else if ($scope.fetchingMore && value > 200) {
+                        $scope.fetchingMore = false;
+                    }
+                });
+
+            $scope.formatMode = function (dateString) {
+                var then = angularMoment(dateString + "+00:00");
+                var now = angularMoment();
+                if (now.subtract(1, 'day') < then) {
+                    return 1;
+                } else if (now.subtract(1, 'year') < then) {
+                    return 2;
+                } else {
+                    return 3;
+                }
+            }
+
+            $scope.filterOutOwnUser = function (id) {
+                if (id === $scope.userId) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+
+            $scope.format = function (dateString) {
+                var parsed = angularMoment(dateString + "+00:00");
+                var returnV = parsed.format('YYYY-MM-DD HH:mm:ss Z');
+                return returnV;
+            }
+
+            $scope.loadMoreForConversation = function () {
+                $scope.scrollBottomEnabled = false;
+                //  logService.log("scrollBottomEnabled: "+ $scope.scrollBottomEnabled);
+                $scope.pageIndex = Math.floor($scope.conversation.Messages.length / $scope.pageSize);
+                return dataService.loadMessages($scope.conversation.ConversationId, $scope.pageIndex, $scope.pageSize);
+            }
+
+            $scope.viewConversationInfo = function (size) {
+
+                $uibModal.open({
+                    animation: $scope.animationsEnabled,
+                    templateUrl: 'template/conversation-info-modal.html',
+                    controller: 'conversationInfoCtrl',
+                    size: size,
+                    resolve: {
+                        conversationInfo: function () {
+
+                            var participants = [];
+
+                            $scope.conversation.Participants.some(function (participant) {
+                                $scope.appUsers.some(function (appUser) {
+                                    if (participant === appUser.UserId) {
+                                        participants.push(appUser);
+                                        return true;
+                                    }
+                                });
+                            });
+
+                            return { Participants: participants, ConversationId: $scope.conversationId };
+                        }
+                    }
+                });
+            };
+
+            $scope.getAvatar = function (appUserId) {
+
+                var found = null;
+
+                for (var i = 0; i < $scope.appUsers.length; i++) {
+                    var appUser = $scope.appUsers[i];
+
+                    if (appUser.id === appUserId) {
+                        found = $scope.appUsers[i].avatar;
+                    }
+                }
+
+                if (found != null) {
+                    return found;
+                }
+            };
+
+            $scope.getUsername = function (appUserId) {
+
+                if (appUserId === $scope.userId) {
+                    return 'you';
+                }
+
+                var displayName = '';
+
+                $scope.appUsers.some(function (appUser) {
+                    if (appUser.id === appUserId) {
+                        displayName = appUser.displayName;
+                    }
+                });
+
+                return displayName;
+            };
+
+            // This is required for ng-repeat order by date
+            $scope.sortMessage = function (message) {
+                $scope.scrollBottomEnabled = false;
+                //  logService.log("scrollBottomEnabled: "+ $scope.scrollBottomEnabled);
+                var date = new Date(message.CreatedOn);
+                return date;
+            };
+        }
     ])
-    .controller('viewFormsCtrl', function ($scope, $uibModalInstance,$sce, url) {
+    .controller('viewFormsCtrl', function ($scope, $uibModalInstance, $sce, url) {
 
-            $scope.url = $sce.trustAsResourceUrl(url);
+        $scope.url = $sce.trustAsResourceUrl(url);
 
-            logService.log("forms modal open with url: "+ url);
+        logService.log("forms modal open with url: " + url);
 
         $scope.close = function () {
             $uibModalInstance.dismiss('cancel');
         };
 
-        })
+    })
 
             .controller('conversationInfoCtrl', [
             '$scope', '$http', 'tokenService', 'contactsService', 'conversationInfo', '$uibModalInstance', 'communicationService', function ($scope, $http, tokenService, contactsService, conversationInfo, $uibModalInstance, communicationService) {
@@ -589,4 +586,4 @@ angular.module('conversations', [])
                     $uibModalInstance.dismiss('cancel');
                 };
             }
-        ])
+            ])

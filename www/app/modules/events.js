@@ -250,7 +250,6 @@ angular.module('event', [])
         // ------------------------------------
         // Application events 
         // ------------------------------------
-
         $scope.$on('logged-in', function (event, args) {
 
             logService.logMessage("Event.. logged-in");
@@ -291,7 +290,6 @@ angular.module('event', [])
         // ------------------------------------
         // Factory-forwarded events 
         // ------------------------------------
-
         $scope.$on('new-messages', function (event, args) {
             messageRepository.on(event, args);
         });
@@ -315,4 +313,8 @@ angular.module('event', [])
         $scope.$on('messages-added', function (event, args) {
             dataService.on(event, args);
         });
+
+        // ------------------------------------
+        // Log/debug events 
+        // ------------------------------------
     }]);

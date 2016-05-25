@@ -463,7 +463,7 @@ angular.module('services', [])
                                     resolve();
                                 });
                             } else {
-                                factory.onFocusOrResume();
+                                //factory.onFocusOrResume();
                                 resolve();
                             }
                         });

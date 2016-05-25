@@ -139,7 +139,7 @@ angular.module('logging', [])
                 return $q(function (resolve, reject) {
                     db.transaction(function (tx) {
                         tx.executeSql(
-                            'INSERT INTO Logs (CreatedOn, Message, Metadata, Level) VALUES (?, ?, ?, ?)',
+                            'INSERT INTO Logs (createdOn, message, metadata, level) VALUES (?, ?, ?, ?)',
                             [
                                 message.createdOn,
                                 message.text,
@@ -240,8 +240,13 @@ angular.module('logging', [])
                         'SELECT * FROM Logs ORDER BY CreatedOn DESC', [],
                         function (trans, result) {
                             var rows = getRows(result);
+                            var logs = [];
 
-                            resolve(rows);
+                            rows.some(function(row) {
+                                logs.push({ text: row.Message, createdOn: row.CreatedOn, metadata: row.Metadata, level: row.Level });
+                            });
+
+                            resolve(logs);
                         },
                         function (t, error) {
                             reject(error);
