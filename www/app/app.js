@@ -33,7 +33,6 @@ var mobileresponseWebbApp = angular.module('administratorApp', [
         fastClick.attach(document.body);
     }
 
-
     databaseService.init().then(function () {
         contactsService.init();
         messageRepository.init();

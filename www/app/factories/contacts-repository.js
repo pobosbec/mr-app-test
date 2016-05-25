@@ -38,9 +38,10 @@ angular.module('contacts', [])
 
             if (found != null) {
                 return found;
+            } else {
+                return '..';
             }
 
-            return '..';
         };
 
         factory.init = function init() {
@@ -48,11 +49,11 @@ angular.module('contacts', [])
             db = databaseService.db;
             var promise = factory.getAppUsers();
             promise.then(function (success) {
-                success.some(function(appUser) {
+                success.some(function (appUser) {
                     factory.appUsers.push(appUser);
                 });
             }, function (error) {
-                
+
             });
         }
 

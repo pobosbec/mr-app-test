@@ -494,7 +494,7 @@ angular.module('services', [])
                         factory.quickLoad();
                         break;
                     case 'messages-added':
-                        var messagesPromise = messageRepository.getMessagesByTime(0, 50);
+                        var messagesPromise = messageRepository.getMessagesByTime(0, 100);
 
                         messagesPromise.then(
                             function (gotMessages) {
