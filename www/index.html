@@ -182,6 +182,11 @@
         if (app) {
             // PhoneGap application
             window.isPhoneGap = true;
+            if ('addEventListener' in document) {
+                document.addEventListener('DOMContentLoaded', function () {
+                    FastClick.attach(document.body);
+                }, false);
+            }
             loadCordova();
         } else {
             // Web page
@@ -226,10 +231,6 @@
                     StatusBar.overlaysWebView(false);
                     console.log("Device ready initiating Angular");
                     angular.bootstrap(document, ['administratorApp']);
-                }, false);
-
-                document.addEventListener('DOMContentLoaded', function () {
-                    FastClick.attach(document.body);
                 }, false);
             }
         }
