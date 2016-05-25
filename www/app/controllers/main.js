@@ -14,6 +14,8 @@ mobileresponseWebbApp
             }
         }
 
+        $scope.debug = true;
+
         $scope.logoutConfirm = function() {
             if(isPhoneGap){
                 console.log("Logout clicked on isPhoneGap device, calling notification.confirm");
