@@ -130,11 +130,6 @@ angular.module('services', [])
                     var messagesFromDatabasePromise = messageRepository.getMessagesFromLocalDatabase(messagesFromApi[0].conversationId, 10, 0);
 
                     messagesFromDatabasePromise.then(function (messagesFromDatabase) {
-                        //var intersect = messagesFromDatabase.some(function (messageFromDb) {
-                        //    return messagesFromApi.some(function (messageFromApi) {
-                        //        return messageFromDb.MessageId === messageFromApi.messageId;
-                        //    });
-                        //});
                         var intersect = true;
 
                         if (messagesFromApi.length !== messagesFromDatabase.length) {
