@@ -115,8 +115,21 @@ angular.module('event', [])
                         if (conversationIds.length === 1) {
                             var convoId = conversationIds[0];
                             resetData();
+                            dataService.conversations.some(function(conversation) {
+                                if (conversation.ConversationId === convoId) {
+                                    dataService.syncConversation(conversation);
+                                }
+                            });
                             $location.path('/conversation/' + convoId);
                         } else if (conversationIds.length > 1) {
+
+                            dataService.conversations.some(function (conversation) {
+                                conversationIds.some(function(id) {
+                                    if (conversation.ConversationId === id) {
+                                        dataService.syncConversation(conversation);
+                                    }
+                                });
+                            });
 
                             var sameConversation = false;
 
@@ -142,7 +155,7 @@ angular.module('event', [])
                     }
                 }
             }, 10);
-            //$rootScope.$broadcast('sync-conversations', args);
+            $rootScope.$broadcast('sync-conversations', args);
         });
 
         $scope.$on('on-blur', function (event, args) {
