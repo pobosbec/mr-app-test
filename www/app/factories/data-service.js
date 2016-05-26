@@ -141,8 +141,14 @@ angular.module('services', [])
                             intersect = false;
                         }
 
+                        factory.sortMessages(messagesFromApi);
+                        messagesFromDatabase.some(function(message) {
+                            message.createdOn = message.CreatedOn;
+                        });
+                        factory.sortMessages(messagesFromDatabase);
+
                         for (var i = 0; i < messagesFromApi.length; i++) {
-                            if (messagesFromDatabase[i].MessageId === messagesFromApi[i].messageId) {
+                            if (messagesFromDatabase[i].MessageId !== messagesFromApi[i].messageId) {
                                 intersect = false;
                             }
                         }
