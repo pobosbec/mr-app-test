@@ -259,9 +259,10 @@ angular.module('event', [])
                 $rootScope.$broadcast('push-service-initialized', event);
             }
             databaseService.on(event, args).then(function (success) {
+                logService.info('Database service inititated.');
                 dataService.on(event, args);
                 communicationService.on(event, args);
-            }, function(error) {
+            }, function (error) {
                 logService.error(error);
             });
         });

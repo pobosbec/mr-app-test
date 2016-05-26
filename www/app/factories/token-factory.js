@@ -64,6 +64,35 @@ angular.module('token', [])
             refreshTokenIntervall = setInterval(refreshTokenFunction, (15 * 60 * 1000));
         };
 
+        factory.isAuthenticated = function() {
+            return $q(function (resolve, reject) {
+                var req = {
+                    method: 'POST',
+                    ignoreLoadingBar: true,
+                    url: factory.currentAppApiUrl + 'app/is-token-valid',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    data: {
+                        "Data": {},
+                        "AuthenticationToken": userDetails.token,
+                        "Tags": [$rootScope.version]
+                    }
+                };
+
+                var promise = factory.httpPost(req);
+                promise.then(function (greeting) {
+                    if (greeting.status && greeting.status.toLocaleLowerCase() !== "unauthorized") {
+                        resolve('authenticated');
+                    } else {
+                        reject('not authenticated');
+                    }
+                }, function (reason) {
+                    reject('not authenticated');
+                });
+            });
+        }
+
         $rootScope.logout = function () {
             //TODO abandon function
             $rootScope.$broadcast("logged-out");

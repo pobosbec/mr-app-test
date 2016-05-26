@@ -19,11 +19,18 @@
                     <input type="text" ng-model="selected" uib-typeahead="user as user.displayName for user in users | filter:{displayName:$viewValue}" typeahead-on-select="onSelect($item, $model, $label)" class="form-control" placeholder="Search users..">
                 </div>
             </div>
-            <div class="wcc-inner" >
+            <div class="wcc-inner">
                 <textarea class="wcci-text" ng-model="create.textarea" data-auto-size placeholder="Message.." ng-keyup="$event.keyCode == 13 && createMsg(create.receiver,create.textarea)"></textarea>
             </div>
+            <div class="wcc-inner" ng-if="errors.length > 0" style="margin-top: 10px">
+                <ul>
+                    <li ng-repeat="error in errors" style="color: red; font-weight: bold">
+                        {{error}}
+                    </li>
+                </ul>
+            </div>
             <div class="m-t-15">
-                <button class="btn btn-sm btn-primary btnCancel" ng-click="sendMessage(create.textarea)">Send</button>
+                <button class="btn btn-sm btn-primary" ng-click="sendMessage(create.textarea)">Send</button>
                 <button class="btn btn-sm btn-link" data-ng-click="cancel()">Cancel</button>
             </div>
         </div>

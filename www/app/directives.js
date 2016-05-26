@@ -5,11 +5,11 @@ mobileresponseWebbApp
     // MAINMENU COLLAPSE
     // =========================================================================
     .directive("outsideClick", [
-        '$document', '$parse', function ($document, $parse) {
+        '$document', '$parse', function($document, $parse) {
             return {
-                link: function ($scope, $element, $attributes) {
+                link: function($scope, $element, $attributes) {
                     var scopeExpression = $attributes.outsideClick,
-                        onDocumentClick = function (event) {
+                        onDocumentClick = function(event) {
                             // For declaring elements that are treated as "inside" without actually being inside.
                             var ignoreOutsideClick = false;
                             if (event.target.dataset["treatAsChildWhenOutside"] === "true" || $(event.target).parents('*[data-treat-as-child-when-outside="true"]').length) {
@@ -25,7 +25,7 @@ mobileresponseWebbApp
 
                     $document.on("click", onDocumentClick);
 
-                    $element.on('$destroy', function () {
+                    $element.on('$destroy', function() {
                         $document.off("click", onDocumentClick);
                     });
                 }
@@ -36,23 +36,23 @@ mobileresponseWebbApp
     // =========================================================================
     // MAINMENU COLLAPSE
     // =========================================================================
-    .directive('toggleSidebar', function () {
+    .directive('toggleSidebar', function() {
         return {
             restrict: 'A',
             scope: {
                 modelLeft: '=',
                 modelRight: '='
             },
-            link: function (scope, element, attr) {
-                element.on('click', function () {
+            link: function(scope, element, attr) {
+                element.on('click', function() {
 
                     if (element.data('target') === 'mainmenu') {
                         if (scope.modelLeft === false) {
-                            scope.$apply(function () {
+                            scope.$apply(function() {
                                 scope.modelLeft = true;
                             })
                         } else {
-                            scope.$apply(function () {
+                            scope.$apply(function() {
                                 scope.modelLeft = false;
                             })
                         }
@@ -60,11 +60,11 @@ mobileresponseWebbApp
 
                     if (element.data('target') === 'chat') {
                         if (scope.modelRight === false) {
-                            scope.$apply(function () {
+                            scope.$apply(function() {
                                 scope.modelRight = true;
                             })
                         } else {
-                            scope.$apply(function () {
+                            scope.$apply(function() {
                                 scope.modelRight = false;
                             });
                         }
@@ -77,11 +77,11 @@ mobileresponseWebbApp
     // =========================================================================
     // SUBMENU TOGGLE
     // =========================================================================
-    .directive('toggleSubmenu', function () {
+    .directive('toggleSubmenu', function() {
         return {
             restrict: 'A',
-            link: function (scope, element, attrs) {
-                element.click(function () {
+            link: function(scope, element, attrs) {
+                element.click(function() {
                     element.next().slideToggle(200);
                     element.parent().toggleClass('toggled');
                 });
@@ -92,7 +92,7 @@ mobileresponseWebbApp
     // =========================================================================
     // IMAGE
     // =========================================================================
-    .directive('fullSizeImageDiv', function () {
+    .directive('fullSizeImageDiv', function() {
         function link(scope, element) {
 
         }
@@ -100,7 +100,7 @@ mobileresponseWebbApp
         return {
             restrict: 'AE',
             link: link,
-            controller: function ($scope, $element) {
+            controller: function($scope, $element) {
                 var theImageElement = $element.find('#theImage');
                 //alert($element);
                 //alert($element.style.height);
@@ -116,21 +116,21 @@ mobileresponseWebbApp
     // =========================================================================
     // STOP PROPAGATION
     // =========================================================================
-    .directive('stopPropagate', function () {
+    .directive('stopPropagate', function() {
         return {
             restrict: 'C',
-            link: function (scope, element) {
-                element.on('click', function (event) {
+            link: function(scope, element) {
+                element.on('click', function(event) {
                     event.stopPropagation();
                 });
             }
         }
     })
-    .directive('aPrevent', function () {
+    .directive('aPrevent', function() {
         return {
             restrict: 'C',
-            link: function (scope, element) {
-                element.on('click', function (event) {
+            link: function(scope, element) {
+                element.on('click', function(event) {
                     event.preventDefault();
                 });
             }
@@ -140,7 +140,7 @@ mobileresponseWebbApp
 // =========================================================================
 // Strong password
 // =========================================================================
-    .directive("strongPassword", function () {
+    .directive("strongPassword", function() {
         return {
 
             // limit usage to argument only
@@ -150,7 +150,7 @@ mobileresponseWebbApp
             require: "ngModel",
 
             // create linking function and pass in our NgModelController as a 4th argument
-            link: function (scope, elem, attrs, ctrl) {
+            link: function(scope, elem, attrs, ctrl) {
 
                 // please note you can name your function & argument anything you like
                 function customValidator(ngModelValue) {
@@ -213,7 +213,7 @@ mobileresponseWebbApp
 // =========================================================================
 // Username validator
 // =========================================================================
-    .directive("usernameValidator", function () {
+    .directive("usernameValidator", function() {
         return {
 
             // limit usage to argument only
@@ -222,7 +222,7 @@ mobileresponseWebbApp
             require: "ngModel",
 
             // create linking function and pass in our NgModelController as a 4th argument
-            link: function (scope, elem, attrs, ctrl) {
+            link: function(scope, elem, attrs, ctrl) {
 
                 // please note you can name your function & argument anything you like
                 function customValidator(ngModelValue) {
@@ -261,12 +261,12 @@ mobileresponseWebbApp
     // =========================================================================
     // Focus me
     // =========================================================================
-    .directive('focusMe', function ($timeout) {
+    .directive('focusMe', function($timeout) {
         return {
-            link: function (scope, element, attr) {
-                attr.$observe('focusMe', function (value) {
+            link: function(scope, element, attr) {
+                attr.$observe('focusMe', function(value) {
                     if (value === "true") {
-                        $timeout(function () {
+                        $timeout(function() {
                             element[0].focus();
                         });
                     }
@@ -274,23 +274,23 @@ mobileresponseWebbApp
             }
         };
     })
-    .directive('goToBottom', function () {
-        return function (scope, element, attrs) {
+    .directive('goToBottom', function() {
+        return function(scope, element, attrs) {
             var el = document.querySelector('#conversationMessagesBody');
             el.scrollTop = el.scrollHeight;
         };
     })
-    .directive('scrollBottom', function () {
+    .directive('scrollBottom', function() {
         return {
             scope: {
                 scrollBottom: "=",
                 scrollBottomEnabled: "="
             },
-            link: function (scope, element) {
+            link: function(scope, element) {
 
-              //  $(element).scrollTop($(element)[0].scrollHeight);
-               // console.log("Scroll bottom enabled: "+scope.scrollBottomEnabled);
-                scope.$watchCollection('scrollBottom', function (newValue) {
+                //  $(element).scrollTop($(element)[0].scrollHeight);
+                // console.log("Scroll bottom enabled: "+scope.scrollBottomEnabled);
+                scope.$watchCollection('scrollBottom', function(newValue) {
                     if (newValue && scope.scrollBottomEnabled) {
                         $(element).scrollTop($(element)[0].scrollHeight);
                     }
@@ -302,13 +302,13 @@ mobileresponseWebbApp
     // =========================================================================
     // Loading spinner
     // =========================================================================
-    .directive('loading', function () {
+    .directive('loading', function() {
         return {
             restrict: 'E',
             replace: true,
             template: '<div class="spinner" style="margin-top: 10px !important; margin-bottom:10px !important;"></div>',
-            link: function (scope, element, attr) {
-                scope.$watch('isLoading', function (val) {
+            link: function(scope, element, attr) {
+                scope.$watch('isLoading', function(val) {
                     if (val)
                         $(element).show();
                     else
@@ -317,14 +317,13 @@ mobileresponseWebbApp
             }
         }
     })
-
-    .directive('scrollPositionCheck', function () {
+    .directive('scrollPositionCheck', function() {
         return {
             restrict: 'A',
-            link: function (scope, element, attrs) {
+            link: function(scope, element, attrs) {
                 var raw = element[0];
 
-                element.bind('scroll', function () {
+                element.bind('scroll', function() {
                     scope.scrollTop = raw.scrollTop;
                     scope.scrollBottom = raw.scrollHeight - raw.offsetHeight - raw.scrollTop;
 
@@ -339,22 +338,21 @@ mobileresponseWebbApp
             }
         };
     })
+    .directive('scrollOnClick', function() {
+        return {
+            restrict: 'A',
+            link: function(scope, $elm, attrs) {
+                var idToScroll = attrs.href;
+                $elm.on('click', function() {
 
-.directive('scrollOnClick', function () {
-    return {
-        restrict: 'A',
-        link: function (scope, $elm, attrs) {
-            var idToScroll = attrs.href;
-            $elm.on('click', function () {
-
-                var $target;
-                if (idToScroll) {
-                    $target = $(idToScroll);
-                } else {
-                    $target = $elm;
-                }
-                $("#conversationMessagesBody").animate({ scrollTop: $target.offset().top }, "slow");
-            });
+                    var $target;
+                    if (idToScroll) {
+                        $target = $(idToScroll);
+                    } else {
+                        $target = $elm;
+                    }
+                    $("#conversationMessagesBody").animate({ scrollTop: $target.offset().top }, "slow");
+                });
+            }
         }
-    }
-});
+    });

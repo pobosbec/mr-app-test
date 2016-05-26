@@ -33,7 +33,7 @@ angular.module('conversations', [])
             };
 
             $scope.getUsername = function (appUserId) {
-                var username = contactsService.getUsername(appUserId);
+                var username = dataService.getUsername(appUserId);
                 return username;
             };
 
@@ -122,6 +122,7 @@ angular.module('conversations', [])
         'dataService',
         '$q',
         'logService',
+        '$location',
         function ($scope,
                   $http,
                   $rootScope,
@@ -136,7 +137,8 @@ angular.module('conversations', [])
                   $window,
                   dataService,
                   $q,
-                  logService) {
+                  logService,
+                  $location) {
             $scope.conversationId = $stateParams.conversationId;
             $scope.userId = tokenService.getAppUserId();
             $scope.conversation = {};
@@ -153,13 +155,26 @@ angular.module('conversations', [])
             $scope.scrollBottomEnabled = true;
 
             $scope.setConversation = function () {
-                // TODO: Handle if conversation is not in dataService?
+
+                if (dataService.conversations === null) {
+                    $location.path('/conversations/');
+                } else if (dataService.conversations.length === 0) {
+                    $location.path('/conversations/');
+                }
+
+                var found = false;
+
                 dataService.conversations.some(function (conversation) {
                     if (conversation.ConversationId === $scope.conversationId) {
+                        found = true;
+                        dataService.syncConversation(conversation);
                         $scope.conversation = conversation;
-                        return true;
                     }
                 });
+
+                if (!found) {
+                    $location.path('/conversations/');
+                }
             };
 
             $scope.setConversation();

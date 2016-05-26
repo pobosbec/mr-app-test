@@ -6,6 +6,7 @@ angular.module('modalcontroll',[])
         $scope.users = [];
         $scope.selectedUsers = [];
         $scope.selected = '';
+        $scope.errors = [];
 
         $scope.getUsers = function(){
             var promise = contactsService.getAppUsers();
@@ -19,12 +20,38 @@ angular.module('modalcontroll',[])
                 });
         };
 
-        $scope.sendMessage = function(message) {
+        $scope.messageSent = false;
+        $scope.messageFailed = false;
+
+        $scope.sendMessage = function (message) {
+            $scope.errors.length = 0;
+            if ($scope.selectedUsers.length === 0) {
+                $scope.errors.push('You must add atleast one recipient.');
+            }
+
+            if (message === null || message === undefined) {
+                $scope.errors.push('You must type a message to send.');
+            }
+
+            if (message != null) {
+                if (message.length === 0) {
+                    $scope.errors.push('You must type a message to send.');
+                }
+            }
+
+            if ($scope.errors.length > 0) {
+                return;
+            }
+
             var userIds = [tokenService.getAppUserId()];
             for(var i = 0; i < $scope.selectedUsers.length; i++){
                 userIds.push($scope.selectedUsers[i].id);
             }
-            communicationService.sendMessage(message, userIds);
+            communicationService.sendMessage(message, userIds).then(function successCallback(response) {
+                $scope.messageSent = true;
+            }, function errorCallback(response) {
+                $scope.messageFailed = true;
+            });;
             $uibModalInstance.close();
         };
 

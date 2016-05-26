@@ -3,7 +3,7 @@
  */
 angular.module('debug', [])
     .controller('debugCtrl', [
-        '$scope', 'logService', function ($scope, logService) {
+        '$scope', 'logService', 'dataService', function ($scope, logService, dataService) {
 
             $scope.capturedLogs = logService.capturedLogs;
 
@@ -28,6 +28,13 @@ angular.module('debug', [])
 
             $scope.clearDatabase = function () {
                 logService.clearLogTable();
+            }
+
+            $scope.printConversationsInMemory = function() {
+                console.table(dataService.conversations);
+                dataService.conversations.some(function(conversation) {
+                    logService.log(new LogObject('Conversation', conversation));
+                });
             }
 
             $scope.$watch("targets.console", function (state) {

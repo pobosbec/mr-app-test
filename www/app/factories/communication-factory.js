@@ -268,12 +268,7 @@ angular.module('communication', [])
 
             // TODO: return promise instead?
 
-            $http(req
-            ).then(function successCallback(response) {
-                logService.log('Message sent.');
-            }, function errorCallback(response) {
-                logService.log('Message could not be sent.');
-            });
+            return $http(req);
         }
 
         var fixAuthorForMessage = function (msg) {

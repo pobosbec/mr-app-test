@@ -14,118 +14,142 @@ angular.module('services', [])
             factory.unProccessedConversations = [];
             factory.unidentifiedAppUsers = [];
             factory.quickLoading = false;
+            factory.isSyncingAppUsers = false;
+            factory.isQuickLoading = false;
+            factory.syncAppUsersCycle = null;
+            factory.userId = tokenService.getAppUserId();
+            factory.isLoggedIn = false;
 
-            function resolveUnidentifiedAppUsers(appUserExistsPromises) {
+            factory.resolveUnidentifiedAppUsers = function () {
 
-                function syncAppUserParticipant(participantId) {
-                    var query = '';
-
-                    for (var i = 0; i < participantId.length; i++) {
-                        if (i === 0) {
-                            query = participantId[i];
-                        } else {
-                            query += ',' + participantId[i];
-                        }
-                    }
-
-                    return contactsService.searchAppUser(query);
+                if (!factory.isLoggedIn) {
+                    console.debug('Cannot start syncing app-users when not logged in.');
+                    return;
                 }
 
-                $q.all(appUserExistsPromises).then(function (values) {
-                    for (var i = 0; i < values.length; i++) {
-                        if (values[i].Found === false) {
-                            factory.unidentifiedAppUsers.push(values[i].Id);
-                        }
-                    }
+                if (factory.syncAppUsersCycle == null) {
+                    console.debug('Starting sync of app-users.');
+                    factory.syncAppUsersCycle = setInterval(function () {
 
-                    if (factory.unidentifiedAppUsers.length > 0) {
+                        function syncAppUserParticipant(participantId) {
+                            var query = '';
+
+                            for (var i = 0; i < participantId.length; i++) {
+                                if (i === 0) {
+                                    query = participantId[i];
+                                } else {
+                                    query += ',' + participantId[i];
+                                }
+                            }
+
+                            return contactsService.searchAppUser(query);
+                        }
+
+                        if (factory.isSyncingAppUsers) {
+                            logService.debug('Did not start syncing appUsers (already in progress).');
+                            return;
+                        }
+
+                        if (factory.unidentifiedAppUsers.length == 0) {
+                            logService.debug('Did not start syncing appUsers (no unkown appUsers).');
+                            return;
+                        }
+                        factory.isSyncingAppUsers = true;
+                        logService.debug('Starting sync of ' + factory.unidentifiedAppUsers.length + ' unkown appUsers.');
+
                         var promise = syncAppUserParticipant(factory.unidentifiedAppUsers);
 
                         promise.then(
                             function (success) {
                                 if (success.data.items != null) {
                                     success.data.items.some(function (appUser) {
-                                        factory.unidentifiedAppUsers.splice(factory.unidentifiedAppUsers.indexOf(appUser.id), 1);
                                         contactsService.addAppUser(appUser);
+                                        factory.unidentifiedAppUsers.splice(factory.unidentifiedAppUsers.indexOf(appUser.id), 1);
                                     });
+
+                                    if (success.data.items.length === 0) {
+                                        logService.warn('Sent appUser id to API and got 0 results.');
+                                        factory.unidentifiedAppUsers.length = 0;
+                                    }
+
+                                    factory.isSyncingAppUsers = false;
+                                    logService.debug('AppUser sync done.');
                                 }
+                                factory.isSyncingAppUsers = false;
                             },
                             function (error) {
+                                factory.isSyncingAppUsers = false;
+                                logService.debug('AppUser sync done.');
                                 logService.error('Could not sync user: ' + JSON.stringify(error));
                             });
+                    }, 2000);
+                }
+            }
+
+            function resolveUnidentifiedAppUsers(appUserExistsPromises) {
+
+                $q.all(appUserExistsPromises).then(function (values) {
+                    for (var i = 0; i < values.length; i++) {
+                        if (values[i].Found === false) {
+                            if (factory.unidentifiedAppUsers.indexOf(values[i].Id) === -1) {
+                                factory.unidentifiedAppUsers.push(values[i].Id);
+                            }
+                        }
                     }
                 });
             }
 
-            factory.onFocusOrResume = function () {
+            factory.getUsername = function (appUserId) {
 
-                var maxConversationsToCheck = 10;
-
-                if (factory.conversations.length < 10) {
-                    maxConversationsToCheck = factory.conversations.length;
+                if (appUserId === factory.userId) {
+                    return 'you';
                 }
 
-                for (var i = 0; i < maxConversationsToCheck; i++) {
-                    var conversation = factory.conversations[i];
-
-                    var messagesPromise = communicationService.downloadMessagesForConversation(conversation.ConversationId, false, 0, 10, false);
-                    messagesPromise.then(function (result) {
-
-                        if (result.data.items.length === 0) {
-                            logService.log('Got 0 messages from api.');
-                            return;
-                        }
-
-                        var messagesFromApi = result.data.items.sort(function (a, b) {
-                            if (a.CreatedOn > b.CreatedOn) {
-                                return 1;
-                            }
-                            if (a.CreatedOn < b.CreatedOn) {
-                                return -1;
-                            }
-                            return 0;
-                        });
-
-                        var messagesFromDatabasePromise = messageRepository.getMessagesFromLocalDatabase(messagesFromApi[0].conversationId, 10, 0);
-
-                        messagesFromDatabasePromise.then(function (messagesFromDatabase) {
-
-                            var intersect = true;
-
-                            if (messagesFromDatabase.length === messagesFromApi.length) {
-                                for (var j = 0; j < messagesFromApi.length; j++) {
-                                    var apiMessage = messagesFromApi[j];
-                                    var dbMessage = messagesFromDatabase[j];
-
-                                    if (apiMessage.messageId !== dbMessage.MessageId) {
-                                        intersect = false;
-                                    }
-                                }
-                            } else {
-                                intersect = false;
-                            }
-
-                            //var intersect = messagesFromDatabase.some(function (messageFromDb) {
-                            //    return messagesFromApi.some(function (messageFromApi) {
-                            //        return messageFromDb.MessageId === messageFromApi.messageId;
-                            //    });
-                            //});
-
-                            if (!intersect) {
-                                if (typeof messagesFromApi[0] !== "undefined" && messagesFromApi[0] !== null && messagesFromApi[0].hasOwnProperty("conversationId")) {
-                                    logService.log("- CLEARED CONVO (" + messagesFromApi[0].conversationId + ") IN DB BECAUSE OF TOO MANY MISSING MESSAGES -");
-                                    messageRepository.deleteConversation(messagesFromApi[0].conversationId);
-                                    communicationService.messagesDownloaded(messagesFromApi);
-                                }
-                            }
-                        });
-                    });
+                var found = factory.appUsers.filter(function (appUser) { return appUser.UserId === appUserId });
+                if (found.length === 1) {
+                    return found[0].displayName;
+                } else {
+                    return '..';
                 }
             }
 
-            /**
-             * Sets first quickload data (10*10 messages) 
-             */
+            factory.syncConversation = function (conversation) {
+                logService.log('Syncing conversation ' + conversation.ConversationId);
+                var messagesPromise = communicationService.downloadMessagesForConversation(conversation.ConversationId, false, 0, 10, false);
+                messagesPromise.then(function (result) {
+                    var messagesFromApi = result.data.items.sort(function (a, b) {
+                        if (a.CreatedOn > b.CreatedOn) {
+                            return 1;
+                        }
+                        if (a.CreatedOn < b.CreatedOn) {
+                            return -1;
+                        }
+                        return 0;
+                    });
+
+                    var messagesFromDatabasePromise = messageRepository.getMessagesFromLocalDatabase(messagesFromApi[0].conversationId, 10, 0);
+
+                    messagesFromDatabasePromise.then(function (messagesFromDatabase) {
+                        var intersect = messagesFromDatabase.some(function (messageFromDb) {
+                            return messagesFromApi.some(function (messageFromApi) {
+                                return messageFromDb.MessageId === messageFromApi.messageId;
+                            });
+                        });
+                        if (!intersect) {
+                            logService.warn('Conversation ' + conversation.ConversationId + ' was not in sync, re-syncing.');
+                            if (typeof messagesFromApi[0] !== "undefined" && messagesFromApi[0] !== null && messagesFromApi[0].hasOwnProperty("conversationId")) {
+                                logService.info("- CLEARED CONVO (" + messagesFromApi[0].conversationId + ") IN DB BECAUSE OF TOO MANY MISSING MESSAGES -");
+                                messageRepository.deleteConversation(messagesFromApi[0].conversationId);
+                                communicationService.messagesDownloaded(messagesFromApi);
+                            }
+                        } else {
+                            logService.log('Conversation ' + conversation.ConversationId + ' was in sync, re-syncing.');
+                            conversation.Messages = messagesFromDatabase;
+                        }
+                    });
+                });
+            }
+
             function quickLoad() {
                 var promise = $q(function (resolve, reject) {
                     var conversationsFromApiPromise = communicationService.getAllConversations(null);
@@ -202,7 +226,10 @@ angular.module('services', [])
                                             appUserExistsPromises.push(contactsService.userExists(participant));
                                     });
 
-                                    factory.conversations.push(conversation);
+                                    factory.sortConversationMessages(conversation);
+                                    if (!factory.conversations.filter(function (e) { return e.ConversationId === conversation.ConversationId; }).length > 0) {
+                                        factory.conversations.push(conversation);
+                                    }
                                 } else {
                                     factory.unProccessedConversations.push(conversation);
                                 }
@@ -283,7 +310,11 @@ angular.module('services', [])
 
 
                         syncConversationMessages(conversation, conversationMessages);
-                        factory.conversations.push(conversation);
+                        factory.sortConversationMessages(conversation);
+
+                        if (!factory.conversations.filter(function (e) { return e.ConversationId === conversation.ConversationId; }).length > 0) {
+                            factory.conversations.push(conversation);
+                        }
                     } else {
                         factory.unProccessedConversations.push(conversation);
                         factory.moreConversationsAreAvailable = factory.unProccessedConversations.length > 0;
@@ -324,6 +355,7 @@ angular.module('services', [])
 
                         shouldAdd(message);
                     });
+                    factory.sortConversationMessages(factory.conversations.filter(function (convo) { return convo.ConversationId === conversationId })[0]);
                 }
 
                 var newConversation = true;
@@ -357,7 +389,10 @@ angular.module('services', [])
                                         appUserExistsPromises.push(contactsService.userExists(participant));
                                 });
 
-                                factory.conversations.unshift(conversation);
+                                factory.sortConversationMessages(conversation);
+                                if (!factory.conversations.filter(function (e) { return e.ConversationId === conversation.ConversationId; }).length > 0) {
+                                    factory.conversations.unshift(conversation);
+                                }
                             }
 
                             resolveUnidentifiedAppUsers(appUserExistsPromises);
@@ -366,6 +401,19 @@ angular.module('services', [])
                 } else {
                     checkIfMessagesShouldBeAdded(messages);
                 }
+            }
+
+            factory.sortConversationMessages = function (conversation) {
+                if (conversation === null || conversation === undefined || conversation.Messages === null || conversation.Messages === undefined) {
+                    logService.warn('Tried to sort messages but conversation or conversation.Messages was null or undefined.');
+                    return;
+                }
+
+                conversation.Messages.sort(function (a, b) {
+                    a = new Date(a.CreatedOn);
+                    b = new Date(b.CreatedOn);
+                    return a > b ? -1 : a < b ? 1 : 0;
+                });
             }
 
             factory.loadUnprocessedConversations = function () {
@@ -410,7 +458,18 @@ angular.module('services', [])
 
             factory.quickLoad = function () {
 
+                if (!factory.isLoggedIn) {
+                    console.debug('Cannot start quickload when not logged in.');
+                    return;
+                }
+
+                if (factory.quickLoading) {
+                    console.debug('Tried to start quickload while another was in progress.');
+                    return;
+                }
+
                 factory.quickLoading = true;
+                console.debug('Starting quickload.');
 
                 // Deliver what ever data we have asap:
                 var conversationsFromDatabasePromise = messageRepository.getConversationsByTime(10, 0, 10);
@@ -428,8 +487,11 @@ angular.module('services', [])
                                         appUserExistsPromises.push(contactsService.userExists(participant));
                                 });
                             }
+                            factory.sortConversationMessages(conversation);
 
-                            factory.conversations.push(conversation);
+                            if (!factory.conversations.filter(function (e) { return e.ConversationId === conversation.ConversationId; }).length > 0) {
+                                factory.conversations.push(conversation);
+                            }
                         }
 
                         messageRepository.getAllConversationsAndParticipants().then(function (success) {
@@ -447,36 +509,37 @@ angular.module('services', [])
                         });
 
                         resolveUnidentifiedAppUsers(appUserExistsPromises);
-                    }, function (conversationsPromiseError) {
+                    },
+                    function (conversationsPromiseError) {
+                        factory.quickLoading = false;
                         logService.warn(conversationsPromiseError);
-                    }).then(function () {
+                    })
+                    .then(function () {
                         var promise = $q(function (resolve, reject) {
-
-                            //var quickLoadPromise = quickLoad();
-                            //quickLoadPromise.then(function (result) {
-                            //    resolve();
-                            //});
 
                             if (!factory.conversations.length) {
                                 var quickLoadPromise = quickLoad();
                                 quickLoadPromise.then(function (result) {
                                     resolve();
+                                }, function (error) {
+                                    reject(error);
                                 });
                             } else {
-                                //factory.onFocusOrResume();
                                 resolve();
                             }
                         });
 
-                        var error = new Error();
-
-                        promise.then(function () {
-                            factory.quickLoading = false;
-                            
-                            logService.log(new LogObject("Initial loading of conversations done."));
-                        });
+                        promise
+                            .then(
+                            function () {
+                                factory.quickLoading = false;
+                                logService.log(new LogObject("Initial loading of conversations done."));
+                            },
+                            function (error) {
+                                factory.quickLoading = false;
+                                logService.log(new LogObject("Initial loading of conversations part 2 failed.", error));
+                            });
                     });
-
             }
 
             factory.on = function (event, data) {
@@ -485,12 +548,18 @@ angular.module('services', [])
                         factory.conversations.length = 0;
                         factory.unProccessedConversations.length = 0;
                         factory.unidentifiedAppUsers.length = 0;
+                        factory.isLoggedIn = false;
+                        logService.debug('Stopping sync of appUsers');
+                        clearInterval(factory.syncAppUsersCycle);
+                        factory.syncAppUsersCycle = null;
                         break;
                     case 'logged-in':
                         factory.conversations.length = 0;
                         factory.unProccessedConversations.length = 0;
                         factory.unidentifiedAppUsers.length = 0;
                         factory.userId = tokenService.getAppUserId();
+                        factory.isLoggedIn = true;
+                        factory.resolveUnidentifiedAppUsers();
                         factory.quickLoad();
                         break;
                     case 'messages-added':
@@ -529,6 +598,7 @@ angular.module('services', [])
                         break;
                     case 'services-started':
                         factory.quickLoad();
+                        factory.resolveUnidentifiedAppUsers();
                     case 'load':
                         break;
                     default:

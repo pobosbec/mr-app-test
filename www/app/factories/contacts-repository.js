@@ -41,7 +41,6 @@ angular.module('contacts', [])
             } else {
                 return '..';
             }
-
         };
 
         factory.init = function init() {
@@ -201,15 +200,17 @@ angular.module('contacts', [])
 
             var deferred = $q.defer();
 
-            var found = factory.appUsers.some(function (appUser) {
+            var foundInMem = false;
+
+            factory.appUsers.some(function (appUser) {
                 if (appUserId === appUser.UserId) {
-                    return true;
+                    foundInMem = true;
                 }
             });
 
             var returnResult = { Found: false, Id: null };
 
-            if (found) {
+            if (foundInMem) {
                 returnResult.Found = true;
                 deferred.resolve(returnResult);
             } else {
@@ -217,7 +218,9 @@ angular.module('contacts', [])
 
                 foundPromise.then(function (success) {
                     if (success.length === 1) {
-                        factory.appUsers.push(success);
+                        if (factory.appUsers.filter(function (appUser) { return appUser.UserId === appUserId }).length === 0) {
+                            factory.appUsers.push(success);
+                        }
                         returnResult.Found = true;
                         deferred.resolve(returnResult);
                     } else {
@@ -330,7 +333,9 @@ angular.module('contacts', [])
                     }
                     factory.insertAppUser(appUser)
                         .then(function () {
-                            factory.appUsers.push(appUser);
+                            if (factory.appUsers.filter(function (appUserInArr) { return appUserInArr.UserId === appUser.UserId }).length === 0) {
+                                factory.appUsers.push(appUser);
+                            }
                             logService.log('Added appUser with id \'' + appUser.UserId + '\'');
                         }, function (error) {
                             logService.error('Error while inserting appUser with id \'' + appUser.UserId + '\'.\r\n' + error.message);
