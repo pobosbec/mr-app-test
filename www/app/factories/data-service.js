@@ -143,7 +143,7 @@ angular.module('services', [])
                                 communicationService.messagesDownloaded(messagesFromApi);
                             }
                         } else {
-                            logService.log('Conversation ' + conversation.ConversationId + ' was in sync, re-syncing.');
+                            logService.log('Conversation ' + conversation.ConversationId + ' was in sync.');
                             conversation.Messages = messagesFromDatabase;
                         }
                     });
