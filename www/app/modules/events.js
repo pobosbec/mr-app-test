@@ -154,8 +154,11 @@ angular.module('event', [])
                         return;
                     }
                 }
+
+                setTimeout(function() {
+                    $rootScope.$broadcast('sync-conversation-in-view', event);
+                }, 10);
             }, 10);
-            $rootScope.$broadcast('sync-conversations', args);
         });
 
         $scope.$on('on-blur', function (event, args) {
