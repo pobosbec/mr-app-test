@@ -130,11 +130,23 @@ angular.module('services', [])
                     var messagesFromDatabasePromise = messageRepository.getMessagesFromLocalDatabase(messagesFromApi[0].conversationId, 10, 0);
 
                     messagesFromDatabasePromise.then(function (messagesFromDatabase) {
-                        var intersect = messagesFromDatabase.some(function (messageFromDb) {
-                            return messagesFromApi.some(function (messageFromApi) {
-                                return messageFromDb.MessageId === messageFromApi.messageId;
-                            });
-                        });
+                        //var intersect = messagesFromDatabase.some(function (messageFromDb) {
+                        //    return messagesFromApi.some(function (messageFromApi) {
+                        //        return messageFromDb.MessageId === messageFromApi.messageId;
+                        //    });
+                        //});
+                        var intersect = true;
+
+                        if (messagesFromApi.length !== messagesFromDatabase.length) {
+                            intersect = false;
+                        }
+
+                        for (var i = 0; i < messagesFromApi.length; i++) {
+                            if (messagesFromDatabase[i].messageId === messagesFromApi[i].messageId) {
+                                intersect = false;
+                            }
+                        }
+
                         if (!intersect) {
                             logService.warn('Conversation ' + conversation.ConversationId + ' was not in sync, re-syncing.');
                             if (typeof messagesFromApi[0] !== "undefined" && messagesFromApi[0] !== null && messagesFromApi[0].hasOwnProperty("conversationId")) {
@@ -410,6 +422,14 @@ angular.module('services', [])
                 }
 
                 conversation.Messages.sort(function (a, b) {
+                    a = new Date(a.CreatedOn);
+                    b = new Date(b.CreatedOn);
+                    return a > b ? -1 : a < b ? 1 : 0;
+                });
+            }
+
+            factory.sortMessages = function(messagesArr) {
+                messagesArr.sort(function (a, b) {
                     a = new Date(a.CreatedOn);
                     b = new Date(b.CreatedOn);
                     return a > b ? -1 : a < b ? 1 : 0;
