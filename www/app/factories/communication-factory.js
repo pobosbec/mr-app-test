@@ -172,6 +172,7 @@ angular.module('communication', [])
                     factory.syncPeriodMessages(args.PeriodStart, args.PeriodEnd, args.PageIndex, args.PageSize);
                     break;
                 case 'push-notification':
+                    // TODO: this is wasteful. sync converation instead
                     var fiveMinutesAgo = new Date();
                     fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5);
                     factory.syncPeriodMessages(fiveMinutesAgo.toJSON(), new Date().toJSON(), 0, 50);

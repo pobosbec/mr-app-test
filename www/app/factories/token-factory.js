@@ -11,7 +11,7 @@ angular.module('token', [])
         var refreshTokenIntervall = null;
         var factory = {};
         var userDetails = {};
-        
+
         factory.keepTokenAlive = function () {
             var req = {
                 method: 'POST',

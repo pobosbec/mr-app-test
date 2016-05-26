@@ -178,6 +178,15 @@ angular.module('conversations', [])
             };
 
             $scope.setConversation();
+            
+            $scope.$on('sync-conversation-in-view', function (event, args) {
+                if ($scope.conversation === null) {
+                    logService.warn('Could not sync conversation in view');
+                    return;
+                } else {
+                    dataService.syncConversation($scope.conversation);
+                }
+            });
 
             $scope.openDefaultBrowserWindow = function (url) {
                 // $window.open(url);
