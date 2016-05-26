@@ -142,7 +142,7 @@ angular.module('services', [])
                         }
 
                         for (var i = 0; i < messagesFromApi.length; i++) {
-                            if (messagesFromDatabase[i].messageId === messagesFromApi[i].messageId) {
+                            if (messagesFromDatabase[i].MessageId === messagesFromApi[i].messageId) {
                                 intersect = false;
                             }
                         }
