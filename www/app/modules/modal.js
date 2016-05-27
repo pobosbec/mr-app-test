@@ -27,7 +27,7 @@ angular.module('modalcontroll', [])
         $scope.sendMessage = function (message) {
             $scope.errors.length = 0;
             if ($scope.selectedUsers.length === 0) {
-                $scope.errors.push('You must add atleast one recipient.');
+                $scope.errors.push('You must add at least one recipient.');
             }
 
             if (message === null || message === undefined) {
@@ -50,6 +50,7 @@ angular.module('modalcontroll', [])
             }
             communicationService.sendMessage(message, userIds).then(function successCallback(response) {
                 $scope.messageSentConfirmed = true;
+                communicationService.downloadMessagesForConversation(response.data.data.conversationId, false, 0, 10, true);
                 setTimeout(function () {
                     $uibModalInstance.close();
                 }, 1000);
