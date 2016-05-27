@@ -1,21 +1,22 @@
 // Please note that $uibModalInstance represents a modal window (instance) dependency.
 // It is not the same as the $uibModal service used above.
-angular.module('modalcontroll',[])
+angular.module('modalcontroll', [])
     .controller('createMessageCtrl', function ($scope, $uibModalInstance, contactsService, communicationService, tokenService, logService) {
 
         $scope.users = [];
         $scope.selectedUsers = [];
         $scope.selected = '';
         $scope.errors = [];
+        $scope.messageSentConfirmed = false;
 
-        $scope.getUsers = function(){
+        $scope.getUsers = function () {
             var promise = contactsService.getAppUsers();
 
             promise.then(
-                function(success){
-                   $scope.users = success;
+                function (success) {
+                    $scope.users = success;
                 },
-                function(error) {
+                function (error) {
                     logService.log('Could not get appUsers.');
                 });
         };
@@ -44,15 +45,17 @@ angular.module('modalcontroll',[])
             }
 
             var userIds = [tokenService.getAppUserId()];
-            for(var i = 0; i < $scope.selectedUsers.length; i++){
+            for (var i = 0; i < $scope.selectedUsers.length; i++) {
                 userIds.push($scope.selectedUsers[i].id);
             }
             communicationService.sendMessage(message, userIds).then(function successCallback(response) {
-                $scope.messageSent = true;
+                $scope.messageSentConfirmed = true;
+                setTimeout(function () {
+                    $uibModalInstance.close();
+                }, 1000);
             }, function errorCallback(response) {
-                $scope.messageFailed = true;
-            });;
-            $uibModalInstance.close();
+                $scope.messageSentConfirmed = true;
+            });
         };
 
         $scope.find = function (data) {
@@ -60,21 +63,20 @@ angular.module('modalcontroll',[])
             logService.log(contactsService.getAppUsers());
         };
 
-        $scope.onSelect = function($item, $model, $label){
-            $scope.selected = '';
+        $scope.onSelect = function ($item, $model, $label) {
             $scope.selectedUsers.push($item);
         }
 
-        $scope.removeSelectedAppUser = function(appUser){
+        $scope.removeSelectedAppUser = function (appUser) {
             var index = -1;
 
-            for(var i = 0; i < $scope.selectedUsers.length; i++){
-                if($scope.selectedUsers[i].userId === appUser.userId){
+            for (var i = 0; i < $scope.selectedUsers.length; i++) {
+                if ($scope.selectedUsers[i].userId === appUser.userId) {
                     index = i;
                 }
             }
 
-            if(index > -1){
+            if (index > -1) {
                 $scope.selectedUsers.splice(index, 1);
             }
         };
