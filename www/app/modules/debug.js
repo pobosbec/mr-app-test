@@ -10,7 +10,8 @@ angular.module('debug', [])
             $scope.targets = logService.options.targets;
 
             $scope.logSorting = function (log) {
-                var date = new Date(log.createdOn);
+                var tmp = log.createdOn.replace('(Log-service)', '');
+                var date = new Date(tmp);
                 return date;
             };
 
