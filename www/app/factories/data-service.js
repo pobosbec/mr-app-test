@@ -137,7 +137,7 @@ angular.module('services', [])
                         }
 
                         factory.sortMessages(messagesFromApi);
-                        messagesFromDatabase.some(function(message) {
+                        messagesFromDatabase.some(function (message) {
                             message.createdOn = message.CreatedOn;
                         });
                         factory.sortMessages(messagesFromDatabase);
@@ -178,20 +178,18 @@ angular.module('services', [])
 
             factory.syncInit = function () {
                 for (var i = 0; i < factory.conversations.length; i++) {
-                    function sync(conversation) {
-                        factory.syncConversation(conversation);
+                    function sync(conv, time) {
+                        setTimeout(function () {
+                            factory.syncConversation(conv);
+                        }, time);
                     }
 
                     var conversation = factory.conversations[i];
 
-                    if (i > 10) {
-                        setTimeout(function () {
-                            sync(conversation);
-                        }, 1000);
+                    if (i < 10) {
+                        sync(conversation, 1000);
                     } else {
-                        setTimeout(function () {
-                            sync(conversation);
-                        }, 5000);
+                        sync(conversation, 5000);
                     }
                 }
             }
@@ -462,7 +460,7 @@ angular.module('services', [])
                 });
             }
 
-            factory.sortMessages = function(messagesArr) {
+            factory.sortMessages = function (messagesArr) {
                 messagesArr.sort(function (a, b) {
                     a = new Date(a.CreatedOn);
                     b = new Date(b.CreatedOn);
