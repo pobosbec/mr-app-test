@@ -1,5 +1,6 @@
-// Please note that $uibModalInstance represents a modal window (instance) dependency.
-// It is not the same as the $uibModal service used above.
+/**
+ * Created by Robin Jobb on 2016-03-30.
+ */
 angular.module('modalcontroll', [])
     .controller('createMessageCtrl', function ($scope, $uibModalInstance, contactsService, communicationService, tokenService, logService) {
 
@@ -87,6 +88,4 @@ angular.module('modalcontroll', [])
         };
 
         $scope.getUsers();
-    });/**
- * Created by Robin Jobb on 2016-03-30.
- */
+    });

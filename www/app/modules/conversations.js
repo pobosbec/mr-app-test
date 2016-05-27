@@ -155,26 +155,27 @@ angular.module('conversations', [])
             $scope.scrollBottomEnabled = true;
 
             $scope.setConversation = function () {
-
-                if (dataService.conversations === null) {
-                    $location.path('/conversations/');
-                } else if (dataService.conversations.length === 0) {
-                    $location.path('/conversations/');
-                }
-
-                var found = false;
-
-                dataService.conversations.some(function (conversation) {
-                    if (conversation.ConversationId === $scope.conversationId) {
-                        found = true;
-                        dataService.syncConversation(conversation);
-                        $scope.conversation = conversation;
+                setTimeout(function() {
+                    if (dataService.conversations === null) {
+                        $location.path('/conversations/');
+                    } else if (dataService.conversations.length === 0) {
+                        $location.path('/conversations/');
                     }
-                });
 
-                if (!found) {
-                    $location.path('/conversations/');
-                }
+                    var found = false;
+
+                    dataService.conversations.some(function (conversation) {
+                        if (conversation.ConversationId === $scope.conversationId) {
+                            found = true;
+                            dataService.syncConversation(conversation);
+                            $scope.conversation = conversation;
+                        }
+                    });
+
+                    if (!found) {
+                        $location.path('/conversations/');
+                    }
+                }, 500);                
             };
 
             $scope.setConversation();
@@ -415,6 +416,9 @@ angular.module('conversations', [])
             }
 
             $scope.$watch('conversation.Messages[0]', function (newValue, oldValue) {
+                if (newValue.Author === $scope.userId) {
+                    return;
+                }
                 $scope.unseenMessages = $scope.unseenMessages || !$scope.atBottom;
             });
 
