@@ -3,7 +3,7 @@
  */
 
 angular.module('logging', [])
-    .factory('logService', ['$q', 'databaseService', function ($q, databaseService) {
+    .factory('logService', ['$q', 'databaseService', '$rootScope', function ($q, databaseService, $rootScope) {
         var factory = {};
 
         var db = null;
@@ -16,6 +16,10 @@ angular.module('logging', [])
         }
 
         factory.capturedLogs = null;
+
+        factory.setDb = function () {
+            db = databaseService.db;
+        }
 
         factory.init = function () {
             db = databaseService.db;
@@ -149,6 +153,7 @@ angular.module('logging', [])
                                 resolve();
                             },
                             function (t, error) {
+                                $rootScope.$broadcast('database-error');
                                 reject(error);
                             });
                     });
@@ -242,13 +247,14 @@ angular.module('logging', [])
                             var rows = getRows(result);
                             var logs = [];
 
-                            rows.some(function(row) {
+                            rows.some(function (row) {
                                 logs.push({ text: row.Message, createdOn: row.CreatedOn, metadata: row.Metadata, level: row.Level });
                             });
 
                             resolve(logs);
                         },
                         function (t, error) {
+                            $rootScope.$broadcast('database-error');
                             reject(error);
                         });
                 });
@@ -267,6 +273,7 @@ angular.module('logging', [])
 
                     },
                     function (t, error) {
+                        $rootScope.$broadcast('database-error');
 
                     });
             });
@@ -285,7 +292,7 @@ angular.module('logging', [])
 
                             },
                             function (t, error) {
-
+                                $rootScope.$broadcast('database-error');
                             });
                     });
                     break;
@@ -297,7 +304,7 @@ angular.module('logging', [])
 
                             },
                             function (t, error) {
-
+                                $rootScope.$broadcast('database-error');
                             });
                     });
                     break;
@@ -309,7 +316,7 @@ angular.module('logging', [])
 
                             },
                             function (t, error) {
-
+                                $rootScope.$broadcast('database-error');
                             });
                     });
                     break;

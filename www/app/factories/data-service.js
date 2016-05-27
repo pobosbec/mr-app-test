@@ -144,7 +144,7 @@ angular.module('services', [])
 
                         for (var i = 0; i < messagesFromApi.length; i++) {
                             if (messagesFromDatabase[i] === null || messagesFromDatabase[i] === undefined || messagesFromApi[i] === null || messagesFromApi[i] === undefined) {
-                                logService.error(new LogObject('Message was null.'));
+                                logService.warn(new LogObject('Message was null.'));
                                 intersect = false;
                                 break;
                             }

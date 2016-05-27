@@ -90,8 +90,12 @@ angular.module('event', [])
         $scope.$on('on-focus', function (event, args) {
             logService.log("on-focus");
 
-            tokenService.registerPushToken();
-
+            databaseService.init().then(function () {
+                contactsService.setDb();
+                messageRepository.init();
+                logService.setDb();
+                //$rootScope.$broadcast('services-started');
+            });
             var onFocusDelay = setTimeout(function (event, args) {
                 args = args | {};
                 args.Sender = 'events';
@@ -115,7 +119,7 @@ angular.module('event', [])
                         if (conversationIds.length === 1) {
                             var convoId = conversationIds[0];
                             resetData();
-                            dataService.conversations.some(function(conversation) {
+                            dataService.conversations.some(function (conversation) {
                                 if (conversation.ConversationId === convoId) {
                                     dataService.syncConversation(conversation);
                                 }
@@ -124,7 +128,7 @@ angular.module('event', [])
                         } else if (conversationIds.length > 1) {
 
                             dataService.conversations.some(function (conversation) {
-                                conversationIds.some(function(id) {
+                                conversationIds.some(function (id) {
                                     if (conversation.ConversationId === id) {
                                         dataService.syncConversation(conversation);
                                     }
@@ -172,6 +176,20 @@ angular.module('event', [])
         });
 
         $scope.$on('offline', function (event, args) { });
+
+        $scope.$on('database-error', function(event, args) {
+            logService.info('Received database-error. Reconnecting db.');
+            databaseService.init().then(
+                function(success) {
+                    logService.info('Database restarted.');
+                    contactsService.setDb();
+                    messageRepository.init();
+                    logService.setDb();
+                },
+                function(error) {
+                    logService.info('Could not restart database.');
+                });
+        });
 
         $scope.$on('back-button', function (event, args) {
             if (event != null) {

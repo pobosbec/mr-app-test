@@ -175,7 +175,7 @@ angular.module('conversations', [])
                     if (!found) {
                         $location.path('/conversations/');
                     }
-                }, 500);                
+                }, 300);                
             };
 
             $scope.setConversation();
@@ -416,6 +416,9 @@ angular.module('conversations', [])
             }
 
             $scope.$watch('conversation.Messages[0]', function (newValue, oldValue) {
+                if (newValue == null) {
+                    return;
+                }
                 if (newValue.Author === $scope.userId) {
                     return;
                 }

@@ -196,6 +196,7 @@ angular.module('message', ['ngCordova'])
                             resolve(messages);
                         }, function (trans, error) {
                             logService.error('Error while fetching messages from database.\r\n' + error.message);
+                            $rootScope.$broadcast('database-error');
                             reject(error);
                         });
                 });
@@ -359,6 +360,7 @@ angular.module('message', ['ngCordova'])
                             resolve(messages);
                         }, function (trans, error) {
                             logService.error('Error while fetching messages from database.\r\n' + error.message);
+                            $rootScope.$broadcast('database-error');
                             reject(error);
                         });
                 });
@@ -453,6 +455,7 @@ angular.module('message', ['ngCordova'])
                         deferred.resolve(ids);
                     }, function (trans, error) {
                         logService.error('Error while fetching messages from database.\r\n' + error.message);
+                        $rootScope.$broadcast('database-error');
                         deferred.reject(error);
                     });
             });
@@ -480,6 +483,7 @@ angular.module('message', ['ngCordova'])
                             resolve(participants);
                         }, function (trans, error) {
                             logService.error('Error while fetching Participants from database.\r\n' + error.message);
+                            $rootScope.$broadcast('database-error');
                             reject(error);
                         });
                 });
@@ -509,6 +513,7 @@ angular.module('message', ['ngCordova'])
 
                         }, function (trans, error) {
                             logService.error('Error while fetching AllConversationsAndParticipants from database.\r\n' + error.message);
+                            $rootScope.$broadcast('database-error');
                             reject(error);
                         });
                 });
@@ -555,6 +560,7 @@ angular.module('message', ['ngCordova'])
                     }, function (t, error) {
                         error = 'Error while checking if message exists.\r\n' + error.message;
                         logService.error(error);
+                        $rootScope.$broadcast('database-error');
                         reject(error);
                     });
                 });
@@ -623,7 +629,11 @@ angular.module('message', ['ngCordova'])
                                     }
                                 }, function (error) {
                                     errorMsg = 'Error while saving message.\r\n' + error.message;
-                                    logService.error(errorMsg);
+                                    if (error.message !== 'could not execute statement due to a constaint failure (19 UNIQUE constraint failed: Messages.MessageId)') {
+                                        logService.error(errorMsg);
+                                        $rootScope.$broadcast('database-error');
+                                    }
+                                    logService.warn(errorMsg);
                                     reject(errorMsg);
                                 });
                             }
@@ -631,6 +641,7 @@ angular.module('message', ['ngCordova'])
                         function (transaction, error) {
                             errorMsg = 'Error while checking if messages exist.\r\n' + error.message;
                             logService.error(errorMsg);
+                            $rootScope.$broadcast('database-error');
                             reject(errorMsg);
                         });
                 });

@@ -43,6 +43,11 @@ angular.module('contacts', [])
             }
         };
 
+        factory.setDb = function() {
+            queries = webSqlQueries;
+            db = databaseService.db;
+        }
+
         factory.init = function init() {
             queries = webSqlQueries;
             db = databaseService.db;
@@ -190,6 +195,7 @@ angular.module('contacts', [])
                             resolve(appUsers);
                         }, function (trans, error) {
                             logService.error('Error while fetching appUsers from database.\r\n' + error.message);
+                            $rootScope.$broadcast('database-error');
                             reject(error);
                         });
                 });
@@ -261,6 +267,7 @@ angular.module('contacts', [])
                             resolve(appUsers);
                         }, function (trans, error) {
                             logService.error('Error while fetching appUsers from database.\r\n' + error.message);
+                            $rootScope.$broadcast('database-error');
                             reject(error);
                         });
                 });
@@ -339,9 +346,11 @@ angular.module('contacts', [])
                             logService.log('Added appUser with id \'' + appUser.UserId + '\'');
                         }, function (error) {
                             logService.error('Error while inserting appUser with id \'' + appUser.UserId + '\'.\r\n' + error.message);
+                            $rootScope.$broadcast('database-error');
                         });
                 }, function (t, error) {
                     logService.error("Error while checking if appUser exists.\r\n" + error.message);
+                    $rootScope.$broadcast('database-error');
                 });
             });
         };
@@ -387,6 +396,7 @@ angular.module('contacts', [])
                             resolve();
                         },
                         function (t, error) {
+                            $rootScope.$broadcast('database-error');
                             reject(error);
                         });
                 });
