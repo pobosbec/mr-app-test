@@ -143,8 +143,21 @@ angular.module('services', [])
                         factory.sortMessages(messagesFromDatabase);
 
                         for (var i = 0; i < messagesFromApi.length; i++) {
+                            if (messagesFromDatabase[i] === null || messagesFromDatabase[i] === undefined || messagesFromApi[i] === null || messagesFromApi[i] === undefined) {
+                                logService.error(new LogObject('Message was null.'));
+                                intersect = false;
+                                break;
+                            }
+
+                            if (messagesFromDatabase[i].MessageId === null || messagesFromDatabase[i].MessageId === undefined || messagesFromApi[i].messageId === null || messagesFromApi[i].messageId === undefined) {
+                                logService.error(new LogObject('Message without id.'));
+                                intersect = false;
+                                break;
+                            }
+
                             if (messagesFromDatabase[i].MessageId !== messagesFromApi[i].messageId) {
                                 intersect = false;
+                                break;
                             }
                         }
 
@@ -161,6 +174,26 @@ angular.module('services', [])
                         }
                     });
                 });
+            }
+
+            factory.syncInit = function () {
+                for (var i = 0; i < factory.conversations.length; i++) {
+                    function sync(conversation) {
+                        factory.syncConversation(conversation);
+                    }
+
+                    var conversation = factory.conversations[i];
+
+                    if (i > 10) {
+                        setTimeout(function () {
+                            sync(conversation);
+                        }, 1000);
+                    } else {
+                        setTimeout(function () {
+                            sync(conversation);
+                        }, 5000);
+                    }
+                }
             }
 
             function quickLoad() {
@@ -555,6 +588,8 @@ angular.module('services', [])
                             function () {
                                 factory.quickLoading = false;
                                 logService.log(new LogObject("Initial loading of conversations done."));
+                                logService.log(new LogObject("Syncing 10 first conversations against api."));
+                                factory.syncInit();
                             },
                             function (error) {
                                 factory.quickLoading = false;
@@ -620,7 +655,6 @@ angular.module('services', [])
                     case 'services-started':
                         factory.quickLoad();
                         factory.resolveUnidentifiedAppUsers();
-                    case 'load':
                         break;
                     default:
                         break;

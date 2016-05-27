@@ -155,8 +155,8 @@ angular.module('event', [])
                     }
                 }
 
+                dataService.quickLoad();
                 setTimeout(function () {
-                    dataService.quickLoad();
                     $rootScope.$broadcast('sync-conversation-in-view', event);
                 }, 10);
             }, 10);
@@ -260,7 +260,7 @@ angular.module('event', [])
 
         // Wrapped
         $scope.$on('load', function (event, args) {
-            $rootScope.$broadcast('sync-conversations', args);
+            //$rootScope.$broadcast('sync-conversations', args);
         });
 
 
