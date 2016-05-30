@@ -39,7 +39,29 @@ var mobileresponseWebbApp = angular.module('administratorApp', [
             dataService.quickLoad();
             dataService.resolveUnidentifiedAppUsers();
         }, function(error) {
+            //not authenticated
 
+            //check if we have credentials
+            var credentials = tokenService.getLoginCredentials();
+            if (credentials !== undefined && credentials !== null) {
+                logService(new LogObject("Credentials was not null or undefined"));
+                logService(credentials);
+
+                tokenService.justAuthenticate(credentials.username, credentials.password).then(function(success){
+                    logService(new LogObject("Success running authenticate"));
+                    dataService.isLoggedIn = true;
+                    dataService.quickLoad();
+                    dataService.resolveUnidentifiedAppUsers();
+                },function(error){
+                    logService(new LogObject("Error running authenticate"));
+                    return null;
+                });
+            }
+            else {
+                logService(new LogObject("Credentials was null or undefined"));
+                logService(credentials);
+                return null;
+            }
         });
     }, function () {
         console.error('Could not initiate database service.');

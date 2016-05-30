@@ -15,6 +15,37 @@ angular.module('event', [])
         document.addEventListener('resume', function (event, args) {
             logService.log("resume");
             logService.log("initing plugin with on device ready, events.js");
+
+            tokenService.isAuthenticated().then(function(success) {
+                dataService.isLoggedIn = true;
+                dataService.quickLoad();
+                dataService.resolveUnidentifiedAppUsers();
+            }, function(error) {
+                //not authenticated
+
+                //check if we have credentials
+                var credentials = tokenService.getLoginCredentials();
+                if (credentials !== undefined && credentials !== null) {
+                    logService(new LogObject("Credentials was not null or undefined"));
+                    logService(credentials);
+
+                    tokenService.justAuthenticate(credentials.username, credentials.password).then(function(success){
+                        logService(new LogObject("Success running authenticate"));
+                        dataService.isLoggedIn = true;
+                        dataService.quickLoad();
+                        dataService.resolveUnidentifiedAppUsers();
+                    },function(error){
+                        logService(new LogObject("Error running authenticate"));
+                        return null;
+                    });
+                }
+                else {
+                    logService(new LogObject("Credentials was null or undefined"));
+                    logService(credentials);
+                    return null;
+                }
+            });
+
             var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
             pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
             logService.log("set app badge nr 0");
@@ -237,7 +268,7 @@ angular.module('event', [])
 
         $scope.$on('push-notification', function (event, args) {
             communicationService.on(event, args);
-            logService.log("$on, push-notification, event.js 192: " + event);
+            logService.log("$on, push-notification, event.js 249: " + event);
 
         });
 
