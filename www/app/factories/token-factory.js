@@ -289,6 +289,7 @@ angular.module('token', [])
                 logService.log('Success appuser authentication');
                 logService.log(greeting);
                 justSetCredentials(greeting);
+                $rootScope.$broadcast('on-focus');
                 authenticationFailed = false;
                 return $q.defer().resolve(greeting);
 
@@ -319,6 +320,8 @@ angular.module('token', [])
                     promise.then(function (greeting) {
                         //Success
                         justSetCredentials(greeting);
+                        $rootScope.$broadcast('on-focus');
+                        
                         logService.log('Success admin-> app');
                         logService.log(greeting);
                         //TODO: logged in now
