@@ -506,6 +506,7 @@ angular.module('token', [])
 
                     }
                     else{
+                        console.log("logging out");
                         $rootScope.logout();
                     }
 
@@ -531,6 +532,7 @@ angular.module('token', [])
                         });
                     }
                     else{
+                        console.log("logging out");
                         $rootScope.logout();
                     }
                 }

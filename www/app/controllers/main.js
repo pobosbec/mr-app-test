@@ -26,7 +26,9 @@ mobileresponseWebbApp
                     ['Logout','Cancel']         // buttonLabels
                 );
             }
-            else{$rootScope.logout();}
+            else{
+                console.log("logging out");
+                $rootScope.logout();}
         };
 
 
