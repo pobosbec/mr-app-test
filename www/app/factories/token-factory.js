@@ -161,6 +161,7 @@ angular.module('token', [])
                     "Tags": null
                 }
             };
+            var defered = $q.defer();
             var promise = factory.httpPost(userDetailRequest);
             promise.then(function (greeting) {
                 //Success
@@ -196,7 +197,7 @@ angular.module('token', [])
                 if ($state.includes('login')) {
                     $state.go('home');
                 }
-                return resolve("success set credentials");
+                return defered.resolve("success set credentials");
 
             }, function (reason) {
                 //failed try authenticate against admin->app
@@ -207,7 +208,7 @@ angular.module('token', [])
                 //we are logged in show navbar and redirect
                 $('#template-2').hide();
 
-                return reject("failed set credentials");
+                return defered.reject("failed set credentials");
             });
         }
 
