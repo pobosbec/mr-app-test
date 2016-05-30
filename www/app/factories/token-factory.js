@@ -333,6 +333,7 @@ angular.module('token', [])
                         factory.saveLoginCredentials(username, password, true);
                         setCredentialsAndLogin(greeting);
                         $rootScope.$broadcast('authentication-success');
+                        return resolve('authenticated');
                     }, function (reason) {
                         //failed try authenticate against admin->app
                         logService.log('Failed login admin-> app');
@@ -342,6 +343,7 @@ angular.module('token', [])
                         //we are logged in show navbar and redirect
                         $('#template-2').hide();
                         $rootScope.$broadcast('authentication-failed');
+                        return reject('not authenticated');
                     });
 
                 }, function (reason) {

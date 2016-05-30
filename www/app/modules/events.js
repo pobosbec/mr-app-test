@@ -28,7 +28,15 @@ angular.module('event', [])
                 if (credentials !== undefined && credentials !== null) {
                     logService(new LogObject("Credentials was not null or undefined"));
                     logService(credentials);
-                    tokenService.authenticate(credentials.username, credentials.password);
+                    tokenService.authenticate(credentials.username, credentials.password).then(function(success){
+                        logService(new LogObject("Success running authenticate"));
+                        dataService.isLoggedIn = true;
+                        dataService.quickLoad();
+                        dataService.resolveUnidentifiedAppUsers();
+
+                    }, function(error){
+                        logService(new LogObject("Error running authenticate"));
+                    });
                 }
                 else {
                     logService(new LogObject("Credentials was null or undefined"));
@@ -36,7 +44,7 @@ angular.module('event', [])
                     tokenService.logout();
                 }
             });
-            
+
             var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
             pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
             logService.log("set app badge nr 0");
