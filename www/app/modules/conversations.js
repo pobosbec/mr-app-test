@@ -44,8 +44,9 @@ angular.module('conversations', [])
             }
 
             // This is required for ng-repeat order by date
+            //changed from ||to &&
             $scope.conversationsSorting = function (convo) {
-                if (convo.Messages !== null || convo.Messages !== undefined) {
+                if (convo.Messages !== null && convo.Messages !== undefined) {
                     var dates = [];
 
                     convo.Messages.some(function (msg) {
