@@ -101,10 +101,13 @@ angular.module('event', [])
                 logService.setDb();
                 //$rootScope.$broadcast('services-started');
             });
+
             var onFocusDelay = setTimeout(function (event, args) {
                 args = args | {};
                 args.Sender = 'events';
                 args.Event = 'on-focus';
+
+                dataService.isLoggedIn = true;
 
                 // TODO: this smells.
 
@@ -164,7 +167,6 @@ angular.module('event', [])
                     }
                 }
 
-                dataService.isLoggedIn = true;
                 dataService.quickLoad();
                 setTimeout(function () {
                     $rootScope.$broadcast('sync-conversation-in-view', event);
