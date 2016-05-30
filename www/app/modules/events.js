@@ -237,7 +237,7 @@ angular.module('event', [])
 
         $scope.$on('push-notification', function (event, args) {
             communicationService.on(event, args);
-            logService.log("$on, push-notification, event.js 192: " + event);
+            logService.log("$on, push-notification, event.js 249: " + event);
 
         });
 

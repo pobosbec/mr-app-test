@@ -552,6 +552,10 @@ angular.module('token', [])
             localStorage.setItem(key, valueAsJson);
         };
 
+        factory.loadFromDb = function (key) {
+            return JSON.parse(localStorage.getItem(key));
+        };
+
         factory.saveLoginCredentials = function (username, password, keepLoggedIn) {
             if (keepLoggedIn) {
                 var keepLoggedInCredentials = {
@@ -566,6 +570,10 @@ angular.module('token', [])
         }
 
         // Clear
+
+        factory.getLoginCredentials = function () {
+           return factory.loadFromDb("keepLoggedInCredentials");
+        }
 
         factory.clearLoginCredentials = function () {
             factory.saveToDb("keepLoggedInCredentials", false);

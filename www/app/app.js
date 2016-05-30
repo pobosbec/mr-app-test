@@ -39,6 +39,28 @@ var mobileresponseWebbApp = angular.module('administratorApp', [
             dataService.quickLoad();
             dataService.resolveUnidentifiedAppUsers();
         }, function(error) {
+            //not authenticated
+
+            //check if we have credentials
+            var credentials = tokenService.getLoginCredentials();
+            if (credentials !== undefined && credentials !== null) {
+                logService(new LogObject("Credentials was not null or undefined"));
+                logService(credentials);
+                tokenService.authenticate(credentials.username, credentials.password);
+            }
+            else {
+                logService(new LogObject("Credentials was null or undefined"));
+                logService(credentials);
+                tokenService.logout();
+            }
+
+            //if credentials is ok try authenticate
+
+                //authentication sucess
+
+                //authentication failed
+
+                    //log out
 
         });
     }, function () {
