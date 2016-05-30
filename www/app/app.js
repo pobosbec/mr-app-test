@@ -34,9 +34,9 @@ var mobileresponseWebbApp = angular.module('administratorApp', [
         logService.init();
         $rootScope.$broadcast('services-started');
 
-            dataService.isLoggedIn = true;
-            dataService.quickLoad();
-            dataService.resolveUnidentifiedAppUsers();
+         //   dataService.isLoggedIn = true;
+          //  dataService.quickLoad();
+           // dataService.resolveUnidentifiedAppUsers();
 
     }, function () {
         console.error('Could not initiate database service.');
