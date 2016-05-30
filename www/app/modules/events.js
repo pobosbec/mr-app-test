@@ -18,6 +18,7 @@ angular.module('event', [])
 
 
                 dataService.isLoggedIn = true;
+                dataService.quickLoading = false;
                 dataService.quickLoad();
                 dataService.resolveUnidentifiedAppUsers();
 
