@@ -619,6 +619,7 @@ angular.module('services', [])
             factory.on = function (event, data) {
                 switch (event.name) {
                     case 'logged-out':
+                        console.log("logged out in dataservice");
                         factory.conversations.length = 0;
                         factory.unProccessedConversations.length = 0;
                         factory.unidentifiedAppUsers.length = 0;

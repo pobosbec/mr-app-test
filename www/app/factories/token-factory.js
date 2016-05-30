@@ -67,6 +67,7 @@ angular.module('token', [])
 
         $rootScope.logout = function () {
             //TODO abandon function
+            console.log("logged out from logout");
             $rootScope.$broadcast("logged-out");
             win.sessionStorage.accessToken = null;
             $rootScope.token = null;
