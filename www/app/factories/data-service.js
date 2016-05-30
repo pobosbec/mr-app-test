@@ -115,21 +115,33 @@ angular.module('services', [])
 
             factory.syncConversation = function (conversation) {
                 logService.log('Syncing conversation ' + conversation.ConversationId);
-                var messagesPromise = communicationService.downloadMessagesForConversation(conversation.ConversationId, false, 0, 10, false);
-                messagesPromise.then(function (result) {
-                    var messagesFromApi = result.data.items.sort(function (a, b) {
-                        if (a.CreatedOn > b.CreatedOn) {
-                            return 1;
-                        }
-                        if (a.CreatedOn < b.CreatedOn) {
-                            return -1;
-                        }
-                        return 0;
-                    });
 
-                    var messagesFromDatabasePromise = messageRepository.getMessagesFromLocalDatabase(messagesFromApi[0].conversationId, 10, 0);
+                var messagesFromDatabasePromise = messageRepository.getMessagesFromLocalDatabase(conversation.conversationId, 10, 0);
 
-                    messagesFromDatabasePromise.then(function (messagesFromDatabase) {
+                messagesFromDatabasePromise.then(
+                    function (messagesFromDatabase) {
+
+                    var messagesPromise = communicationService.downloadMessagesForConversation(conversation.ConversationId, false, 0, 10, false);
+
+                    messagesPromise.then(function (result) {
+                        if (result.data.items === null || result.data.items === undefined) {
+                            logService.warn('Aborting syncing of conversation ' + conversation.ConversationId + '. Messages from api was null. Conversation messages are from local db, if any.');
+                            conversation.Messages = messagesFromDatabase;
+                            return;
+                        }
+
+                        var messagesFromApi = [];
+
+                        messagesFromApi = result.data.items.sort(function (a, b) {
+                            if (a.CreatedOn > b.CreatedOn) {
+                                return 1;
+                            }
+                            if (a.CreatedOn < b.CreatedOn) {
+                                return -1;
+                            }
+                            return 0;
+                        });
+
                         var intersect = true;
 
                         if (messagesFromApi.length !== messagesFromDatabase.length) {
@@ -172,8 +184,16 @@ angular.module('services', [])
                             logService.log('Conversation ' + conversation.ConversationId + ' was in sync.');
                             conversation.Messages = messagesFromDatabase;
                         }
+
+                    }, function (error) {
+                        conversation.Messages = messagesFromDatabase;
+                        logService.warn('Aborting syncing of conversation ' + conversation.ConversationId + '. Could not make request to get messages from api. Conversation messages are from local db, if any.');
                     });
+                    },
+                    function (error) {
+                    logService.error('Something went wrong when getting messages from database, cannot display any messages.', error);
                 });
+                
             }
 
             factory.syncInit = function () {
