@@ -6,6 +6,7 @@
 angular.module('token', [])
     .factory('tokenService', ['$http', '$window', '$rootScope', '$location', '$q', '$state', 'logService', function ($http, win, $rootScope, $location, $q, $state, logService) {
         $rootScope.token = null;
+        var authenticationFailed = false;
 
         var token = null;
         var refreshTokenIntervall = null;
@@ -83,11 +84,14 @@ angular.module('token', [])
                 var promise = factory.httpPost(req);
                 promise.then(function (greeting) {
                     if (greeting.status && greeting.status.toLocaleLowerCase() !== "unauthorized") {
+                        authenticationFailed = false;
                         resolve('authenticated');
                     } else {
+                        authenticationFailed = true;
                         reject('not authenticated');
                     }
                 }, function (reason) {
+                    authenticationFailed = true;
                     reject('not authenticated');
                 });
             });
@@ -133,6 +137,19 @@ angular.module('token', [])
 
             });
         };
+
+        function justSetCredentials(greeting) {
+            logService.log("setting credentials for following user:");
+            logService.log(greeting);
+            //fetch user details
+            userDetails = {
+                token: greeting.data.id,
+                accountId: greeting.data.accountId,
+                administratorId: greeting.data.administratorId,
+                appUserId: greeting.data.appUserId,
+                displayName: ""
+            };
+        }
 
         //set user credentials
         function setCredentialsAndLogin(greeting) {
@@ -305,6 +322,8 @@ angular.module('token', [])
                 //Success
                 logService.log('Success appuser authentication');
                 logService.log(greeting);
+                justSetCredentials(greeting);
+                authenticationFailed = false;
                 return $q.defer().resolve(greeting);
 
             }, function (reason) {
@@ -333,12 +352,15 @@ angular.module('token', [])
                     promise = factory.httpPost(appTokenAuthentication);
                     promise.then(function (greeting) {
                         //Success
+                        justSetCredentials(greeting);
                         logService.log('Success admin-> app');
                         logService.log(greeting);
                         //TODO: logged in now
+                        authenticationFailed = false;
                         return $q.defer().resolve(greeting);
 
                     }, function (reason) {
+                        authenticationFailed = true;
                        return $q.defer().reject(reason);
                     });
 
@@ -347,6 +369,7 @@ angular.module('token', [])
                     logService.log('Failed login admin');
                     logService.log(reason);
 
+                    authenticationFailed = true;
                     return $q.defer().reject(reason);
                 });
             });

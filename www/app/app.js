@@ -54,13 +54,11 @@ var mobileresponseWebbApp = angular.module('administratorApp', [
                     dataService.resolveUnidentifiedAppUsers();
                 },function(error){
                     logService(new LogObject("Error running authenticate"));
-                    return null;
                 });
             }
             else {
                 logService(new LogObject("Credentials was null or undefined"));
                 logService(credentials);
-                return null;
             }
         });
     }, function () {
