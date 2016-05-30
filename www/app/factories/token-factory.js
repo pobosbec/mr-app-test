@@ -196,6 +196,7 @@ angular.module('token', [])
                 if ($state.includes('login')) {
                     $state.go('home');
                 }
+                return resolve("success set credentials");
 
             }, function (reason) {
                 //failed try authenticate against admin->app
@@ -205,6 +206,8 @@ angular.module('token', [])
                 $state.go('login');
                 //we are logged in show navbar and redirect
                 $('#template-2').hide();
+
+                return reject("failed set credentials");
             });
         }
 
@@ -333,7 +336,6 @@ angular.module('token', [])
                         factory.saveLoginCredentials(username, password, true);
                         setCredentialsAndLogin(greeting);
                         $rootScope.$broadcast('authentication-success');
-                        return resolve('authenticated');
                     }, function (reason) {
                         //failed try authenticate against admin->app
                         logService.log('Failed login admin-> app');
@@ -343,7 +345,6 @@ angular.module('token', [])
                         //we are logged in show navbar and redirect
                         $('#template-2').hide();
                         $rootScope.$broadcast('authentication-failed');
-                        return reject('not authenticated');
                     });
 
                 }, function (reason) {
