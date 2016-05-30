@@ -18,6 +18,7 @@ angular.module('event', [])
 
          //   dataService.quickLoading = false;
 
+            //hotfix
             dataService.isLoggedIn = true;
             var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
             pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
@@ -163,6 +164,7 @@ angular.module('event', [])
                     }
                 }
 
+                dataService.isLoggedIn = true;
                 dataService.quickLoad();
                 setTimeout(function () {
                     $rootScope.$broadcast('sync-conversation-in-view', event);
