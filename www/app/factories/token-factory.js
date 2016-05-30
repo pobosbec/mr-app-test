@@ -289,7 +289,9 @@ angular.module('token', [])
                 logService.log('Success appuser authentication');
                 logService.log(greeting);
                 justSetCredentials(greeting);
+                $rootScope.$broadcast("logged-in");
                 $rootScope.$broadcast('on-focus');
+                $rootScope.$broadcast("app-token-available");
                 authenticationFailed = false;
                 return $q.defer().resolve(greeting);
 
@@ -320,8 +322,9 @@ angular.module('token', [])
                     promise.then(function (greeting) {
                         //Success
                         justSetCredentials(greeting);
+                        $rootScope.$broadcast("app-token-available");
+                        $rootScope.$broadcast("logged-in");
                         $rootScope.$broadcast('on-focus');
-
                         logService.log('Success admin-> app');
                         logService.log(greeting);
                         //TODO: logged in now
@@ -496,6 +499,9 @@ angular.module('token', [])
                     if(factory.getLoginCredentials() !== null && factory.getLoginCredentials() !== undefined){
 
                     factory.justAuthenticate(factory.getLoginCredentials().username, factory.getLoginCredentials().password);
+
+                            factory.httpPostOriginal(req);
+
                     }
                     else{
                         $rootScope.logout();
@@ -516,6 +522,7 @@ angular.module('token', [])
                     if(factory.getLoginCredentials() !== null && factory.getLoginCredentials() !== undefined){
 
                         factory.justAuthenticate(factory.getLoginCredentials().username, factory.getLoginCredentials().password);
+                        factory.httpPostOriginal(req);
                     }
                     else{
                         $rootScope.logout();
