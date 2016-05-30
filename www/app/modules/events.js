@@ -28,20 +28,21 @@ angular.module('event', [])
                 if (credentials !== undefined && credentials !== null) {
                     logService(new LogObject("Credentials was not null or undefined"));
                     logService(credentials);
-                    tokenService.authenticate(credentials.username, credentials.password).then(function(success){
+
+                    tokenService.justAuthenticate(credentials.username, credentials.password).then(function(success){
                         logService(new LogObject("Success running authenticate"));
                         dataService.isLoggedIn = true;
                         dataService.quickLoad();
                         dataService.resolveUnidentifiedAppUsers();
-
-                    }, function(error){
+                    },function(error){
                         logService(new LogObject("Error running authenticate"));
+                        return null;
                     });
                 }
                 else {
                     logService(new LogObject("Credentials was null or undefined"));
                     logService(credentials);
-                    tokenService.logout();
+                    return null;
                 }
             });
 

@@ -255,6 +255,103 @@ angular.module('token', [])
             });
         };
 
+        /**
+         * This function is an version of authenticate but it wont log the user out if failed
+         * @param username
+         * @param password
+         * @param keepLoggedIn
+         */
+        factory.justAuthenticate = function (username, password, keepLoggedIn) {
+            // the API gives a 200 response-code with Error-text if we pass null, but 400 if we pass empty string.
+            if (typeof username === "undefined" || username === null) { username = "" };
+            if (typeof password === "undefined" || password === null) { password = "" };
+
+            var appAuthenticate = {
+                method: 'POST',
+                ignoreLoadingBar: true,
+                url: factory.currentAppApiUrl + 'app/authenticate',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: {
+                    "Data": {
+                        "InstanceName": "mobileresponse",
+                        "Username": username,
+                        "Password": password
+                    },
+                    "Tags": ['version:' + $rootScope.version]
+                }
+            };
+
+            var adminAuthenticate = {
+                method: 'POST',
+                ignoreLoadingBar: true,
+                url: factory.currentApiUrl + 'authenticate',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: {
+                    "Data": {
+                        "InstanceName": "mobileresponse",
+                        "Username": username,
+                        "Password": password
+                    },
+                    "Tags": null
+                }
+            };
+
+            var promise = factory.httpPost(appAuthenticate);
+            promise.then(function (greeting) {
+                //Success
+                logService.log('Success appuser authentication');
+                logService.log(greeting);
+                return $q.defer().resolve(greeting);
+
+            }, function (reason) {
+                //failed try authenticate against admin
+                logService.log('Failed App authentication, trying with admin');
+                logService.log(reason);
+                promise = factory.httpPost(adminAuthenticate);
+                promise.then(function (greeting) {
+                    //Admin authenticate success
+                    logService.log('Success admin authenticate now authenticating towards app');
+                    logService.log(greeting);
+                    var authenticationTokenAdmin = greeting.data.id;
+                    appTokenAuthentication = {
+                        method: 'POST',
+                        ignoreLoadingBar: true,
+                        url: factory.currentAppApiUrl + 'app/is-token-valid',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        data: {
+                            Data: { AuthenticationToken: authenticationTokenAdmin },
+                            AuthenticationToken: authenticationTokenAdmin
+                        },
+                        "Tags": ['version:' + $rootScope.version]
+                    };
+                    promise = factory.httpPost(appTokenAuthentication);
+                    promise.then(function (greeting) {
+                        //Success
+                        logService.log('Success admin-> app');
+                        logService.log(greeting);
+                        //TODO: logged in now
+                        return $q.defer().resolve(greeting);
+
+                    }, function (reason) {
+                       return $q.defer().reject(reason);
+                    });
+
+                }, function (reason) {
+                    //failed try authenticate against admin
+                    logService.log('Failed login admin');
+                    logService.log(reason);
+
+                    return $q.defer().reject(reason);
+                });
+            });
+        };
+
         factory.authenticate = function (username, password, keepLoggedIn) {
             // the API gives a 200 response-code with Error-text if we pass null, but 400 if we pass empty string.
             if (typeof username === "undefined" || username === null) { username = "" };
