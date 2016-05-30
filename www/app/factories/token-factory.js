@@ -13,89 +13,57 @@ angular.module('token', [])
         var factory = {};
         var userDetails = {};
 
-        factory.keepTokenAlive = function () {
-            var req = {
-                method: 'POST',
-                ignoreLoadingBar: true,
-                url: factory.currentAppApiUrl + 'app/is-token-valid',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                data: {
-                    "Data": {},
-                    "AuthenticationToken": userDetails.token,
-                    "Tags": [$rootScope.version]
-                }
-            };
-
-            var refreshTokenSuccess = function (greeting) {
-                //Success
-                logService.log(new LogObject('Success refreshing token', greeting));
-            };
-
-            var refreshTokenFailed = function (reason) {
-                //failed attempt
-                logService.log('Failed refreshing token');
-                logService.log(reason);
-
-                var credentials = factory.keepLoggedInCredentialsFromDatabase();
-                if (credentials.keepLoggedIn) {
-                    logService.log("Keep Logged in is active, attempting to re-authenticate");
-                    factory.authenticate(credentials.username, credentials.password, credentials.keepLoggedIn);
-                } else {
-                    logService.log("Logging out");
-                    $rootScope.logout();
-                }
-            }
-
-            var refreshTokenFunction = function () {
-                var promise = factory.httpPost(req);
-                promise.then(function (greeting) {
-                    if (greeting.status && greeting.status.toLocaleLowerCase() !== "unauthorized") {
-                        refreshTokenSuccess(greeting);
-                    } else {
-                        refreshTokenFailed(greeting);
-                    }
-                }, function (reason) {
-                    refreshTokenFailed(reason);
-                });
-            }
-
-            refreshTokenFunction();
-            refreshTokenIntervall = setInterval(refreshTokenFunction, (15 * 60 * 1000));
-        };
-
-        factory.isAuthenticated = function() {
-            return $q(function (resolve, reject) {
-                var req = {
-                    method: 'POST',
-                    ignoreLoadingBar: true,
-                    url: factory.currentAppApiUrl + 'app/is-token-valid',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    data: {
-                        "Data": {},
-                        "AuthenticationToken": userDetails.token,
-                        "Tags": [$rootScope.version]
-                    }
-                };
-
-                var promise = factory.httpPost(req);
-                promise.then(function (greeting) {
-                    if (greeting.status && greeting.status.toLocaleLowerCase() !== "unauthorized") {
-                        authenticationFailed = false;
-                        resolve('authenticated');
-                    } else {
-                        authenticationFailed = true;
-                        reject('not authenticated');
-                    }
-                }, function (reason) {
-                    authenticationFailed = true;
-                    reject('not authenticated');
-                });
-            });
-        }
+        //factory.keepTokenAlive = function () {
+        //    var req = {
+        //        method: 'POST',
+        //        ignoreLoadingBar: true,
+        //        url: factory.currentAppApiUrl + 'app/is-token-valid',
+        //        headers: {
+        //            'Content-Type': 'application/json'
+        //        },
+        //        data: {
+        //            "Data": {},
+        //            "AuthenticationToken": userDetails.token,
+        //            "Tags": [$rootScope.version]
+        //        }
+        //    };
+        //
+        //    var refreshTokenSuccess = function (greeting) {
+        //        //Success
+        //        logService.log(new LogObject('Success refreshing token', greeting));
+        //    };
+        //
+        //    var refreshTokenFailed = function (reason) {
+        //        //failed attempt
+        //        logService.log('Failed refreshing token');
+        //        logService.log(reason);
+        //
+        //        var credentials = factory.keepLoggedInCredentialsFromDatabase();
+        //        if (credentials.keepLoggedIn) {
+        //            logService.log("Keep Logged in is active, attempting to re-authenticate");
+        //            factory.authenticate(credentials.username, credentials.password, credentials.keepLoggedIn);
+        //        } else {
+        //            logService.log("Logging out");
+        //            $rootScope.logout();
+        //        }
+        //    }
+        //
+        //    var refreshTokenFunction = function () {
+        //        var promise = factory.httpPost(req);
+        //        promise.then(function (greeting) {
+        //            if (greeting.status && greeting.status.toLocaleLowerCase() !== "unauthorized") {
+        //                refreshTokenSuccess(greeting);
+        //            } else {
+        //                refreshTokenFailed(greeting);
+        //            }
+        //        }, function (reason) {
+        //            refreshTokenFailed(reason);
+        //        });
+        //    }
+        //
+        //    refreshTokenFunction();
+        //    refreshTokenIntervall = setInterval(refreshTokenFunction, (15 * 60 * 1000));
+        //};
 
         $rootScope.logout = function () {
             //TODO abandon function
@@ -141,14 +109,12 @@ angular.module('token', [])
         function justSetCredentials(greeting) {
             logService.log("setting credentials for following user:");
             logService.log(greeting);
-            //fetch user details
-            userDetails = {
-                token: greeting.data.id,
-                accountId: greeting.data.accountId,
-                administratorId: greeting.data.administratorId,
-                appUserId: greeting.data.appUserId,
-                displayName: ""
-            };
+            //fetch user detail
+                userDetails.token = greeting.data.id;
+                userDetails.accountId = greeting.data.accountId;
+                userDetails.administratorId = greeting.data.administratorId;
+                userDetails.appUserId = greeting.data.appUserId;
+
         }
 
         //set user credentials
@@ -210,7 +176,7 @@ angular.module('token', [])
                 //TODO: logged in now transfer home
                 $rootScope.$broadcast("app-token-available");
                 $rootScope.$broadcast("logged-in");
-                factory.keepTokenAlive();
+              //  factory.keepTokenAlive();
                 if ($state.includes('login')) {
                     $state.go('home');
                 }
@@ -510,18 +476,37 @@ angular.module('token', [])
             });
         }
 
-        factory.httpPostOriginal = function (req) {
+        factory.httpPostOriginal = function (req,dontRetry) {
             var deferred = $q.defer();
 
             $http(req
             ).then(function successCallback(response) {
                 // this callback will be called asynchronously
                 // when the response is available
+                console.log(response.status);
+
+                console.log(response);
+                if(response.data.status === 401 || response.data.status === "Unauthorized"){
+                    logService.log(new LogObject("user unauthorized"));
+                    logService.log(new LogObject(response));
+
+                    factory.justAuthenticate(factory.getLoginCredentials().username, factory.getLoginCredentials().password);
+
+                    //retry
+
+                }
+
                 deferred.resolve(response.data);
             }, function errorCallback(response) {
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
                 //logService.log(response); // TODO: REMOVE! only for debugging.
+                if(response.status === 401 || response.status === 'Unauthorized'){
+                    logService.log(new LogObject("user unauthorized"));
+                    logService.log(new LogObject(response));
+                    factory.justAuthenticate(factory.getLoginCredentials().username, factory.getLoginCredentials().password);
+
+                }
                 deferred.reject(response.data);
             });
             return deferred.promise;
@@ -790,7 +775,7 @@ angular.module('token', [])
         factory.currentDeviceServiceUrl = factory.getDeviceServiceUrl(window.location);
         factory.currentReservationServiceUrl = factory.getReservationServiceUrl(window.location);
 
-        factory.keepTokenAlive();
+     //   factory.keepTokenAlive();
 
         return factory;
     }]);

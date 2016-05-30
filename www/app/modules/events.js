@@ -16,33 +16,10 @@ angular.module('event', [])
             logService.log("resume");
             logService.log("initing plugin with on device ready, events.js");
 
-            tokenService.isAuthenticated().then(function(success) {
+
                 dataService.isLoggedIn = true;
                 dataService.quickLoad();
                 dataService.resolveUnidentifiedAppUsers();
-            }, function(error) {
-                //not authenticated
-
-                //check if we have credentials
-                var credentials = tokenService.getLoginCredentials();
-                if (credentials !== undefined && credentials !== null) {
-                    logService(new LogObject("Credentials was not null or undefined"));
-                    logService(credentials);
-
-                    tokenService.justAuthenticate(credentials.username, credentials.password).then(function(success){
-                        logService(new LogObject("Success running authenticate"));
-                        dataService.isLoggedIn = true;
-                        dataService.quickLoad();
-                        dataService.resolveUnidentifiedAppUsers();
-                    },function(error){
-                        logService(new LogObject("Error running authenticate"));
-                    });
-                }
-                else {
-                    logService(new LogObject("Credentials was null or undefined"));
-                    logService(credentials);
-                }
-            });
 
             var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
             pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });

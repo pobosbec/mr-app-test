@@ -124,7 +124,7 @@ angular.module('services', [])
                     var messagesPromise = communicationService.downloadMessagesForConversation(conversation.ConversationId, false, 0, 10, false);
 
                     messagesPromise.then(function (result) {
-                        if (result.data.items === null || result.data.items === undefined) {
+                        if (result.data === null || result.data.items === undefined) {
                             logService.warn('Aborting syncing of conversation ' + conversation.ConversationId + '. Messages from api was null. Conversation messages are from local db, if any.');
                             conversation.Messages = messagesFromDatabase;
                             return;
