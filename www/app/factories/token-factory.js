@@ -321,7 +321,7 @@ angular.module('token', [])
                         //Success
                         justSetCredentials(greeting);
                         $rootScope.$broadcast('on-focus');
-                        
+
                         logService.log('Success admin-> app');
                         logService.log(greeting);
                         //TODO: logged in now
@@ -493,7 +493,13 @@ angular.module('token', [])
                     logService.log(new LogObject("user unauthorized"));
                     logService.log(new LogObject(response));
 
+                    if(factory.getLoginCredentials() !== null && factory.getLoginCredentials() !== undefined){
+
                     factory.justAuthenticate(factory.getLoginCredentials().username, factory.getLoginCredentials().password);
+                    }
+                    else{
+                        $rootScope.logout();
+                    }
 
                     //retry
 
@@ -507,8 +513,13 @@ angular.module('token', [])
                 if(response.status === 401 || response.status === 'Unauthorized'){
                     logService.log(new LogObject("user unauthorized"));
                     logService.log(new LogObject(response));
-                    factory.justAuthenticate(factory.getLoginCredentials().username, factory.getLoginCredentials().password);
+                    if(factory.getLoginCredentials() !== null && factory.getLoginCredentials() !== undefined){
 
+                        factory.justAuthenticate(factory.getLoginCredentials().username, factory.getLoginCredentials().password);
+                    }
+                    else{
+                        $rootScope.logout();
+                    }
                 }
                 deferred.reject(response.data);
             });
