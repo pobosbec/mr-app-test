@@ -16,11 +16,7 @@ angular.module('event', [])
             logService.log("resume");
             logService.log("initing plugin with on device ready, events.js");
 
-
-                dataService.isLoggedIn = true;
-                dataService.quickLoading = false;
-                dataService.quickLoad();
-                dataService.resolveUnidentifiedAppUsers();
+            dataService.quickLoading = false;
 
             var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
             pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
