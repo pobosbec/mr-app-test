@@ -35,9 +35,9 @@ var mobileresponseWebbApp = angular.module('administratorApp', [
         $rootScope.$broadcast('services-started');
 
         //hotfix
-        dataService.isLoggedIn = true;
-         //   dataService.isLoggedIn = true;
-        dataService.quickLoad();
+       // dataService.isLoggedIn = true;
+            dataService.isLoggedIn = true;
+       // dataService.quickLoad();
            // dataService.resolveUnidentifiedAppUsers();
 
     }, function () {
