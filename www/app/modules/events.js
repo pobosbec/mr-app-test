@@ -164,7 +164,6 @@ angular.module('event', [])
                     }
                 }
 
-                dataService.quickLoad();
                 setTimeout(function () {
                     $rootScope.$broadcast('sync-conversation-in-view', event);
                 }, 10);
