@@ -217,6 +217,7 @@ angular.module('services', [])
             function quickLoad() {
                 var promise = $q(function (resolve, reject) {
                     var conversationsFromApiPromise = communicationService.getAllConversations(null);
+
                     conversationsFromApiPromise.then(
                         function (conversationsPromiseSuccess) {
 
@@ -304,7 +305,10 @@ angular.module('services', [])
                             messageRepository.addConversations(conversations).then(function (success) {
                                 resolve();
                             });
-                        });
+                        }),
+                        function(error) {
+                            logService.error('Quickload failed.', error);
+                        };
 
                 });
                 return promise;
