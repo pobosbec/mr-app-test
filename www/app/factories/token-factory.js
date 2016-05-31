@@ -250,6 +250,7 @@ angular.module('token', [])
             if (typeof password === "undefined" || password === null) { password = "" };
 
             console.log("JustAuthenticate running");
+
             var appAuthenticate = {
                 method: 'POST',
                 ignoreLoadingBar: true,
@@ -284,68 +285,80 @@ angular.module('token', [])
                 }
             };
 
-            var promise = factory.httpPost(appAuthenticate);
-            promise.then(function (greeting) {
-                //Success
-                logService.log('Success appuser authentication');
-                logService.log(greeting);
-                justSetCredentials(greeting);
-                $rootScope.$broadcast("logged-in");
-                $rootScope.$broadcast('on-focus');
-                $rootScope.$broadcast("app-token-available");
-                authenticationFailed = false;
-                return $q.defer().resolve(greeting);
+            var promise = $q(function(resolve, reject) {
 
-            }, function (reason) {
-                //failed try authenticate against admin
-                logService.log('Failed App authentication, trying with admin');
-                logService.log(reason);
-                promise = factory.httpPost(adminAuthenticate);
-                promise.then(function (greeting) {
-                    //Admin authenticate success
-                    logService.log('Success admin authenticate now authenticating towards app');
+                var promise = factory.httpPost(appAuthenticate);
+
+                promise.then(function(greeting) {
+                    //Success
+                    logService.log('Success appuser authentication');
                     logService.log(greeting);
-                    var authenticationTokenAdmin = greeting.data.id;
-                    appTokenAuthentication = {
-                        method: 'POST',
-                        ignoreLoadingBar: true,
-                        url: factory.currentAppApiUrl + 'app/is-token-valid',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        data: {
-                            Data: { AuthenticationToken: authenticationTokenAdmin },
-                            AuthenticationToken: authenticationTokenAdmin
-                        },
-                        "Tags": ['version:' + $rootScope.version]
-                    };
-                    promise = factory.httpPost(appTokenAuthentication);
-                    promise.then(function (greeting) {
-                        //Success
-                        justSetCredentials(greeting);
-                        $rootScope.$broadcast("app-token-available");
-                        $rootScope.$broadcast("logged-in");
-                        $rootScope.$broadcast('on-focus');
-                        logService.log('Success admin-> app');
-                        logService.log(greeting);
-                        //TODO: logged in now
-                        authenticationFailed = false;
-                        return $q.defer().resolve(greeting);
+                    justSetCredentials(greeting);
+                    $rootScope.$broadcast("logged-in");
+                    $rootScope.$broadcast('on-focus');
+                    $rootScope.$broadcast("app-token-available");
+                    authenticationFailed = false;
+                    //return $q.defer().resolve(greeting);
+                    resolve(greeting);
 
-                    }, function (reason) {
-                        authenticationFailed = true;
-                       return $q.defer().reject(reason);
-                    });
-
-                }, function (reason) {
+                }, function(reason) {
                     //failed try authenticate against admin
-                    logService.log('Failed login admin');
+                    logService.log('Failed App authentication, trying with admin');
                     logService.log(reason);
+                    promise = factory.httpPost(adminAuthenticate);
 
-                    authenticationFailed = true;
-                    return $q.defer().reject(reason);
+                    promise.then(function(greeting) {
+                        //Admin authenticate success
+                        logService.log('Success admin authenticate now authenticating towards app');
+                        logService.log(greeting);
+                        var authenticationTokenAdmin = greeting.data.id;
+                        appTokenAuthentication = {
+                            method: 'POST',
+                            ignoreLoadingBar: true,
+                            url: factory.currentAppApiUrl + 'app/is-token-valid',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            data: {
+                                Data: { AuthenticationToken: authenticationTokenAdmin },
+                                AuthenticationToken: authenticationTokenAdmin
+                            },
+                            "Tags": ['version:' + $rootScope.version]
+                        };
+
+                        promise = factory.httpPost(appTokenAuthentication);
+                        promise.then(function(greeting) {
+                            //Success
+                            justSetCredentials(greeting);
+                            $rootScope.$broadcast("app-token-available");
+                            $rootScope.$broadcast("logged-in");
+                            $rootScope.$broadcast('on-focus');
+                            logService.log('Success admin-> app');
+                            logService.log(greeting);
+                            //TODO: logged in now
+                            authenticationFailed = false;
+                            resolve(greeting);
+                            //return $q.defer().resolve(greeting);
+
+                        }, function(reason) {
+                            authenticationFailed = true;
+                            reject(reason);
+                            //return $q.defer().reject(reason);
+                        });
+
+                    }, function(reason) {
+                        //failed try authenticate against admin
+                        logService.log('Failed login admin');
+                        logService.log(reason);
+
+                        authenticationFailed = true;
+                        reject(reason);
+                        //return $q.defer().reject(reason);
+                    });
                 });
             });
+
+            return promise;
         };
 
         factory.authenticate = function (username, password, keepLoggedIn) {
@@ -491,30 +504,32 @@ angular.module('token', [])
                 // this callback will be called asynchronously
                 // when the response is available
                 logService.log(response);
-                if(response.data.status === 401 || response.data.status === "Unauthorized"){
+                if (response.data.status === 401 || response.data.status === "Unauthorized") {
                     logService.log(new LogObject("success callback - user unauthorized"));
                     logService.log(new LogObject(response));
 
-                    if(factory.getLoginCredentials() !== null){
+                    if (factory.getLoginCredentials() !== null) {
 
                         factory.justAuthenticate(factory.getLoginCredentials().username, factory.getLoginCredentials().password)
-                            .then(function (success){
+                            .then(function(success) {
                                 logService.log(new LogObject("justAuthenticate successfully ran now re running http post"));
-                                factory.httpPostOriginal(req);
-                            }, function(error){
+                                factory.httpPostOriginal(req).then(function(success) {
+                                    deferred.resolve(success);
+                                }, function(error) {
+                                    deferred.reject(error);
+                                });
+                            }, function(error) {
+                                deferred.reject(error);
                             });
 
-                    }
-                    else{
+                    } else {
                         console.log("logging out");
                         $rootScope.logout();
                     }
-
                     //retry
-
+                } else {
+                    deferred.resolve(response);
                 }
-
-                deferred.resolve(response.data);
             }, function errorCallback(response) {
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
