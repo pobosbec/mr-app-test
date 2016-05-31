@@ -79,7 +79,6 @@ angular.module('database', [])
         factory.createTables = function () {
 
             var deferred = $q.defer();
-
             factory.db.transaction(function (tx) {
                 tx.executeSql('CREATE TABLE IF NOT EXISTS Messages (MessageId primary key, CreatedOn, ConversationId, Author, JSON)');
                 tx.executeSql('CREATE TABLE IF NOT EXISTS AppUsers (AppUserId text primary key, DisplayName text, JSON text)');
