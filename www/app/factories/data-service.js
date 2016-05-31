@@ -308,6 +308,7 @@ angular.module('services', [])
                         }),
                         function(error) {
                             logService.error('Quickload failed.', error);
+                            reject(error);
                         };
 
                 });
