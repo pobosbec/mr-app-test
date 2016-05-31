@@ -18,7 +18,7 @@ angular.module('services', [])
             factory.isQuickLoading = false;
             factory.syncAppUsersCycle = null;
             factory.userId = tokenService.getAppUserId();
-            factory.isLoggedIn = false;
+            factory.isLoggedIn = true;
 
             factory.resolveUnidentifiedAppUsers = function () {
 
