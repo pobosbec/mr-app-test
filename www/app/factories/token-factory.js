@@ -111,10 +111,10 @@ angular.module('token', [])
             logService.log("setting credentials for following user:");
             logService.log(greeting);
             //fetch user detail
-                userDetails.token = greeting.data.id;
-                userDetails.accountId = greeting.data.accountId;
-                userDetails.administratorId = greeting.data.administratorId;
-                userDetails.appUserId = greeting.data.appUserId;
+                userDetails.token = greeting.data.data.id;
+                userDetails.accountId = greeting.data.data.accountId;
+                userDetails.administratorId = greeting.data.data.administratorId;
+                userDetails.appUserId = greeting.data.data.appUserId;
         }
 
         //set user credentials
@@ -294,10 +294,9 @@ angular.module('token', [])
                     logService.log('Success appuser authentication');
                     logService.log(greeting);
                     justSetCredentials(greeting);
-                    $rootScope.$broadcast("logged-in");
-                    $rootScope.$broadcast('on-focus');
+                    //$rootScope.$broadcast("logged-in");
+                    //$rootScope.$broadcast('on-focus');
                     $rootScope.$broadcast("app-token-available");
-                    authenticationFailed = false;
                     //return $q.defer().resolve(greeting);
                     resolve(greeting);
 
@@ -336,7 +335,6 @@ angular.module('token', [])
                             logService.log('Success admin-> app');
                             logService.log(greeting);
                             //TODO: logged in now
-                            authenticationFailed = false;
                             resolve(greeting);
                             //return $q.defer().resolve(greeting);
 
@@ -350,8 +348,6 @@ angular.module('token', [])
                         //failed try authenticate against admin
                         logService.log('Failed login admin');
                         logService.log(reason);
-
-                        authenticationFailed = true;
                         reject(reason);
                         //return $q.defer().reject(reason);
                     });
@@ -513,7 +509,8 @@ angular.module('token', [])
                         factory.justAuthenticate(factory.getLoginCredentials().username, factory.getLoginCredentials().password)
                             .then(function(success) {
                                 logService.log(new LogObject("justAuthenticate successfully ran now re running http post"));
-                                factory.httpPostOriginal(req).then(function(success) {
+
+                                factory.httpPostOriginal(req).then(function (success) {
                                     deferred.resolve(success);
                                 }, function(error) {
                                     deferred.reject(error);
