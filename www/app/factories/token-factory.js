@@ -122,7 +122,6 @@ angular.module('token', [])
             logService.log("setting credentials for following user:");
             logService.log(greeting);
             //fetch user details
-            var greeting = greeting.data
             userDetails = {
                 token: greeting.data.id,
                 accountId: greeting.data.accountId,
@@ -152,7 +151,6 @@ angular.module('token', [])
                 //Success
                 logService.log('Success fetched userdetails');
                 logService.log(greeting);
-                var greeting = greeting.data;
                 if (greeting.data.displayName != null) {
                     userDetails.displayName = greeting.data.displayName;
                 }
