@@ -19,7 +19,6 @@ angular.module('event', [])
          //   dataService.quickLoading = false;
 
             //hotfix
-            dataService.isLoggedIn = true;
             var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
             pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
             logService.log("set app badge nr 0");
@@ -106,8 +105,6 @@ angular.module('event', [])
                 args = args | {};
                 args.Sender = 'events';
                 args.Event = 'on-focus';
-
-                dataService.isLoggedIn = true;
 
                 // TODO: this smells.
 

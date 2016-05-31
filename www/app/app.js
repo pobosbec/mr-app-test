@@ -33,11 +33,14 @@ var mobileresponseWebbApp = angular.module('administratorApp', [
         contactsService.init();
         messageRepository.init();
         logService.init();
+        $rootScope.$broadcast('services-started');
 
         if (tokenService.getLoginCredentials() !== null && tokenService.getLoginCredentials() !== undefined){
-            $rootScope.$broadcast('services-started');
-            //dataService.quickLoad();
-            //dataService.resolveUnidentifiedAppUsers();
+            dataService.isLoggedIn = true;
+            dataService.quickLoad();
+            dataService.resolveUnidentifiedAppUsers();
+
+
         }
         else {
             $rootScope.logout();
