@@ -115,7 +115,6 @@ angular.module('token', [])
                 userDetails.accountId = greeting.data.accountId;
                 userDetails.administratorId = greeting.data.administratorId;
                 userDetails.appUserId = greeting.data.appUserId;
-
         }
 
         //set user credentials
@@ -496,7 +495,7 @@ angular.module('token', [])
                     logService.log(new LogObject("success callback - user unauthorized"));
                     logService.log(new LogObject(response));
 
-                    if(factory.getLoginCredentials() !== null && factory.getLoginCredentials() !== undefined){
+                    if(factory.getLoginCredentials() !== null){
 
                         factory.justAuthenticate(factory.getLoginCredentials().username, factory.getLoginCredentials().password)
                             .then(function (success){
@@ -523,7 +522,7 @@ angular.module('token', [])
                 if(response.status === 401 || response.status === 'Unauthorized'){
                     logService.log(new LogObject("error callback - user unauthorized"));
                     logService.log(new LogObject(response));
-                    if(factory.getLoginCredentials() !== null && factory.getLoginCredentials() !== undefined){
+                    if(factory.getLoginCredentials() !== null){
 
                         factory.justAuthenticate(factory.getLoginCredentials().username, factory.getLoginCredentials().password)
                             .then(function (success){
