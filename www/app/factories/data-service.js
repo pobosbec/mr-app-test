@@ -677,7 +677,7 @@ angular.module('services', [])
                             });
                         break;
                     case 'services-started':
-                        factory.quickLoad();
+                        factory.syncInit();
                         factory.resolveUnidentifiedAppUsers();
                         break;
                     default:

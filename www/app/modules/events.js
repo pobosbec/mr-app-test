@@ -176,8 +176,6 @@ angular.module('event', [])
         });
 
         $scope.$on('online', function (event, args) {
-            args.Sender = 'events';
-            args.Event = 'online';
         });
 
         $scope.$on('offline', function (event, args) { });
