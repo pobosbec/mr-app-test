@@ -11,8 +11,8 @@ angular.module('token', [])
         var token = null;
         var refreshTokenIntervall = null;
         var factory = {};
-        var userDetails = {};
-
+        var userDetails = {}
+        var lastReq = {};
         //factory.keepTokenAlive = function () {
         //    var req = {
         //        method: 'POST',
@@ -111,9 +111,9 @@ angular.module('token', [])
             logService.log("setting credentials for following user:");
             logService.log(greeting);
             //fetch user detail
-                userDetails.token = greeting.data.data.id;
-                userDetails.accountId = greeting.data.data.accountId;
-                userDetails.administratorId = greeting.data.data.administratorId;
+                userDetails.token = greeting.data.id;
+                userDetails.accountId = greeting.data.accountId;
+                userDetails.administratorId = greeting.data.administratorId;
                 userDetails.appUserId = greeting.data.data.appUserId;
         }
 
@@ -123,7 +123,7 @@ angular.module('token', [])
             logService.log(greeting);
             //fetch user details
             userDetails = {
-                token: greeting.data.id,
+                token: greeting.data.data.id,
                 accountId: greeting.data.accountId,
                 administratorId: greeting.data.administratorId,
                 appUserId: greeting.data.appUserId,
@@ -140,16 +140,18 @@ angular.module('token', [])
                     "Data": {
                         "InstanceName": "mobileresponse"
                     },
-                    "AuthenticationToken": greeting.data.id,
+                    "AuthenticationToken": greeting.data.data.id,
                     "Tags": null
                 }
             };
             var defered = $q.defer();
+
             var promise = factory.httpPost(userDetailRequest);
             promise.then(function (greeting) {
                 //Success
                 logService.log('Success fetched userdetails');
                 logService.log(greeting);
+                var greeting = greeting.data;
                 if (greeting.data.displayName != null) {
                     userDetails.displayName = greeting.data.displayName;
                 }
@@ -285,20 +287,16 @@ angular.module('token', [])
                 }
             };
 
-            var promise = $q(function(resolve, reject) {
+            var deferred = $q.defer();
 
                 var promise = factory.httpPost(appAuthenticate);
-
                 promise.then(function(greeting) {
                     //Success
                     logService.log('Success appuser authentication');
                     logService.log(greeting);
                     justSetCredentials(greeting);
-                    //$rootScope.$broadcast("logged-in");
-                    //$rootScope.$broadcast('on-focus');
-                    $rootScope.$broadcast("app-token-available");
                     //return $q.defer().resolve(greeting);
-                    resolve(greeting);
+                    deferred.resolve(greeting);
 
                 }, function(reason) {
                     //failed try authenticate against admin
@@ -329,18 +327,16 @@ angular.module('token', [])
                         promise.then(function(greeting) {
                             //Success
                             justSetCredentials(greeting);
-                            $rootScope.$broadcast("app-token-available");
-                            $rootScope.$broadcast("logged-in");
-                            $rootScope.$broadcast('on-focus');
                             logService.log('Success admin-> app');
                             logService.log(greeting);
                             //TODO: logged in now
-                            resolve(greeting);
+
+                            deferred.resolve(greeting);
                             //return $q.defer().resolve(greeting);
 
                         }, function(reason) {
-                            authenticationFailed = true;
-                            reject(reason);
+
+                            deferred.reject(reason);
                             //return $q.defer().reject(reason);
                         });
 
@@ -348,14 +344,14 @@ angular.module('token', [])
                         //failed try authenticate against admin
                         logService.log('Failed login admin');
                         logService.log(reason);
-                        reject(reason);
+
+                        deferred.reject(reason);
                         //return $q.defer().reject(reason);
                     });
                 });
-            });
+            return deferred.promise;
+            };
 
-            return promise;
-        };
 
         factory.authenticate = function (username, password, keepLoggedIn) {
             // the API gives a 200 response-code with Error-text if we pass null, but 400 if we pass empty string.
@@ -501,6 +497,7 @@ angular.module('token', [])
                 // when the response is available
                 logService.log(response);
                 if (response.data.status === 401 || response.data.status === "Unauthorized") {
+                    lastReq = req;
                     logService.log(new LogObject("success callback - user unauthorized"));
                     logService.log(new LogObject(response));
 
@@ -510,7 +507,9 @@ angular.module('token', [])
                             .then(function(success) {
                                 logService.log(new LogObject("justAuthenticate successfully ran now re running http post"));
 
-                                factory.httpPostOriginal(req).then(function (success) {
+                                lastReq.data.AuthenticationToken = success.data.data.id;
+                                userDetails.token = success.data.data.id;
+                                factory.httpPostOriginal(lastReq).then(function(success) {
                                     deferred.resolve(success);
                                 }, function(error) {
                                     deferred.reject(error);
@@ -532,14 +531,17 @@ angular.module('token', [])
                 // or server returns response with an error status.
                 //logService.log(response); // TODO: REMOVE! only for debugging.
                 if(response.status === 401 || response.status === 'Unauthorized'){
+                    lastReq = req;
                     logService.log(new LogObject("error callback - user unauthorized"));
                     logService.log(new LogObject(response));
                     if(factory.getLoginCredentials() !== null){
 
                         factory.justAuthenticate(factory.getLoginCredentials().username, factory.getLoginCredentials().password)
                             .then(function (success){
+                                lastReq.data.AuthenticationToken = success.data.data.id;
+                                userDetails.token = success.data.data.id;
                                 logService.log(new LogObject("justAuthenticate successfully ran now re running http post"));
-                                factory.httpPostOriginal(req);
+                                factory.httpPostOriginal(lastReq);
                         }, function(error){
                         });
                     }
