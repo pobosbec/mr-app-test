@@ -98,7 +98,7 @@ angular.module('event', [])
                 contactsService.setDb();
                 messageRepository.init();
                 logService.setDb();
-                //$rootScope.$broadcast('services-started');
+                $rootScope.$broadcast('services-started');
             });
 
             var onFocusDelay = setTimeout(function (event, args) {
