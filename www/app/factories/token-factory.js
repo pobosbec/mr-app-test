@@ -122,8 +122,9 @@ angular.module('token', [])
             logService.log("setting credentials for following user:");
             logService.log(greeting);
             //fetch user details
+            var greeting = greeting.data
             userDetails = {
-                token: greeting.data.data.id,
+                token: greeting.data.id,
                 accountId: greeting.data.accountId,
                 administratorId: greeting.data.administratorId,
                 appUserId: greeting.data.appUserId,
@@ -140,7 +141,7 @@ angular.module('token', [])
                     "Data": {
                         "InstanceName": "mobileresponse"
                     },
-                    "AuthenticationToken": greeting.data.data.id,
+                    "AuthenticationToken": greeting.data.id,
                     "Tags": null
                 }
             };
