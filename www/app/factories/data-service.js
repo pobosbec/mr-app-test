@@ -277,7 +277,7 @@ angular.module('services', [])
                                             if (!intersect) {
                                                 if (typeof messagesFromApi[0] !== "undefined" && messagesFromApi[0] !== null && messagesFromApi[0].hasOwnProperty("conversationId")) {
                                                     logService.log("- CLEARED CONVO (" + messagesFromApi[0].conversationId + ") IN DB BECAUSE OF TOO MANY MISSING MESSAGES -");
-                                                    messageRepository.deleteConversation(messagesFromApi[0].conversationId);
+                                                    //messageRepository.deleteConversation(messagesFromApi[0].conversationId);
                                                     communicationService.messagesDownloaded(messagesFromApi);
                                                 }
                                             } else {
