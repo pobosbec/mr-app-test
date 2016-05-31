@@ -34,8 +34,6 @@ var mobileresponseWebbApp = angular.module('administratorApp', [
         messageRepository.init();
         logService.init();
 
-
-
         if (tokenService.getLoginCredentials() !== null && tokenService.getLoginCredentials() !== undefined){
             //$rootScope.$broadcast('services-started');
             //dataService.isLoggedIn = true;
