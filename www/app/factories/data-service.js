@@ -116,7 +116,7 @@ angular.module('services', [])
             factory.syncConversation = function (conversation) {
                 logService.log('Syncing conversation ' + conversation.ConversationId);
 
-                var messagesFromDatabasePromise = messageRepository.getMessagesFromLocalDatabase(conversation.conversationId, 10, 0);
+                var messagesFromDatabasePromise = messageRepository.getMessagesFromLocalDatabase(conversation.ConversationId, 10, 0);
 
                 messagesFromDatabasePromise.then(
                     function (messagesFromDatabase) {
