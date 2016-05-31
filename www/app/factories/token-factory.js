@@ -67,6 +67,7 @@ angular.module('token', [])
 
         $rootScope.logout = function () {
             //TODO abandon function
+            console.log("logged out from logout");
             $rootScope.$broadcast("logged-out");
             win.sessionStorage.accessToken = null;
             $rootScope.token = null;
@@ -249,6 +250,7 @@ angular.module('token', [])
             if (typeof username === "undefined" || username === null) { username = "" };
             if (typeof password === "undefined" || password === null) { password = "" };
 
+            console.log("JustAuthenticate running");
             var appAuthenticate = {
                 method: 'POST',
                 ignoreLoadingBar: true,
@@ -489,21 +491,23 @@ angular.module('token', [])
             ).then(function successCallback(response) {
                 // this callback will be called asynchronously
                 // when the response is available
-                console.log(response.status);
-
-                console.log(response);
+                logService.log(response);
                 if(response.data.status === 401 || response.data.status === "Unauthorized"){
-                    logService.log(new LogObject("user unauthorized"));
+                    logService.log(new LogObject("success callback - user unauthorized"));
                     logService.log(new LogObject(response));
 
                     if(factory.getLoginCredentials() !== null && factory.getLoginCredentials() !== undefined){
 
-                    factory.justAuthenticate(factory.getLoginCredentials().username, factory.getLoginCredentials().password);
-
-                            factory.httpPostOriginal(req);
+                        factory.justAuthenticate(factory.getLoginCredentials().username, factory.getLoginCredentials().password)
+                            .then(function (success){
+                                logService.log(new LogObject("justAuthenticate successfully ran now re running http post"));
+                                factory.httpPostOriginal(req);
+                            }, function(error){
+                            });
 
                     }
                     else{
+                        console.log("logging out");
                         $rootScope.logout();
                     }
 
@@ -517,14 +521,19 @@ angular.module('token', [])
                 // or server returns response with an error status.
                 //logService.log(response); // TODO: REMOVE! only for debugging.
                 if(response.status === 401 || response.status === 'Unauthorized'){
-                    logService.log(new LogObject("user unauthorized"));
+                    logService.log(new LogObject("error callback - user unauthorized"));
                     logService.log(new LogObject(response));
                     if(factory.getLoginCredentials() !== null && factory.getLoginCredentials() !== undefined){
 
-                        factory.justAuthenticate(factory.getLoginCredentials().username, factory.getLoginCredentials().password);
-                        factory.httpPostOriginal(req);
+                        factory.justAuthenticate(factory.getLoginCredentials().username, factory.getLoginCredentials().password)
+                            .then(function (success){
+                                logService.log(new LogObject("justAuthenticate successfully ran now re running http post"));
+                                factory.httpPostOriginal(req);
+                        }, function(error){
+                        });
                     }
                     else{
+                        console.log("logging out");
                         $rootScope.logout();
                     }
                 }
