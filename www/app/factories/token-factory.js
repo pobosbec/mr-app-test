@@ -510,7 +510,7 @@ angular.module('token', [])
                                 lastReq.data.AuthenticationToken = success.data.data.id;
                                 userDetails.token = success.data.data.id;
                                 factory.httpPostOriginal(lastReq).then(function(success) {
-                                    deferred.resolve(success);
+                                    deferred.resolve(success.data);
                                 }, function(error) {
                                     deferred.reject(error);
                                 });
@@ -524,7 +524,7 @@ angular.module('token', [])
                     }
                     //retry
                 } else {
-                    deferred.resolve(response);
+                    deferred.resolve(response.data);
                 }
             }, function errorCallback(response) {
                 // called asynchronously if an error occurs

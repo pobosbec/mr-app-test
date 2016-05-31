@@ -594,7 +594,7 @@ angular.module('services', [])
                     .then(function () {
                         var promise = $q(function (resolve, reject) {
 
-                            if (!factory.conversations.length) {
+                            if (factory.conversations.length < 10) {
                                 var quickLoadPromise = quickLoad();
                                 quickLoadPromise.then(function (result) {
                                     resolve();
