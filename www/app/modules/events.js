@@ -101,6 +101,8 @@ angular.module('event', [])
                 $rootScope.$broadcast('services-started');
             });
 
+            dataService.quickLoad();
+
             var onFocusDelay = setTimeout(function (event, args) {
                 args = args | {};
                 args.Sender = 'events';
