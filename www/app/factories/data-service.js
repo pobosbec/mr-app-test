@@ -413,7 +413,7 @@ angular.module('services', [])
 
                                     if (shouldAdd) {
                                         if (newMessages) {
-                                            if (!factory.isQuickLoading) {
+                                            if (!factory.isQuickLoading && message.Author !== factory.userId) {
                                                 factory.conversations[i].HasNewMessages = true;
                                             }
                                             factory.conversations[i].Messages.unshift(message);
