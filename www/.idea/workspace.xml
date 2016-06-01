@@ -82,7 +82,7 @@
         <entry file="file://$PROJECT_DIR$/template/forms-modal.html">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.053097345">
-              <caret line="3" column="69" selection-start-line="3" selection-start-column="69" selection-end-line="3" selection-end-column="69" />
+              <caret line="3" column="52" selection-start-line="3" selection-start-column="52" selection-end-line="3" selection-end-column="52" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#iframe#0;n#div#1;n#!!top" expanded="true" />
@@ -1306,7 +1306,7 @@
     <entry file="file://$PROJECT_DIR$/template/forms-modal.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.053097345">
-          <caret line="3" column="69" selection-start-line="3" selection-start-column="69" selection-end-line="3" selection-end-column="69" />
+          <caret line="3" column="52" selection-start-line="3" selection-start-column="52" selection-end-line="3" selection-end-column="52" />
           <folding>
             <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#iframe#0;n#div#1;n#!!top" expanded="true" />
