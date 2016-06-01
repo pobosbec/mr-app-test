@@ -114,7 +114,7 @@ angular.module('token', [])
                 userDetails.token = greeting.data.id;
                 userDetails.accountId = greeting.data.accountId;
                 userDetails.administratorId = greeting.data.administratorId;
-                userDetails.appUserId = greeting.data.data.appUserId;
+                userDetails.appUserId = greeting.data.appUserId;
         }
 
         //set user credentials
