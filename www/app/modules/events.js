@@ -43,6 +43,9 @@ angular.module('event', [])
 
         document.addEventListener('online', function (event, args) {
             $rootScope.$broadcast('online', args);
+            logService.log(new LogObject("Online"));
+            $rootScope.$broadcast('services-started');
+            dataService.quickLoad();
         }, false);
 
         document.addEventListener('offline', function (event, args) {
