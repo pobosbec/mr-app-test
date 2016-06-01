@@ -11,7 +11,7 @@ angular.module('event', [])
         // PhoneGap/Cordova events
         // ------------------------------------
 
-        document.addEventListener("deviceready", function() {
+        document.addEventListener("deviceready", function () {
             // Your code here...
             logService.log("Device Ready");
         });
@@ -21,7 +21,7 @@ angular.module('event', [])
             logService.log("resume");
             logService.log("initing plugin with on device ready, events.js");
 
-         //   dataService.quickLoading = false;
+            //   dataService.quickLoading = false;
 
 
             $rootScope.$broadcast('on-focus', args);
@@ -190,16 +190,16 @@ angular.module('event', [])
 
         $scope.$on('offline', function (event, args) { });
 
-        $scope.$on('database-error', function(event, args) {
+        $scope.$on('database-error', function (event, args) {
             logService.info('Received database-error. Reconnecting db.');
             databaseService.init().then(
-                function(success) {
+                function (success) {
                     logService.info('Database restarted.');
                     contactsService.setDb();
                     messageRepository.init();
                     logService.setDb();
                 },
-                function(error) {
+                function (error) {
                     logService.info('Could not restart database.');
                 });
         });
@@ -252,19 +252,13 @@ angular.module('event', [])
             communicationService.on(event, args);
             logService.log("$on, push-notification, event.js 249: " + event);
 
+            dataService.on(event, args);
 
             //hotfix
             var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
             pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
             logService.log("set app badge nr 0");
             pushNotification.setApplicationIconBadgeNumber(0);
-
-            //databaseService.init().then(function () {
-            //    contactsService.setDb();
-            //    messageRepository.init();
-            //    logService.setDb();
-            //    $rootScope.$broadcast('services-started');
-            //});
 
             var onFocusDelay = setTimeout(function (event, args) {
                 args = args | {};
@@ -294,7 +288,7 @@ angular.module('event', [])
                                     dataService.syncConversation(conversation);
                                 }
                             });
-                         //   $location.path('/conversation/' + convoId);
+                            //   $location.path('/conversation/' + convoId);
                         } else if (conversationIds.length > 1) {
 
                             dataService.conversations.some(function (conversation) {
@@ -318,9 +312,9 @@ angular.module('event', [])
 
                             resetData();
                             if (sameConversation) {
-                          //      $location.path('/conversation/' + firstConversationId);
+                                //      $location.path('/conversation/' + firstConversationId);
                             } else {
-                            //    $location.path('/conversations/');
+                                //    $location.path('/conversations/');
                             }
                         }
                     } else {

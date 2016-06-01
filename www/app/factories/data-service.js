@@ -121,89 +121,80 @@ angular.module('services', [])
                 messagesFromDatabasePromise.then(
                     function (messagesFromDatabase) {
 
-                    var messagesPromise = communicationService.downloadMessagesForConversation(conversation.ConversationId, false, 0, 10, false);
+                        var messagesPromise = communicationService.downloadMessagesForConversation(conversation.ConversationId, false, 0, 10, false);
 
-                    messagesPromise.then(function (result) {
-                        //TODO: result.data.items is not an object / error undefined is not an object
-                        logService.log('result.data.items: ' + result.data.items);
-                        if (result.data === null || result.data.items === undefined) {
-                            logService.warn('Aborting syncing of conversation ' + conversation.ConversationId + '. Messages from api was null. Conversation messages are from local db, if any.');
-                            conversation.Messages = messagesFromDatabase;
-                            return;
-                        }
-
-                        var messagesFromApi = [];
-
-                        messagesFromApi = result.data.items.sort(function (a, b) {
-                            if (a.CreatedOn > b.CreatedOn) {
-                                return 1;
+                        messagesPromise.then(function (result) {
+                            //TODO: result.data.items is not an object / error undefined is not an object
+                            logService.log('result.data.items: ' + result.data.items);
+                            if (result.data === null || result.data.items === undefined) {
+                                logService.warn('Aborting syncing of conversation ' + conversation.ConversationId + '. Messages from api was null. Conversation messages are from local db, if any.');
+                                conversation.Messages = messagesFromDatabase;
+                                return;
                             }
-                            if (a.CreatedOn < b.CreatedOn) {
-                                return -1;
-                            }
-                            return 0;
-                        });
 
-                        var intersect = true;
+                            var messagesFromApi = [];
 
-                        if (messagesFromApi.length !== messagesFromDatabase.length) {
-                            intersect = false;
-                        }
+                            messagesFromApi = result.data.items.sort(function (a, b) {
+                                if (a.CreatedOn > b.CreatedOn) {
+                                    return 1;
+                                }
+                                if (a.CreatedOn < b.CreatedOn) {
+                                    return -1;
+                                }
+                                return 0;
+                            });
 
-                        factory.sortMessages(messagesFromApi);
-                        messagesFromDatabase.some(function (message) {
-                            message.createdOn = message.CreatedOn;
-                        });
-                        factory.sortMessages(messagesFromDatabase);
+                            var intersect = true;
 
-                        for (var i = 0; i < messagesFromApi.length; i++) {
-                            if (messagesFromDatabase[i] === null || messagesFromDatabase[i] === undefined || messagesFromApi[i] === null || messagesFromApi[i] === undefined) {
-                                logService.warn(new LogObject('Message was null.'));
+                            if (messagesFromApi.length !== messagesFromDatabase.length) {
                                 intersect = false;
-                                break;
                             }
 
-                            if (messagesFromDatabase[i].MessageId === null || messagesFromDatabase[i].MessageId === undefined || messagesFromApi[i].messageId === null || messagesFromApi[i].messageId === undefined) {
-                                logService.error(new LogObject('Message without id.'));
-                                intersect = false;
-                                break;
-                            }
+                            factory.sortMessages(messagesFromApi);
+                            messagesFromDatabase.some(function (message) {
+                                message.createdOn = message.CreatedOn;
+                            });
+                            factory.sortMessages(messagesFromDatabase);
 
-                            if (messagesFromDatabase[i].MessageId !== messagesFromApi[i].messageId) {
-                                intersect = false;
-                                break;
-                            }
-                        }
+                            for (var i = 0; i < messagesFromApi.length; i++) {
+                                if (messagesFromDatabase[i] === null || messagesFromDatabase[i] === undefined || messagesFromApi[i] === null || messagesFromApi[i] === undefined) {
+                                    logService.warn(new LogObject('Message was null.'));
+                                    intersect = false;
+                                    break;
+                                }
 
-                        if (!intersect) {
-                            logService.warn('Conversation ' + conversation.ConversationId + ' was not in sync, re-syncing.');
-                            if (typeof messagesFromApi[0] !== "undefined" && messagesFromApi[0] !== null && messagesFromApi[0].hasOwnProperty("conversationId")) {
-                                logService.info("- CLEARED CONVO (" + messagesFromApi[0].conversationId + ") IN DB BECAUSE OF TOO MANY MISSING MESSAGES -");
-                                messageRepository.deleteConversation(messagesFromApi[0].conversationId);
-                                communicationService.messagesDownloaded(messagesFromApi);
-                            }
-                        } else {
-                            logService.log('Conversation ' + conversation.ConversationId + ' was in sync.');
-                            if (conversation.Messages !== null) {
-                                if (conversation.Messages.length > 0) {
-                                    if (conversation.Messages[0].hasOwnProperty('unread')) {
-                                        if (conversation.Messages[0].unread === true) {
-                                            messagesFromDatabase[0].unread = true;
-                                        }
-                                    }
+                                if (messagesFromDatabase[i].MessageId === null || messagesFromDatabase[i].MessageId === undefined || messagesFromApi[i].messageId === null || messagesFromApi[i].messageId === undefined) {
+                                    logService.error(new LogObject('Message without id.'));
+                                    intersect = false;
+                                    break;
+                                }
+
+                                if (messagesFromDatabase[i].MessageId !== messagesFromApi[i].messageId) {
+                                    intersect = false;
+                                    break;
                                 }
                             }
-                            conversation.Messages = messagesFromDatabase;
-                        }
 
-                    }, function (error) {
-                        conversation.Messages = messagesFromDatabase;
-                        logService.warn('Aborting syncing of conversation ' + conversation.ConversationId + '. Could not make request to get messages from api. Conversation messages are from local db, if any.');
-                    });
+                            if (!intersect) {
+                                logService.warn('Conversation ' + conversation.ConversationId + ' was not in sync, re-syncing.');
+                                if (typeof messagesFromApi[0] !== "undefined" && messagesFromApi[0] !== null && messagesFromApi[0].hasOwnProperty("conversationId")) {
+                                    logService.info("- CLEARED CONVO (" + messagesFromApi[0].conversationId + ") IN DB BECAUSE OF TOO MANY MISSING MESSAGES -");
+                                    messageRepository.deleteConversation(messagesFromApi[0].conversationId);
+                                    communicationService.messagesDownloaded(messagesFromApi);
+                                }
+                            } else {
+                                logService.log('Conversation ' + conversation.ConversationId + ' was in sync.');
+                                conversation.Messages = messagesFromDatabase;
+                            }
+
+                        }, function (error) {
+                            conversation.Messages = messagesFromDatabase;
+                            logService.warn('Aborting syncing of conversation ' + conversation.ConversationId + '. Could not make request to get messages from api. Conversation messages are from local db, if any.');
+                        });
                     },
                     function (error) {
-                    logService.error('Something went wrong when getting messages from database, cannot display any messages.', error);
-                });
+                        logService.error('Something went wrong when getting messages from database, cannot display any messages.', error);
+                    });
             }
 
             factory.syncInit = function () {
@@ -245,7 +236,8 @@ angular.module('services', [])
                                 var conversation = {
                                     ConversationId: convo,
                                     Messages: [],
-                                    Participants: conversationsPromiseSuccess.data.usersInConversations[convo]
+                                    Participants: conversationsPromiseSuccess.data.usersInConversations[convo],
+                                    HasNewMessages: false
                                 };
 
                                 conversations.push(conversation);
@@ -316,7 +308,7 @@ angular.module('services', [])
                                 resolve();
                             });
                         }),
-                        function(error) {
+                        function (error) {
                             logService.error('Quickload failed.', error);
                             reject(error);
                         };
@@ -387,7 +379,6 @@ angular.module('services', [])
 
                     if (processedConvos <= conversationsLimit) {
 
-
                         syncConversationMessages(conversation, conversationMessages);
                         factory.sortConversationMessages(conversation);
 
@@ -422,7 +413,6 @@ angular.module('services', [])
 
                                     if (shouldAdd) {
                                         if (newMessages) {
-                                            message.unread = true;
                                             factory.conversations[i].Messages.unshift(message);
                                         } else {
                                             factory.conversations[i].Messages.push(message);
@@ -461,7 +451,8 @@ angular.module('services', [])
                                 var conversation = {
                                     ConversationId: convo,
                                     Messages: [],
-                                    Participants: conversationsPromiseSuccess.data.usersInConversations[convo]
+                                    Participants: conversationsPromiseSuccess.data.usersInConversations[convo],
+                                    HasNewMessages: true
                                 };
 
                                 conversation.Participants.some(function (participant) {
@@ -568,6 +559,7 @@ angular.module('services', [])
 
                         for (var cid in conversationsPromiseSuccess) {
                             var conversation = conversationsPromiseSuccess[cid];
+                            conversation.HasNewMessages = false;
 
                             if (conversation.Participants.constructor === Array) {
                                 conversation.Participants.some(function (participant) {
@@ -690,6 +682,15 @@ angular.module('services', [])
                     case 'services-started':
                         factory.syncInit();
                         factory.resolveUnidentifiedAppUsers();
+                        break;
+                    case 'push-notification':
+                        var conversationId = data.notification.userdata.c;
+
+                        factory.conversations.some(function(conversation) {
+                            if (conversationId === conversation.ConversationId) {
+                                conversation.HasNewMessages = true;
+                            }
+                        });
                         break;
                     default:
                         break;
