@@ -506,8 +506,8 @@ angular.module('token', [])
                             .then(function(success) {
                                 logService.log(new LogObject("justAuthenticate successfully ran now re running http post"));
 
-                                lastReq.data.AuthenticationToken = success.data.data.id;
-                                userDetails.token = success.data.data.id;
+                                lastReq.data.AuthenticationToken = success.data.id;
+                                userDetails.token = success.data.id;
                                 factory.httpPostOriginal(lastReq).then(function(success) {
                                     deferred.resolve(success.data);
                                 }, function(error) {
@@ -537,8 +537,8 @@ angular.module('token', [])
 
                         factory.justAuthenticate(factory.getLoginCredentials().username, factory.getLoginCredentials().password)
                             .then(function (success){
-                                lastReq.data.AuthenticationToken = success.data.data.id;
-                                userDetails.token = success.data.data.id;
+                                lastReq.data.AuthenticationToken = success.data.id;
+                                userDetails.token = success.data.id;
                                 logService.log(new LogObject("justAuthenticate successfully ran now re running http post"));
                                 factory.httpPostOriginal(lastReq);
                         }, function(error){
