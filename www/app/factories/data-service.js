@@ -413,6 +413,7 @@ angular.module('services', [])
 
                                     if (shouldAdd) {
                                         if (newMessages) {
+                                            message.unread = true;
                                             factory.conversations[i].Messages.unshift(message);
                                         } else {
                                             factory.conversations[i].Messages.push(message);
