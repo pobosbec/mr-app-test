@@ -11,6 +11,11 @@ angular.module('event', [])
         // PhoneGap/Cordova events
         // ------------------------------------
 
+        document.addEventListener("deviceready", function() {
+            // Your code here...
+            logService.log("Device Ready");
+        });
+
         // Native
         document.addEventListener('resume', function (event, args) {
             logService.log("resume");
@@ -44,8 +49,6 @@ angular.module('event', [])
         document.addEventListener('online', function (event, args) {
             $rootScope.$broadcast('online', args);
             logService.log(new LogObject("Online"));
-            $rootScope.$broadcast('services-started');
-            dataService.quickLoad();
         }, false);
 
         document.addEventListener('offline', function (event, args) {
