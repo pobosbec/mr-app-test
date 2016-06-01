@@ -71,15 +71,6 @@ angular.module('event', [])
         document.addEventListener('push-notification', function (event, args) {
             logService.log("push-notification, events.js");
 
-            databaseService.init().then(function () {
-                contactsService.setDb();
-                messageRepository.init();
-                logService.setDb();
-                $rootScope.$broadcast('services-started');
-            });
-
-
-
             // TODO: fix code smell..
             var notificationConversations = JSON.parse(localStorage.getItem("pushConversations"));
 
