@@ -70,7 +70,7 @@ angular.module('event', [])
 
         document.addEventListener('push-notification', function (event, args) {
             logService.log("push-notification, events.js");
-            dataService.quickLoad();
+
             // TODO: fix code smell..
             var notificationConversations = JSON.parse(localStorage.getItem("pushConversations"));
 
