@@ -23,11 +23,7 @@ angular.module('event', [])
 
          //   dataService.quickLoading = false;
 
-            //hotfix
-            var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
-            pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
-            logService.log("set app badge nr 0");
-            pushNotification.setApplicationIconBadgeNumber(0);
+
             $rootScope.$broadcast('on-focus', args);
         }, false);
 
@@ -95,20 +91,25 @@ angular.module('event', [])
                 }
             }
             $rootScope.$broadcast('push-notification', event);
+            $rootScope.$broadcast('on-focus', event);
         }, false);
 
         // Wrapped
         $scope.$on('on-focus', function (event, args) {
             logService.log("on-focus");
 
-            databaseService.init().then(function () {
-                contactsService.setDb();
-                messageRepository.init();
-                logService.setDb();
-                $rootScope.$broadcast('services-started');
-            });
+            //hotfix
+            var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
+            pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
+            logService.log("set app badge nr 0");
+            pushNotification.setApplicationIconBadgeNumber(0);
 
-            dataService.quickLoad();
+            //databaseService.init().then(function () {
+            //    contactsService.setDb();
+            //    messageRepository.init();
+            //    logService.setDb();
+            //    $rootScope.$broadcast('services-started');
+            //});
 
             var onFocusDelay = setTimeout(function (event, args) {
                 args = args | {};
@@ -173,6 +174,7 @@ angular.module('event', [])
                     }
                 }
 
+                dataService.quickLoad();
                 setTimeout(function () {
                     $rootScope.$broadcast('sync-conversation-in-view', event);
                 }, 10);
