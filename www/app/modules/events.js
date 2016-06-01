@@ -95,7 +95,7 @@ angular.module('event', [])
                 }
             }
             $rootScope.$broadcast('push-notification', event);
-            dataService.quickLoad();
+            $rootScope.$broadcast('on-focus', event);
         }, false);
 
         // Wrapped
