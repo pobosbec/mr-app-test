@@ -168,6 +168,15 @@ angular.module('conversations', [])
                     dataService.conversations.some(function (conversation) {
                         if (conversation.ConversationId === $scope.conversationId) {
                             found = true;
+                            if (conversation.Messages !== null) {
+                                if (conversation.Messages.length > 0) {
+                                    if (conversation.Messages[0].hasOwnProperty('unread')) {
+                                        if (conversation.Messages[0].unread === true) {
+                                            conversation.Messages[0].unread = false;
+                                        }
+                                    }
+                                }
+                            }
                             dataService.syncConversation(conversation);
                             $scope.conversation = conversation;
                         }

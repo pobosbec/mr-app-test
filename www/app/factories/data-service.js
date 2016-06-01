@@ -184,15 +184,15 @@ angular.module('services', [])
                             }
                         } else {
                             logService.log('Conversation ' + conversation.ConversationId + ' was in sync.');
-                            //if (conversation.Messages !== null) {
-                            //    if (conversation.Messages.length > 0) {
-                            //        if (conversation.Messages[0].hasOwnProperty('unread')) {
-                            //            if (conversation.Messages[0].unread === true) {
-                            //                messagesFromDatabase[0].unread = true;
-                            //            }
-                            //        }
-                            //    }
-                            //}
+                            if (conversation.Messages !== null) {
+                                if (conversation.Messages.length > 0) {
+                                    if (conversation.Messages[0].hasOwnProperty('unread')) {
+                                        if (conversation.Messages[0].unread === true) {
+                                            messagesFromDatabase[0].unread = true;
+                                        }
+                                    }
+                                }
+                            }
                             conversation.Messages = messagesFromDatabase;
                         }
 
