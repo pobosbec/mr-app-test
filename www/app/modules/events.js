@@ -78,7 +78,6 @@ angular.module('event', [])
                 $rootScope.$broadcast('services-started');
             });
 
-            dataService.quickLoad();
 
 
             // TODO: fix code smell..
@@ -105,6 +104,7 @@ angular.module('event', [])
                 }
             }
             $rootScope.$broadcast('push-notification', event);
+            dataService.quickLoad();
         }, false);
 
         // Wrapped
