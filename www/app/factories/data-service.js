@@ -413,6 +413,9 @@ angular.module('services', [])
 
                                     if (shouldAdd) {
                                         if (newMessages) {
+                                            if (!factory.isQuickLoading) {
+                                                factory.conversations[i].HasNewMessages = true;
+                                            }
                                             factory.conversations[i].Messages.unshift(message);
                                         } else {
                                             factory.conversations[i].Messages.push(message);
