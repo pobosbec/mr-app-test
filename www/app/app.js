@@ -40,6 +40,7 @@ var mobileresponseWebbApp = angular.module('administratorApp', [
             //dataService.quickLoad();
             //dataService.resolveUnidentifiedAppUsers();
             $rootScope.$broadcast('services-started');
+            dataService.quickLoad();
         }
         else {
             $rootScope.logout();
