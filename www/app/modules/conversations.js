@@ -564,7 +564,7 @@ angular.module('conversations', [])
             };
         }
     ])
-    .controller('viewFormsCtrl', function ($scope, $uibModalInstance, $sce, url) {
+    .controller('viewFormsCtrl', function ($scope, $uibModalInstance, $sce, url, logService) {
 
         $scope.url = $sce.trustAsResourceUrl(url);
 
