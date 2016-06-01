@@ -12,7 +12,7 @@
                         </li>
                         <li ng-repeat="message in conversation.Messages | orderBy: messagesSorting | limitTo: 1 track by message.messageId">
                             <small class="latestMessage">{{getUsername(message.Author)}}: {{message.Content}}</small>&nbsp;
-                            <small ng-if="message.unread"><i class="zmdi zmdi-email zmdi-hc-fw" style="color: black !important;"></i>Unread messages</small>
+                            <small ng-if="conversation.HasNewMessages"><i class="zmdi zmdi-email zmdi-hc-fw" style="color: black !important;"></i>New messages!</small>
                             <small class="ms-date">
                                 <i class="zmdi zmdi-time"></i>
                                 <span ng-show="formatMode(message.CreatedOn)==1">{{format(message.CreatedOn) | amTimeAgo}}</span>
