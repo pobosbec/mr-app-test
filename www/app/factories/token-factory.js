@@ -111,10 +111,10 @@ angular.module('token', [])
             logService.log("setting credentials for following user:");
             logService.log(greeting);
             //fetch user detail
-                userDetails.token = greeting.data.id;
-                userDetails.accountId = greeting.data.accountId;
-                userDetails.administratorId = greeting.data.administratorId;
-                userDetails.appUserId = greeting.data.appUserId;
+            userDetails.token = greeting.data.id;
+            userDetails.accountId = greeting.data.accountId;
+            userDetails.administratorId = greeting.data.administratorId;
+            userDetails.appUserId = greeting.data.appUserId;
         }
 
         //set user credentials
@@ -177,7 +177,7 @@ angular.module('token', [])
                 //TODO: logged in now transfer home
                 $rootScope.$broadcast("app-token-available");
                 $rootScope.$broadcast("logged-in");
-              //  factory.keepTokenAlive();
+                //  factory.keepTokenAlive();
                 if ($state.includes('login')) {
                     $state.go('home');
                 }
@@ -288,68 +288,68 @@ angular.module('token', [])
 
             var deferred = $q.defer();
 
-                var promise = factory.httpPost(appAuthenticate);
-                promise.then(function(greeting) {
-                    //Success
-                    logService.log('Success appuser authentication');
+            var promise = factory.httpPost(appAuthenticate);
+            promise.then(function (greeting) {
+                //Success
+                logService.log('Success appuser authentication');
+                logService.log(greeting);
+                justSetCredentials(greeting);
+                //return $q.defer().resolve(greeting);
+                deferred.resolve(greeting);
+
+            }, function (reason) {
+                //failed try authenticate against admin
+                logService.log('Failed App authentication, trying with admin');
+                logService.log(reason);
+                promise = factory.httpPost(adminAuthenticate);
+
+                promise.then(function (greeting) {
+                    //Admin authenticate success
+                    logService.log('Success admin authenticate now authenticating towards app');
                     logService.log(greeting);
-                    justSetCredentials(greeting);
-                    //return $q.defer().resolve(greeting);
-                    deferred.resolve(greeting);
+                    var authenticationTokenAdmin = greeting.data.id;
+                    appTokenAuthentication = {
+                        method: 'POST',
+                        ignoreLoadingBar: true,
+                        url: factory.currentAppApiUrl + 'app/is-token-valid',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        data: {
+                            Data: { AuthenticationToken: authenticationTokenAdmin },
+                            AuthenticationToken: authenticationTokenAdmin
+                        },
+                        "Tags": ['version:' + $rootScope.version]
+                    };
 
-                }, function(reason) {
-                    //failed try authenticate against admin
-                    logService.log('Failed App authentication, trying with admin');
-                    logService.log(reason);
-                    promise = factory.httpPost(adminAuthenticate);
-
-                    promise.then(function(greeting) {
-                        //Admin authenticate success
-                        logService.log('Success admin authenticate now authenticating towards app');
+                    promise = factory.httpPost(appTokenAuthentication);
+                    promise.then(function (greeting) {
+                        //Success
+                        justSetCredentials(greeting);
+                        logService.log('Success admin-> app');
                         logService.log(greeting);
-                        var authenticationTokenAdmin = greeting.data.id;
-                        appTokenAuthentication = {
-                            method: 'POST',
-                            ignoreLoadingBar: true,
-                            url: factory.currentAppApiUrl + 'app/is-token-valid',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            data: {
-                                Data: { AuthenticationToken: authenticationTokenAdmin },
-                                AuthenticationToken: authenticationTokenAdmin
-                            },
-                            "Tags": ['version:' + $rootScope.version]
-                        };
+                        //TODO: logged in now
 
-                        promise = factory.httpPost(appTokenAuthentication);
-                        promise.then(function(greeting) {
-                            //Success
-                            justSetCredentials(greeting);
-                            logService.log('Success admin-> app');
-                            logService.log(greeting);
-                            //TODO: logged in now
+                        deferred.resolve(greeting);
+                        //return $q.defer().resolve(greeting);
 
-                            deferred.resolve(greeting);
-                            //return $q.defer().resolve(greeting);
-
-                        }, function(reason) {
-
-                            deferred.reject(reason);
-                            //return $q.defer().reject(reason);
-                        });
-
-                    }, function(reason) {
-                        //failed try authenticate against admin
-                        logService.log('Failed login admin');
-                        logService.log(reason);
+                    }, function (reason) {
 
                         deferred.reject(reason);
                         //return $q.defer().reject(reason);
                     });
+
+                }, function (reason) {
+                    //failed try authenticate against admin
+                    logService.log('Failed login admin');
+                    logService.log(reason);
+
+                    deferred.reject(reason);
+                    //return $q.defer().reject(reason);
                 });
+            });
             return deferred.promise;
-            };
+        };
 
 
         factory.authenticate = function (username, password, keepLoggedIn) {
@@ -472,9 +472,9 @@ angular.module('token', [])
             return $q.all(promises).then(function (values) {
                 var elapsedTime = (new Date().getTime() - values[0]);
                 //var elapsedTime = (values[1].debug.executionTime);
-                var logString = "[ " + elapsedTime + " ms ] " + (values[1].requestUrl) + " ";
+                var logString = "[ " + elapsedTime + " ms ] " + (values[1].data.requestUrl) + " ";
 
-                var timedResponse = { timeStamp: values[0], elapsedTime: elapsedTime, url: values[1].requestUrl, response: values[1] };
+                var timedResponse = { timeStamp: values[0], elapsedTime: elapsedTime, url: values[1].data.requestUrl, response: values[1] };
                 // Insert log item and limit logging to 50 posts
                 timerResults.unshift(timedResponse);
                 timerResults = timerResults.slice(0, 50);
@@ -483,11 +483,11 @@ angular.module('token', [])
                 if (elapsedTime > 2000 || (elapsedTime > 1000 && elapsedTime > (timersAverage * 1.3) && timerResults.length > 10)) {
                     $rootScope.$broadcast('slow-http-request-detected', timedResponse);
                 }
-                return values[1];
+                return values[1].data;
             });
         }
 
-        factory.httpPostOriginal = function (req,dontRetry) {
+        factory.httpPostOriginal = function (req, dontRetry) {
             var deferred = $q.defer();
 
             $http(req
@@ -503,17 +503,17 @@ angular.module('token', [])
                     if (factory.getLoginCredentials() !== null) {
 
                         factory.justAuthenticate(factory.getLoginCredentials().username, factory.getLoginCredentials().password)
-                            .then(function(success) {
+                            .then(function (success) {
                                 logService.log(new LogObject("justAuthenticate successfully ran now re running http post"));
 
                                 lastReq.data.AuthenticationToken = success.data.id;
                                 userDetails.token = success.data.id;
-                                factory.httpPostOriginal(lastReq).then(function(success) {
-                                    deferred.resolve(success.data);
-                                }, function(error) {
+                                factory.httpPostOriginal(lastReq).then(function (success) {
+                                    deferred.resolve(success);
+                                }, function (error) {
                                     deferred.reject(error);
                                 });
-                            }, function(error) {
+                            }, function (error) {
                                 deferred.reject(error);
                             });
 
@@ -523,33 +523,38 @@ angular.module('token', [])
                     }
                     //retry
                 } else {
-                    deferred.resolve(response.data);
+                    deferred.resolve(response);
                 }
             }, function errorCallback(response) {
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
                 //logService.log(response); // TODO: REMOVE! only for debugging.
-                if(response.status === 401 || response.status === 'Unauthorized'){
+                if (response.status === 401 || response.status === 'Unauthorized') {
                     lastReq = req;
                     logService.log(new LogObject("error callback - user unauthorized"));
                     logService.log(new LogObject(response));
-                    if(factory.getLoginCredentials() !== null){
+                    if (factory.getLoginCredentials() !== null) {
 
                         factory.justAuthenticate(factory.getLoginCredentials().username, factory.getLoginCredentials().password)
-                            .then(function (success){
+                            .then(function (success) {
                                 lastReq.data.AuthenticationToken = success.data.id;
                                 userDetails.token = success.data.id;
                                 logService.log(new LogObject("justAuthenticate successfully ran now re running http post"));
-                                factory.httpPostOriginal(lastReq);
-                        }, function(error){
-                        });
+                                factory.httpPostOriginal(lastReq).then(function (success) {
+                                    deferred.resolve(success);
+                                }, function (error) {
+                                    deferred.reject(error);
+                                });
+                            }, function (error) {
+                                deferred.reject(error);
+                            });
                     }
-                    else{
+                    else {
                         console.log("logging out");
                         $rootScope.logout();
                     }
                 }
-                deferred.reject(response.data);
+                deferred.reject(response);
             });
             return deferred.promise;
         };
@@ -557,8 +562,8 @@ angular.module('token', [])
         factory.registerPushToken = function () {
             logService.log("registerPushToken");
 
-            return window.plugins.pushNotification.getPushToken(function(token) {
-                logService.log("registering pushtoken: "+token);
+            return window.plugins.pushNotification.getPushToken(function (token) {
+                logService.log("registering pushtoken: " + token);
                 var req = {
                     method: 'POST',
                     url: factory.currentAppApiUrl + 'app/users/update-device',
@@ -723,7 +728,7 @@ angular.module('token', [])
         // Clear
 
         factory.getLoginCredentials = function () {
-           return factory.loadFromDb("keepLoggedInCredentials");
+            return factory.loadFromDb("keepLoggedInCredentials");
         }
 
         factory.clearLoginCredentials = function () {
@@ -742,11 +747,11 @@ angular.module('token', [])
             switch (event.name) {
                 case 'push-service-initialized':
                     // check not empty
-                  //  insertPushTokenClearTableFirst(args.token);
+                    //  insertPushTokenClearTableFirst(args.token);
                     break;
                 case 'logged-out':
                     // Clearing Table on logout, just to be srure
-                 //   dropPushTokensTable().then(function (success) { logService.error('Dropped pushTokens table.') }, function (error) { logService.error('Could not drop pushTokens table.') });
+                    //   dropPushTokensTable().then(function (success) { logService.error('Dropped pushTokens table.') }, function (error) { logService.error('Could not drop pushTokens table.') });
                     break;
                 default:
                     break;
@@ -817,7 +822,7 @@ angular.module('token', [])
         factory.currentDeviceServiceUrl = factory.getDeviceServiceUrl(window.location);
         factory.currentReservationServiceUrl = factory.getReservationServiceUrl(window.location);
 
-     //   factory.keepTokenAlive();
+        //   factory.keepTokenAlive();
 
         return factory;
     }]);

@@ -195,7 +195,6 @@ angular.module('services', [])
                     function (error) {
                     logService.error('Something went wrong when getting messages from database, cannot display any messages.', error);
                 });
-                
             }
 
             factory.syncInit = function () {
