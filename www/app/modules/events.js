@@ -91,7 +91,7 @@ angular.module('event', [])
                 }
             }
             $rootScope.$broadcast('push-notification', event);
-            $rootScope.$broadcast('on-focus', event);
+
         }, false);
 
         // Wrapped
@@ -251,6 +251,89 @@ angular.module('event', [])
         $scope.$on('push-notification', function (event, args) {
             communicationService.on(event, args);
             logService.log("$on, push-notification, event.js 249: " + event);
+
+
+            //hotfix
+            var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
+            pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
+            logService.log("set app badge nr 0");
+            pushNotification.setApplicationIconBadgeNumber(0);
+
+            //databaseService.init().then(function () {
+            //    contactsService.setDb();
+            //    messageRepository.init();
+            //    logService.setDb();
+            //    $rootScope.$broadcast('services-started');
+            //});
+
+            var onFocusDelay = setTimeout(function (event, args) {
+                args = args | {};
+                args.Sender = 'events';
+                args.Event = 'on-focus';
+
+                // TODO: this smells.
+
+                function resetData() {
+                    var conversationIds = [];
+                    localStorage.setItem("pushConversations", JSON.stringify(conversationIds));
+                }
+
+                var conversationIds = JSON.parse(localStorage.getItem("pushConversations"));
+
+                if (conversationIds === null || conversationIds === undefined) {
+                    resetData();
+                    return;
+                } else {
+                    // TODO: what if several elements contain same conversationId
+                    if (conversationIds.constructor === Array) {
+                        if (conversationIds.length === 1) {
+                            var convoId = conversationIds[0];
+                            resetData();
+                            dataService.conversations.some(function (conversation) {
+                                if (conversation.ConversationId === convoId) {
+                                    dataService.syncConversation(conversation);
+                                }
+                            });
+                         //   $location.path('/conversation/' + convoId);
+                        } else if (conversationIds.length > 1) {
+
+                            dataService.conversations.some(function (conversation) {
+                                conversationIds.some(function (id) {
+                                    if (conversation.ConversationId === id) {
+                                        dataService.syncConversation(conversation);
+                                    }
+                                });
+                            });
+
+                            var sameConversation = false;
+
+                            var firstConversationId = conversationIds[0];
+
+                            for (var i = 1; i < conversationIds.length; i++) {
+                                if (conversationIds[i] === firstConversationId) {
+                                    sameConversation = true;
+                                    break;
+                                }
+                            }
+
+                            resetData();
+                            if (sameConversation) {
+                          //      $location.path('/conversation/' + firstConversationId);
+                            } else {
+                            //    $location.path('/conversations/');
+                            }
+                        }
+                    } else {
+                        resetData();
+                        return;
+                    }
+                }
+
+                dataService.quickLoad();
+                setTimeout(function () {
+                    $rootScope.$broadcast('sync-conversation-in-view', event);
+                }, 10);
+            }, 10);
 
         });
 
