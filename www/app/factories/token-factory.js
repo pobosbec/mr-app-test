@@ -764,7 +764,31 @@ angular.module('token', [])
          * @returns {*}
          */
         factory.getApiUrl = function (host) {
-            return "http://apitest.aws.mobileresponse.se/";
+            return "http://api2.aws.mobileresponse.se/";
+            // in test
+            if (host.pathname.indexOf("/test") > -1)
+                return "http://api2.mobileresponse.se/";
+
+            // in production
+            if (host.pathname.indexOf("/production") > -1)
+                return "https://api2.mobileresponse.se/";
+
+            // in localhost
+            if (host.host.indexOf("localhost") > -1)
+                //return "http://10.100.126.80:8887/";
+                //return "http://api2.mobileresponse.se/";
+                return "http://api2.mobileresponse.se/";
+            // in staging
+            return "http://api2.mobileresponse.se/";
+        };
+
+        /**
+         * When the service is runned, depending on what url mobile response uses we set the api address differently
+         * @param host
+         * @returns {*}
+         */
+        factory.getAppApiUrl = function (host) {
+            return "http://api2.aws.mobileresponse.se/";
             // in test
             if (host.pathname.indexOf("/test") > -1)
                 return "http://api2.test.mobileresponse.se/";
@@ -775,33 +799,9 @@ angular.module('token', [])
 
             // in localhost
             if (host.host.indexOf("localhost") > -1)
-                //return "http://10.100.126.80:8887/";
-                //return "http://api2.test.mobileresponse.se/";
                 return "http://api2.test.mobileresponse.se/";
             // in staging
             return "http://api2.test.mobileresponse.se/";
-        };
-
-        /**
-         * When the service is runned, depending on what url mobile response uses we set the api address differently
-         * @param host
-         * @returns {*}
-         */
-        factory.getAppApiUrl = function (host) {
-            return "http://apitest.aws.mobileresponse.se/";
-            // in test
-            if (host.pathname.indexOf("/test") > -1)
-                return "http://api.test.mobileresponse.se/";
-
-            // in production
-            if (host.pathname.indexOf("/production") > -1)
-                return "https://api.mobileresponse.se/";
-
-            // in localhost
-            if (host.host.indexOf("localhost") > -1)
-                return "http://api.test.mobileresponse.se/";
-            // in staging
-            return "http://api.test.mobileresponse.se/";
         };
 
         factory.getDeviceServiceUrl = function () {
