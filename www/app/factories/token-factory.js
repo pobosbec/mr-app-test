@@ -764,22 +764,22 @@ angular.module('token', [])
          * @returns {*}
          */
         factory.getApiUrl = function (host) {
-            return "https://api2.mobileresponse.se/";
+            return "https://api.mobileresponse.se/";
             // in test
             if (host.pathname.indexOf("/test") > -1)
-                return "https://api2.mobileresponse.se/";
+                return "https://api.mobileresponse.se/";
 
             // in production
             if (host.pathname.indexOf("/production") > -1)
-                return "https://api2.mobileresponse.se/";
+                return "https://api.mobileresponse.se/";
 
             // in localhost
             if (host.host.indexOf("localhost") > -1)
                 //return "http://10.100.126.80:8887/";
-                //return "https://api2.mobileresponse.se/";
-                return "https://api2.mobileresponse.se/";
+                //return "https://api.mobileresponse.se/";
+                return "https://api.mobileresponse.se/";
             // in staging
-            return "https://api2.mobileresponse.se/";
+            return "https://api.mobileresponse.se/";
         };
 
         /**
@@ -788,20 +788,20 @@ angular.module('token', [])
          * @returns {*}
          */
         factory.getAppApiUrl = function (host) {
-            return "https://api2.mobileresponse.se/";
+            return "https://api.mobileresponse.se/";
             // in test
             if (host.pathname.indexOf("/test") > -1)
-                return "http://api2.test.mobileresponse.se/";
+                return "http://api.test.mobileresponse.se/";
 
             // in production
             if (host.pathname.indexOf("/production") > -1)
-                return "https://api2.mobileresponse.se/";
+                return "https://api.mobileresponse.se/";
 
             // in localhost
             if (host.host.indexOf("localhost") > -1)
-                return "http://api2.test.mobileresponse.se/";
+                return "http://api.test.mobileresponse.se/";
             // in staging
-            return "http://api2.test.mobileresponse.se/";
+            return "http://api.test.mobileresponse.se/";
         };
 
         factory.getDeviceServiceUrl = function () {
