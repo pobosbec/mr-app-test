@@ -1,0 +1,24 @@
+﻿<div ng-controller="ConversationsController">
+    
+    <div class="scrollable content-container">
+        <div class="scrollable-content">
+            
+            <div class="list-group">
+                <div ng-repeat="conversation in conversations" ng-click="ListMessagesInConversation(conversation)" class="list-group-item" ng-class="(!conversation.isRead) ? 'new-item' : ''">
+                    <div class="list-item-avatar">
+                        <img ng-repeat="avatar in conversation.avatars" ng-show="avatar.avatar != null && avatar.userId != conversation.userId" height="50" alt="avatar" src="{{ avatar.avatar }}" />
+                    </div>
+                    <div>
+                        <b>{{ conversation.name }}</b><br />
+                        {{ conversation.content }}
+                        <i class="fa fa-chevron-right pull-right"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+</div>
+
+

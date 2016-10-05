@@ -1,0 +1,50 @@
+﻿<div ng-controller="LoginController" class="login">
+    
+    <div class="container">
+        
+        <div>
+            <form class="form-signin" name="signinForm" role="form">
+                <div>
+                    <a ng-show="!signin.show" href="" ng-click="ShowSignin()">Back to sign in</a>
+                </div>
+                <div ng-show="signin.show">
+                    <h2 class="form-signin-heading">Please sign in</h2>
+                    <div ng-if="signin.error.show" class="error-label">{{ signin.error.message }}</div>
+                    <input type="text" ng-model="credentials.userName" class="form-control" placeholder="UserName" required autofocus>
+                    <input type="password" ng-model="credentials.password" class="form-control" placeholder="Password" required>
+                    <label class="checkbox">
+                        <input type="checkbox" ng-model="saveCredentials" value="saveCredentials"> Remember me
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" ng-model="keepMeSignedIn" value="keepMeSignedIn"> Keep me signed in
+                    </label>
+                    <button class="btn btn-lg btn-primary btn-block" ng-click="Login()" type="submit">Sign in</button>
+                    <a ng-show="credentials!=null" href="" ng-click="ClearCredentials()">Clear credentials</a>
+                </div>
+            </form>
+        </div>
+
+        <hr/>
+        
+        <div>
+            <form class="form-signin" name="registrationForm" role="form">
+                <div>
+                    <a ng-show="!registration.show" href="" ng-click="ShowRegistration()">Register new user</a>
+                </div>
+                <div ng-show="registration.show">
+                    <h3>Register new user</h3>
+                    <div ng-if="registration.error.show" class="error-label">{{ registration.error.message }}</div>
+                    <input type="text" ng-model="register.userName" class="form-control" placeholder="UserName (*)" required>
+                    <input type="password" ng-model="register.password" class="form-control" placeholder="Password (*)" required>
+                    <input type="password" ng-model="register.password2" class="form-control" placeholder="Password again (*)" required>
+                    <br/>
+                    <button class="btn btn-lg btn-primary btn-block" ng-click="Register()" type="submit">Register</button>
+                    <a ng-show="!registrationForm.$invalid" href="" ng-click="ClearRegistration()">Clear registration</a>
+                </div>
+            </form>
+        </div>
+       
+    </div> 
+
+</div>
+

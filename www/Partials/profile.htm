@@ -1,0 +1,47 @@
+﻿<div ng-controller="ProfileController">
+
+    <div ng-show="successText!=null" class="alert alert-success">{{ successText }}</div>
+    <div ng-show="errorText!=null" class="alert alert-danger">{{ errorText }}</div>
+    
+    <div class="scrollable content-container">
+        <div class="scrollable-content overthrow">
+
+            <div class="list-group">
+
+                <div class="list-group-item text-center">
+                    <img ng-show="myAppUser.avatar != null" alt="avatar" src="{{ myAppUser.avatar }}"/>
+                    <h1>{{ myAppUser.displayName }}</h1>
+                </div>
+
+                <div class="list-group-item">
+
+                    <form name="profileForm" role="form" class="form-group form-signin">
+                        <div>
+                            <label>First name</label>
+                            <input type="text" ng-model="profile.firstName" class="form-control" placeholder="{{ myAppUser.firstname }}" autofocus>
+
+                            <label>Last name</label>
+                            <input type="text" ng-model="profile.lastName" class="form-control" placeholder="{{ myAppUser.lastname }}">
+                            
+                            <label>Phone (mobile with country prefix)</label>
+                            <input type="text" ng-model="profile.phone" class="form-control" placeholder="{{ myAppUser.phoneNumber }}">
+                            
+                            <label>Email</label>
+                            <input type="text" ng-model="profile.email" class="form-control" placeholder="{{ myAppUser.email }}">
+                            
+                            <label>Avatar (url)</label>
+                            <input type="text" ng-model="profile.avatar" class="form-control" placeholder="{{ myAppUser.avatar }}">
+                            
+                            <button class="btn btn-lg btn-primary btn-block" ng-click="UpdateProfile()" type="submit">Update Profile</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+
+            
+        </div>
+    </div>
+
+   
+</div>

@@ -1,0 +1,53 @@
+﻿<div ng-controller="MessagesController">
+    <div ng-show="successText!=null" class="alert alert-success">
+        <i class="fa fa-envelope"></i><a href="#/conversations/{{ inbox.inboxId }}">{{ successText }}</a>
+    </div>
+    <div ng-show="errorText!=null" class="alert alert-danger">{{ errorText }}</div>
+
+    <div class="scrollable content-container content-container-chat">
+        <div id="chat-container" class="scrollable-content">
+            <div class="list-group">
+                <div ng-repeat="message in messages | orderBy:'-createdOn':true"
+                     id="{{'msg'+ ($index + 1)}}"
+                     class="list-group-item message-chat"
+                     ng-class="{ 'message-chat-me': message.author === 'me', 'message-chat-other': message.author === 'other', 'last-message': $index >= messages.length-1}" ng-class="(!message.isRead) ? 'new-item' : ''">
+
+                    <div class="list-item-attachment">
+                        <div ng-repeat="metadata in message.metaData">
+                            <a href="{{metadata.url}}" target="_blank" ng-show="metadata._type == 'image'">
+                                <img height="50" alt="avatar" src="{{ metadata.thumbnail }}"/>
+                            </a>
+                            <a href="https://www.google.com/maps/preview/@{{metadata.value}}" target="_blank" ng-show="metadata._type == 'position'">
+                                <img height="50" alt="avatar" src="https://lh3.googleusercontent.com/MOf9Kxxkj7GvyZlTZOnUzuYv0JAweEhlxJX6gslQvbvlhLK5_bSTK6duxY2xfbBsj43H=w50"/>
+                            </a>
+                            <div ng-show="metadata._type == 'form'">
+                                <a href="https://m.mobileresponse.se/form/{{ message.formId }}" target="_blank">
+                                    <span><i class="fa fa-clipboard"></i></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="conversation.avatars" class="list-item-avatar">
+                        <img ng-repeat="avatar in conversation.avatars" ng-show="avatar.avatar != null && avatar.userId == message.authorId" height="50" alt="avatar" src="{{ avatar.avatar }}"/>
+                    </div>
+                    <div>
+                        <b>{{ message.authorDisplayName }}</b><br/>
+                        <div ng-bind-html="message.content"></div>
+                        <span class="smallDateTime">{{ message.createdOn }}</span>
+                    </div>
+                </div>
+                <div id="last-message" class="list-group-item message-chat-end">
+                    <div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="send-chat-message">
+        <form ng-submit="sendMessage(newMessage)">
+            <a href="" ng-click="sendMessage(newMessage)" class="btn btn-primary btn-align-right"><span><i class="fa fa-arrow-right"></i></span></a>
+            <input ng-model="newMessage" class="form-control send-message" placeholder="Compose message" />
+        </form>
+    </div>
+
+</div>
