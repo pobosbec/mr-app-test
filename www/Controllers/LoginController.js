@@ -16,7 +16,7 @@
 
     function init() {
         $scope.credentials = $localStorage.savedCredentials;
-        if ($scope.credentials.keepMeSignedIn) {
+        if ($scope.credentials != null && $scope.credentials.keepMeSignedIn) {
             login();
         }
     }
