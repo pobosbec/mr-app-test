@@ -7,7 +7,22 @@
         "files": {}
     },
     "installed_plugins": {
+        "io.litehelpers.cordova.sqlite": {
+            "PACKAGE_NAME": "com.bosbec.testapp"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.bosbec.testapp"
+        },
+        "cordova-plugin-app-version": {
+            "PACKAGE_NAME": "com.bosbec.testapp"
+        },
         "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "com.bosbec.testapp"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.bosbec.testapp"
+        },
+        "cordova-plugin-dialogs": {
             "PACKAGE_NAME": "com.bosbec.testapp"
         }
     },
