@@ -41,18 +41,16 @@
   
   
   <platform name="android">
-    <icon src="icon.png" />
-    <splash src="splash.png" />
 
-    <!--<icon src="www/res/icon/android/icon-36-ldpi.png" qualifier="ldpi" />
-    <icon src="www/res/icon/android/icon-48-mdpi.png" qualifier="mdpi" />
-    <icon src="www/res/icon/android/icon-72-hdpi.png" qualifier="hdpi" />
-    <icon src="www/res/icon/android/icon-96-xhdpi.png" qualifier="xhdpi" />
+    <icon platform="android" src="www/res/icon/android/icon-36-ldpi.png" qualifier="ldpi" />
+    <icon platform="android" src="www/res/icon/android/icon-48-mdpi.png" qualifier="mdpi" />
+    <icon platform="android" src="www/res/icon/android/icon-72-hdpi.png" qualifier="hdpi" />
+    <icon platform="android" src="www/res/icon/android/icon-96-xhdpi.png" qualifier="xhdpi" />
     
     <splash platform="android" qualifier="ldpi" src="www/res/screens/android/screen-ldpi-portrait.png" />
     <splash platform="android" qualifier="mdpi" src="www/res/screens/android/screen-mdpi-portrait.png" />
     <splash platform="android" qualifier="hdpi" src="www/res/screens/android/screen-hdpi-portrait.png" />
-    <splash platform="android" qualifier="xhdpi" src="www/res/screens/android/screen-xhdpi-portrait.png" />-->
+    <splash platform="android" qualifier="xhdpi" src="www/res/screens/android/screen-xhdpi-portrait.png" />
 
   </platform>
   
