@@ -74,6 +74,7 @@
 /// <reference path="../../../../www/js/mobile-angular-ui/dist/js/mobile-angular-ui.gestures.js" />
 /// <reference path="../../../../www/js/mobile-angular-ui/dist/js/mobile-angular-ui.js" />
 /// <reference path="../../../../www/js/ng-cordova.js" />
+/// <reference path="../../../../www/js/ng-cordova-mocks.js" />
 /// <reference path="../../../../www/Scripts/config.js" />
 /// <reference path="../../../../www/Scripts/init.js" />
 /// <reference path="../../../../www/Scripts/init_old.js" />
