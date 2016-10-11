@@ -9,6 +9,7 @@
     </author>
   
     <platform name="ios">
+      <icon src="www/icon.png" />
       <icon src="www/res/icon/ios/icon.png" />
 
       <!-- iPhone 6 / 6+ -->
