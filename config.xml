@@ -8,10 +8,11 @@
         Bosbec MobileResponse Team
     </author>
   
-    <!--<platform name="ios">
+    <platform name="ios">
       <icon src="icon.png" />
+      <splash src="splash.png" />
       
-      --><!-- iPhone 6 / 6+ --><!--
+      <!-- iPhone 6 / 6+ --><!--
       <icon src="www/res/icon/ios/icon-60@3x.png" platform="ios" width="180" height="180" />
 
       --><!-- iPhone / iPod Touch  --><!--
@@ -30,7 +31,7 @@
       <icon src="www/res/icon/ios/icon-40.png" platform="ios" width="40" height="40" />
       <icon src="www/res/icon/ios/icon-40@2x.png" platform="ios" width="80" height="80" />
       
-      <splash src="splash.png" />
+      
 
       <splash platform="ios" src="www/res/screens/ios/screen-iphone-portrait.png" width="320" height="480" />
       <splash platform="ios" src="www/res/screens/ios/screen-iphone-portrait-2x.png" width="640" height="960" />
@@ -38,26 +39,26 @@
       <splash platform="ios" src="www/res/screens/ios/screen-iphone-portrait-667h.png" width="750" height="1334" />
       <splash platform="ios" src="www/res/screens/ios/screen-iphone-portrait-736h.png" width="1242" height="2208" />
       <splash platform="ios" src="www/res/screens/ios/screen-ipad-portrait.png" width="768" height="1024" />
-      <splash platform="ios" src="www/res/screens/ios/screen-ipad-portrait-2x.png" width="1536" height="2048" />
+      <splash platform="ios" src="www/res/screens/ios/screen-ipad-portrait-2x.png" width="1536" height="2048" />-->
+      
     </platform>
   
   
   <platform name="android">
     <icon src="icon.png" />
+    <splash src="splash.png" />
 
-    <icon src="www/res/icon/android/icon-36-ldpi.png" qualifier="ldpi" />
+    <!--<icon src="www/res/icon/android/icon-36-ldpi.png" qualifier="ldpi" />
     <icon src="www/res/icon/android/icon-48-mdpi.png" qualifier="mdpi" />
     <icon src="www/res/icon/android/icon-72-hdpi.png" qualifier="hdpi" />
     <icon src="www/res/icon/android/icon-96-xhdpi.png" qualifier="xhdpi" />
-
-    <splash src="splash.png" />
     
     <splash platform="android" qualifier="ldpi" src="www/res/screens/android/screen-ldpi-portrait.png" />
     <splash platform="android" qualifier="mdpi" src="www/res/screens/android/screen-mdpi-portrait.png" />
     <splash platform="android" qualifier="hdpi" src="www/res/screens/android/screen-hdpi-portrait.png" />
-    <splash platform="android" qualifier="xhdpi" src="www/res/screens/android/screen-xhdpi-portrait.png" />
+    <splash platform="android" qualifier="xhdpi" src="www/res/screens/android/screen-xhdpi-portrait.png" />-->
 
-  </platform>-->
+  </platform>
   
     <content src="index.html" />
     <!--<plugin name="io.litehelpers.cordova.sqlite" spec="0.7.10" source="pgb" />-->

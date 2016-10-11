@@ -105,8 +105,8 @@
 
   <gap:plugin name="cordova-plugin-dialogs"/>
 
-  <icon src="icon.png" />
-  <splash src="splash.png" />
+  <!--<icon src="icon.png" />
+  <splash src="splash.png" />-->
   
   <!-- Define app icon for each platform. -->
   <!--<icon src="icon.png" />
