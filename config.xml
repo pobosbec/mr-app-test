@@ -11,23 +11,23 @@
     <platform name="ios">
       
       <!-- iPhone 6 / 6+ -->
-      <icon src="www/res/icons/ios/icon-60@3x.png" platform="ios" width="180" height="180" />
+      <icon src="www/res/icons/ios/icon-60-3x.png" platform="ios" width="180" height="180" />
 
       <!-- iPhone / iPod Touch  -->
       <icon src="www/res/icons/ios/icon-60.png" platform="ios" width="60" height="60" />
-      <icon src="www/res/icons/ios/icon-60@2x.png" platform="ios" width="120" height="120" />
+      <icon src="www/res/icons/ios/icon-60-2x.png" platform="ios" width="120" height="120" />
 
       <!-- iPad -->
       <icon src="www/res/icons/ios/icon-76.png" platform="ios" width="76" height="76" />
-      <icon src="www/res/icons/ios/icon-76@2x.png" platform="ios" width="152" height="152" />
+      <icon src="www/res/icons/ios/icon-76-2x.png" platform="ios" width="152" height="152" />
 
       <!-- Settings Icon -->
       <icon src="www/res/icons/ios/icon-small.png" platform="ios" width="29" height="29" />
-      <icon src="www/res/icons/ios/icon-small@2x.png" platform="ios" width="58" height="58" />
+      <icon src="www/res/icons/ios/icon-small-2x.png" platform="ios" width="58" height="58" />
 
       <!-- Spotlight Icon -->
       <icon src="www/res/icons/ios/icon-40.png" platform="ios" width="40" height="40" />
-      <icon src="www/res/icons/ios/icon-40@2x.png" platform="ios" width="80" height="80" />
+      <icon src="www/res/icons/ios/icon-40-2x.png" platform="ios" width="80" height="80" />
       
       <splash platform="ios" src="www/res/screens/ios/screen-iphone-portrait.png" width="320" height="480" />
       <splash platform="ios" src="www/res/screens/ios/screen-iphone-portrait-2x.png" width="640" height="960" />
