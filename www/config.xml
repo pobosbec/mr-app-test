@@ -106,7 +106,7 @@
   <gap:plugin name="cordova-plugin-dialogs"/>
 
   <platform name="ios">
-      <icon src="res/icon/ios/icon-60@3x.png" platform="ios" width="180" height="180" />
+      <!--<icon src="res/icon/ios/icon-60@3x.png" platform="ios" width="180" height="180" />
 
       <icon src="res/icon/ios/icon-60.png" platform="ios" width="60" height="60" />
       <icon src="res/icon/ios/icon-60@2x.png" platform="ios" width="120" height="120" />
