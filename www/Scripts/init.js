@@ -14,6 +14,11 @@ mrApp.run(function () {
     console.log("--- RUN ---");
 });
 
+mrApp.filter('trustUrl', ['$sce', function ($sce) {
+  return function(url) {
+    return $sce.trustAsResourceUrl(url);
+  };
+}]);
 
 
 

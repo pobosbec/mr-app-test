@@ -10,7 +10,7 @@
             $timeout(function () {
                 $location.path('/login');
                 $window.location.reload();
-            }, 1000);
+            }, 2000);
         }
 
         init();

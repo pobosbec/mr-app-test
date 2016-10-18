@@ -1,11 +1,52 @@
-﻿mrApp.controller('MessagesController', [
-    'ApiFactory', '$scope', '$location', '$routeParams', 'UsersFactory', 'ConversationsFactory', '$timeout', '$filter',
-    function(apiFactory, $scope, $location, $routeParams, usersFactory, conversationsFactory, $timeout, $filter) {
+﻿mrApp.directive('iframeOnload',
+[
+    function() {
+        return {
+            scope: {
+                callBack: '&iframeOnload'
+            },
+            link: function(scope, element, attrs) {
+                element.on('load',
+                    function() {
+                        return scope.callBack();
+                    });
+            }
+        }
+    }
+]);
+
+mrApp.controller('FormModalController', ['$scope', 'SharedState', function ($scope, SharedState) {
+
+    $scope.activeFormUrl = "Partials/loading.htm";
+
+    $scope.iframeLoadedCallBack = function () {
+        $scope.activeFormUrl = SharedState.get('formModalUrl');
+    }
+    
+    function init() {
+        //console.log(SharedState.get('formModalUrl'));
+    }
+
+    init();
+
+}]);
+
+mrApp.controller('MessagesController', [
+    'ApiFactory', '$scope', '$location', '$routeParams', 'UsersFactory', 'ConversationsFactory', '$timeout', '$filter','SharedState',
+    function(apiFactory, $scope, $location, $routeParams, usersFactory, conversationsFactory, $timeout, $filter, SharedState) {
 
         var conversationId = $routeParams.param1;
 
         $scope.successText = null;
         $scope.errorText = null;
+
+        $scope.activeFormUrl = '';
+
+        $scope.openFormModal = function (formId) {
+            var formUrl = 'http://m.mobileresponse.se/form/' + formId;
+            SharedState.set('formModalUrl', formUrl);
+            SharedState.turnOn('formModal');
+        };
 
         function showAlert(text, type, duration) {
             if (type == 'success') {
@@ -24,11 +65,14 @@
         }
 
         function init() {
+            
             if ($scope.authenticationToken == undefined) {
                 $location.path('/login');
             }
             listMessages($scope.authenticationToken, conversationId);
             $scope.conversation = conversationsFactory.getCurrentConversation();
+
+            SharedState.initialize($scope, 'formModalUrl', '');
         }
 
         function linkify(text) {
@@ -48,6 +92,9 @@
             }
             return messages;
         }
+
+       
+
 
         function listMessages(token, conversationId) {
 
@@ -86,19 +133,19 @@
                 apiFactory.functions.call('conversations/conversation-read', markAsReadRequest, function (response) {
                     //console.log("Conversation is read: " + conversationId);
                 });
-
+                
             });
         }
-
+        
         function scrollToLast() {
-            $timeout(function () {
-                var elem = angular.element(document.getElementById('chat-container'));
-                var scrollableContentController = elem.controller('scrollableContent');
-                scrollableContentController.scrollTo(angular.element(document.getElementById('last-message')));
-            },
+            $timeout(function() {
+                    var elem = angular.element(document.getElementById('chat-container'));
+                    var scrollableContentController = elem.controller('scrollableContent');
+                    scrollableContentController.scrollTo(angular.element(document.getElementById('last-message')));
+                },
                 100);
         }
-
+        
         $scope.sendMessage = function (message) {
             console.log('Message: ' + message);
             if (message == null) {
@@ -137,7 +184,7 @@
                         'metadata': {}
                     }
                 };
-                console.log(replyRequest);
+                //console.log(replyRequest);
                 apiFactory.functions.call('conversations/reply', replyRequest, function (response) {
                     showAlert('Message sent', 'success', 1000);
                     listMessages($scope.authenticationToken, conversationId);

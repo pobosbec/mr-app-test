@@ -21,10 +21,11 @@
                                 <img height="50" alt="avatar" src="https://lh3.googleusercontent.com/MOf9Kxxkj7GvyZlTZOnUzuYv0JAweEhlxJX6gslQvbvlhLK5_bSTK6duxY2xfbBsj43H=w50"/>
                             </a>
                             <div ng-show="metadata._type == 'form'">
-                                <a href="https://m.mobileresponse.se/form/{{ message.formId }}" target="_blank">
+                                <a href="" ng-click="openFormModal(message.formId)">
                                     <span><i class="fa fa-clipboard"></i></span>
                                 </a>
                             </div>
+
                         </div>
                     </div>
                     <div ng-if="conversation.avatars" class="list-item-avatar">
@@ -46,8 +47,17 @@
     <div class="send-chat-message">
         <form ng-submit="sendMessage(newMessage)">
             <a href="" ng-click="sendMessage(newMessage)" class="btn btn-primary btn-align-right"><span><i class="fa fa-arrow-right"></i></span></a>
-            <input ng-model="newMessage" class="form-control send-message" placeholder="Compose message" />
+            <input ng-model="newMessage" class="form-control send-message" placeholder="Compose message"/>
         </form>
     </div>
 
+    <div ui-content-for="modals">
+        <div ng-include="'Partials/overlay.htm'"></div>
+    </div>
+
 </div>
+
+
+
+
+

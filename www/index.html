@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html ng-app="mrApp">
+<html>
 <head>
     <title>Mobile Response Angular App</title>
 
@@ -7,12 +7,10 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimal-ui" />
     <meta name="apple-mobile-web-app-status-bar-style" content="yes" />
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
 
-    <!--<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">-->
-    <link href="js/mobile-angular-ui/dist/css/mobile-angular-ui-base.min-aws.css" rel="stylesheet" type="text/css" />
-    <!--<link href="js/mobile-angular-ui/dist/css/mobile-angular-ui-base.min-azure.css" rel="stylesheet" type="text/css" />-->
-    <link rel="stylesheet" href="js/mobile-angular-ui/dist/css/mobile-angular-ui-desktop.min.css" type="text/css" />
+    <link href="js/mobile-angular-ui/dist/css/mobile-angular-ui-base.min.css" rel="stylesheet" type="text/css" />
+    <link href="js/mobile-angular-ui/dist/css/mobile-angular-ui-desktop.min.css" rel="stylesheet" type="text/css" />
 
     <link href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
@@ -20,35 +18,39 @@
 
    
 </head>
-<body ng-controller="MainController">
+<body ng-app="mrApp" ng-controller="MainController">
 
-    <!-- Sidebars -->
+<div ui-yield-to="modals"></div>
 
-    <div class="sidebar sidebar-left" toggleable parent-active-class="sidebar-left-in" id="mainSidebar">
-        <h1 class="app-name"><a href="#/main"><img src="images/mobile-response-logo.png" class="logo" alt="Mobile Response" /></a></h1>
+<!-- Sidebars -->
 
-        <div class="scrollable">
-            <div class="scrollable-content">
+<div class="sidebar sidebar-left" toggleable parent-active-class="sidebar-left-in" id="mainSidebar">
+    <h1 class="app-name">
+        <a href="#/login"><img src="images/mobile-response-logo.png" class="logo" alt="Mobile Response"/></a>
+    </h1>
 
-                <div ng-show="validateLoad('inboxes')" class="list-group" toggle="off" bubble target="mainSidebar">
-                    <a ng-repeat="inbox in inboxes" class="list-group-item" href="#/conversations/{{ inbox.inboxId }}">
-                        <div ng-show="inbox.inboxIcon != null">
-                            <img height="25" alt="inboxIcon" src="{{ inbox.inboxIcon }}" />
-                        </div>
-                        {{ inbox.inboxDisplayName }} <i class="fa fa-chevron-right pull-right"></i>
-                    </a>
-                </div>
-                <div>
-                    <a class="list-group-item" ng-show="validateLoad('profile')" href="#/profile/{{ myAppUser.id }}"><i class="fa fa-user"></i> Profile</a>
-                    <a class="list-group-item" ng-show="validateLoad('logout')" href="#/login/logout"><i class="fa fa-sign-out"></i> Logout</a>
-                </div>
+    <div class="scrollable">
+        <div class="scrollable-content">
 
+            <div ng-show="validateLoad('inboxes')" class="list-group" toggle="off" bubble target="mainSidebar">
+                <a ng-repeat="inbox in inboxes" class="list-group-item" href="#/conversations/{{ inbox.inboxId }}">
+                    <div ng-show="inbox.inboxIcon != null">
+                        <img height="25" alt="inboxIcon" src="{{ inbox.inboxIcon }}"/>
+                    </div>
+                    {{ inbox.inboxDisplayName }} <i class="fa fa-chevron-right pull-right"></i>
+                </a>
             </div>
-        </div>
+            <div>
+                <a class="list-group-item" ng-show="validateLoad('profile')" href="#/profile/{{ myAppUser.id }}"><i class="fa fa-user"></i> Profile</a>
+                <a class="list-group-item" ng-show="validateLoad('logout')" href="#/login/logout"><i class="fa fa-sign-out"></i> Logout</a>
+            </div>
 
+        </div>
     </div>
 
-<div class="app">
+</div>
+
+<div class="app" ui-swipe-right='Ui.turnOn("uiSidebarLeft")' ui-swipe-left='Ui.turnOff("uiSidebarLeft")'>
 
     <!-- Top Navbar -->
     <div class="navbar navbar-app navbar-absolute-top">
@@ -58,10 +60,8 @@
         </div>
 
         <div class="btn-group pull-left">
-            <!-- <a href ui-toggle='uiSidebarLeft'><img src="images/icon.png" height="40"/></a>-->
             <div ui-turn-on="mainSidebar" class="btn btn-navbar sidebar-toggle">
                 <img src="images/icon.png" height="40"/>
-                <!--<i class="fa fa-bars"></i> Inboxes-->
             </div>
         </div>
 
@@ -76,11 +76,6 @@
 
     </div>
 
-    <!-- App Body -->
-    <div class="app-body" ng-view="">
-
-    </div>
-
     <!-- Bottom Navbar -->
     <div class="navbar navbar-app navbar-absolute-bottom">
         <div class="btn-group justified">
@@ -89,36 +84,42 @@
         </div>
     </div>
 
+
+    <!-- App Body -->
+    <div class="app-body" ng-view="">
+
+    </div>
+
 </div>
 
 <script src="js/angular/angular.min.js" type="text/javascript"></script>
 <script src="js/angular/angular-route.min.js" type="text/javascript"></script>
 <script src="js/angular/angular-resource.min.js" type="text/javascript"></script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular-touch.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-sanitize.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular-touch.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-sanitize.js"></script>
 
 <script src="cordova.js" type="text/javascript"></script>
-    <script src="js/index.js" type="text/javascript"></script>
-    <script src="js/ng-cordova.js" type="text/javascript"></script>
-    <script src="js/mobile-angular-ui/dist/js/mobile-angular-ui.min.js" type="text/javascript"></script>
+<script src="js/index.js" type="text/javascript"></script>
+<script src="js/ng-cordova.js" type="text/javascript"></script>
+<script src="js/mobile-angular-ui/dist/js/mobile-angular-ui.min.js" type="text/javascript"></script>
 
-    <script src="Scripts/init.js" type="text/javascript"></script>
-    <script src="Scripts/config.js" type="text/javascript"></script>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.6/ngStorage.min.js"></script>
-    
-    <script src="Factories/ApiFactory.js" type="text/javascript"></script>
-    <script src="Factories/UsersFactory.js" type="text/javascript"></script>
-    <script src="Factories/ConversationsFactory.js" type="text/javascript"></script>
+<script src="Scripts/init.js" type="text/javascript"></script>
+<script src="Scripts/config.js" type="text/javascript"></script>
 
-    <script src="Controllers/MainController.js" type="text/javascript"></script>
-    <script src="Controllers/LoginController.js" type="text/javascript"></script>
-    <script src="Controllers/LogoutController.js" type="text/javascript"></script>
-    <script src="Controllers/ConversationsController.js" type="text/javascript"></script>
-    <script src="Controllers/MessagesController.js" type="text/javascript"></script>
-    <script src="Controllers/ProfileController.js" type="text/javascript"></script>
-    <script src="Controllers/NewConversationController.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.6/ngStorage.min.js"></script>
+
+<script src="Factories/ApiFactory.js" type="text/javascript"></script>
+<script src="Factories/UsersFactory.js" type="text/javascript"></script>
+<script src="Factories/ConversationsFactory.js" type="text/javascript"></script>
+
+<script src="Controllers/MainController.js" type="text/javascript"></script>
+<script src="Controllers/LoginController.js" type="text/javascript"></script>
+<script src="Controllers/LogoutController.js" type="text/javascript"></script>
+<script src="Controllers/ConversationsController.js" type="text/javascript"></script>
+<script src="Controllers/MessagesController.js" type="text/javascript"></script>
+<script src="Controllers/ProfileController.js" type="text/javascript"></script>
+<script src="Controllers/NewConversationController.js" type="text/javascript"></script>
 
 </body>
 </html>

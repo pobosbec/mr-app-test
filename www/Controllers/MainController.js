@@ -17,6 +17,7 @@
                         5000);
                 },
                 function(error) {
+                    console.log("What-is-new:");
                     console.log(error);
                 });
         };

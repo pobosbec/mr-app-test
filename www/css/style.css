@@ -11,8 +11,24 @@
 	border-bottom: 1px solid #ccc;	
 }
 
-.logo {
-	
+.modal {
+    display: block;
+}
+
+.modal-content {
+    z-index: 1050;
+}
+
+.formModalIframe {
+    border: 0;
+    background-color: white;
+    display: block;
+}
+
+.closeModal {
+    position: absolute;
+    margin-left: 90%;
+    z-index: 1060;
 }
 
 .content-container {
