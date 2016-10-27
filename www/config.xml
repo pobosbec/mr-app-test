@@ -7,15 +7,7 @@
         id        = "com.bosbec.test-app"
         version   = "0.3.0"> <!-- VERSION HERE -->
   <!--id        = "com.phonegap.hello-world"-->
-
-  <gap:config-file platform="ios" parent="CFBundleShortVersionString">
-    <string>0.3.0</string> <!-- VERSION HERE -->
-  </gap:config-file>
-
-  <gap:config-file platform="android" parent="/manifest">
-    <application android:debuggable="true" />
-  </gap:config-file>
-
+ 
   <name>Mobile Response App</name>
 
   <description>
@@ -23,8 +15,17 @@
   </description>
 
   <author href="http://mobileresponse.com/" email="support@mobileresponse.se">
-    Pushwoosh
+    Bosbec MobileResponse Team
   </author>
+
+  <gap:config-file platform="ios" parent="CFBundleShortVersionString">
+    <string>0.3.0</string>
+    <!-- VERSION HERE -->
+  </gap:config-file>
+
+  <gap:config-file platform="android" parent="/manifest">
+    <application android:debuggable="true" />
+  </gap:config-file>
 
   <!--
      If you do not want any permissions to be added to your app, add the
@@ -122,7 +123,7 @@
   <access origin="*"/>
   <!-- Added the following intents to support the removal of whitelist code from base cordova to a plugin -->
   <!-- Whitelist configuration. Refer to https://cordova.apache.org/docs/en/edge/guide_appdev_whitelist_index.md.html -->
-  <plugin name="cordova-plugin-whitelist" version="1" />
+  <!--<plugin name="cordova-plugin-whitelist" version="1" />-->
   <allow-intent href="http://*/*" />
   <allow-intent href="https://*/*" />
   <allow-intent href="tel:*" />

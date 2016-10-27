@@ -1,9 +1,9 @@
 ﻿mrApp.controller('MainController', [
-    'ApiFactory','$rootScope', '$scope', '$location', '$filter', '$timeout', 'ConversationsFactory',
-    function(apiFactory, $rootScope, $scope, $location, $filter, $timeout, conversationsFactory) {
+    'ApiFactory','$rootScope', '$scope', '$location', '$filter', '$timeout', 'ConversationsFactory','deviceReady',
+    function(apiFactory, $rootScope, $scope, $location, $filter, $timeout, conversationsFactory, deviceReady) {
 
         $scope.alertNewMessage = false;
-
+        
         var checkWhatsNew = function() {
             conversationsFactory.whatIsNew(function(messages) {
                     //console.log(apiFactory.lastCallTimestamp());
@@ -119,7 +119,6 @@
                 });
 
         }
-
 
     }
 ]);

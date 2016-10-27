@@ -1,12 +1,20 @@
 ﻿mrApp.controller('LoginController', [
-    'ApiFactory', '$rootScope', '$scope', '$location', '$window', '$routeParams', '$localStorage', 'UsersFactory',
-    function(apiFactory, $rootScope, $scope, $location, $window, $routeParams, $localStorage, usersFactory) {
+    'ApiFactory', '$rootScope', '$scope', '$location', '$window', '$routeParams', '$localStorage', 'UsersFactory', 'deviceReady',
+    function(apiFactory, $rootScope, $scope, $location, $window, $routeParams, $localStorage, usersFactory, deviceReady) {
 
         var command = $routeParams.param1;
 
         if (command === "logout") {
             logout();
         }
+
+        deviceReady(function (isDevice) {
+            console.log("[LOGIN] DeviceReady: isDevice=" + isDevice);
+            $scope.credentials = $localStorage.savedCredentials;
+            if ($scope.credentials != null && $scope.credentials.keepMeSignedIn) {
+                login();
+            }
+        });
 
         $scope.saveCredentials = true;
         $scope.keepMeSignedIn = true;
@@ -17,10 +25,7 @@
         };
 
         function init() {
-            $scope.credentials = $localStorage.savedCredentials;
-            if ($scope.credentials != null && $scope.credentials.keepMeSignedIn) {
-                login();
-            }
+            
         }
 
         $scope.signin = {

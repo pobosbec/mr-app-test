@@ -18,17 +18,15 @@
 
    
 </head>
-<body ng-app="mrApp" ng-controller="MainController">
+<body ng-controller="MainController">
 
 <div ui-yield-to="modals"></div>
 
 <!-- Sidebars -->
-
 <div class="sidebar sidebar-left" toggleable parent-active-class="sidebar-left-in" id="mainSidebar">
     <h1 class="app-name">
         <a href="#/login"><img src="images/mobile-response-logo.png" class="logo" alt="Mobile Response"/></a>
     </h1>
-
     <div class="scrollable">
         <div class="scrollable-content">
 
@@ -47,7 +45,6 @@
 
         </div>
     </div>
-
 </div>
 
 <div class="app" ui-swipe-right='Ui.turnOn("uiSidebarLeft")' ui-swipe-left='Ui.turnOff("uiSidebarLeft")'>
@@ -120,6 +117,10 @@
 <script src="Controllers/MessagesController.js" type="text/javascript"></script>
 <script src="Controllers/ProfileController.js" type="text/javascript"></script>
 <script src="Controllers/NewConversationController.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    angular.bootstrap(document.body, ['mrApp']);
+</script>
 
 </body>
 </html>

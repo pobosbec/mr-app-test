@@ -1,12 +1,19 @@
-<?xml version='1.0' encoding='utf-8'?>
-<widget id="com.bosbec.testapp" version="0.2.5b" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0"> <!-- VERSION HERE -->
-    <name>Mobile Response App</name>
-    <description>
-        Mobile Response messaging app
-    </description>
-    <author email="support@mobileresponse.se" href="http://www.mobileresponse.com">
-        Bosbec MobileResponse Team
-    </author>
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- config.xml reference: https://build.phonegap.com/docs/config-xml -->
+<widget xmlns     = "http://www.w3.org/ns/widgets"
+        xmlns:gap = "http://phonegap.com/ns/1.0"
+        xmlns:android = "http://schemas.android.com/apk/res/android"
+        id        = "com.bosbec.test-app"
+        version   = "0.3.0">
+  <!-- VERSION HERE -->
+  <!--id        = "com.phonegap.hello-world"-->
+
+  <name>Mobile Response App</name>
+
+  <description>
+    Mobile Response messaging app
+  </description>
 
   <icon src="www/icon.png" />
   <splash src="www/splash.png" />
@@ -47,11 +54,11 @@
 
   </platform>
   
-    <content src="index.html" />
+    <content src="www/index.html" />
     <!--<plugin name="io.litehelpers.cordova.sqlite" spec="0.7.10" source="pgb" />-->
-    <plugin name="cordova-plugin-whitelist" spec="1" />
-    <plugin name="cordova-plugin-app-version" spec="0.1.8" source="npm" />
-    <plugin name="cordova-plugin-statusbar" spec="2.1.3" source="npm" />
+    <!--<plugin name="cordova-plugin-whitelist" spec="1" />-->
+    <!--<plugin name="cordova-plugin-app-version" spec="0.1.8" source="npm" />-->
+    <!--<plugin name="cordova-plugin-statusbar" spec="2.1.3" source="npm" />-->
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
