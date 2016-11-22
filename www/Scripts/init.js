@@ -3,6 +3,10 @@
         function() {
 
             function initPushwoosh() {
+
+                var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
+                pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
+
                 if (window.isPhoneGap) {
                     console.log("initPushwoosh, isPhoneGap");
                     if (cordova !== null &&
@@ -24,23 +28,24 @@
                         }
                     }
                 }
-            }
+           }
 
-            return function(done) {
-                if (typeof window.cordova === 'object') {
-                    document.addEventListener('deviceready',
-                        function() {
-                            var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
-                            pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
-
-                            initPushwoosh();
-                            done(true);
-                        },
-                        false);
+            return function (done) {
+                if (window.isPhoneGap) {
+                    document.addEventListener('deviceready', initPushwoosh, false);
+                    done(true);
                 } else {
                     done(false);
                 }
             }
+
+            //return function(done) {
+            //    if (typeof window.cordova === 'object') {
+            //        document.addEventListener('deviceready', initDevice, false);
+            //    } else {
+            //        done(false);
+            //    }
+            //}
         }
     );
 

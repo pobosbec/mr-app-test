@@ -134,6 +134,7 @@
 
     function loadScript(scriptUrl) {
         console.log(">> Loading: " + scriptUrl);
+        alert(">> Loading: " + scriptUrl);
         var script = document.createElement('script');
         script.src = scriptUrl;
         script.onload = function () {
@@ -189,7 +190,7 @@
         } else if (isIOS()) {
             CORDOVA_EDITION = "ios";
             window.deviceType = 1;
-            loadStyle("css/style-ios.css");
+            //loadStyle("css/style-ios.css");
         }
         window.isPhoneGap = (CORDOVA_EDITION !== null);
         loadScript("js/index.js");
