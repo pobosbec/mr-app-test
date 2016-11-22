@@ -16,26 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-function initPushwoosh() {
-    if (window.isPhoneGap) {
-        console.log("initPushwoosh, isPhoneGap");
-        if (cordova !== null && typeof cordova !== "undefined" && cordova.require !== null && typeof cordova.require !== "undefined") {
-            if (device.platform == "Android") {
-                console.log("registering Android");
-                registerPushwooshAndroid();
-            }
 
-            if (device.platform == "iPhone" || device.platform == "iOS") {
-                console.log("registering pushwooshIOS");
-                registerPushwooshIOS();
-            }
-
-            if (device.platform == "Win32NT") {
-                registerPushwooshWP();
-            }
-        }
-    }
-}
 
 var app = {
     // Application Constructor

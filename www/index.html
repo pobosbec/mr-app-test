@@ -134,7 +134,7 @@
 
     function loadScript(scriptUrl) {
         console.log(">> Loading: " + scriptUrl);
-        alert(">> Loading: " + scriptUrl);
+        //alert(">> Loading: " + scriptUrl);
         var script = document.createElement('script');
         script.src = scriptUrl;
         script.onload = function () {
@@ -143,20 +143,7 @@
 
         document.head.appendChild(script);
     }
-
-    function loadStyle(styleUrl) {
-        //<link rel="stylesheet" href="css/style.css" type="text/css"/>
-        console.log(">> Loading: " + styleUrl);
-        var script = document.createElement('link');
-        script.href = styleUrl;
-        script.onload = function () {
-            console.log(">> Loaded: " + styleUrl);
-        };
-
-        document.head.appendChild(script);
-
-    }
-
+    
     var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
     if (app) {
         // PhoneGap application
@@ -169,13 +156,42 @@
         angular.bootstrap(document.body, ['mrApp']);
     }
 
+    function initPushwoosh() {
+        //alert("initPushwoosh: isPhoneGap=" + window.isPhoneGap);
+        if (window.isPhoneGap) {
+            console.log("initPushwoosh, isPhoneGap");
+            if (cordova !== null && typeof cordova !== "undefined" && cordova.require !== null && typeof cordova.require !== "undefined") {
+
+                alert("Cordova require: " + cordova.require);
+
+                var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
+                pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
+
+                alert("Device: " + device.platform);
+
+                if (device.platform == "Android") {
+                    console.log("registering Android");
+                    registerPushwooshAndroid();
+                }
+
+                if (device.platform == "iPhone" || device.platform == "iOS") {
+                    console.log("registering pushwooshIOS");
+                    registerPushwooshIOS();
+                }
+
+                if (device.platform == "Win32NT") {
+                    registerPushwooshWP();
+                }
+            }
+        }
+    }
+
     function onDeviceReady() {
         console.log("deviceready");
         console.log("initing plugin with on device ready, index.html");
-        var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
-        pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
-
+        
         initPushwoosh();
+
         console.log("Device ready initiating Angular");
         alert("Device ready initiating Angular");
         angular.bootstrap(document.body, ['mrApp']);
@@ -190,7 +206,6 @@
         } else if (isIOS()) {
             CORDOVA_EDITION = "ios";
             window.deviceType = 1;
-            //loadStyle("css/style-ios.css");
         }
         window.isPhoneGap = (CORDOVA_EDITION !== null);
         loadScript("js/index.js");
@@ -208,9 +223,9 @@
                 alert("phone is android");
             }
 
-            angular.bootstrap(document.body, ['mrApp']);
+            //angular.bootstrap(document.body, ['mrApp']);
 
-            //document.addEventListener('deviceready', onDeviceReady, false);
+            document.addEventListener('deviceready', onDeviceReady, false);
         }
     }
 </script>

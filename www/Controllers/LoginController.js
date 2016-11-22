@@ -1,6 +1,9 @@
-﻿mrApp.controller('LoginController', [
-    'ApiFactory', '$rootScope', '$scope', '$location', '$window', '$routeParams', '$localStorage', 'UsersFactory', 'deviceReady',
-    function(apiFactory, $rootScope, $scope, $location, $window, $routeParams, $localStorage, usersFactory, deviceReady) {
+﻿//mrApp.controller('LoginController', [
+//    'ApiFactory', '$rootScope', '$scope', '$location', '$window', '$routeParams', '$localStorage', 'UsersFactory', 'deviceReady',
+//    function(apiFactory, $rootScope, $scope, $location, $window, $routeParams, $localStorage, usersFactory, deviceReady) {
+mrApp.controller('LoginController', [
+    'ApiFactory', '$rootScope', '$scope', '$location', '$window', '$routeParams', '$localStorage', 'UsersFactory', 
+    function(apiFactory, $rootScope, $scope, $location, $window, $routeParams, $localStorage, usersFactory) {
 
         var command = $routeParams.param1;
 
@@ -8,14 +11,14 @@
             logout();
         }
 
-        deviceReady(function (isDevice) {
-            console.log("[LOGIN] DeviceReady: isDevice=" + isDevice);
-            alert("[LOGIN] DeviceReady: isDevice=" + isDevice);
-            $scope.credentials = $localStorage.savedCredentials;
-            if ($scope.credentials != null && $scope.credentials.keepMeSignedIn) {
-                login();
-            }
-        });
+        //deviceReady(function (isDevice) {
+        //    console.log("[LOGIN] DeviceReady: isDevice=" + isDevice);
+        //    alert("[LOGIN] DeviceReady: isDevice=" + isDevice);
+        //    $scope.credentials = $localStorage.savedCredentials;
+        //    if ($scope.credentials != null && $scope.credentials.keepMeSignedIn) {
+        //        login();
+        //    }
+        //});
 
         $scope.saveCredentials = true;
         $scope.keepMeSignedIn = true;

@@ -1,6 +1,6 @@
 ﻿mrApp.controller('MainController', [
-    'ApiFactory','$rootScope', '$scope', '$location', '$filter', '$timeout', 'ConversationsFactory','deviceReady',
-    function(apiFactory, $rootScope, $scope, $location, $filter, $timeout, conversationsFactory, deviceReady) {
+    'ApiFactory','$rootScope', '$scope', '$location', '$filter', '$timeout', 'ConversationsFactory',
+    function(apiFactory, $rootScope, $scope, $location, $filter, $timeout, conversationsFactory) {
 
         $scope.alertNewMessage = false;
         

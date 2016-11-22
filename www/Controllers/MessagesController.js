@@ -109,8 +109,6 @@ mrApp.controller('MessagesController', [
             };
             apiFactory.functions.call('conversations/list-messages', listMessagesRequest, function (response) {
 
-                console.log(response);
-
                 for (var i = 0; i < response.data.items.length; i++) {
                     response.data.items[i].content = linkify(response.data.items[i].content);
                     if (response.data.items[i].metaData.length > 0) {
