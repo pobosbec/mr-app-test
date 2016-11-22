@@ -54,7 +54,7 @@
 
   </platform>
   
-    <content src="www/index.html" />
+    <content src="index.html" />
     <!--<plugin name="io.litehelpers.cordova.sqlite" spec="0.7.10" source="pgb" />-->
     <!--<plugin name="cordova-plugin-whitelist" spec="1" />-->
     <!--<plugin name="cordova-plugin-app-version" spec="0.1.8" source="npm" />-->
