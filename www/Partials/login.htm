@@ -3,22 +3,22 @@
     <div class="container">
         
         <div>
-            <form class="form-signin" name="signinForm" role="form">
+            <form class="form-signin" ng-disabled="signingin" name="signinForm" role="form">
                 <div>
                     <a ng-show="!signin.show" href="" ng-click="ShowSignin()">Back to sign in</a>
                 </div>
                 <div ng-show="signin.show">
                     <h2 class="form-signin-heading">Please sign in</h2>
                     <div ng-if="signin.error.show" class="error-label">{{ signin.error.message }}</div>
-                    <input type="text" ng-model="credentials.userName" class="form-control" placeholder="UserName" required autofocus>
-                    <input type="password" ng-model="credentials.password" class="form-control" placeholder="Password" required>
+                    <input type="text" ng-disabled="signingin" ng-model="credentials.userName" class="form-control" placeholder="UserName" required autofocus>
+                    <input type="password" ng-disabled="signingin" ng-model="credentials.password" class="form-control" placeholder="Password" required>
                     <label class="checkbox">
-                        <input type="checkbox" ng-model="saveCredentials" value="saveCredentials"> Remember me
+                        <input type="checkbox" ng-disabled="signingin" ng-model="saveCredentials" value="saveCredentials"> Remember me
                     </label>
                     <label class="checkbox">
-                        <input type="checkbox" ng-model="keepMeSignedIn" value="keepMeSignedIn"> Keep me signed in
+                        <input type="checkbox" ng-disabled="signingin" ng-model="keepMeSignedIn" value="keepMeSignedIn"> Keep me signed in
                     </label>
-                    <button class="btn btn-lg btn-primary btn-block" ng-click="Login()" type="submit">Sign in</button>
+                    <button class="btn btn-lg btn-primary btn-block" ng-disabled="signingin" ng-click="Login()" type="submit"><span ng-show="!signingin">Sign in </span><i class="fa fa-circle-o-notch fa-spin fa-1x fa-fw" ng-show="signingin"></i></button>
                     <a ng-show="credentials!=null" href="" ng-click="ClearCredentials()">Clear credentials</a>
                 </div>
             </form>

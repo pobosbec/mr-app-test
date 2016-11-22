@@ -1,22 +1,27 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>Mobile Response Angular App</title>
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimal-ui" />
     <meta name="apple-mobile-web-app-status-bar-style" content="yes" />
-    <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
+    
+    <!--<meta http-equiv="Content-Security-Policy" content="default-src * gap: ws: https://ssl.gstatic.com;style-src * 'unsafe-inline' * data: blob:;script-src * 'unsafe-inline' 'unsafe-eval' data: blob:;img-src 'self' data: content:;">-->
+    <!--<meta http-equiv="Content-Security-Policy" content="default-src * gap: ws: https://ssl.gstatic.com;img-src * data: content:;style-src * 'unsafe-inline' data: blob:;script-src * 'unsafe-inline' 'unsafe-eval' data: blob:;">-->
+    
+    <title>Mobile Response Angular App</title>
 
-    <link href="js/mobile-angular-ui/dist/css/mobile-angular-ui-base.min.css" rel="stylesheet" type="text/css" />
-    <link href="js/mobile-angular-ui/dist/css/mobile-angular-ui-desktop.min.css" rel="stylesheet" type="text/css" />
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon"/>
+
+    <link href="js/mobile-angular-ui/dist/css/mobile-angular-ui-base.min.css" rel="stylesheet" type="text/css"/>
+    <link href="js/mobile-angular-ui/dist/css/mobile-angular-ui-desktop.min.css" rel="stylesheet" type="text/css"/>
 
     <link href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css" type="text/css" />
+    <link rel="stylesheet" href="css/style.css" type="text/css"/>
 
-   
+
 </head>
 <body ng-controller="MainController">
 
@@ -32,10 +37,7 @@
 
             <div ng-show="validateLoad('inboxes')" class="list-group" toggle="off" bubble target="mainSidebar">
                 <a ng-repeat="inbox in inboxes" class="list-group-item" href="#/conversations/{{ inbox.inboxId }}">
-                    <div ng-show="inbox.inboxIcon != null">
-                        <img height="25" alt="inboxIcon" src="{{ inbox.inboxIcon }}"/>
-                    </div>
-                    {{ inbox.inboxDisplayName }} <i class="fa fa-chevron-right pull-right"></i>
+                    <img ng-show="inbox.icon" height="25" alt="inboxIcon" src="{{ inbox.icon }}"/> {{ inbox.inboxDisplayName }} <i class="fa fa-chevron-right pull-right"></i>
                 </a>
             </div>
             <div>
@@ -96,8 +98,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular-touch.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-sanitize.js"></script>
 
-<script src="cordova.js" type="text/javascript"></script>
-<script src="js/index.js" type="text/javascript"></script>
 <script src="js/ng-cordova.js" type="text/javascript"></script>
 <script src="js/mobile-angular-ui/dist/js/mobile-angular-ui.min.js" type="text/javascript"></script>
 
@@ -118,8 +118,100 @@
 <script src="Controllers/ProfileController.js" type="text/javascript"></script>
 <script src="Controllers/NewConversationController.js" type="text/javascript"></script>
 
+    <!--<script src="cordova.js" type="text/javascript"></script>
+    <script src="js/index.js" type="text/javascript"></script>-->
+
 <script type="text/javascript">
-    angular.bootstrap(document.body, ['mrApp']);
+    console.log("running script in index..");
+    
+    function isAndroid() {
+        return navigator.userAgent.indexOf("Android") > 0;
+    }
+
+    function isIOS() {
+        return (navigator.userAgent.indexOf("iPhone") > 0 || navigator.userAgent.indexOf("iPad") > 0 || navigator.userAgent.indexOf("iPod") > 0);
+    }
+
+    function loadScript(scriptUrl) {
+        console.log(">> Loading: " + scriptUrl);
+        var script = document.createElement('script');
+        script.src = scriptUrl;
+        script.onload = function () {
+            console.log(">> Loaded: " + scriptUrl);
+        };
+
+        document.head.appendChild(script);
+    }
+
+    function loadStyle(styleUrl) {
+        //<link rel="stylesheet" href="css/style.css" type="text/css"/>
+        console.log(">> Loading: " + styleUrl);
+        var script = document.createElement('link');
+        script.href = styleUrl;
+        script.onload = function () {
+            console.log(">> Loaded: " + styleUrl);
+        };
+
+        document.head.appendChild(script);
+
+    }
+
+    var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+    if (app) {
+        // PhoneGap application
+        window.isPhoneGap = true;
+        loadCordova();
+    } else {
+        // Web page
+        window.isPhoneGap = false;
+        window.deviceType = 0;
+        angular.bootstrap(document.body, ['mrApp']);
+    }
+
+    function onDeviceReady() {
+        console.log("deviceready");
+        console.log("initing plugin with on device ready, index.html");
+        var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
+        pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
+
+        initPushwoosh();
+        console.log("Device ready initiating Angular");
+        alert("Device ready initiating Angular");
+        angular.bootstrap(document.body, ['mrApp']);
+    }
+
+    function loadCordova() {
+        window.deviceType = 0;
+        var CORDOVA_EDITION = null;
+        if (isAndroid()) {
+            CORDOVA_EDITION = "android";
+            window.deviceType = 3;
+        } else if (isIOS()) {
+            CORDOVA_EDITION = "ios";
+            window.deviceType = 1;
+            loadStyle("css/style-ios.css");
+        }
+        window.isPhoneGap = (CORDOVA_EDITION !== null);
+        loadScript("js/index.js");
+        if (CORDOVA_EDITION != null) {
+            loadScript("cordova.js");
+            // now add plugins
+            if (isIOS()) {
+                loadScript("js/PushwooshiOS.js");
+                console.log("phone is ios");
+                alert("phone is ios");
+            }
+            if (isAndroid()) {
+                loadScript("js/PushwooshAndroid.js");
+                console.log("phone is android");
+                alert("phone is android");
+            }
+
+            angular.bootstrap(document.body, ['mrApp']);
+
+            //document.addEventListener('deviceready', onDeviceReady, false);
+        }
+    }
 </script>
 
 </body>

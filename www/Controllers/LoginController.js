@@ -10,6 +10,8 @@
 
         deviceReady(function (isDevice) {
             console.log("[LOGIN] DeviceReady: isDevice=" + isDevice);
+            alert("Login:deviceReady");
+
             $scope.credentials = $localStorage.savedCredentials;
             if ($scope.credentials != null && $scope.credentials.keepMeSignedIn) {
                 login();
@@ -18,6 +20,7 @@
 
         $scope.saveCredentials = true;
         $scope.keepMeSignedIn = true;
+        $scope.signingin = false;
 
         $scope.error = {
             show: false,
@@ -35,6 +38,16 @@
                 message: ''
             }
         };
+
+        function setSigningIn(state) {
+            //is signing in
+            if (state) {
+
+            } else {
+                
+            }
+            $scope.signingin = state;
+        }
 
         $scope.ClearCredentials = function () {
             //console.log("Cleared credentials");
@@ -154,21 +167,21 @@
                                 callback(response);
 
                             },
-                            function (error) {
-
+                            function (e) {
+                                error(e);
                             });
 
                     }
                 },
                 function (e) {
 
-                    $scope.error.message = "Login failed! User does not exist";
+                    $scope.signin.error.message = "Login failed! User does not exist";
 
                     if (e.status === 401) {
-                        $scope.error.message = "Login failed! Password is incorrect";
+                        $scope.signin.error.message = "Login failed! Password is incorrect";
                     }
 
-                    $scope.error.show = true;
+                    $scope.signin.error.show = true;
                     console.log("Login failed");
 
                     error(e);
@@ -178,18 +191,21 @@
 
         function login() {
             console.log('--- LOGIN ---');
+            setSigningIn(true);
             apiLogin(apiFactory.apiSettings.instanceName,
                 $scope.credentials.userName,
                 $scope.credentials.password,
-                function (response) {
+                function(response) {
                     //console.log($rootScope.currentInboxId);
+                    setSigningIn(false);
                     if ($rootScope.currentInboxId != undefined) {
                         $location.path('/conversations/' + $rootScope.currentInboxId);
                     } else {
                         $location.path('/main');
                     }
                 },
-                function (error) {
+                function(error) {
+                    setSigningIn(false);
                     $location.path('/login');
                 });
         }
@@ -199,6 +215,7 @@
                 login();
             }
         };
+
 
         //function logout() {
         //    $scope.keepMeSignedIn = false;

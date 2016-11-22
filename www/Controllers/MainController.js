@@ -93,7 +93,7 @@
             };
             apiFactory.functions.call('inboxes/list',
                 listInboxesRequest,
-                function(response) {
+                function (response) {
                     $scope.inboxes = response.data.items;
                     callback(response);
                 },
