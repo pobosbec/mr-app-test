@@ -167,21 +167,18 @@
                 var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
                 console.log(pushNotification);
                 pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
-                console.log(device);
+                console.log(window.deviceType);
 
-                if (device.platform == "Android") {
+                if (window.deviceType === 3) {
                     console.log("registering Android");
                     registerPushwooshAndroid();
                 }
 
-                if (device.platform == "iPhone" || device.platform == "iOS") {
+                if (window.deviceType === 1) {
                     console.log("registering pushwooshIOS");
                     registerPushwooshIOS();
                 }
 
-                if (device.platform == "Win32NT") {
-                    registerPushwooshWP();
-                }
             }
         }
     }
