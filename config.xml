@@ -20,6 +20,10 @@
     <application android:debuggable="true" />
   </gap:config-file>
 
+  <!-- Pushwoosh plugin -->
+  <gap:plugin name="pushwoosh-pgb-plugin" source="npm" />
+
+
   <icon src="www/icon.png" />
   <splash src="www/splash.png" />
 
