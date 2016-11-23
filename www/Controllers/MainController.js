@@ -29,6 +29,14 @@
         // start subscribing
         $scope.$on('showAlertNewMessage', onShowAlertNewMessage);
 
+        function onNewPush(event, state) {
+            console.log("Handle:newPush");
+            console.log(event);
+            console.log(state);
+        }
+
+        $scope.$on('newPush', onNewPush);
+
         $scope.$on('$viewContentLoaded',
             function() {
 
