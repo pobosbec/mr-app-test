@@ -163,14 +163,11 @@
         if (window.isPhoneGap) {
             console.log("initPushwoosh, isPhoneGap");
             if (cordova !== null && typeof cordova !== "undefined" && cordova.require !== null && typeof cordova.require !== "undefined") {
-
-                alert("Cordova require: " + cordova.require("cordova/plugin_list").metadata);
-
+                
                 var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
-                alert("111");
+                console.log(pushNotification);
                 pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
-
-                alert("Device: " + device.platform);
+                console.log(device);
 
                 if (device.platform == "Android") {
                     console.log("registering Android");
@@ -195,7 +192,6 @@
         initPushwoosh();
 
         console.log("Device ready initiating Angular");
-        alert("Device ready initiating Angular");
         angular.bootstrap(document.body, ['mrApp']);
     }
 
@@ -217,12 +213,12 @@
             if (isIOS()) {
                 loadScript("js/PushwooshiOS.js");
                 console.log("phone is ios");
-                alert("phone is ios");
+                //alert("phone is ios");
             }
             if (isAndroid()) {
                 loadScript("js/PushwooshAndroid.js");
                 console.log("phone is android");
-                alert("phone is android");
+                //alert("phone is android");
             }
 
             //angular.bootstrap(document.body, ['mrApp']);
