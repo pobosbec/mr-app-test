@@ -148,12 +148,10 @@
     if (app) {
         // PhoneGap application
         window.isPhoneGap = true;
-        //console.log("PhoneGap: " + window.isPhoneGap);
         loadCordova();
     } else {
         // Web page
         window.isPhoneGap = false;
-        //console.log("PhoneGap: " + window.isPhoneGap);
         window.deviceType = 0;
         angular.bootstrap(document.body, ['mrApp']);
     }
