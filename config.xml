@@ -15,6 +15,11 @@
     Mobile Response messaging app
   </description>
 
+
+  <gap:config-file platform="android" parent="/manifest">
+    <application android:debuggable="true" />
+  </gap:config-file>
+
   <icon src="www/icon.png" />
   <splash src="www/splash.png" />
 

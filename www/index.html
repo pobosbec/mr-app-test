@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimal-ui" />
     <meta name="apple-mobile-web-app-status-bar-style" content="yes" />
-    
+
     <!--<meta http-equiv="Content-Security-Policy" content="default-src * gap: ws: https://ssl.gstatic.com;style-src * 'unsafe-inline' * data: blob:;script-src * 'unsafe-inline' 'unsafe-eval' data: blob:;img-src 'self' data: content:;">-->
     <!--<meta http-equiv="Content-Security-Policy" content="default-src * gap: ws: https://ssl.gstatic.com;img-src * data: content:;style-src * 'unsafe-inline' data: blob:;script-src * 'unsafe-inline' 'unsafe-eval' data: blob:;">-->
     
@@ -167,7 +167,6 @@
                 alert("Cordova require: " + cordova.require("cordova/plugin_list").metadata);
 
                 var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
-                return;
                 alert("111");
                 pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
 
