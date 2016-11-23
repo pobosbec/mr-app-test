@@ -189,7 +189,8 @@
         document.addEventListener('push-notification', function (event) {
             var notification = event.notification;
             // handle push open here
-            console.log("PUSH: " + notification);
+            console.log("PUSH");
+            console.log(notification);
             $scope.$broadcast('newPush', notification);
         });
         
