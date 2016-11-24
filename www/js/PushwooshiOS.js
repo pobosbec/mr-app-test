@@ -36,7 +36,7 @@ function registerPushwooshIOS() {
 	console.log("initing plugin with on device ready, pushwoshios");
     //pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
 	//pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
-	pushNotification.onDeviceReady({ alert: true, badge: true, sound: true, pw_appid: "A014B-AC83E", appname: "com.bosbec.test-app" });
+	pushNotification.onDeviceReady({ alert: true, badge: true, sound: true, pw_appid: "A014B-AC83E", appname: "com.bosbec.testapp" });
 	alert("iOS: appid registered");
 	console.log("check if token is registeredpushwooshios.js on resume");
 
