@@ -19,12 +19,14 @@
 
 function registerPushwooshIOS() {
     console.log("registerPushwooshIOS");
+    alert("registerPushwooshIOS");
 
     var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
 
     //set push notification callback before we initialize the plugin
     document.addEventListener('push-notification',
 		function (event) {
+		    alert("New push iOS");
 		    var notification = event.notification;
 		    pushNotification.setApplicationIconBadgeNumber(0);
 		}
@@ -32,7 +34,8 @@ function registerPushwooshIOS() {
 
     //initialize the plugin
 	console.log("initing plugin with on device ready, pushwoshios");
-    pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
+    //pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
+	pushNotification.onDeviceReady({ appid: "A014B-AC83E" });
 
 	console.log("check if token is registeredpushwooshios.js on resume");
 

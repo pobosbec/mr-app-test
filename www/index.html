@@ -190,7 +190,8 @@
             // handle push open here
             console.log("PUSH");
             console.log(notification);
-            $scope.$broadcast('newPush', notification);
+            alert("[PUSH] " + notification);
+            //$scope.$broadcast('newPush', notification);
         });
         
         initPushwoosh();
