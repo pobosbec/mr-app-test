@@ -214,6 +214,7 @@
         loadScript("js/index.js");
         if (CORDOVA_EDITION != null) {
             loadScript("cordova.js");
+            loadScript("PushNotification.js");
             // now add plugins
             if (isIOS()) {
                 loadScript("js/PushwooshiOS.js");
