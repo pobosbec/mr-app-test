@@ -101,11 +101,12 @@ function registerPushwooshIOS() {
     //);
 
     //reset badges on start
-    pushNotification.setApplicationIconBadgeNumber(0);
+    //pushNotification.setApplicationIconBadgeNumber(0);
 }
 
 function onPushwooshiOSInitialized(pushToken) {
     console.log("onPushwooshiOSInitialized");
+    alert("onPushwooshiOSInitialized" + pushToken);
 
     //var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
 
@@ -133,7 +134,7 @@ function onPushwooshiOSInitialized(pushToken) {
     //	}
     //);
 
-    var evt = document.createEvent('Event');
-    evt.initEvent('push-service-initialized', true, true);
-    document.dispatchEvent(evt);
+    //var evt = document.createEvent('Event');
+    //evt.initEvent('push-service-initialized', true, true);
+    //document.dispatchEvent(evt);
 }
