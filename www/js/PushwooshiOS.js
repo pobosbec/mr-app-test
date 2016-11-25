@@ -41,49 +41,35 @@ function registerPushwooshIOS() {
     console.log("check if token is registeredpushwooshios.js on resume");
 
     //check so that we have a token or not before registering. if we register with a present token then we will disable the push service..
-    //pushNotification.getPushToken(
-	//	function (token) {
-	//	    console.log("pushToken is not null: " + JSON.stringify(token));
-	//	    console.warn('push token: ' + token);
+    pushNotification.getPushToken(
+		function (token) {
+		    console.log("pushToken is not null: " + JSON.stringify(token));
+		    console.warn('push token: ' + token);
 
-	//	    if (token != null) {
-	//	        console.log("pushToken is not null");
-	//	        alert("iOS: pushToken is not null, don't re-register");
-	//	    }
-	//	    else {
+		    if (token != null) {
+		        console.log("pushToken is not null");
+		        alert("iOS: pushToken is not null, don't re-register");
+		    }
+		    else {
 
-	//	        console.log("pushToken is null re register: ");
-	//	        pushNotification.registerDevice({alert:true, badge:true, sound:true}, 
-	//					function (token) {
-	//					    alert("iOS: registerDevice: " + JSON.stringify(token));
-	//					    console.log("pushNotification.registerDevice, from PushwooshiOS.js, token: " + JSON.stringify(token));
+		        console.log("pushToken is null re register: ");
+		        pushNotification.registerDevice({alert:true, badge:true, sound:true}, 
+						function (token) {
+						    alert("iOS: registerDevice: " + JSON.stringify(token));
+						    console.log("pushNotification.registerDevice, from PushwooshiOS.js, token: " + JSON.stringify(token));
 
-	//					    var deviceToken = token.deviceToken;
+						    var deviceToken = token.deviceToken;
 						    
-	//					    onPushwooshiOSInitialized(deviceToken);
-	//					},
-	//				function (status) {
-	//				    console.warn('failed to register : ' + JSON.stringify(status));
-	//				}
-	//			);
-	//	    }
-	//	}
-	//);
-
-    pushNotification.registerDevice({ alert: true, badge: true, sound: true },
-        function(token) {
-            alert("iOS: registerDevice: " + JSON.stringify(token));
-            console.log("pushNotification.registerDevice, from PushwooshiOS.js, token: " + JSON.stringify(token));
-
-            var deviceToken = token.deviceToken;
-
-            onPushwooshiOSInitialized(deviceToken);
-        },
-        function(status) {
-            console.warn('failed to register : ' + JSON.stringify(status));
-        }
-    );
-
+						    onPushwooshiOSInitialized(deviceToken);
+						},
+					function (status) {
+					    console.warn('failed to register : ' + JSON.stringify(status));
+					}
+				);
+		    }
+		}
+	);
+    
     pushNotification.getPendingNotifications(function (notifications) {
         //console.log(JSON.stringify(['getPendingNotifications', notifications]));
         alert("iOS: Pending push: " + notifications);
