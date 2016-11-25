@@ -185,14 +185,14 @@
     function onDeviceReady() {
         console.log("initing plugin with on device ready, index.html");
 
-        document.addEventListener('push-notification', function (event) {
-            var notification = event.notification;
-            // handle push open here
-            console.log("PUSH");
-            console.log(notification);
-            alert("[PUSH] " + notification);
-            //$scope.$broadcast('newPush', notification);
-        });
+        //document.addEventListener('push-notification', function (event) {
+        //    var notification = event.notification;
+        //    // handle push open here
+        //    console.log("PUSH");
+        //    console.log(notification);
+        //    alert("[PUSH] " + notification);
+        //    //$scope.$broadcast('newPush', notification);
+        //});
         
         initPushwoosh();
 

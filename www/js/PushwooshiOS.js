@@ -10,10 +10,10 @@ function registerPushwooshIOS() {
         var notification = event.notification;
 
         //we might want to display and alert with push notification title
-        alert(notification.aps.alert);
+        alert("[iOS] PUSH: "+ notification.aps.alert);
 
         //sample code to view full push payload in the alert (test mode)
-        alert(JSON.stringify(notification));
+        //alert(JSON.stringify(notification));
 
         //reset badges on icon as user has accepted push notification
         pushNotification.setApplicationIconBadgeNumber(0);
