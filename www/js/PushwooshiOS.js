@@ -1,8 +1,8 @@
 function registerPushwooshIOS() {
     alert("registerPushwooshIOS");
 
-    //var pushNotification = window.plugins.pushNotification;
-    var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
+    var pushNotification = window.plugins.pushNotification;
+    //var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
 
     //push notifications handler
     document.addEventListener('push-notification', function (event) {
@@ -10,7 +10,8 @@ function registerPushwooshIOS() {
         var notification = event.notification;
 
         //we might want to display and alert with push notification title
-        alert("[iOS] PUSH: "+ notification.aps.alert);
+        //alert("[iOS] PUSH: "+ notification.aps.alert);
+        alert("[iOS] PUSH: " + notification);
 
         //sample code to view full push payload in the alert (test mode)
         //alert(JSON.stringify(notification));
@@ -20,7 +21,7 @@ function registerPushwooshIOS() {
     });
 
     //register for push notifications
-    pushNotification.registerDevice({ alert: true, badge: true, sound: true, pw_appid: "A014B-AC83E", appname: "com.bosbec.testapp" },
+    pushNotification.registerDevice({ alert: true, badge: true, sound: true, pw_appid: "A014B-AC83E", appname: "7T5TMACXPF.com.bosbec.testapp" },
       function (status) {
           //this is a push token
           var deviceToken = status['deviceToken'];
