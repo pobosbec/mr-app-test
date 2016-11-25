@@ -1,6 +1,8 @@
 function registerPushwooshIOS() {
     alert("registerPushwooshIOS");
-    var pushNotification = window.plugins.pushNotification;
+
+    //var pushNotification = window.plugins.pushNotification;
+    var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
 
     //push notifications handler
     document.addEventListener('push-notification', function (event) {
@@ -23,6 +25,7 @@ function registerPushwooshIOS() {
           //this is a push token
           var deviceToken = status['deviceToken'];
           console.warn('registerDevice: ' + deviceToken);
+          alert('registerDevice: ' + deviceToken);
 
           rungroup.globals.deviceToken = deviceToken;
 
