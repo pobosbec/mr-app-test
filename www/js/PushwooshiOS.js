@@ -36,34 +36,35 @@ function registerPushwooshIOS() {
     //initialize the plugin
     console.log("initing plugin with on device ready, pushwoshios");
     //pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
-    pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E", appname: "com.bosbec.testapp" });
+    pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
 
     console.log("check if token is registeredpushwooshios.js on resume");
 
     //check so that we have a token or not before registering. if we register with a present token then we will disable the push service..
     pushNotification.getPushToken(
 		function (token) {
-		    console.log("pushToken is not null: " + JSON.stringify(token));
+		    //console.log("pushToken is not null: " + JSON.stringify(token));
 		    console.warn('push token: ' + token);
 
 		    if (token != null) {
-		        console.log("pushToken is not null");
+		        //console.log("pushToken is not null");
 		        alert("iOS: pushToken is not null, don't re-register");
 		    }
 		    else {
 
-		        console.log("pushToken is null re register: ");
-		        pushNotification.registerDevice({alert:true, badge:true, sound:true}, 
+		        //console.log("pushToken is null re register: ");
+		        pushNotification.registerDevice( 
 						function (token) {
-						    alert("iOS: registerDevice: " + JSON.stringify(token));
-						    console.log("pushNotification.registerDevice, from PushwooshiOS.js, token: " + JSON.stringify(token));
+						    alert("iOS: registerDevice: " + token);
+						    //console.log("pushNotification.registerDevice, from PushwooshiOS.js, token: " + JSON.stringify(token));
 
 						    var deviceToken = token.deviceToken;
 						    
 						    onPushwooshiOSInitialized(deviceToken);
 						},
 					function (status) {
-					    console.warn('failed to register : ' + JSON.stringify(status));
+					    //console.warn('failed to register : ' + JSON.stringify(status));
+					    alert("iOS: registerDevice: FAILED");
 					}
 				);
 		    }
