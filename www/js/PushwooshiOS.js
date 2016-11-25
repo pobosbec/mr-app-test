@@ -37,7 +37,7 @@ function registerPushwooshIOS() {
             alert("iOS: registerDevice: " + JSON.stringify(token));
             //console.log("pushNotification.registerDevice, from PushwooshiOS.js, token: " + JSON.stringify(token));
 
-            var deviceToken = token.deviceToken;
+            var deviceToken = token.pushToken;
 
             onPushwooshiOSInitialized(deviceToken);
         },
