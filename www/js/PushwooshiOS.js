@@ -38,7 +38,6 @@ function registerPushwooshIOS() {
             //console.log("pushNotification.registerDevice, from PushwooshiOS.js, token: " + JSON.stringify(token));
 
             var deviceToken = token.pushToken;
-            localStorage.setItem("deviceToken", deviceToken);
 
             onPushwooshiOSInitialized(deviceToken);
         },
@@ -81,9 +80,11 @@ function registerPushwooshIOS() {
 
 }
 
-function onPushwooshiOSInitialized(pushToken) {
+function onPushwooshiOSInitialized(deviceToken) {
     console.log("onPushwooshiOSInitialized");
-    alert("onPushwooshiOSInitialized: " + pushToken);
+    //alert("onPushwooshiOSInitialized: " + deviceToken);
+    localStorage.deviceToken = deviceToken;
+    alert("local: "+ localStorage.deviceToken);
 
     //var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
 
