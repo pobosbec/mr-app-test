@@ -38,6 +38,7 @@ function registerPushwooshIOS() {
             //console.log("pushNotification.registerDevice, from PushwooshiOS.js, token: " + JSON.stringify(token));
 
             var deviceToken = token.pushToken;
+            localStorage.setItem("deviceToken", deviceToken);
 
             onPushwooshiOSInitialized(deviceToken);
         },

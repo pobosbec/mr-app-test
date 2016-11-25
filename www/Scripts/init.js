@@ -4,7 +4,11 @@
 
             return function (done) {
                 if (typeof window.cordova === 'object') {
-                    document.addEventListener('deviceready', function() {
+                    // is device
+                    document.addEventListener('deviceready', function () {
+
+
+
                         done(true);
                     }, false);
                 } else {

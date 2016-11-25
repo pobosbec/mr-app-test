@@ -11,6 +11,7 @@
 
         deviceReady(function (isDevice) {
             console.log("[LOGIN] DeviceReady: isDevice=" + isDevice);
+            alert("[LOGIN] deviceToken: "+ $localStorage.deviceToken);
             $scope.credentials = $localStorage.savedCredentials;
             if ($scope.credentials != null && $scope.credentials.keepMeSignedIn) {
                 login();
