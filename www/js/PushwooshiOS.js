@@ -38,10 +38,7 @@ function registerPushwooshIOS(callback, error) {
             //console.log("pushNotification.registerDevice, from PushwooshiOS.js, token: " + JSON.stringify(token));
 
             var deviceToken = token.pushToken;
-
-            localStorage.deviceToken = deviceToken;
-            alert("local: " + localStorage.deviceToken);
-
+            
             onPushwooshiOSInitialized(deviceToken);
             
             callback(deviceToken);

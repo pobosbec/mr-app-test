@@ -154,6 +154,7 @@
         window.isPhoneGap = false;
         window.deviceType = 0;
         angular.bootstrap(document.body, ['mrApp']);
+        mrApp.value("deviceToken", "");
     }
 
     function initPushwoosh(callback) {
@@ -207,9 +208,29 @@
         //    //$scope.$broadcast('newPush', notification);
         //});
 
-        initPushwoosh(function() {
-            console.log("Device ready initiating Angular");
-            angular.bootstrap(document.body, ['mrApp']);
+        initPushwoosh(function(token) {
+            console.log("Device ready initiating Angular. Token:" + token);
+
+
+            window.localStorage.deviceToken = deviceToken;
+            alert("local: " + window.localStorage.deviceToken);
+
+            angular.module('mrApp', [])
+                .controller('DeviceController',
+                [
+                    '$scope', function($scope) {
+                        $scope.deviceToken = 'ABC123';
+                        alert("Test" + token);
+                    }
+                ]);
+
+            angular.element(function () {
+                angular.bootstrap(document.body, ['mrApp']);
+            });
+
+
+
+            //angular.bootstrap(document.body, ['mrApp']);
         });
 
 
