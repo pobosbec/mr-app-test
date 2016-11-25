@@ -65,6 +65,7 @@ function registerPushwooshIOS() {
 						    console.log("pushNotification.registerDevice, from PushwooshiOS.js, token: " + JSON.stringify(token));
 
 						    var deviceToken = token.deviceToken;
+						    alert(token);
 
 						    //Throws the error: "Error in Success callbackId: PushNotification1997628909 : ReferenceError: Can't find variable: evt"
 						    //...and stops execution here. No event gets sent, and we never reach onPushwooshiOSInitialized.
