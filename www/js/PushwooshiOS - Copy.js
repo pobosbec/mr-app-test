@@ -28,113 +28,114 @@ function registerPushwooshIOS() {
 		function (event) {
 		    alert("New push iOS");
 		    var notification = event.notification;
-		    alert("iOS PUSH: "+ notification.animationPlayState.alert);
+		    alert("iOS PUSH: " + notification.animationPlayState.alert);
 		    pushNotification.setApplicationIconBadgeNumber(0);
 		}
 	);
 
     //initialize the plugin
-	console.log("initing plugin with on device ready, pushwoshios");
+    console.log("initing plugin with on device ready, pushwoshios");
     //pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
-	pushNotification.onDeviceReady({ alert: true, badge: true, sound: true, pw_appid: "A014B-AC83E", appname: "com.bosbec.testapp" },
-        function(status) {
+    pushNotification.onDeviceReady({ alert: true, badge: true, sound: true, pw_appid: "A014B-AC83E", appname: "com.bosbec.testapp" },
+        function (status) {
             alert("iOS: appid registered");
         },
-        function(status) {
+        function (status) {
             alert("iOS: appid registered failed");
         });
-	
-	console.log("check if token is registeredpushwooshios.js on resume");
 
-	//check so that we have a token or not before registering. if we register with a present token then we will disable the push service..
-	pushNotification.getPushToken(
-		function(token)
-		{
-			console.log("pushToken is not null: " + JSON.stringify(token));
-			console.warn('push token: ' + token);
+    console.log("check if token is registeredpushwooshios.js on resume");
 
-			if (token != null) {
-			    console.log("pushToken is not null");
-			    alert("iOS: pushToken is not null, don't re-register");
-			}
-			else {
+    //check so that we have a token or not before registering. if we register with a present token then we will disable the push service..
+    pushNotification.getPushToken(
+		function (token) {
+		    console.log("pushToken is not null: " + JSON.stringify(token));
+		    console.warn('push token: ' + token);
 
-				console.log("pushToken is null re register: ");
-				pushNotification.registerDevice(
+		    if (token != null) {
+		        console.log("pushToken is not null");
+		        alert("iOS: pushToken is not null, don't re-register");
+		    }
+		    else {
+
+		        console.log("pushToken is null re register: ");
+		        pushNotification.registerDevice(
 						function (token) {
 						    alert("iOS: registerDevice");
-						console.log("pushNotification.registerDevice, from PushwooshiOS.js, token: " + JSON.stringify(token));
+						    console.log("pushNotification.registerDevice, from PushwooshiOS.js, token: " + JSON.stringify(token));
 
-						var deviceToken = token.deviceToken;
+						    var deviceToken = token.deviceToken;
+						    alert(token);
 
-						//Throws the error: "Error in Success callbackId: PushNotification1997628909 : ReferenceError: Can't find variable: evt"
-						//...and stops execution here. No event gets sent, and we never reach onPushwooshiOSInitialized.
-						//evt.initCustomEvent("push-service-initialized", true, true, { token: deviceToken });
-						//window.dispatchEvent(evt);
+						    //Throws the error: "Error in Success callbackId: PushNotification1997628909 : ReferenceError: Can't find variable: evt"
+						    //...and stops execution here. No event gets sent, and we never reach onPushwooshiOSInitialized.
+						    //evt.initCustomEvent("push-service-initialized", true, true, { token: deviceToken });
+						    //window.dispatchEvent(evt);
 
-						onPushwooshiOSInitialized(deviceToken);
-					},
+						    onPushwooshiOSInitialized(deviceToken);
+						},
 					function (status) {
-						console.warn('failed to register : ' + JSON.stringify(status));
+					    console.warn('failed to register : ' + JSON.stringify(status));
 					}
 				);
-			}
+		    }
 		}
 	);
 
     ////register for pushes
     //pushNotification.registerDevice(
-	//	function (token) {
-	//	    console.log("pushNotification.registerDevice, from PushwooshiOS.js, token: " + JSON.stringify(token));
+    //	function (token) {
+    //	    console.log("pushNotification.registerDevice, from PushwooshiOS.js, token: " + JSON.stringify(token));
     //
-	//	    var deviceToken = token.deviceToken;
+    //	    var deviceToken = token.deviceToken;
     //
-	//	    //Throws the error: "Error in Success callbackId: PushNotification1997628909 : ReferenceError: Can't find variable: evt"
-	//	    //...and stops execution here. No event gets sent, and we never reach onPushwooshiOSInitialized.
-	//	    //evt.initCustomEvent("push-service-initialized", true, true, { token: deviceToken });
-	//	    //window.dispatchEvent(evt);
+    //	    //Throws the error: "Error in Success callbackId: PushNotification1997628909 : ReferenceError: Can't find variable: evt"
+    //	    //...and stops execution here. No event gets sent, and we never reach onPushwooshiOSInitialized.
+    //	    //evt.initCustomEvent("push-service-initialized", true, true, { token: deviceToken });
+    //	    //window.dispatchEvent(evt);
     //
-	//	    onPushwooshiOSInitialized(deviceToken);
-	//	},
-	//	function (status) {
-	//	    console.warn('failed to register : ' + JSON.stringify(status));
-	//	}
-	//);
+    //	    onPushwooshiOSInitialized(deviceToken);
+    //	},
+    //	function (status) {
+    //	    console.warn('failed to register : ' + JSON.stringify(status));
+    //	}
+    //);
 
     //reset badges on start
-    pushNotification.setApplicationIconBadgeNumber(0);
+    //pushNotification.setApplicationIconBadgeNumber(0);
 }
 
 function onPushwooshiOSInitialized(pushToken) {
     console.log("onPushwooshiOSInitialized");
+    alert("onPushwooshiOSInitialized" + pushToken);
 
     //var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
 
     ////retrieve the tags for the device
     //pushNotification.getTags(
-	//	function (tags) {
-	//	    console.warn('tags for the device: ' + JSON.stringify(tags));
-	//	},
-	//	function (error) {
-	//	    console.warn('get tags error: ' + JSON.stringify(error));
-	//	}
-	//);
+    //	function (tags) {
+    //	    console.warn('tags for the device: ' + JSON.stringify(tags));
+    //	},
+    //	function (error) {
+    //	    console.warn('get tags error: ' + JSON.stringify(error));
+    //	}
+    //);
 
     ////example how to get push token at a later time
     //pushNotification.getPushToken(
-	//	function (token) {
-	//	    console.warn('push token device: ' + token);
-	//	}
-	//);
+    //	function (token) {
+    //	    console.warn('push token device: ' + token);
+    //	}
+    //);
 
     ////example how to get Pushwoosh HWID to communicate with Pushwoosh API
     //pushNotification.getPushwooshHWID(
-	//	function (token) {
-	//	    console.warn('Pushwoosh HWID: ' + token);
-	//	}
-	//);
+    //	function (token) {
+    //	    console.warn('Pushwoosh HWID: ' + token);
+    //	}
+    //);
 
-    var evt = document.createEvent('Event');
-    evt.initEvent('push-service-initialized', true, true);
-    document.dispatchEvent(evt);
+    //var evt = document.createEvent('Event');
+    //evt.initEvent('push-service-initialized', true, true);
+    //document.dispatchEvent(evt);
 }
