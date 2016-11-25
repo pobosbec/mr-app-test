@@ -64,6 +64,7 @@
 /// <reference path="../../../../www/js/ng-cordova.js" />
 /// <reference path="../../../../www/js/ng-cordova-mocks.js" />
 /// <reference path="../../../../www/js/PushwooshAndroid.js" />
+/// <reference path="../../../../www/js/PushwooshiOS - Copy.js" />
 /// <reference path="../../../../www/js/PushwooshiOS.js" />
 /// <reference path="../../../../www/js/PushwooshWP.js" />
 /// <reference path="../../../../www/Scripts/config.js" />
