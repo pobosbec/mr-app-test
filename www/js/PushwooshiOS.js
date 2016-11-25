@@ -30,7 +30,7 @@ function registerPushwooshIOS() {
 		}
 	);
 
-    pushNotification.onDeviceReady({ appid: "A014B-AC83E" });
+    pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
 
     pushNotification.registerDevice(
         function(token) {
