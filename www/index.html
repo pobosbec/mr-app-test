@@ -212,8 +212,8 @@
             console.log("Device ready initiating Angular. Token:" + token);
 
 
-            window.localStorage.deviceToken = deviceToken;
-            alert("local: " + window.localStorage.deviceToken);
+            localStorage.deviceToken = token;
+            alert("local: " + localStorage.deviceToken);
 
             //angular.module('mrApp', [])
             //    .controller('DeviceController',
