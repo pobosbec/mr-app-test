@@ -18,9 +18,7 @@
  */
 
 function registerPushwooshIOS() {
-    console.log("registerPushwooshIOS");
-    alert("registerPushwooshIOS");
-
+    
     var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
 
     //set push notification callback before we initialize the plugin
@@ -28,53 +26,57 @@ function registerPushwooshIOS() {
 		function (event) {
 		    alert("New push iOS");
 		    var notification = event.notification;
-		    alert("iOS PUSH: " + notification.animationPlayState.alert);
 		    pushNotification.setApplicationIconBadgeNumber(0);
 		}
 	);
 
-    //initialize the plugin
-    console.log("initing plugin with on device ready, pushwoshios");
-    //pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
     pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
 
-    console.log("check if token is registeredpushwooshios.js on resume");
+    pushNotification.registerDevice(
+        function(token) {
+            alert("iOS: registerDevice: " + token);
+            //console.log("pushNotification.registerDevice, from PushwooshiOS.js, token: " + JSON.stringify(token));
 
-    //check so that we have a token or not before registering. if we register with a present token then we will disable the push service..
-    pushNotification.getPushToken(
-		function (token) {
-		    //console.log("pushToken is not null: " + JSON.stringify(token));
-		    console.warn('push token: ' + token);
+            var deviceToken = token.deviceToken;
 
-		    if (token != null) {
-		        //console.log("pushToken is not null");
-		        alert("iOS: pushToken is not null, don't re-register");
-		    }
-		    else {
+            onPushwooshiOSInitialized(deviceToken);
+        },
+        function(status) {
+            //console.warn('failed to register : ' + JSON.stringify(status));
+            alert("iOS: registerDevice: FAILED");
+        }
+    );
 
-		        //console.log("pushToken is null re register: ");
-		        pushNotification.registerDevice( 
-						function (token) {
-						    alert("iOS: registerDevice: " + token);
-						    //console.log("pushNotification.registerDevice, from PushwooshiOS.js, token: " + JSON.stringify(token));
+    ////check so that we have a token or not before registering. if we register with a present token then we will disable the push service..
+    //pushNotification.getPushToken(
+    //	function (token) {
+    //	    //console.log("pushToken is not null: " + JSON.stringify(token));
+    //	    console.warn('push token: ' + token);
 
-						    var deviceToken = token.deviceToken;
-						    
-						    onPushwooshiOSInitialized(deviceToken);
-						},
-					function (status) {
-					    //console.warn('failed to register : ' + JSON.stringify(status));
-					    alert("iOS: registerDevice: FAILED");
-					}
-				);
-		    }
-		}
-	);
-    
-    pushNotification.getPendingNotifications(function (notifications) {
-        //console.log(JSON.stringify(['getPendingNotifications', notifications]));
-        alert("iOS: Pending push: " + notifications);
-    });
+    //	    if (token != null) {
+    //	        //console.log("pushToken is not null");
+    //	        alert("iOS: pushToken is not null, don't re-register");
+    //	    }
+    //	    else {
+
+    //	        //console.log("pushToken is null re register: ");
+    //	        pushNotification.registerDevice( 
+    //					function (token) {
+    //					    alert("iOS: registerDevice: " + token);
+    //					    //console.log("pushNotification.registerDevice, from PushwooshiOS.js, token: " + JSON.stringify(token));
+
+    //					    var deviceToken = token.deviceToken;
+
+    //					    onPushwooshiOSInitialized(deviceToken);
+    //					},
+    //				function (status) {
+    //				    //console.warn('failed to register : ' + JSON.stringify(status));
+    //				    alert("iOS: registerDevice: FAILED");
+    //				}
+    //			);
+    //	    }
+    //	}
+    //);
 
 }
 
