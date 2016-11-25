@@ -30,11 +30,11 @@ function registerPushwooshIOS() {
 		}
 	);
 
-    pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
+    pushNotification.onDeviceReady({ appid: "A014B-AC83E" });
 
     pushNotification.registerDevice(
         function(token) {
-            alert("iOS: registerDevice: " + token);
+            alert("iOS: registerDevice: " + JSON.stringify(token));
             //console.log("pushNotification.registerDevice, from PushwooshiOS.js, token: " + JSON.stringify(token));
 
             var deviceToken = token.deviceToken;
