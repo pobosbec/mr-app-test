@@ -17,7 +17,7 @@
  * under the License.
  */
 
-function registerPushwooshIOS() {
+function registerPushwooshIOS(callback, error) {
     
     var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
 
@@ -39,11 +39,17 @@ function registerPushwooshIOS() {
 
             var deviceToken = token.pushToken;
 
+            localStorage.deviceToken = deviceToken;
+            alert("local: " + localStorage.deviceToken);
+
             onPushwooshiOSInitialized(deviceToken);
+            
+            callback(deviceToken);
         },
         function(status) {
             //console.warn('failed to register : ' + JSON.stringify(status));
             alert("iOS: registerDevice: FAILED");
+            error();
         }
     );
 
@@ -83,8 +89,7 @@ function registerPushwooshIOS() {
 function onPushwooshiOSInitialized(deviceToken) {
     console.log("onPushwooshiOSInitialized");
     //alert("onPushwooshiOSInitialized: " + deviceToken);
-    localStorage.deviceToken = deviceToken;
-    alert("local: "+ localStorage.deviceToken);
+
 
     //var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
 

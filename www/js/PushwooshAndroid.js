@@ -17,7 +17,7 @@
  * under the License.
  */
 
-function registerPushwooshAndroid() {
+function registerPushwooshAndroid(callback,error) {
     var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
 
     //set push notifications handler
@@ -42,11 +42,13 @@ function registerPushwooshAndroid() {
 		    console.log('pushNotification.registerDevice token: ' + token);
 		    //callback when pushwoosh is ready
 		    onPushwooshAndroidInitialized(token);
+		    callback(token);
 		},
 		function(status)
 		{
 		    alert("failed to register: " +  status);
 		    console.warn(JSON.stringify(['failed to register ', status]));
+		    error();
 		}
 	);
 }

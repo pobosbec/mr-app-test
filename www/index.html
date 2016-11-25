@@ -156,26 +156,39 @@
         angular.bootstrap(document.body, ['mrApp']);
     }
 
-    function initPushwoosh() {
+    function initPushwoosh(callback) {
         //alert("initPushwoosh: isPhoneGap=" + window.isPhoneGap);
         if (window.isPhoneGap) {
             console.log("initPushwoosh, isPhoneGap");
-            if (cordova !== null && typeof cordova !== "undefined" && cordova.require !== null && typeof cordova.require !== "undefined") {
-                
+            if (cordova !== null &&
+                typeof cordova !== "undefined" &&
+                cordova.require !== null &&
+                typeof cordova.require !== "undefined") {
+
                 //var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
                 //console.log(pushNotification);
                 //pushNotification.onDeviceReady({ pw_appid: "A014B-AC83E" });
 
-                console.log("DeviceType: "+ window.deviceType);
+                console.log("DeviceType: " + window.deviceType);
 
                 if (window.deviceType === 3) {
                     console.log("registering Android");
-                    registerPushwooshAndroid();
+                    registerPushwooshAndroid(function(token) {
+                            callback(token);
+                        },
+                        function(error) {
+
+                        });
                 }
 
                 if (window.deviceType === 1) {
                     console.log("registering pushwooshIOS");
-                    registerPushwooshIOS();
+                    registerPushwooshIOS(function(token) {
+                            callback(token);
+                        },
+                        function(error) {
+
+                        });
                 }
 
             }
@@ -193,11 +206,13 @@
         //    alert("[PUSH] " + notification);
         //    //$scope.$broadcast('newPush', notification);
         //});
-        
-        initPushwoosh();
 
-        console.log("Device ready initiating Angular");
-        angular.bootstrap(document.body, ['mrApp']);
+        initPushwoosh(function() {
+            console.log("Device ready initiating Angular");
+            angular.bootstrap(document.body, ['mrApp']);
+        });
+
+
     }
 
     function loadCordova() {
