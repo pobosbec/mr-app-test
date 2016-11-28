@@ -1,6 +1,6 @@
-﻿angular.module('deviceReady', [])
+﻿angular.module('deviceReady', ['$rootScope'])
     .factory('deviceReady',
-        function () {
+        function ($rootScope) {
 
             function isAndroid() {
                 return navigator.userAgent.indexOf("Android") > 0;
@@ -27,15 +27,11 @@
 
                 pushNotification.registerDevice(
                     function(token) {
-                        alert("iOS: registerDevice: " + JSON.stringify(token));
-
                         var deviceToken = token.pushToken;
                         callback(deviceToken);
                     },
                     function(status) {
-                        //console.warn('failed to register : ' + JSON.stringify(status));
-                        alert("iOS: registerDevice: FAILED");
-                        error();
+                        error(status);
                     }
                 );
             }
@@ -52,10 +48,11 @@
                         if (isIOS()) {
                             alert("iOS");
                             registerPushwooshIOS(function(token) {
-                                    alert("[iOS] token: " + token);
+                                alert("[iOS] token: " + token);
+                                    $rootScope.deviceToken = token;
                                 },
                                 function (error) {
-
+                                    alert("iOS: registerDevice: FAILED " + error);
                                 });
                         }
 
