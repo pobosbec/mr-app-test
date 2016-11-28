@@ -41,7 +41,6 @@
                 pushNotification.registerDevice(
                     function(token) {
                         console.log('pushNotification.registerDevice token: ' + token);
-                        pushToken = token.pushToken;
                         callback(token.pushToken);
                     },
                     function(status) {
@@ -110,7 +109,7 @@
                             macAddress: ''
                         }
                     };
-                    apiFactory.functions.call('users/register-device',
+                    apiFactory.functions.call('users/update-device',
                         registerDeviceRequest,
                         function(response) {
                             alert("Device registered in Mobile Response");
