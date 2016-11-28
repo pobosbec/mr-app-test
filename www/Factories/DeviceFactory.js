@@ -87,10 +87,11 @@
                         userId: apiFactory.myAppUser.appUserId,
                         hardwareId: '',
                         pushToken: deviceToken,
-                        deviceType: deviceType(),
+                        deviceType: getDeviceType(),
                         macAddress: ''
                     }
                 };
+                console.log(registerDeviceRequest);
                 alert(registerDeviceRequest);
                 apiFactory.functions.call('users/register-device',
                     registerDeviceRequest,
@@ -112,7 +113,8 @@
                     document.addEventListener('deviceready',
                         function() {
 
-                            var afterRegisterSuccess = function(token) {
+                            var afterRegisterSuccess = function (token) {
+                                console.log(token);
                                 alert("Register success" + token);
                                 registerDeviceInMobileResponse(token, function() {
                                     callback(true);
