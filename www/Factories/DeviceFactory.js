@@ -166,7 +166,7 @@
                         return "Android";
                     }
                     else if (isIOS()) {
-                        return "iOS";
+                        return "Ios";
                     } else {
                         return "Other";
                     }
