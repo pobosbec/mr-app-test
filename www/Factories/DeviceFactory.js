@@ -1,8 +1,6 @@
 ﻿angular.module('DeviceFactory', [])
     .factory('DeviceFactory', ['ApiFactory', function (apiFactory) {
-
-            var deviceToken = null;
-
+        
             function isAndroid() {
                 return navigator.userAgent.indexOf("Android") > 0;
             }
@@ -79,7 +77,7 @@
                 );
             }
 
-            function registerDeviceInMobileResponse(callback, error) {
+            function registerDeviceInMobileResponse(deviceToken, callback, error) {
                 alert("Register in Mobile Response");
                 // register device 
                 var registerDeviceRequest = {
@@ -115,9 +113,8 @@
                         function() {
 
                             var afterRegisterSuccess = function(token) {
-                                deviceToken = token;
-                                alert("Register success" + deviceToken);
-                                registerDeviceInMobileResponse(function() {
+                                alert("Register success" + token);
+                                registerDeviceInMobileResponse(token, function() {
                                     callback(true);
                                 }, function(error) {
                                     callback(false);
