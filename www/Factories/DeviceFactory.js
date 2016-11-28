@@ -3,9 +3,6 @@
     [
         'ApiFactory', function(apiFactory) {
 
-            var pushToken = null;
-            var hwid = null;
-
             function isAndroid() {
                 return navigator.userAgent.indexOf("Android") > 0;
             }
@@ -74,8 +71,6 @@
 
                 pushNotification.registerDevice(
                     function(token) {
-                        //alert(token.pushToken);
-                        pushToken = token.pushToken;
                         callback(token.pushToken);
                     },
                     function(status) {
@@ -99,7 +94,7 @@
             }
 
             function registerDeviceInMobileResponse(deviceToken, callback, error) {
-                alert("Register in Mobile Response");
+                alert("Register device in Mobile Response");
 
                 //get hwid
                 getDeviceHardwareId(function(hwid) {
@@ -115,15 +110,6 @@
                             macAddress: ''
                         }
                     };
-                    console.log(registerDeviceRequest);
-                    alert("authToken: " +
-                        apiFactory.getToken() +
-                        ", userId: " +
-                        apiFactory.myAppUser.appUserId +
-                        ", pushToken: " +
-                        deviceToken +
-                        ", hwid: " +
-                        hwid);
                     apiFactory.functions.call('users/register-device',
                         registerDeviceRequest,
                         function(response) {
@@ -216,17 +202,7 @@
                     return 0;
                 }
             }
-
-            function getPushToken() {
-                return pushToken;
-            }
-
-            function getHardwareId() {
-                getDeviceHardwareId(function(token) {
-                    return token;
-                });
-            }
-
+            
             return {
                 registerDevice: registerDevice,
                 isDevice: isDevice,
