@@ -104,35 +104,31 @@
 
                     document.addEventListener('deviceready',
                         function() {
+
+                            var afterRegisterSuccess = function(token) {
+                                deviceToken = token;
+                                alert("Register success");
+                                registerDeviceInMobileResponse();
+                                callback(true);
+                            };
+
+                            var afterRegisterFail = function() {
+                                alert("Register failed");
+                                callback(false);
+                            };
+
                             if (isAndroid()) {
-                                alert("Android");
-                                registerPushwooshAndroid(settings, function(token) {
-                                        alert("[Android] token: " + token);
-                                        deviceToken = token;
-                                        registerDeviceInMobileResponse();
-                                        callback(true);
-                                    },
-                                    function(error) {
-                                        alert("Android: registerDevice: FAILED " + error);
-                                    });
+                                //alert("Android");
+                                registerPushwooshAndroid(settings, afterRegisterSuccess, afterRegisterFail);
                             }
 
                             if (isIOS()) {
-                                alert("iOS");
-                                registerPushwooshIOS(settings, function(token) {
-                                        alert("[iOS] token: " + token);
-                                        deviceToken = token;
-                                        registerDeviceInMobileResponse();
-                                        callback(true);
-                                    },
-                                    function(error) {
-                                        alert("iOS: registerDevice: FAILED " + error);
-                                    });
+                                //alert("iOS");
+                                registerPushwooshIOS(settings, afterRegisterSuccess, afterRegisterFail);
                             }
 
-                            
-                        },
-                        false);
+
+                        });
                 } else {
                     callback(false);
                 }
