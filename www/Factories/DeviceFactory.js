@@ -68,7 +68,7 @@
 
                 pushNotification.registerDevice(
                     function(token) {
-                        callback(token.pushToke);
+                        callback(token.pushToken);
                     },
                     function(status) {
                         error(status);
