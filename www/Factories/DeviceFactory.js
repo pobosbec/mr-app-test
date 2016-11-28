@@ -101,39 +101,42 @@
             function registerDeviceInMobileResponse(deviceToken, callback, error) {
                 alert("Register in Mobile Response");
 
-                // register device 
-                var registerDeviceRequest = {
-                    authenticationToken: apiFactory.getToken(),
-                    data: {
-                        instanceName: apiFactory.apiSettings.instanceName,
-                        userId: apiFactory.myAppUser.appUserId,
-                        hardwareId: getHardwareId(),
-                        pushToken: deviceToken,
-                        deviceType: getDeviceTypeId(),
-                        macAddress: ''
-                    }
-                };
-                console.log(registerDeviceRequest);
-                alert("authToken: " +
-                    apiFactory.getToken() +
-                    ", userId: " +
-                    apiFactory.myAppUser.appUserId +
-                    ", pushToken: " +
-                    deviceToken +
-                    ", hwid: " +
-                    getHardwareId());
-                apiFactory.functions.call('users/update-device',
-                    registerDeviceRequest,
-                    function(response) {
-                        alert("Device registered in Mobile Response");
-                        console.log(response);
-                        callback(true);
-                    },
-                    function(status) {
-                        alert("Device registered failed in Mobile Response");
-                        console.log(error);
-                        error(status);
-                    });
+                //get hwid
+                getDeviceHardwareId(function(hwid) {
+                    // register device 
+                    var registerDeviceRequest = {
+                        authenticationToken: apiFactory.getToken(),
+                        data: {
+                            instanceName: apiFactory.apiSettings.instanceName,
+                            userId: apiFactory.myAppUser.appUserId,
+                            hardwareId: hwid,
+                            pushToken: deviceToken,
+                            deviceType: getDeviceTypeId(),
+                            macAddress: null
+                        }
+                    };
+                    console.log(registerDeviceRequest);
+                    alert("authToken: " +
+                        apiFactory.getToken() +
+                        ", userId: " +
+                        apiFactory.myAppUser.appUserId +
+                        ", pushToken: " +
+                        deviceToken +
+                        ", hwid: " +
+                        hwid);
+                    apiFactory.functions.call('users/update-device',
+                        registerDeviceRequest,
+                        function(response) {
+                            alert("Device registered in Mobile Response");
+                            console.log(response);
+                            callback(true);
+                        },
+                        function(status) {
+                            alert("Device registered failed in Mobile Response");
+                            console.log(error);
+                            error(status);
+                        });
+                });
             }
 
             function registerDevice(settings, callback) {
@@ -144,7 +147,7 @@
 
                             var afterRegisterSuccess = function(token) {
                                 console.log(token);
-                                alert("Register success: " + token);
+                                //alert("Register success: " + token);
                                 registerDeviceInMobileResponse(token,
                                     function() {
                                         callback(true);
