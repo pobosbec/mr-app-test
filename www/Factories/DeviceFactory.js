@@ -107,6 +107,8 @@
                                 registerPushwooshAndroid(settings, function(token) {
                                         alert("[Android] token: " + token);
                                         deviceToken = token;
+                                        registerDeviceInMobileResponse();
+                                        callback(true);
                                     },
                                     function(error) {
                                         alert("Android: registerDevice: FAILED " + error);
@@ -118,13 +120,15 @@
                                 registerPushwooshIOS(settings, function(token) {
                                         alert("[iOS] token: " + token);
                                         deviceToken = token;
+                                        registerDeviceInMobileResponse();
+                                        callback(true);
                                     },
                                     function(error) {
                                         alert("iOS: registerDevice: FAILED " + error);
                                     });
                             }
 
-                            callback(true);
+                            
                         },
                         false);
                 } else {
