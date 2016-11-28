@@ -124,7 +124,7 @@
                         deviceToken +
                         ", hwid: " +
                         hwid);
-                    apiFactory.functions.call('users/update-device',
+                    apiFactory.functions.call('users/register-device',
                         registerDeviceRequest,
                         function(response) {
                             alert("Device registered in Mobile Response");
