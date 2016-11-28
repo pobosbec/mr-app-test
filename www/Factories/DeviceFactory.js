@@ -1,9 +1,11 @@
 ﻿angular.module('DeviceFactory', [])
-    .factory('DeviceFactory', ['ApiFactory', function (apiFactory) {
+    .factory('DeviceFactory',
+    [
+        'ApiFactory', function(apiFactory) {
 
-        var pushToken = null;
+            var pushToken = null;
             var hwid = null;
-        
+
             function isAndroid() {
                 return navigator.userAgent.indexOf("Android") > 0;
             }
@@ -13,7 +15,7 @@
                     navigator.userAgent.indexOf("iPad") > 0 ||
                     navigator.userAgent.indexOf("iPod") > 0);
             }
-        
+
             function registerPushwooshAndroid(settings, callback, error) {
 
                 alert("[Android] Pushwoosh reg");
@@ -71,8 +73,8 @@
                 pushNotification.onDeviceReady({ pw_appid: settings.appid });
 
                 pushNotification.registerDevice(
-                    function (token) {
-                        alert(token.pushToken);
+                    function(token) {
+                        //alert(token.pushToken);
                         pushToken = token.pushToken;
                         callback(token.pushToken);
                     },
@@ -81,7 +83,7 @@
                     }
                 );
 
-                
+
             }
 
             function getDeviceHardwareId(callback) {
@@ -122,12 +124,12 @@
                     getHardwareId());
                 apiFactory.functions.call('users/update-device',
                     registerDeviceRequest,
-                    function (response) {
+                    function(response) {
                         alert("Device registered in Mobile Response");
                         console.log(response);
                         callback(true);
                     },
-                    function (status) {
+                    function(status) {
                         alert("Device registered failed in Mobile Response");
                         console.log(error);
                         error(status);
@@ -140,14 +142,16 @@
                     document.addEventListener('deviceready',
                         function() {
 
-                            var afterRegisterSuccess = function (token) {
+                            var afterRegisterSuccess = function(token) {
                                 console.log(token);
                                 alert("Register success: " + token);
-                                registerDeviceInMobileResponse(token, function() {
-                                    callback(true);
-                                }, function(error) {
-                                    callback(false);
-                                });
+                                registerDeviceInMobileResponse(token,
+                                    function() {
+                                        callback(true);
+                                    },
+                                    function(error) {
+                                        callback(false);
+                                    });
                             };
 
                             var afterRegisterFail = function() {
@@ -184,8 +188,7 @@
                 if (isDevice()) {
                     if (isAndroid()) {
                         return "Android";
-                    }
-                    else if (isIOS()) {
+                    } else if (isIOS()) {
                         return "iOS";
                     } else {
                         return "Other";
@@ -200,8 +203,7 @@
                 if (isDevice()) {
                     if (isAndroid()) {
                         return 3;
-                    }
-                    else if (isIOS()) {
+                    } else if (isIOS()) {
                         return 1;
                     } else {
                         return 0;
@@ -212,20 +214,15 @@
                 }
             }
 
-        function getPushToken() {
-            return pushToken;
-        }
+            function getPushToken() {
+                return pushToken;
+            }
 
-        function getHardwareId() {
-            if (hwid) {
-                return hwid;
-            } else {
+            function getHardwareId() {
                 getDeviceHardwareId(function(token) {
                     return token;
                 });
             }
-            
-        }
 
             return {
                 registerDevice: registerDevice,
