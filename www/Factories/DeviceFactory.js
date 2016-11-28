@@ -84,7 +84,7 @@
                     data: {
                         instanceName: apiFactory.apiSettings.instanceName,
                         userId: apiFactory.myAppUser.appUserId,
-                        hardwareId: '',
+                        hardwareId: 'XX-YY',
                         pushToken: deviceToken,
                         deviceType: getDeviceType(),
                         macAddress: ''
