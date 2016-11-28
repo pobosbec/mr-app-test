@@ -14,6 +14,9 @@
             }
 
             function registerPushwooshAndroid(settings, callback, error) {
+
+                alert("[Android] Pushwoosh reg");
+
                 var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
 
                 //set push notifications handler
@@ -48,6 +51,8 @@
 
             function registerPushwooshIOS(settings, callback, error) {
 
+                alert("[iOS] Pushwoosh reg");
+
                 var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
 
                 //set push notification callback before we initialize the plugin
@@ -75,6 +80,7 @@
             }
 
             function registerDeviceInMobileResponse(callback, error) {
+                alert("Register in Mobile Response");
                 // register device 
                 var registerDeviceRequest = {
                     authenticationToken: apiFactory.getToken(),
@@ -110,9 +116,11 @@
 
                             var afterRegisterSuccess = function(token) {
                                 deviceToken = token;
-                                alert("Register success");
+                                alert("Register success" + deviceToken);
                                 registerDeviceInMobileResponse(function() {
                                     callback(true);
+                                }, function(error) {
+                                    callback(false);
                                 });
                             };
 
