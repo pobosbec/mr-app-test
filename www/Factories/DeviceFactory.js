@@ -74,7 +74,7 @@
                 );
             }
 
-            function registerDeviceInMobileResponse() {
+            function registerDeviceInMobileResponse(callback, error) {
                 // register device 
                 var registerDeviceRequest = {
                     authenticationToken: apiFactory.getToken(),
@@ -87,15 +87,18 @@
                         macAddress: ''
                     }
                 };
+                alert(registerDeviceRequest);
                 apiFactory.functions.call('users/register-device',
                     registerDeviceRequest,
                     function (response) {
                         alert("Device registered in Mobile Response");
                         console.log(response);
+                        callback(true);
                     },
-                    function (error) {
+                    function (status) {
                         alert("Device registered failed in Mobile Response");
                         console.log(error);
+                        error(status);
                     });
             }
 
@@ -108,8 +111,9 @@
                             var afterRegisterSuccess = function(token) {
                                 deviceToken = token;
                                 alert("Register success");
-                                registerDeviceInMobileResponse();
-                                callback(true);
+                                registerDeviceInMobileResponse(function() {
+                                    callback(true);
+                                });
                             };
 
                             var afterRegisterFail = function() {
@@ -127,8 +131,8 @@
                                 registerPushwooshIOS(settings, afterRegisterSuccess, afterRegisterFail);
                             }
 
-
                         });
+
                 } else {
                     callback(false);
                 }
