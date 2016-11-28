@@ -53,6 +53,7 @@
 /// <reference path="../../../../www/Controllers/ProfileController.js" />
 /// <reference path="../../../../www/Factories/ApiFactory.js" />
 /// <reference path="../../../../www/Factories/ConversationsFactory.js" />
+/// <reference path="../../../../www/Factories/DeviceFactory.js" />
 /// <reference path="../../../../www/Factories/UsersFactory.js" />
 /// <reference path="../../../../www/js/angular/angular.js" />
 /// <reference path="../../../../www/js/angular/angular-resource.js" />

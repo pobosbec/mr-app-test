@@ -1,6 +1,6 @@
 ﻿mrApp.controller('LoginController', [
-    'ApiFactory', '$rootScope', '$scope', '$location', '$window', '$routeParams', '$localStorage', 'UsersFactory', 'deviceReady',
-    function(apiFactory, $rootScope, $scope, $location, $window, $routeParams, $localStorage, usersFactory, deviceReady) {
+    'ApiFactory', '$rootScope', '$scope', '$location', '$window', '$routeParams', '$localStorage', 'UsersFactory', 'DeviceFactory',
+    function(apiFactory, $rootScope, $scope, $location, $window, $routeParams, $localStorage, usersFactory, deviceFactory) {
 
 
         var command = $routeParams.param1;
@@ -9,15 +9,19 @@
             logout();
         }
 
-        deviceReady(function (isDevice) {
-            console.log("[LOGIN] DeviceReady: isDevice=" + isDevice);
-            //alert("[LOGIN] DeviceReady: isDevice=" + isDevice);
-            alert("[LOGIN] deviceToken: " + $rootScope.deviceToken);
-            $scope.credentials = $localStorage.savedCredentials;
-            if ($scope.credentials != null && $scope.credentials.keepMeSignedIn) {
-                login();
-            }
-        });
+        //deviceFactory.registerDevice(function (deviceToken) {
+
+        //    console.log("[LOGIN] DeviceReady: deviceToken=" + deviceToken);
+        //    if (deviceToken) {
+        //        $localStorage.deviceToken = deviceToken;
+        //        alert("[LOGIN] deviceToken: " + $localStorage.deviceToken);
+        //    }
+
+        //    $scope.credentials = $localStorage.savedCredentials;
+        //    if ($scope.credentials != null && $scope.credentials.keepMeSignedIn) {
+        //        login();
+        //    }
+        //});
 
         $scope.saveCredentials = true;
         $scope.keepMeSignedIn = true;
@@ -29,7 +33,10 @@
         };
 
         function init() {
-            
+            $scope.credentials = $localStorage.savedCredentials;
+            if ($scope.credentials != null && $scope.credentials.keepMeSignedIn) {
+                login();
+            }
         }
 
         $scope.signin = {
@@ -148,23 +155,21 @@
                                 $rootScope.myAppUser = response;
                                 //console.log($rootScope.myAppUser);
 
-                                //// register device 
-                                //var registerDeviceRequest = {
-                                //    authenticationToken: apiFactory.getToken(),
-                                //    data: {
-                                //        instanceName: apiFactory.apiSettings.instanceName,
-                                //        userId: apiFactory.myAppUser.appUserId,
-                                //        hardwareId: 'XXX-YYY',
-                                //        pushToken: 'XXX-YYY',
-                                //        deviceType: 'Nokia',
-                                //        macAddress: '01:02:03:04:05:06:07'
-                                //    }
-                                //};
-                                //apiFactory.functions.call('users/register-device', registerDeviceRequest, function(response) {
-                                //    console.log(response);
-                                //}, function(error) {
-                                //    console.log(error);
-                                //});
+                                // registerDevice ---
+                                var registerDeviceRequest = {
+                                    "appid": "A014B-AC83E",
+                                    "projectid": "482590317251",
+                                    "onPush": function(push) {
+                                        alert("[PUSH]" + push);
+                                    }
+                                };
+
+                                if (deviceFactory.isDevice) {
+                                    deviceFactory.registerDevice(registerDeviceRequest,
+                                        function(status) {
+                                            alert("RegisterDevice: " + status);
+                                        });
+                                }
                                 callback(response);
 
                             },
