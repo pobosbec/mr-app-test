@@ -39,7 +39,7 @@
                 pushNotification.registerDevice(
                     function(token) {
                         console.log('pushNotification.registerDevice token: ' + token);
-                        callback(token);
+                        callback(token.pushToken);
                     },
                     function(status) {
                         error(status);
@@ -68,8 +68,7 @@
 
                 pushNotification.registerDevice(
                     function(token) {
-                        var deviceToken = token.pushToken;
-                        callback(deviceToken);
+                        callback(token.pushToke);
                     },
                     function(status) {
                         error(status);
