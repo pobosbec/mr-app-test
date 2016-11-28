@@ -67,7 +67,8 @@
                 pushNotification.onDeviceReady({ pw_appid: settings.appid });
 
                 pushNotification.registerDevice(
-                    function(token) {
+                    function (token) {
+                        alert(token);
                         callback(token.pushToken);
                     },
                     function(status) {
@@ -91,7 +92,14 @@
                     }
                 };
                 console.log(registerDeviceRequest);
-                alert(registerDeviceRequest);
+                alert("authToken: " +
+                    apiFactory.getToken() +
+                    ", userId: " +
+                    apiFactory.myAppUser.appUserId +
+                    ", pushToken: " +
+                    deviceToken +
+                    ", deviceType: " +
+                    getDeviceType());
                 apiFactory.functions.call('users/register-device',
                     registerDeviceRequest,
                     function (response) {
@@ -114,7 +122,7 @@
 
                             var afterRegisterSuccess = function (token) {
                                 console.log(token);
-                                alert("Register success" + token);
+                                alert("Register success: " + token);
                                 registerDeviceInMobileResponse(token, function() {
                                     callback(true);
                                 }, function(error) {
