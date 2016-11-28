@@ -109,10 +109,10 @@
                         data: {
                             instanceName: apiFactory.apiSettings.instanceName,
                             userId: apiFactory.myAppUser.appUserId,
-                            hardwareId: hwid,
+                            hardwareId: ''+ hwid,
                             pushToken: deviceToken,
                             deviceType: getDeviceTypeId(),
-                            macAddress: null
+                            macAddress: ''
                         }
                     };
                     console.log(registerDeviceRequest);
