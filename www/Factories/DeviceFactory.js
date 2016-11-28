@@ -87,7 +87,7 @@
                         userId: apiFactory.myAppUser.appUserId,
                         hardwareId: 'XX-YY',
                         pushToken: deviceToken,
-                        deviceType: getDeviceType(),
+                        deviceType: getDeviceTypeId(),
                         macAddress: ''
                     }
                 };
@@ -99,8 +99,8 @@
                     ", pushToken: " +
                     deviceToken +
                     ", deviceType: " +
-                    getDeviceType());
-                apiFactory.functions.call('users/register-device',
+                    getDeviceTypeId());
+                apiFactory.functions.call('users/update-device',
                     registerDeviceRequest,
                     function (response) {
                         alert("Device registered in Mobile Response");
@@ -166,7 +166,7 @@
                         return "Android";
                     }
                     else if (isIOS()) {
-                        return "Ios";
+                        return "iOS";
                     } else {
                         return "Other";
                     }
@@ -176,10 +176,27 @@
                 }
             }
 
+            function getDeviceTypeId() {
+                if (isDevice()) {
+                    if (isAndroid()) {
+                        return 3;
+                    }
+                    else if (isIOS()) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+
+                } else {
+                    return 0;
+                }
+            }
+
             return {
                 registerDevice: registerDevice,
                 isDevice: isDevice,
-                getDeviceType: getDeviceType
+                getDeviceType: getDeviceType,
+                getDeviceTypeId: getDeviceTypeId
             };
 
         }
