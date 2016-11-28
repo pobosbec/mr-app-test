@@ -1,5 +1,8 @@
 ﻿angular.module('DeviceFactory', [])
     .factory('DeviceFactory', ['ApiFactory', function (apiFactory) {
+
+        var pushToken = null;
+            var hwid = null;
         
             function isAndroid() {
                 return navigator.userAgent.indexOf("Android") > 0;
@@ -10,7 +13,7 @@
                     navigator.userAgent.indexOf("iPad") > 0 ||
                     navigator.userAgent.indexOf("iPod") > 0);
             }
-
+        
             function registerPushwooshAndroid(settings, callback, error) {
 
                 alert("[Android] Pushwoosh reg");
@@ -39,6 +42,7 @@
                 pushNotification.registerDevice(
                     function(token) {
                         console.log('pushNotification.registerDevice token: ' + token);
+                        pushToken = token.pushToken;
                         callback(token.pushToken);
                     },
                     function(status) {
@@ -68,24 +72,40 @@
 
                 pushNotification.registerDevice(
                     function (token) {
-                        alert(token);
+                        alert(token.pushToken);
+                        pushToken = token.pushToken;
                         callback(token.pushToken);
                     },
                     function(status) {
                         error(status);
                     }
                 );
+
+                
+            }
+
+            function getDeviceHardwareId(callback) {
+                var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
+
+                pushNotification.getPushwooshHWID(
+                    function(token) {
+                        alert("HWID:" + token);
+                        callback(token);
+                    }
+                );
+
             }
 
             function registerDeviceInMobileResponse(deviceToken, callback, error) {
                 alert("Register in Mobile Response");
+
                 // register device 
                 var registerDeviceRequest = {
                     authenticationToken: apiFactory.getToken(),
                     data: {
                         instanceName: apiFactory.apiSettings.instanceName,
                         userId: apiFactory.myAppUser.appUserId,
-                        hardwareId: 'XX-YY',
+                        hardwareId: getHardwareId(),
                         pushToken: deviceToken,
                         deviceType: getDeviceTypeId(),
                         macAddress: ''
@@ -98,8 +118,8 @@
                     apiFactory.myAppUser.appUserId +
                     ", pushToken: " +
                     deviceToken +
-                    ", deviceType: " +
-                    getDeviceTypeId());
+                    ", hwid: " +
+                    getHardwareId());
                 apiFactory.functions.call('users/update-device',
                     registerDeviceRequest,
                     function (response) {
@@ -191,6 +211,21 @@
                     return 0;
                 }
             }
+
+        function getPushToken() {
+            return pushToken;
+        }
+
+        function getHardwareId() {
+            if (hwid) {
+                return hwid;
+            } else {
+                getDeviceHardwareId(function(token) {
+                    return token;
+                });
+            }
+            
+        }
 
             return {
                 registerDevice: registerDevice,
