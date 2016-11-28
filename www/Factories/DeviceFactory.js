@@ -89,10 +89,12 @@
                 };
                 apiFactory.functions.call('users/register-device',
                     registerDeviceRequest,
-                    function(response) {
+                    function (response) {
+                        alert("Device registered in Mobile Response");
                         console.log(response);
                     },
-                    function(error) {
+                    function (error) {
+                        alert("Device registered failed in Mobile Response");
                         console.log(error);
                     });
             }
