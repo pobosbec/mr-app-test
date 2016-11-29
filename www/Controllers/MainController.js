@@ -11,10 +11,10 @@
                         //BROADCAST
                         $scope.$broadcast('newMessages', messages);
                     }
-                    //$timeout(function() {
-                    //        checkWhatsNew();
-                    //    },
-                    //    5000);
+                    $timeout(function() {
+                            checkWhatsNew();
+                        },
+                        5000);
                 },
                 function(error) {
                     console.log("What-is-new:");
