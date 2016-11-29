@@ -160,23 +160,27 @@
                                     "appid": "A014B-AC83E",
                                     "projectid": "482590317251",
                                     "onPush": function(push) {
-                                        alert("[PUSH] Message: " +
-                                            push.message +
-                                            ", Conversation: " +
-                                            push.userdata.c +
-                                            ", Inbox: " +
-                                            push.userdata.i +
-                                            ", Sender: " +
-                                            push.userdata.s);
-                                        console.log(push);
+                                        //alert("[PUSH] Message: " +
+                                        //    push.message +
+                                        //    ", Conversation: " +
+                                        //    push.userdata.c +
+                                        //    ", Inbox: " +
+                                        //    push.userdata.i +
+                                        //    ", Sender: " +
+                                        //    push.userdata.s);
+                                        //console.log(push);
+                                        $scope.$emit('newPush', push);
+                                    },
+                                    "onResume": function() {
+                                        $scope.$emit('appResumed', true);
                                     }
-                                };
+                            };
 
                                 if (deviceFactory.isDevice) {
                                     deviceFactory.registerDevice(registerDeviceRequest,
                                         function (status) {
                                             if (status) {
-                                                alert("Device registered");
+                                                //alert("Device registered");
                                             }
                                         });
                                 }

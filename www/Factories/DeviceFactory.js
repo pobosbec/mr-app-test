@@ -128,7 +128,9 @@
                 if (isDevice()) {
 
                     document.addEventListener('deviceready',
-                        function() {
+                        function () {
+
+                            document.addEventListener("resume", settings.onResume, false);
 
                             var afterRegisterSuccess = function(token) {
                                 console.log(token);

@@ -145,7 +145,7 @@
                     data: {
                         'inboxId': inboxId,
                         'pageIndex': 1,
-                        'pageSize': 15
+                        'pageSize': 20
                     }
                 };
                 apiFactory.functions.call('inboxes/list-content',

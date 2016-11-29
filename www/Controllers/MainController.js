@@ -11,10 +11,10 @@
                         //BROADCAST
                         $scope.$broadcast('newMessages', messages);
                     }
-                    $timeout(function() {
-                            checkWhatsNew();
-                        },
-                        5000);
+                    //$timeout(function() {
+                    //        checkWhatsNew();
+                    //    },
+                    //    5000);
                 },
                 function(error) {
                     console.log("What-is-new:");
@@ -33,36 +33,57 @@
             console.log("Handle:newPush");
             console.log(event);
             console.log(state);
+            alert("[PUSH] Message: " + state.message);
+
+            //    push.message
+            //alert("[PUSH] Message: " +
+            //    push.message +
+            //    ", Conversation: " +
+            //    push.userdata.c +
+            //    ", Inbox: " +
+            //    push.userdata.i +
+            //    ", Sender: " +
+            //    push.userdata.s);
+            //console.log(push);
+
+            checkWhatsNew();
+        }
+
+        function onResume(event, state) {
+            alert("Resumed");
+            onViewLoaded();
         }
 
         $scope.$on('newPush', onNewPush);
 
-        $scope.$on('$viewContentLoaded',
-            function() {
+        $scope.$on('appResumed', onResume);
 
-                //var token = $rootScope.authenticationToken;
-                var token = apiFactory.authenticationToken();
+        function onViewLoaded() {
+            //var token = $rootScope.authenticationToken;
+            var token = apiFactory.authenticationToken();
 
-                if (token != undefined) {
+            if (token != undefined) {
 
-                    if ($scope.inboxes == undefined) {
+                if ($scope.inboxes == undefined) {
 
-                        listInboxes(token,
-                            function(response) {
+                    listInboxes(token,
+                        function (response) {
 
-                                getInbox(token,
-                                    $scope.inboxes[0].inboxId,
-                                    function(response) {
-                                        if ($scope.inboxes[0].inboxId != undefined) {
-                                            $location.path('/conversations/' + $scope.inboxes[0].inboxId);
-                                        }
-                                    });
-                                checkWhatsNew();
-                            });
+                            getInbox(token,
+                                $scope.inboxes[0].inboxId,
+                                function (response) {
+                                    if ($scope.inboxes[0].inboxId != undefined) {
+                                        $location.path('/conversations/' + $scope.inboxes[0].inboxId);
+                                    }
+                                });
+                            checkWhatsNew();
+                        });
 
-                    }
                 }
-            });
+            }
+        }
+
+        $scope.$on('$viewContentLoaded', onViewLoaded);
 
         $rootScope.validateLoad = function(part) {
             if (part == 'inboxes') {
