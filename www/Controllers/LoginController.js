@@ -160,14 +160,16 @@
                                     "appid": "A014B-AC83E",
                                     "projectid": "482590317251",
                                     "onPush": function(push) {
-                                        alert("[PUSH]" + push);
+                                        alert("[PUSH] Title: " + push.title +", Data: "+ push.userdata);
                                     }
                                 };
 
                                 if (deviceFactory.isDevice) {
                                     deviceFactory.registerDevice(registerDeviceRequest,
-                                        function(status) {
-                                            alert("RegisterDevice: " + status);
+                                        function (status) {
+                                            if (status) {
+                                                alert("Device registered");
+                                            }
                                         });
                                 }
                                 callback(response);

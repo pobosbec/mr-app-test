@@ -15,7 +15,7 @@
 
             function registerPushwooshAndroid(settings, callback, error) {
 
-                alert("[Android] Pushwoosh reg");
+                //alert("[Android] Pushwoosh reg");
 
                 var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
 
@@ -25,13 +25,13 @@
                         var title = event.notification.title;
                         var userData = event.notification.userdata;
 
-                        alert("[Android] PUSH: " + event.notification);
+                        //alert("[Android] PUSH: " + event.notification);
 
                         if (typeof (userData) != "undefined") {
-                            console.warn('user data: ' + JSON.stringify(userData));
+                            //console.warn('user data: ' + JSON.stringify(userData));
                         }
 
-                        settings.onPush(event);
+                        settings.onPush(event.notification);
                     }
                 );
 
@@ -40,7 +40,7 @@
                 //register for push notifications
                 pushNotification.registerDevice(
                     function(token) {
-                        console.log('pushNotification.registerDevice token: ' + token);
+                        //console.log('pushNotification.registerDevice token: ' + token);
                         callback(token.pushToken);
                     },
                     function(status) {
@@ -51,18 +51,18 @@
 
             function registerPushwooshIOS(settings, callback, error) {
 
-                alert("[iOS] Pushwoosh reg");
+                //alert("[iOS] Pushwoosh reg");
 
                 var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
 
                 //set push notification callback before we initialize the plugin
                 document.addEventListener('push-notification',
                     function(event) {
-                        alert("New push iOS");
+                        //alert("New push iOS");
                         var notification = event.notification;
                         pushNotification.setApplicationIconBadgeNumber(0);
 
-                        settings.onPush(event);
+                        settings.onPush(event.notification);
                     }
                 );
 
@@ -85,7 +85,7 @@
 
                 pushNotification.getPushwooshHWID(
                     function(token) {
-                        alert("HWID:" + token);
+                        //alert("HWID:" + token);
                         callback(token);
                     }
                 );
@@ -93,7 +93,7 @@
             }
 
             function registerDeviceInMobileResponse(deviceToken, callback, error) {
-                alert("Register device in Mobile Response");
+                //alert("Register device in Mobile Response");
 
                 //get hwid
                 getDeviceHardwareId(function(hwid) {
@@ -112,12 +112,12 @@
                     apiFactory.functions.call('users/update-device',
                         registerDeviceRequest,
                         function(response) {
-                            alert("Device registered in Mobile Response");
+                            //alert("Device registered in Mobile Response");
                             console.log(response);
                             callback(true);
                         },
                         function(status) {
-                            alert("Device registered failed in Mobile Response");
+                            //alert("Device registered failed in Mobile Response");
                             console.log(error);
                             error(status);
                         });
@@ -143,7 +143,7 @@
                             };
 
                             var afterRegisterFail = function() {
-                                alert("Register failed");
+                                //alert("Register failed");
                                 callback(false);
                             };
 
