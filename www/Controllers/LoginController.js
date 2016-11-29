@@ -160,7 +160,8 @@
                                     "appid": "A014B-AC83E",
                                     "projectid": "482590317251",
                                     "onPush": function(push) {
-                                        alert("[PUSH] Title: " + push.title +", Data: "+ push.userdata);
+                                        alert("[PUSH] Title: " + push.title + ", Data: " + push.userdata);
+                                        console.log(push);
                                     }
                                 };
 

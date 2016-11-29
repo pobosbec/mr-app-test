@@ -36,7 +36,7 @@
                 );
 
                 pushNotification.onDeviceReady({ projectid: settings.projectid, appid: settings.appid });
-
+                
                 //register for push notifications
                 pushNotification.registerDevice(
                     function(token) {
