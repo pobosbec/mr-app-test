@@ -169,12 +169,12 @@
                                         //    ", Sender: " +
                                         //    push.userdata.s);
                                         //console.log(push);
-                                        console.log("Emit: newPush");
-                                        $scope.$emit('newPush', push);
+                                        console.log("RootBroadcast: newPush");
+                                        $rootScope.$broadcast('newPush', push);
                                     },
                                     "onResume": function() {
-                                        console.log("Emit: appResumed");
-                                        $scope.$emit('appResumed', true);
+                                        console.log("RootBroadcast: appResumed");
+                                        $rootScope.$broadcast('appResumed', true);
                                     }
                             };
 
