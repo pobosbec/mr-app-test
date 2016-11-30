@@ -169,9 +169,11 @@
                                         //    ", Sender: " +
                                         //    push.userdata.s);
                                         //console.log(push);
+                                        console.log("Emit: newPush");
                                         $scope.$emit('newPush', push);
                                     },
                                     "onResume": function() {
+                                        console.log("Emit: appResumed");
                                         $scope.$emit('appResumed', true);
                                     }
                             };
