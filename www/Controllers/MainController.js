@@ -11,10 +11,10 @@
                         //BROADCAST
                         $scope.$broadcast('newMessages', messages);
                     }
-                    $timeout(function() {
-                            checkWhatsNew();
-                        },
-                        5000);
+                    //$timeout(function() {
+                    //        checkWhatsNew();
+                    //    },
+                    //    5000);
                 },
                 function(error) {
                     console.log("What-is-new:");
@@ -51,7 +51,8 @@
 
         function onResume(event, state) {
             alert("Resumed");
-            onViewLoaded();
+            //onViewLoaded();
+            checkWhatsNew();
         }
 
         $scope.$on('newPush', onNewPush);
