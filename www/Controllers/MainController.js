@@ -58,13 +58,13 @@
         function onHttpCallError(event, state) {
             console.log(event);
             console.log(state);
-            alert("httpCallError: " + state);
+            //alert("httpCallError: " + state);
         }
 
         function onHttpUnauthorized(event, state) {
             console.log(event);
             console.log(state);
-            alert("httpUnauthorized: " + state);
+            //alert("httpUnauthorized: " + state);
             $location.path('/login/');
         }
 
