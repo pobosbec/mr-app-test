@@ -5,6 +5,11 @@
     
 }
 
+.ios-body {
+    padding-top: 20px;
+    background-color: gray;
+}
+
 .app-name 
 {	
 	background-color: #fff;

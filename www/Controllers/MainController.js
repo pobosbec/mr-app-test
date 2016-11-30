@@ -4,6 +4,7 @@
 
         $scope.alertNewMessage = false;
         $scope.alertLoading = false;
+        $scope.deviceType = 0;
         
         var checkWhatsNew = function() {
             conversationsFactory.whatIsNew(function(messages) {
@@ -37,25 +38,10 @@
             console.log("Handle:newPush");
             console.log(event);
             console.log(state);
-            //alert("[PUSH] Message: " + state.message);
-
-            //    push.message
-            //alert("[PUSH] Message: " +
-            //    push.message +
-            //    ", Conversation: " +
-            //    push.userdata.c +
-            //    ", Inbox: " +
-            //    push.userdata.i +
-            //    ", Sender: " +
-            //    push.userdata.s);
-            //console.log(push);
-
             checkWhatsNew();
         }
 
         function onResume(event, state) {
-            //alert("Resumed");
-            //onViewLoaded();
             checkWhatsNew();
         }
 
@@ -66,15 +52,16 @@
         }
 
         function onHttpUnauthorized(event, state) {
-            console.log(event);
-            console.log(state);
+            //console.log(event);
+            //console.log(state);
             //alert("httpUnauthorized: " + state);
             $location.path('/login/');
         }
 
         function onLoading(event, state) {
+            // TODO: detect slow loading, show info banner/modal after X sec
             $scope.alertLoading = state;
-            console.log("loading: " + state);
+            //console.log("loading: " + state);
         }
 
         $scope.$on('loading', onLoading);
@@ -88,6 +75,9 @@
         $scope.$on('httpUnauthorized', onHttpUnauthorized);
 
         function onViewLoaded() {
+
+            $scope.deviceType = deviceFactory.getDeviceTypeId();
+            
             //var token = $rootScope.authenticationToken;
             var token = apiFactory.authenticationToken();
 
