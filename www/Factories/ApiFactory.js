@@ -42,12 +42,14 @@
             }
 
             function call(url, request, callback, error) {
+                $rootScope.$broadcast('loading', true);
                 $http({
                         url: apiSettings.baseApiUrl + url,
                         method: apiSettings.method,
                         data: request
                     })
-                    .then(function(response) {
+                    .then(function (response) {
+                        $rootScope.$broadcast('loading', false);
                             //console.log(url);
                             //console.log(response);
                             if (response.data.status === "Unauthorized") {
@@ -56,7 +58,8 @@
                             lastCallTimestamp = response.data.time;
                             callback(response.data);
                         },
-                        function(e) {
+                        function (e) {
+                            $rootScope.$broadcast('loading', false);
                             //console.log('ERROR');
                             //console.log(e);
                             $rootScope.$broadcast('httpCallError', e);

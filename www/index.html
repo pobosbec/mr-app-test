@@ -65,6 +65,9 @@
         </div>
 
         <div ng-show="validateLoad('inbox')" class="btn-group pull-right" yield-to="navbarAction">
+            <div ng-show="alertLoading" class="btn btn-navbar">
+                <a href="#"><span><i class="fa fa-spinner"></i></span></a>
+            </div>
             <div ng-show="alertNewMessage" class="btn btn-navbar">
                 <a href="#/conversations/{{ inbox.inboxId }}"><span><i class="fa fa-comment"></i></span></a>
             </div>

@@ -59,7 +59,6 @@
                 document.addEventListener('push-notification',
                     function(event) {
                         //alert("New push iOS");
-                        var notification = event.notification;
                         pushNotification.setApplicationIconBadgeNumber(0);
 
                         settings.onPush(event.notification);
@@ -76,7 +75,8 @@
                         error(status);
                     }
                 );
-
+                
+                pushNotification.setApplicationIconBadgeNumber(0);
 
             }
 

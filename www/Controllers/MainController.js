@@ -1,8 +1,9 @@
 ﻿mrApp.controller('MainController', [
-    'ApiFactory','$rootScope', '$scope', '$location', '$filter', '$timeout', 'ConversationsFactory',
-    function(apiFactory, $rootScope, $scope, $location, $filter, $timeout, conversationsFactory) {
+    'ApiFactory','$rootScope', '$scope', '$location', '$filter', '$timeout', 'ConversationsFactory','DeviceFactory',
+    function(apiFactory, $rootScope, $scope, $location, $filter, $timeout, conversationsFactory, deviceFactory) {
 
         $scope.alertNewMessage = false;
+        $scope.alertLoading = false;
         
         var checkWhatsNew = function() {
             conversationsFactory.whatIsNew(function(messages) {
@@ -11,10 +12,13 @@
                         //BROADCAST
                         $scope.$broadcast('newMessages', messages);
                     }
-                    //$timeout(function() {
-                    //        checkWhatsNew();
-                    //    },
-                    //    5000);
+                    //console.log("isDevice: " + deviceFactory.isDevice());
+                    if (!deviceFactory.isDevice()) {
+                        $timeout(function() {
+                                checkWhatsNew();
+                            },
+                            5000);
+                    }
                 },
                 function(error) {
                     console.log("What-is-new:");
@@ -67,6 +71,13 @@
             //alert("httpUnauthorized: " + state);
             $location.path('/login/');
         }
+
+        function onLoading(event, state) {
+            $scope.alertLoading = state;
+            console.log("loading: " + state);
+        }
+
+        $scope.$on('loading', onLoading);
 
         $scope.$on('newPush', onNewPush);
 
