@@ -48,13 +48,17 @@
                         data: request
                     })
                     .then(function(response) {
+                            //console.log(url);
                             //console.log(response);
+                            if (response.data.status === "Unauthorized") {
+                                $rootScope.$broadcast('httpUnauthorized', response);
+                            }
                             lastCallTimestamp = response.data.time;
                             callback(response.data);
                         },
                         function(e) {
-                            console.log('ERROR');
-                            console.log(e);
+                            //console.log('ERROR');
+                            //console.log(e);
                             $rootScope.$broadcast('httpCallError', e);
                             error(e);
                         });
