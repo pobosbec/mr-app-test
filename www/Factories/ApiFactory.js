@@ -1,5 +1,5 @@
 ﻿angular.module('ApiFactory', [])
-    .factory('ApiFactory', ['$http', function($http) {
+    .factory('ApiFactory', ['$rootScope','$http', function($rootScope, $http) {
 
             var authenticationToken;
             var lastCallTimestamp;
@@ -55,6 +55,7 @@
                         function(e) {
                             console.log('ERROR');
                             console.log(e);
+                            $rootScope.$broadcast('httpCallError', e);
                             error(e);
                         });
             }

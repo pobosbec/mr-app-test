@@ -33,7 +33,7 @@
             console.log("Handle:newPush");
             console.log(event);
             console.log(state);
-            alert("[PUSH] Message: " + state.message);
+            //alert("[PUSH] Message: " + state.message);
 
             //    push.message
             //alert("[PUSH] Message: " +
@@ -50,14 +50,22 @@
         }
 
         function onResume(event, state) {
-            alert("Resumed");
+            //alert("Resumed");
             //onViewLoaded();
             checkWhatsNew();
+        }
+
+        function onHttpCallError(event, state) {
+            console.log(event);
+            console.log(state);
+            alert(state);
         }
 
         $scope.$on('newPush', onNewPush);
 
         $scope.$on('appResumed', onResume);
+
+        $scope.$on('httpCallError', onHttpCallError);
 
         function onViewLoaded() {
             //var token = $rootScope.authenticationToken;
