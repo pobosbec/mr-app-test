@@ -210,7 +210,12 @@
 
             function unregisterDevice(callback) {
                 if (isDevice()) {
-                    unregisterDevicePushwoosh(function() {
+                    //unregisterDevicePushwoosh(function () {
+
+                    //        document.removeEventListener('deviceready',
+                    //            function() {
+
+                    //            });
 
                             unregisterDeviceInMobileResponse(
                                 function() {
@@ -219,10 +224,10 @@
                                 function(error) {
                                     callback(false);
                                 });
-                        },
-                        function() {
+                //        },
+                //        function() {
 
-                        });
+                //        });
                 } else {
                     callback(true);
                 }
