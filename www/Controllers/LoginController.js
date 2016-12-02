@@ -160,15 +160,6 @@
                                     "appid": "A014B-AC83E",
                                     "projectid": "482590317251",
                                     "onPush": function(push) {
-                                        //alert("[PUSH] Message: " +
-                                        //    push.message +
-                                        //    ", Conversation: " +
-                                        //    push.userdata.c +
-                                        //    ", Inbox: " +
-                                        //    push.userdata.i +
-                                        //    ", Sender: " +
-                                        //    push.userdata.s);
-                                        //console.log(push);
                                         console.log("RootBroadcast: newPush");
                                         $rootScope.$broadcast('newPush', push);
                                     },
@@ -176,17 +167,20 @@
                                         console.log("RootBroadcast: appResumed");
                                         $rootScope.$broadcast('appResumed', true);
                                     }
-                            };
+                                };
 
                                 if (deviceFactory.isDevice) {
                                     deviceFactory.registerDevice(registerDeviceRequest,
                                         function (status) {
                                             if (status) {
-                                                //alert("Device registered");
+                                                alert("Device registered");
+                                            } else {
+                                                alert("Device not registered"); 
                                             }
+                                            callback(response);
                                         });
                                 }
-                                callback(response);
+                                
 
                             },
                             function (e) {
