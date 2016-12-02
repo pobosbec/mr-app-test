@@ -44,6 +44,7 @@
     margin-top: 50px;
     padding-bottom: 81px;
 }
+
 .login {
 	background-color: #fff
 }
@@ -154,7 +155,8 @@
 }
 .content-container-chat {
     margin-top: 55px;
-    padding-bottom: 141px;
+    /*padding-bottom: 141px;*/
+    padding-bottom: 73px;
 }
 .message-chat {
     width: 60%;
@@ -173,7 +175,7 @@
     float: left;
     width: 100%;
     height: 5px;
-    margin: 0;
+    margin: 1px;
     background-color: inherit;
     border: 0;
 }
@@ -183,7 +185,7 @@
     background-color: white;
     position: absolute;
     bottom: 0;
-    padding: 3px 3px 53px 3px;
+    padding: 3px 3px 3px 3px;
     width: 100%;
 }
 

@@ -79,6 +79,8 @@ mrApp.controller('MessagesController', [
             $scope.conversation = conversationsFactory.getCurrentConversation();
 
             SharedState.initialize($scope, 'formModalUrl', '');
+
+            $scope.$emit('inConversation', { 'state': true });
         }
 
         function linkify(text) {

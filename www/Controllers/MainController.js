@@ -2,9 +2,12 @@
     'ApiFactory','$rootScope', '$scope', '$location', '$filter', '$timeout', 'ConversationsFactory','DeviceFactory',
     function(apiFactory, $rootScope, $scope, $location, $filter, $timeout, conversationsFactory, deviceFactory) {
 
+        $scope.inConversation = false;
+        
         $scope.alertNewMessage = false;
         $scope.alertLoading = false;
         $scope.deviceType = 0;
+
         
         var checkWhatsNew = function() {
             conversationsFactory.whatIsNew(function(messages) {
@@ -64,6 +67,11 @@
             //console.log("loading: " + state);
         }
 
+        function onInConversation(event, state) {
+            console.log(state);
+            $scope.inConversation = state;
+        }
+
         $scope.$on('loading', onLoading);
 
         $scope.$on('newPush', onNewPush);
@@ -73,6 +81,13 @@
         $scope.$on('httpCallError', onHttpCallError);
 
         $scope.$on('httpUnauthorized', onHttpUnauthorized);
+
+        $scope.$on('inConversation', onInConversation);
+
+        $scope.hideConversation = function () {
+            console.log("hideConversation");
+            $scope.inConversation = false;
+        };
 
         function onViewLoaded() {
 
