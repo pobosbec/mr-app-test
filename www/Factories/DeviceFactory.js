@@ -92,6 +92,8 @@
 
             }
 
+            
+
             function registerDeviceInMobileResponse(deviceToken, callback, error) {
                 //alert("Register device in Mobile Response");
 
@@ -166,6 +168,67 @@
                 }
             }
 
+            function unregisterDevicePushwoosh(callback, error) {
+                var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
+
+                pushNotification.unregisterDevice(
+                    function (status) {
+                        callback(status);
+                    },
+                    function (status) {
+                        error(status);
+                    }
+                );
+            }
+
+            function unregisterDeviceInMobileResponse(callback, error) {
+                //alert("Register device in Mobile Response");
+
+                //get hwid
+                getDeviceHardwareId(function (hwid) {
+                    // register device 
+                    var registerDeviceRequest = {
+                        authenticationToken: apiFactory.getToken(),
+                        data: {
+                            hardwareId: '' + hwid
+                        }
+                    };
+                    apiFactory.functions.call('users/unregister-device',
+                        registerDeviceRequest,
+                        function (response) {
+                            //alert("Device unregistered in Mobile Response");
+                            console.log(response);
+                            callback(true);
+                        },
+                        function (status) {
+                            //alert("Device unregister failed in Mobile Response");
+                            console.log(error);
+                            error(status);
+                        });
+                });
+            }
+
+            function unregisterDevice(callback) {
+                if (isDevice()) {
+                    unregisterDevicePushwoosh(function() {
+
+                            unregisterDeviceInMobileResponse(
+                                function() {
+                                    callback(true);
+                                },
+                                function(error) {
+                                    callback(false);
+                                });
+                        },
+                        function() {
+
+                        });
+                } else {
+                    callback(true);
+                }
+                
+            }
+
             function isDevice() {
                 if (typeof window.cordova === 'object') {
                     return true;
@@ -206,6 +269,7 @@
             
             return {
                 registerDevice: registerDevice,
+                unregisterDevice: unregisterDevice,
                 isDevice: isDevice,
                 getDeviceType: getDeviceType,
                 getDeviceTypeId: getDeviceTypeId

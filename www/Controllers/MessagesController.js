@@ -15,21 +15,26 @@
     }
 ]);
 
-mrApp.controller('FormModalController', ['$scope', 'SharedState', function ($scope, SharedState) {
+mrApp.controller('FormModalController',
+[
+    '$scope', 'SharedState',
+    function($scope, SharedState) {
 
-    $scope.activeFormUrl = "Partials/loading.htm";
+        $scope.activeFormUrl = "Partials/loading.htm";
 
-    $scope.iframeLoadedCallBack = function () {
-        $scope.activeFormUrl = SharedState.get('formModalUrl');
+        $scope.iframeLoadedCallBack = function() {
+            console.log("iFrameLoaded");
+            $scope.activeFormUrl = SharedState.get('formModalUrl');
+        }
+
+        function init() {
+            console.log(SharedState.get('formModalUrl'));
+        }
+
+        init();
+
     }
-    
-    function init() {
-        //console.log(SharedState.get('formModalUrl'));
-    }
-
-    init();
-
-}]);
+]);
 
 mrApp.controller('MessagesController', [
     'ApiFactory', '$scope', '$location', '$routeParams', 'UsersFactory', 'ConversationsFactory', '$timeout', '$filter','SharedState',
@@ -44,6 +49,7 @@ mrApp.controller('MessagesController', [
 
         $scope.openFormModal = function (formId) {
             var formUrl = 'http://m.mobileresponse.se/form/' + formId;
+            console.log(formUrl);
             SharedState.set('formModalUrl', formUrl);
             SharedState.turnOn('formModal');
         };
