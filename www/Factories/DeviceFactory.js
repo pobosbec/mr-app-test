@@ -136,7 +136,7 @@
 
                             var afterRegisterSuccess = function(token) {
                                 console.log(token);
-                                //alert("Register success: " + token);
+                                alert("Register success: " + token);
                                 registerDeviceInMobileResponse(token,
                                     function() {
                                         callback(true);
@@ -147,7 +147,7 @@
                             };
 
                             var afterRegisterFail = function() {
-                                //alert("Register failed");
+                                alert("Register failed");
                                 callback(false);
                             };
 
