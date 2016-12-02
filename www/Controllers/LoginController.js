@@ -173,9 +173,9 @@
                                     deviceFactory.registerDevice(registerDeviceRequest,
                                         function (status) {
                                             if (status) {
-                                                alert("Device registered");
+                                                //alert("Device registered");
                                             } else {
-                                                alert("Device not registered"); 
+                                                //alert("Device not registered"); 
                                             }
                                             callback(response);
                                         });

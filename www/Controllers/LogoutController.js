@@ -18,18 +18,18 @@
             if (deviceFactory.isDevice()) {
                 deviceFactory.unregisterDevice(
                     function(status) {
-                        alert("unregisteredDevice success");
+                        //alert("unregisteredDevice success");
                         console.log("unregisteredDevice success");
-                        afterLogout(200);
+                        afterLogout(3000);
                     },
                     function(status) {
-                        alert("unregisteredDevice error");
+                        //alert("unregisteredDevice error");
                         console.log("unregisteredDevice error");
-                        afterLogout(200);
+                        afterLogout(3000);
                     });
 
             } else {
-                afterLogout(1000);
+                afterLogout(3000);
             }
             
         }
