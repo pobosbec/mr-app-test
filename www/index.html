@@ -54,9 +54,12 @@
 
     <!-- Top Navbar -->
     <div class="navbar navbar-app navbar-absolute-top">
-        
-        <div ng-show="validateLoad('inbox')" class="navbar-brand navbar-brand-center" yield-to="title">
+
+        <!--<div ng-show="validateLoad('inbox')" class="navbar-brand navbar-brand-center" yield-to="title">
             <a href="#/conversations/{{ inbox.inboxId }}"><span> <img ng-show="inbox.icon" height="25" alt="inboxIcon" src="{{ inbox.icon }}" /></span><span ng-show="!inbox.icon">{{ inbox.inboxDisplayName }}</span></a>
+        </div>-->
+        <div ng-show="validateLoad('inbox')" class="navbar-brand navbar-brand-center" yield-to="title">
+            <span><img ng-show="inbox.icon" height="25" alt="inboxIcon" src="{{ inbox.icon }}" /></span><span ng-show="!inbox.icon">{{ inbox.inboxDisplayName }}</span>
         </div>
 
         <div class="btn-group pull-left">
@@ -69,9 +72,11 @@
             <div ng-show="alertLoading" class="btn btn-navbar">
                 <a href="#"><span><i class="fa fa-spinner"></i></span></a>
             </div>
+
             <div ng-show="alertNewMessage" class="btn btn-navbar">
                 <a href="#/conversations/{{ inbox.inboxId }}"><span><i class="fa fa-comment"></i></span></a>
             </div>
+
             <!--<div class="btn btn-navbar">
                 <a href="#/newconversation/"><span><i class="fa fa-lg fa-pencil"></i> New </span></a>
             </div>-->
@@ -86,9 +91,10 @@
     <!-- Bottom Navbar -->
     <div ng-show="!inConversation" class="navbar navbar-app navbar-absolute-bottom">
         <div class="btn-group justified">
-            <a ng-show="validateLoad('inbox')" href="#/newconversation/" class="btn btn-navbar btn-icon-only"><i class="fa fa-lg fa-pencil"></i></a>
-            <a ng-show="validateLoad('inbox')" href="#/conversations/{{ inbox.inboxId }}" class="btn btn-navbar btn-icon-only"><i class="fa fa-lg fa-inbox"></i></a>
             <a ng-show="validateLoad('profile')" href="#/profile/{{ myAppUser.id }}" class="btn btn-navbar btn-icon-only"><i class="fa fa-lg fa-user"></i></a>
+            <a ng-show="validateLoad('inbox')" href="#/conversations/{{ inbox.inboxId }}" class="btn btn-navbar btn-icon-only"><i class="fa fa-lg fa-inbox"></i></a>
+            <a ng-show="validateLoad('inbox')" href="#/newconversation/" class="btn btn-navbar btn-icon-only"><i class="fa fa-lg fa-pencil"></i></a>
+            
         </div>
     </div>
 
