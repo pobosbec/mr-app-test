@@ -78,11 +78,9 @@
                 var avatars = [];
                 for (var q = 0; q < conversation.participants.length; q++) {
                     var user = findUserById(conversation.participants[q], users);
-                    //console.log(user);
                     if (user != null) {
                         if (user.avatar == null) {
-                            //console.log(user.avatar);
-                            user.avatar = "images/NoAvatar.png";
+                            user.avatar = "images/NoAvatar2.png";
                         } 
                         avatars.push(user);
                     } 
@@ -90,6 +88,9 @@
                 // add myself
                 user = findUserById(conversation.userId, users);
                 if (user != null) {
+                    if (user.avatar == null) {
+                        user.avatar = "images/NoAvatar2.png";
+                    }
                     if (user.avatar != '') {
                         avatars.push(user);
                     }
