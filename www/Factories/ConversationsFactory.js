@@ -78,19 +78,17 @@
                 var avatars = [];
                 for (var q = 0; q < conversation.participants.length; q++) {
                     var user = findUserById(conversation.participants[q], users);
+                    //console.log(user);
                     if (user != null) {
-                        //if (user.avatar != null) {
-                        //    //console.log(user.avatar);
-                        //} else {
-                        //    //user.avatar = "http://findicons.com/files/icons/175/halloween_avatar/128/mike.png";
-                        //    //console.log("Changed: "+ user.avatar);
-                        //}
+                        if (user.avatar == null) {
+                            //console.log(user.avatar);
+                            user.avatar = "images/NoAvatar.png";
+                        } 
                         avatars.push(user);
-                    }
+                    } 
                 }
                 // add myself
                 user = findUserById(conversation.userId, users);
-                //console.log(users);
                 if (user != null) {
                     if (user.avatar != '') {
                         avatars.push(user);

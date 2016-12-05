@@ -28,7 +28,8 @@
                         </div>
                     </div>
                     <div ng-if="conversation.avatars" class="list-item-avatar">
-                        <img ng-repeat="avatar in conversation.avatars" ng-show="avatar.avatar != null && avatar.userId == message.authorId" height="50" alt="avatar" src="{{ avatar.avatar }}"/>
+                        <img class="avatar" ng-if="conversation.avatars" ng-repeat="avatar in conversation.avatars" ng-show="avatar.avatar != null && avatar.userId == message.authorId" height="50" alt="avatar" src="{{ avatar.avatar }}"/>
+                        
                     </div>
                     <div>
                         <b>{{ message.authorDisplayName }}</b><br/>

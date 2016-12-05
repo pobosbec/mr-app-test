@@ -209,3 +209,7 @@
     position: relative;
     top: 5px;
 }
+
+.avatar {
+    border-radius: 25px;
+}
