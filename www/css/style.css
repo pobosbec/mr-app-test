@@ -154,9 +154,9 @@
     margin-right: -10px;
 }
 .content-container-chat {
-    margin-top: 55px;
+    margin-top: 50px;
     /*padding-bottom: 141px;*/
-    padding-bottom: 73px;
+    padding-bottom: 75px;
 }
 .message-chat {
     width: 60%;
@@ -198,4 +198,14 @@
 .send-message {
     float: left;
     width: 90%;
+}
+.navbar-brand {
+    padding-top: 1px;
+}
+.navbar-icongroup {
+    
+}
+.navbar-icongroup i {
+    position: relative;
+    top: 5px;
 }

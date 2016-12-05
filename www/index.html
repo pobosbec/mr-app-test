@@ -14,7 +14,8 @@
 
     <link rel="shortcut icon" href="favicon.png" type="image/x-icon"/>
 
-    <link href="js/mobile-angular-ui/dist/css/mobile-angular-ui-base.min.css" rel="stylesheet" type="text/css"/>
+    <link href="js/mobile-angular-ui/dist/css/mobile-angular-ui-base.css" rel="stylesheet" type="text/css" />
+    <!--<link href="js/mobile-angular-ui/dist/css/mobile-angular-ui-base.min.css" rel="stylesheet" type="text/css"/>-->
     <link href="js/mobile-angular-ui/dist/css/mobile-angular-ui-desktop.min.css" rel="stylesheet" type="text/css"/>
 
     <link href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
@@ -55,31 +56,29 @@
     <!-- Top Navbar -->
     <div class="navbar navbar-app navbar-absolute-top">
 
-        <!--<div ng-show="validateLoad('inbox')" class="navbar-brand navbar-brand-center" yield-to="title">
-            <a href="#/conversations/{{ inbox.inboxId }}"><span> <img ng-show="inbox.icon" height="25" alt="inboxIcon" src="{{ inbox.icon }}" /></span><span ng-show="!inbox.icon">{{ inbox.inboxDisplayName }}</span></a>
-        </div>-->
+        <!--ICON-->
         <div ng-show="validateLoad('inbox')" class="navbar-brand navbar-brand-center" yield-to="title">
-            <span><img ng-show="inbox.icon" height="25" alt="inboxIcon" src="{{ inbox.icon }}" /></span><span ng-show="!inbox.icon">{{ inbox.inboxDisplayName }}</span>
+            <span><img ng-show="inbox.icon" height="48" alt="inboxIcon" src="{{ inbox.icon }}" /></span><span ng-show="!inbox.icon">{{ inbox.inboxDisplayName }}</span>
         </div>
 
-        <div class="btn-group pull-left">
+        <!--BARS-->
+        <div class="btn-group pull-left navbar-icongroup">
             <div ui-turn-on="mainSidebar" class="btn btn-navbar sidebar-toggle">
-                <i class="fa fa-lg fa-bars"></i>
+                <i class="fa fa-2x fa-bars"></i>
             </div>
         </div>
 
-        <div ng-show="validateLoad('inbox')" class="btn-group pull-right" yield-to="navbarAction">
+        <!--ICONS-->
+        <div ng-show="validateLoad('inbox')" class="btn-group pull-right navbar-icongroup" yield-to="navbarAction">
+            
             <div ng-show="alertLoading" class="btn btn-navbar">
-                <a href="#"><span><i class="fa fa-spinner"></i></span></a>
+                <i class="fa fa-2x fa-spinner"></i>
             </div>
 
             <div ng-show="alertNewMessage" class="btn btn-navbar">
-                <a href="#/conversations/{{ inbox.inboxId }}"><span><i class="fa fa-comment"></i></span></a>
+                <a href="#/conversations/{{ inbox.inboxId }}"><span><i class="fa fa-2x fa-comment"></i></span></a>
             </div>
 
-            <!--<div class="btn btn-navbar">
-                <a href="#/newconversation/"><span><i class="fa fa-lg fa-pencil"></i> New </span></a>
-            </div>-->
             <div ng-show="inConversation" class="btn btn-navbar">
                 <a href="#/conversations/{{ inbox.inboxId }}" ng-click="hideConversation()"><span><i class="fa fa-2x fa-times-circle"></i></span></a>
             </div>
