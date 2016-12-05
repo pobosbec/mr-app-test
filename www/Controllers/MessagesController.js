@@ -146,12 +146,13 @@ mrApp.controller('MessagesController', [
         }
         
         function scrollToLast() {
-            $timeout(function() {
+            // TODO: add $watch last-message instead
+            $timeout(function () {
                     var elem = angular.element(document.getElementById('chat-container'));
                     var scrollableContentController = elem.controller('scrollableContent');
                     scrollableContentController.scrollTo(angular.element(document.getElementById('last-message')));
                 },
-                100);
+                200);
         }
         
         $scope.sendMessage = function (message) {

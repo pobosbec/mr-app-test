@@ -46,7 +46,8 @@
     <div class="send-chat-message">
         <form ng-submit="sendMessage(newMessage)">
             <a href="" ng-click="sendMessage(newMessage)" class="btn btn-primary btn-align-right"><span><i class="fa fa-arrow-right"></i></span></a>
-            <input ng-model="newMessage" class="form-control send-message" placeholder="Compose message"/>
+            <!--<input ng-model="newMessage" class="form-control send-message" placeholder="Compose message"/>-->
+            <textarea ng-model="newMessage" class="form-control send-message" placeholder="Compose message"></textarea>
         </form>
     </div>
 
