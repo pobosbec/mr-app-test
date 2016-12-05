@@ -34,7 +34,7 @@
         <a href="#/login"><img src="images/mobile-response-logo.png" class="logo" alt="Mobile Response"/></a>
     </h1>
     <div class="scrollable">
-        <div class="scrollable-content">
+        <div class="scrollable-content" ui-turn-off="mainSidebar">
 
             <div ng-show="validateLoad('inboxes')" class="list-group" toggle="off" bubble target="mainSidebar">
                 <a ng-repeat="inbox in inboxes" class="list-group-item" href="#/conversations/{{ inbox.inboxId }}">
@@ -51,7 +51,7 @@
     </div>
 </div>
 
-<div class="app" ui-swipe-right='Ui.turnOn("uiSidebarLeft")' ui-swipe-left='Ui.turnOff("uiSidebarLeft")'>
+<div class="app" ui-swipe-right='Ui.turnOn("mainSidebar")' ui-swipe-left='Ui.turnOff("mainSidebar")'>
 
     <!-- Top Navbar -->
     <div class="navbar navbar-app navbar-absolute-top">
@@ -64,7 +64,8 @@
         <!--BARS-->
         <div class="btn-group pull-left navbar-icongroup">
             <div ui-turn-on="mainSidebar" class="btn btn-navbar sidebar-toggle">
-                <i class="fa fa-2x fa-bars"></i>
+                <i ui-if="!mainSidebar" class="fa fa-2x fa-bars"></i>
+                <i ui-if="mainSidebar" class="fa fa-2x fa-arrow-left"></i>
             </div>
         </div>
 
@@ -90,9 +91,9 @@
     <!-- Bottom Navbar -->
     <div ng-show="!inConversation" class="navbar navbar-app navbar-absolute-bottom">
         <div class="btn-group justified">
-            <a ng-show="validateLoad('profile')" href="#/profile/{{ myAppUser.id }}" class="btn btn-navbar btn-icon-only"><i class="fa fa-lg fa-user"></i></a>
-            <a ng-show="validateLoad('inbox')" href="#/conversations/{{ inbox.inboxId }}" class="btn btn-navbar btn-icon-only"><i class="fa fa-lg fa-inbox"></i></a>
-            <a ng-show="validateLoad('inbox')" href="#/newconversation/" class="btn btn-navbar btn-icon-only"><i class="fa fa-lg fa-pencil"></i></a>
+            <a ng-show="validateLoad('profile')" href="#/profile/{{ myAppUser.id }}" class="btn btn-navbar btn-icon-only"><i class="fa fa-2x fa-user"></i></a>
+            <a ng-show="validateLoad('inbox')" href="#/conversations/{{ inbox.inboxId }}" class="btn btn-navbar btn-icon-only"><i class="fa fa-2x fa-inbox"></i></a>
+            <a ng-show="validateLoad('inbox')" href="#/newconversation/" class="btn btn-navbar btn-icon-only"><i class="fa fa-2x fa-pencil"></i></a>
             
         </div>
     </div>
