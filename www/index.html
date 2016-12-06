@@ -80,7 +80,7 @@
                 <a href="#/conversations/{{ inbox.inboxId }}"><span><i class="fa fa-2x fa-comment"></i></span></a>
             </div>
 
-            <div ng-show="inConversation" class="btn btn-navbar">
+            <div ng-show="currentView=='conversation'" class="btn btn-navbar">
                 <a href="#/conversations/{{ inbox.inboxId }}" ng-click="hideConversation()"><span><i class="fa fa-2x fa-times-circle"></i></span></a>
             </div>
 
@@ -89,11 +89,11 @@
     </div>
 
     <!-- Bottom Navbar -->
-    <div ng-show="!inConversation" class="navbar navbar-app navbar-absolute-bottom">
+    <div ng-show="currentView!='conversation'" class="navbar navbar-app navbar-absolute-bottom">
         <div class="btn-group justified">
-            <a ng-show="validateLoad('profile')" href="#/profile/{{ myAppUser.id }}" class="btn btn-navbar btn-icon-only"><i class="fa fa-2x fa-user"></i></a>
-            <a ng-show="validateLoad('inbox')" href="#/conversations/{{ inbox.inboxId }}" class="btn btn-navbar btn-icon-only"><i class="fa fa-2x fa-inbox"></i></a>
-            <a ng-show="validateLoad('inbox')" href="#/newconversation/" class="btn btn-navbar btn-icon-only"><i class="fa fa-2x fa-pencil"></i></a>
+            <a ng-show="validateLoad('profile')" href="#/profile/{{ myAppUser.id }}" class="btn btn-navbar btn-icon-only" ng-class="{'navbar-active-item': currentView === 'profile'}"><i class="fa fa-2x fa-user"></i></a>
+            <a ng-show="validateLoad('inbox')" href="#/conversations/{{ inbox.inboxId }}" class="btn btn-navbar btn-icon-only" ng-class="{'navbar-active-item': currentView === 'conversations'}"><i class="fa fa-2x fa-inbox"></i></a>
+            <a ng-show="validateLoad('inbox')" href="#/newconversation/" class="btn btn-navbar btn-icon-only" ng-class="{'navbar-active-item': currentView === 'newconversation'}"><i class="fa fa-2x fa-pencil"></i></a>
             
         </div>
     </div>

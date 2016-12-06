@@ -7,6 +7,7 @@
         $scope.alertText = null;
 
         function init() {
+            $scope.$emit('viewChanged', 'conversations');
             $rootscope.currentInboxId = inboxId;
             listConversations(apiFactory.getToken(), inboxId);
         }

@@ -211,5 +211,15 @@
 }
 
 .avatar {
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    resize: both;
+    height: 40px;
+}
+.navbar-active-item i {
+    border: 1px solid silver;
+    color: white;
+    background-color: #007aff;
+    padding: 7px 9px;
     border-radius: 25px;
 }

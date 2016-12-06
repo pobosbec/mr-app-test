@@ -3,6 +3,7 @@
     function(apiFactory, $rootScope, $scope, $location, $filter, $timeout, conversationsFactory, deviceFactory) {
 
         $scope.inConversation = false;
+        $scope.currentView = 'main';
         
         $scope.alertNewMessage = false;
         $scope.alertLoading = false;
@@ -66,10 +67,10 @@
             $scope.alertLoading = state;
             //console.log("loading: " + state);
         }
-
-        function onInConversation(event, state) {
-            console.log(state);
-            $scope.inConversation = state;
+        
+        function onViewChanged(event, currentViewName) {
+            $scope.currentView = currentViewName;
+            //console.log($scope.currentView);
         }
 
         $scope.$on('loading', onLoading);
@@ -81,14 +82,13 @@
         $scope.$on('httpCallError', onHttpCallError);
 
         $scope.$on('httpUnauthorized', onHttpUnauthorized);
-
-        $scope.$on('inConversation', onInConversation);
+        
+        $scope.$on('viewChanged', onViewChanged);
 
         $scope.hideConversation = function () {
-            console.log("hideConversation");
-            $scope.inConversation = false;
+            $scope.currentView = 'conversations';
         };
-
+        
         function onViewLoaded() {
 
             $scope.deviceType = deviceFactory.getDeviceTypeId();

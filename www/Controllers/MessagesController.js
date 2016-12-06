@@ -80,7 +80,8 @@ mrApp.controller('MessagesController', [
 
             SharedState.initialize($scope, 'formModalUrl', '');
 
-            $scope.$emit('inConversation', { 'state': true });
+            //$scope.$emit('inConversation', { 'state': true });
+            $scope.$emit('viewChanged', 'conversation');
         }
 
         function linkify(text) {

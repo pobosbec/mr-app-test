@@ -33,6 +33,7 @@
         };
 
         function init() {
+            $scope.$emit('viewChanged', 'login');
             $scope.credentials = $localStorage.savedCredentials;
             if ($scope.credentials != null && $scope.credentials.keepMeSignedIn) {
                 login();
