@@ -94,7 +94,7 @@
             if ($scope.currentView === 'conversation') {
                 $location.path('/conversations/' + $scope.inboxes[0].inboxId);
             } else {
-                //SharedState.turnOn('mainSidebar');
+                SharedState.turnOn('mainSidebar');
             }
         };
         
