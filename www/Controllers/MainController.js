@@ -1,6 +1,6 @@
 ﻿mrApp.controller('MainController', [
-    'ApiFactory','$rootScope', '$scope', '$location', '$filter', '$timeout', 'ConversationsFactory','DeviceFactory',
-    function(apiFactory, $rootScope, $scope, $location, $filter, $timeout, conversationsFactory, deviceFactory) {
+    'ApiFactory','$rootScope', '$scope', '$location', '$filter', '$timeout', 'ConversationsFactory','DeviceFactory','SharedState',
+    function(apiFactory, $rootScope, $scope, $location, $filter, $timeout, conversationsFactory, deviceFactory, SharedState) {
 
         $scope.inConversation = false;
         $scope.currentView = 'main';
@@ -88,9 +88,18 @@
         $scope.hideConversation = function () {
             $scope.currentView = 'conversations';
         };
+
+        $scope.swipeRight = function () {
+            console.log("SwipeRight: " + $scope.currentView);
+            if ($scope.currentView === 'conversation') {
+                $location.path('/conversations/' + $scope.inboxes[0].inboxId);
+            } else {
+                //SharedState.turnOn('mainSidebar');
+            }
+        };
         
         function onViewLoaded() {
-
+            
             $scope.deviceType = deviceFactory.getDeviceTypeId();
             
             //var token = $rootScope.authenticationToken;
