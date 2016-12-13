@@ -137,14 +137,14 @@
                 return currentConversation;
             }
 
-            function listConversations(token, inboxId, callback, error) {
+            function listConversations(token, inboxId, pageIndex, pageSize, callback, error) {
 
                 var listConversationsRequest = {
                     authenticationToken: apiFactory.getToken(),
                     data: {
                         'inboxId': inboxId,
-                        'pageIndex': 1,
-                        'pageSize': 20
+                        'pageIndex': pageIndex,
+                        'pageSize': pageSize
                     }
                 };
                 apiFactory.functions.call('inboxes/list-content',
