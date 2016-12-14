@@ -30,12 +30,12 @@ mrApp.controller('FormModalController',
         }
 
         $scope.iframeLoadedCallBack = function() {
-            //loadIframe();
+            loadIframe();
         }
 
         function init() {
             console.log("Init: " + SharedState.get('formModalUrl'));
-            loadIframe();
+            //loadIframe();
             //$timeout(function () {
             //    loadIframe();
             //},
