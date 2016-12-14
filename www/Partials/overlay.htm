@@ -1,11 +1,11 @@
-﻿<div ng-controller="FormModalController" class="modal formModal" ui-state="formModal">
+﻿<div ng-controller="FormModalController" class="modal formModal" ui-if="formModal" ui-state="formModal">
     <button type="button" class="btn btn-default closeModal" ui-turn-off="formModal"><i class="fa fa-times-circle"></i></button>
     <!--<a href="" class="closeModal" ui-turn-off="formModal"><i class="fa fa-times-circle"></i></a>-->
     <div class="modal-dialog">
         <div class="modal-backdrop in"></div>
         <div class="modal-content">
             <div class="modal-body" style="padding: 0 !important; overflow: scroll !important; -webkit-overflow-scrolling: touch !important; height: 80vh !important;">
-                <iframe class="formModalIframe" src="{{ activeFormUrl | trustUrl }}" iframe-onload="iframeLoadedCallBack()" style="width: 100% !important; height: 100% !important; overflow: scroll !important; -webkit-overflow-scrolling: touch !important" scrolling="yes"></iframe>
+                <iframe class="formModalIframe" src="{{ activeFormUrl }}" iframe-onload="iframeLoadedCallBack()" style="width: 100% !important; height: 100% !important; overflow: scroll !important; -webkit-overflow-scrolling: touch !important" scrolling="yes"></iframe>
             </div>
         </div>
     </div>

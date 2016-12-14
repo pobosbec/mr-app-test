@@ -23,21 +23,22 @@ mrApp.controller('FormModalController',
         $scope.activeFormUrl = "Partials/loading.htm";
 
         function loadIframe() {
-            console.log("iFrameLoaded");
-            $scope.activeFormUrl = SharedState.get('formModalUrl');
+            console.log("iFrameLoaded: " + SharedState.get('formModalUrl'));
+            if (SharedState.get('formModalUrl')) {
+                $scope.activeFormUrl = SharedState.get('formModalUrl');
+            }
         }
 
         $scope.iframeLoadedCallBack = function() {
-            
-
+            loadIframe();
         }
 
         function init() {
             console.log("Init: " + SharedState.get('formModalUrl'));
-            $timeout(function () {
-                loadIframe();
-            },
-                1000);
+            //$timeout(function () {
+            //    loadIframe();
+            //},
+            //    1000);
         }
 
         init();
