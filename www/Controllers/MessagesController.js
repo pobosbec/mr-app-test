@@ -17,18 +17,28 @@
 
 mrApp.controller('FormModalController',
 [
-    '$scope', 'SharedState',
-    function($scope, SharedState) {
+    '$scope','$timeout', 'SharedState',
+    function($scope,$timeout, SharedState) {
 
+        var iframeLoading = true;
         $scope.activeFormUrl = "Partials/loading.htm";
 
-        $scope.iframeLoadedCallBack = function() {
+        function loadIframe() {
             console.log("iFrameLoaded");
             $scope.activeFormUrl = SharedState.get('formModalUrl');
+            iframeLoading = false;
         }
 
+        $scope.iframeLoadedCallBack = loadIframe();
+
         function init() {
-            console.log(SharedState.get('formModalUrl'));
+            iframeLoading = true;
+            console.log("Init: "+ SharedState.get('formModalUrl'));
+            $timeout(function () {
+                if (iframeLoading) {
+                    loadIframe();
+                }
+            }, 5000);
         }
 
         init();
@@ -49,7 +59,7 @@ mrApp.controller('MessagesController', [
 
         $scope.openFormModal = function (formId) {
             var formUrl = 'http://m.mobileresponse.se/form/' + formId;
-            console.log(formUrl);
+            //console.log(formUrl);
             SharedState.set('formModalUrl', formUrl);
             SharedState.turnOn('formModal');
         };
@@ -101,10 +111,7 @@ mrApp.controller('MessagesController', [
             }
             return messages;
         }
-
-       
-
-
+        
         function listMessages(token, conversationId) {
 
             var listMessagesRequest = {
@@ -154,7 +161,7 @@ mrApp.controller('MessagesController', [
                     var scrollableContentController = elem.controller('scrollableContent');
                     scrollableContentController.scrollTo(angular.element(document.getElementById('last-message')));
                 },
-                200);
+                400);
         }
         
         $scope.sendMessage = function (message) {
