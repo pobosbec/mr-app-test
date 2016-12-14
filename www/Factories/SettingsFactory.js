@@ -42,7 +42,7 @@
                 console.log("Number of messages: " + $localStorage.settings.numberOfMessages);
             }
 
-            function init() {
+            function initSettings() {
                 if ($localStorage.settings === undefined) {
                     console.log("Init localStorage.settings");
                     $localStorage.settings = {
@@ -53,9 +53,14 @@
                 }
             }
 
+            function init() {
+                initSettings();
+            }
+
             init();
 
             return {
+                initSettings: initSettings,
                 getSettings: getSettings,
                 getNumberOfConversations: getNumberOfConversations,
                 getNumberOfMessages: getNumberOfMessages,
