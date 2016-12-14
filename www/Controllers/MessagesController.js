@@ -55,13 +55,13 @@ mrApp.controller('MessagesController', [
         };
 
         function showAlert(text, type, duration) {
-            if (type == 'success') {
+            if (type === 'success') {
                 $scope.successText = text;
                 $timeout(function () {
                     $scope.successText = null;
                 }, duration);
             }
-            if (type == 'error') {
+            if (type === 'error') {
                 $scope.errorText = text;
                 $timeout(function () {
                     $scope.errorText = null;
