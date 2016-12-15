@@ -68,7 +68,8 @@
                 pushNotification.onDeviceReady({ pw_appid: settings.appid });
 
                 pushNotification.registerDevice(
-                    function(token) {
+                    function (token) {
+                        alert("Register device iOS");
                         callback(token.pushToken);
                     },
                     function(status) {
@@ -136,7 +137,7 @@
 
                             var afterRegisterSuccess = function(token) {
                                 //console.log(token);
-                                //alert("Register success: " + token);
+                                alert("Register success: " + token);
                                 registerDeviceInMobileResponse(token,
                                     function() {
                                         callback(true);
