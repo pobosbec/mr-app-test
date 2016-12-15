@@ -151,37 +151,45 @@
                         }
                         $rootScope.keepMeSignedIn = $scope.keepMeSignedIn;
                         $rootScope.authenticationToken = response;
+
                         usersFactory.getUser(apiFactory.myAppUser,
                             function (response) {
+
                                 $rootScope.myAppUser = response;
                                 //console.log($rootScope.myAppUser);
 
-                                // registerDevice ---
-                                var registerDeviceRequest = {
-                                    "appid": "A014B-AC83E",
-                                    "projectid": "482590317251",
-                                    "onPush": function(push) {
-                                        console.log("RootBroadcast: newPush");
-                                        $rootScope.$broadcast('newPush', push);
-                                    },
-                                    "onResume": function() {
-                                        console.log("RootBroadcast: appResumed");
-                                        $rootScope.$broadcast('appResumed', true);
-                                    }
-                                };
-
                                 if (deviceFactory.isDevice) {
+
+                                    // registerDevice ---
+                                    var registerDeviceRequest = {
+                                        "appid": "A014B-AC83E",
+                                        "projectid": "482590317251",
+                                        "onPush": function(push) {
+                                            console.log("RootBroadcast: newPush");
+                                            $rootScope.$broadcast('newPush', push);
+                                        },
+                                        "onResume": function() {
+                                            console.log("RootBroadcast: appResumed");
+                                            $rootScope.$broadcast('appResumed', true);
+                                        }
+                                    };
+
                                     deviceFactory.registerDevice(registerDeviceRequest,
                                         function (status) {
+
                                             if (status) {
                                                 //alert("Device registered");
                                             } else {
                                                 //alert("Device not registered"); 
                                             }
+
                                             callback(response);
+
                                         });
+
+                                } else {
+                                    callback(response);
                                 }
-                                
 
                             },
                             function (e) {
@@ -216,6 +224,7 @@
                     alert("apiLogin-response: " + response);
                     //console.log($rootScope.currentInboxId);
                     setSigningIn(false);
+                    alert("InboxId: " + $rootScope.currentInboxId);
                     if ($rootScope.currentInboxId != undefined) {
                         $location.path('/conversations/' + $rootScope.currentInboxId);
                     } else {
