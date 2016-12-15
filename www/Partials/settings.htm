@@ -1,6 +1,8 @@
 ﻿<div ng-controller="SettingsController">
+    
     <div ng-show="successText!=null" class="alert alert-success">{{ successText }}</div>
     <div ng-show="errorText!=null" class="alert alert-danger">{{ errorText }}</div>
+
     <div class="scrollable content-container">
         <div class="scrollable-content overthrow">
 
@@ -14,7 +16,7 @@
                                 <i>Set the values for how many conversations and messages to load. A larger number might cause slow page loading. Default is 20 items.</i>
                             </div>
                             <div>
-                                <br/>
+                                <br />
                             </div>
 
                             <label>Number of conversations</label>
@@ -27,6 +29,9 @@
                         </div>
                     </form>
 
+                </div>
+                <div class="list-group-item">
+                    <pre>{{ storedData }}</pre>
                 </div>
             </div>
 

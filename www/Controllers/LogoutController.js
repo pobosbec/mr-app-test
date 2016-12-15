@@ -12,7 +12,7 @@
         function init() {
             console.log("LOGOUT");
             $rootScope.keepMeSignedIn = false;
-            $localStorage.savedCredentials.keepMeSignedIn = $rootScope.keepMeSignedIn;
+            $localStorage.settings.savedCredentials.keepMeSignedIn = $rootScope.keepMeSignedIn;
             $rootScope.authenticationToken = undefined;
 
             if (deviceFactory.isDevice()) {

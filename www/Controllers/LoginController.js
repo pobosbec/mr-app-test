@@ -1,28 +1,13 @@
 ﻿mrApp.controller('LoginController', [
     'ApiFactory', '$rootScope', '$scope', '$location', '$window', '$routeParams', '$localStorage', 'UsersFactory', 'DeviceFactory',
     function(apiFactory, $rootScope, $scope, $location, $window, $routeParams, $localStorage, usersFactory, deviceFactory) {
-
-
+        
         var command = $routeParams.param1;
 
         if (command === "logout") {
             logout();
         }
-
-        //deviceFactory.registerDevice(function (deviceToken) {
-
-        //    console.log("[LOGIN] DeviceReady: deviceToken=" + deviceToken);
-        //    if (deviceToken) {
-        //        $localStorage.deviceToken = deviceToken;
-        //        alert("[LOGIN] deviceToken: " + $localStorage.deviceToken);
-        //    }
-
-        //    $scope.credentials = $localStorage.savedCredentials;
-        //    if ($scope.credentials != null && $scope.credentials.keepMeSignedIn) {
-        //        login();
-        //    }
-        //});
-
+        
         $scope.saveCredentials = true;
         $scope.keepMeSignedIn = true;
         $scope.signingin = false;
@@ -34,7 +19,7 @@
 
         function init() {
             $scope.$emit('viewChanged', 'login');
-            $scope.credentials = $localStorage.savedCredentials;
+            $scope.credentials = $localStorage.settings.savedCredentials;
             if ($scope.credentials != null && $scope.credentials.keepMeSignedIn) {
                 login();
             }
@@ -60,7 +45,7 @@
 
         $scope.ClearCredentials = function () {
             //console.log("Cleared credentials");
-            $localStorage.savedCredentials = null;
+            $localStorage.settings.savedCredentials = null;
             $scope.credentials = null;
         };
 
@@ -142,7 +127,7 @@
                     if (response != null) {
 
                         if ($scope.saveCredentials) {
-                            $localStorage.savedCredentials = {
+                            $localStorage.settings.savedCredentials = {
                                 'userName': userName,
                                 'password': password,
                                 'keepMeSignedIn': $scope.keepMeSignedIn
@@ -181,7 +166,6 @@
                                             callback(response);
                                         });
                                 }
-                                
 
                             },
                             function (e) {

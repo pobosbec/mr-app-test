@@ -6,6 +6,8 @@
         $scope.successText = null;
         $scope.errorText = null;
 
+        $scope.storedData = null;
+
         function showAlert(text, type, duration) {
             if (type === 'success') {
                 $scope.successText = text;
@@ -34,6 +36,7 @@
         function init() {
             $scope.numberOfConversations = settingsFactory.getNumberOfConversations();
             $scope.numberOfMessages = settingsFactory.getNumberOfMessages();
+            $scope.storedData = settingsFactory.getSettings();
         }
         
         init();
