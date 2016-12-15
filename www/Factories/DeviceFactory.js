@@ -114,12 +114,12 @@
                     apiFactory.functions.call('users/update-device',
                         registerDeviceRequest,
                         function(response) {
-                            //alert("Device registered in Mobile Response");
+                            alert("Device registered in Mobile Response");
                             console.log(response);
                             callback(true);
                         },
                         function(status) {
-                            //alert("Device registered failed in Mobile Response");
+                            alert("Device registered failed in Mobile Response");
                             console.log(error);
                             error(status);
                         });
@@ -135,7 +135,7 @@
                             document.addEventListener("resume", settings.onResume, false);
 
                             var afterRegisterSuccess = function(token) {
-                                console.log(token);
+                                //console.log(token);
                                 //alert("Register success: " + token);
                                 registerDeviceInMobileResponse(token,
                                     function() {
@@ -157,7 +157,7 @@
                             }
 
                             if (isIOS()) {
-                                //alert("iOS");
+                                alert("iOS");
                                 registerPushwooshIOS(settings, afterRegisterSuccess, afterRegisterFail);
                             }
 
