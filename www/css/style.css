@@ -216,12 +216,6 @@
     resize: both;
     height: 40px;
 }
-.profile-avatar {
-    border-radius: 75px;
-    border: 1px solid #ccc;
-    resize: both;
-    height: 150px;
-}
 .navbar-active-item i {
     border: 1px solid silver;
     color: white;
