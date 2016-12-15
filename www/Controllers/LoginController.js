@@ -1,13 +1,28 @@
 ﻿mrApp.controller('LoginController', [
     'ApiFactory', '$rootScope', '$scope', '$location', '$window', '$routeParams', '$localStorage', 'UsersFactory', 'DeviceFactory',
     function(apiFactory, $rootScope, $scope, $location, $window, $routeParams, $localStorage, usersFactory, deviceFactory) {
-        
+
+
         var command = $routeParams.param1;
 
         if (command === "logout") {
             logout();
         }
-        
+
+        //deviceFactory.registerDevice(function (deviceToken) {
+
+        //    console.log("[LOGIN] DeviceReady: deviceToken=" + deviceToken);
+        //    if (deviceToken) {
+        //        $localStorage.deviceToken = deviceToken;
+        //        alert("[LOGIN] deviceToken: " + $localStorage.deviceToken);
+        //    }
+
+        //    $scope.credentials = $localStorage.savedCredentials;
+        //    if ($scope.credentials != null && $scope.credentials.keepMeSignedIn) {
+        //        login();
+        //    }
+        //});
+
         $scope.saveCredentials = true;
         $scope.keepMeSignedIn = true;
         $scope.signingin = false;
@@ -166,6 +181,7 @@
                                             callback(response);
                                         });
                                 }
+                                
 
                             },
                             function (e) {
@@ -200,7 +216,6 @@
                     //console.log($rootScope.currentInboxId);
                     setSigningIn(false);
                     if ($rootScope.currentInboxId != undefined) {
-                        //alert("Login complete");
                         $location.path('/conversations/' + $rootScope.currentInboxId);
                     } else {
                         $location.path('/main');

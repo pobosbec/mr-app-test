@@ -15,8 +15,6 @@
         function listConversations(token, inboxId) {
             conversationsFactory.listConversations(token,
                 inboxId,
-                1,
-                20,//settingsFactory.getNumberOfConversations(),
                 function(conversations) {
                     $scope.conversations = conversations;
                     $scope.$emit('showAlertNewMessage', false);

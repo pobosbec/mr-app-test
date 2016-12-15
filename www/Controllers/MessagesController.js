@@ -17,29 +17,18 @@
 
 mrApp.controller('FormModalController',
 [
-    '$scope','$timeout', 'SharedState',
-    function($scope,$timeout, SharedState) {
+    '$scope', 'SharedState',
+    function($scope, SharedState) {
 
         $scope.activeFormUrl = "Partials/loading.htm";
 
-        function loadIframe() {
-            console.log("iFrameLoaded: " + SharedState.get('formModalUrl'));
-            if (SharedState.get('formModalUrl')) {
-                $scope.activeFormUrl = SharedState.get('formModalUrl');
-            }
-        }
-
         $scope.iframeLoadedCallBack = function() {
-            //loadIframe();
+            console.log("iFrameLoaded");
+            $scope.activeFormUrl = SharedState.get('formModalUrl');
         }
 
         function init() {
-            console.log("Init: " + SharedState.get('formModalUrl'));
-            //loadIframe();
-            $timeout(function() {
-                    loadIframe();
-                },
-                1000);
+            console.log(SharedState.get('formModalUrl'));
         }
 
         init();
@@ -60,19 +49,19 @@ mrApp.controller('MessagesController', [
 
         $scope.openFormModal = function (formId) {
             var formUrl = 'http://m.mobileresponse.se/form/' + formId;
-            //console.log(formUrl);
+            console.log(formUrl);
             SharedState.set('formModalUrl', formUrl);
             SharedState.turnOn('formModal');
         };
 
         function showAlert(text, type, duration) {
-            if (type === 'success') {
+            if (type == 'success') {
                 $scope.successText = text;
                 $timeout(function () {
                     $scope.successText = null;
                 }, duration);
             }
-            if (type === 'error') {
+            if (type == 'error') {
                 $scope.errorText = text;
                 $timeout(function () {
                     $scope.errorText = null;
@@ -112,7 +101,10 @@ mrApp.controller('MessagesController', [
             }
             return messages;
         }
-        
+
+       
+
+
         function listMessages(token, conversationId) {
 
             var listMessagesRequest = {
@@ -121,10 +113,9 @@ mrApp.controller('MessagesController', [
                     'conversationId': conversationId,
                     'sortAscending': false,
                     'pageIndex': 1,
-                    'pageSize': 20//settingsFactory.getNumberOfMessages()
+                    'pageSize': 20
                 }
             };
-            //console.log(listMessagesRequest);
             apiFactory.functions.call('conversations/list-messages', listMessagesRequest, function (response) {
 
                 for (var i = 0; i < response.data.items.length; i++) {
@@ -162,7 +153,7 @@ mrApp.controller('MessagesController', [
                     var scrollableContentController = elem.controller('scrollableContent');
                     scrollableContentController.scrollTo(angular.element(document.getElementById('last-message')));
                 },
-                400);
+                200);
         }
         
         $scope.sendMessage = function (message) {
