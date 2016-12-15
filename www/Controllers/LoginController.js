@@ -200,7 +200,7 @@
                     //console.log($rootScope.currentInboxId);
                     setSigningIn(false);
                     if ($rootScope.currentInboxId != undefined) {
-                        alert("Login complete");
+                        //alert("Login complete");
                         $location.path('/conversations/' + $rootScope.currentInboxId);
                     } else {
                         $location.path('/main');

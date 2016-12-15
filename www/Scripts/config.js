@@ -55,11 +55,11 @@ mrApp.config(function ($routeProvider) {
         resolve: checkToken
     });
 
-    $routeProvider.when('/settings',
-    {
-        templateUrl: 'Partials/settings.htm',
-        resolve: checkToken
-    });
+    //$routeProvider.when('/settings',
+    //{
+    //    templateUrl: 'Partials/settings.htm',
+    //    resolve: checkToken
+    //});
 
     $routeProvider.when('/login/:param1',
     {

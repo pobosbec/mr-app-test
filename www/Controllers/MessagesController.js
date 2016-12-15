@@ -124,7 +124,7 @@ mrApp.controller('MessagesController', [
                     'pageSize': 20//settingsFactory.getNumberOfMessages()
                 }
             };
-            console.log(listMessagesRequest);
+            //console.log(listMessagesRequest);
             apiFactory.functions.call('conversations/list-messages', listMessagesRequest, function (response) {
 
                 for (var i = 0; i < response.data.items.length; i++) {
