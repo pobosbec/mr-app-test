@@ -221,15 +221,17 @@
                 $scope.credentials.userName,
                 $scope.credentials.password,
                 function (response) {
-                    alert("apiLogin-response: " + response);
+                    alert("Welcome " + response.displayName);
+                    //console.log(response);
                     //console.log($rootScope.currentInboxId);
                     setSigningIn(false);
-                    alert("InboxId: " + $rootScope.currentInboxId);
-                    if ($rootScope.currentInboxId != undefined) {
-                        $location.path('/conversations/' + $rootScope.currentInboxId);
-                    } else {
-                        $location.path('/main');
-                    }
+                    //alert("InboxId: " + $rootScope.currentInboxId);
+                    //if ($rootScope.currentInboxId != undefined) {
+                    //    $location.path('/conversations/' + $rootScope.currentInboxId);
+                    //} else {
+                    //    $location.path('/main');
+                    //}
+                    $location.path('/main');
                 },
                 function (error) {
                     alert("apiLogin-error: " + error);
