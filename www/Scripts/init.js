@@ -9,8 +9,7 @@ var mrApp = angular.module('mrApp', [
     'ngSanitize',
     'UsersFactory',
     'ConversationsFactory',
-    'DeviceFactory',
-    'SettingsFactory'
+    'DeviceFactory'//,'SettingsFactory'
 ]);
 
 mrApp.run(function () {

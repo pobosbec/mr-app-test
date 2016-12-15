@@ -1,6 +1,6 @@
 ﻿mrApp.controller('LoginController', [
-    'ApiFactory', '$rootScope', '$scope', '$location', '$window', '$routeParams', '$localStorage', 'UsersFactory', 'DeviceFactory','SettingsFactory',
-    function(apiFactory, $rootScope, $scope, $location, $window, $routeParams, $localStorage, usersFactory, deviceFactory,settingsFactory) {
+    'ApiFactory', '$rootScope', '$scope', '$location', '$window', '$routeParams', '$localStorage', 'UsersFactory', 'DeviceFactory',
+    function(apiFactory, $rootScope, $scope, $location, $window, $routeParams, $localStorage, usersFactory, deviceFactory) {
         
         var command = $routeParams.param1;
 
@@ -19,8 +19,7 @@
 
         function init() {
             $scope.$emit('viewChanged', 'login');
-            settingsFactory.initSettings();
-            $scope.credentials = $localStorage.settings.savedCredentials;
+            $scope.credentials = $localStorage.savedCredentials;
             if ($scope.credentials != null && $scope.credentials.keepMeSignedIn) {
                 login();
             }
@@ -46,7 +45,7 @@
 
         $scope.ClearCredentials = function () {
             //console.log("Cleared credentials");
-            $localStorage.settings.savedCredentials = null;
+            $localStorage.savedCredentials = null;
             $scope.credentials = null;
         };
 
@@ -128,7 +127,7 @@
                     if (response != null) {
 
                         if ($scope.saveCredentials) {
-                            $localStorage.settings.savedCredentials = {
+                            $localStorage.savedCredentials = {
                                 'userName': userName,
                                 'password': password,
                                 'keepMeSignedIn': $scope.keepMeSignedIn

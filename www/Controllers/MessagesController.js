@@ -48,8 +48,8 @@ mrApp.controller('FormModalController',
 ]);
 
 mrApp.controller('MessagesController', [
-    'ApiFactory', '$scope', '$location', '$routeParams', 'UsersFactory', 'ConversationsFactory', '$timeout', '$filter','SharedState','SettingsFactory',
-    function(apiFactory, $scope, $location, $routeParams, usersFactory, conversationsFactory, $timeout, $filter, SharedState, settingsFactory) {
+    'ApiFactory', '$scope', '$location', '$routeParams', 'UsersFactory', 'ConversationsFactory', '$timeout', '$filter','SharedState',
+    function(apiFactory, $scope, $location, $routeParams, usersFactory, conversationsFactory, $timeout, $filter, SharedState) {
 
         var conversationId = $routeParams.param1;
 
@@ -121,7 +121,7 @@ mrApp.controller('MessagesController', [
                     'conversationId': conversationId,
                     'sortAscending': false,
                     'pageIndex': 1,
-                    'pageSize': settingsFactory.getNumberOfMessages()
+                    'pageSize': 20//settingsFactory.getNumberOfMessages()
                 }
             };
             console.log(listMessagesRequest);

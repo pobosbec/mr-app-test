@@ -1,6 +1,6 @@
 ﻿mrApp.controller('ConversationsController',[
-    'ApiFactory', '$scope', '$rootScope', '$location', '$routeParams', 'UsersFactory', 'ConversationsFactory','SettingsFactory',
-    function(apiFactory, $scope, $rootscope, $location, $routeParams, usersFactory, conversationsFactory,settingsFactory) {
+    'ApiFactory', '$scope', '$rootScope', '$location', '$routeParams', 'UsersFactory', 'ConversationsFactory',
+    function(apiFactory, $scope, $rootscope, $location, $routeParams, usersFactory, conversationsFactory) {
 
         var inboxId = $routeParams.param1;
 
@@ -16,7 +16,7 @@
             conversationsFactory.listConversations(token,
                 inboxId,
                 1,
-                settingsFactory.getNumberOfConversations(),
+                20,//settingsFactory.getNumberOfConversations(),
                 function(conversations) {
                     $scope.conversations = conversations;
                     $scope.$emit('showAlertNewMessage', false);
