@@ -212,7 +212,8 @@
             apiLogin(apiFactory.apiSettings.instanceName,
                 $scope.credentials.userName,
                 $scope.credentials.password,
-                function(response) {
+                function (response) {
+                    alert("apiLogin-response: " + response);
                     //console.log($rootScope.currentInboxId);
                     setSigningIn(false);
                     if ($rootScope.currentInboxId != undefined) {
@@ -221,7 +222,8 @@
                         $location.path('/main');
                     }
                 },
-                function(error) {
+                function (error) {
+                    alert("apiLogin-error: " + error);
                     setSigningIn(false);
                     $location.path('/login');
                 });
