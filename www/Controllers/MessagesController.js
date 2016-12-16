@@ -17,18 +17,29 @@
 
 mrApp.controller('FormModalController',
 [
-    '$scope', 'SharedState',
-    function($scope, SharedState) {
+    '$scope','$timeout', 'SharedState',
+    function($scope,$timeout, SharedState) {
 
         $scope.activeFormUrl = "Partials/loading.htm";
 
+        function loadIframe() {
+            console.log("iFrameLoaded: " + SharedState.get('formModalUrl'));
+            if (SharedState.get('formModalUrl')) {
+                $scope.activeFormUrl = SharedState.get('formModalUrl');
+            }
+        }
+
         $scope.iframeLoadedCallBack = function() {
-            console.log("iFrameLoaded");
-            $scope.activeFormUrl = SharedState.get('formModalUrl');
+            //loadIframe();
         }
 
         function init() {
-            console.log(SharedState.get('formModalUrl'));
+            console.log("Init: " + SharedState.get('formModalUrl'));
+            //loadIframe();
+            $timeout(function() {
+                    loadIframe();
+                },
+                1000);
         }
 
         init();
@@ -37,8 +48,8 @@ mrApp.controller('FormModalController',
 ]);
 
 mrApp.controller('MessagesController', [
-    'ApiFactory', '$scope', '$location', '$routeParams', 'UsersFactory', 'ConversationsFactory', '$timeout', '$filter','SharedState',
-    function(apiFactory, $scope, $location, $routeParams, usersFactory, conversationsFactory, $timeout, $filter, SharedState) {
+    'ApiFactory', '$scope', '$location', '$routeParams', 'UsersFactory', 'ConversationsFactory', '$timeout', '$filter','SharedState','SettingsFactory',
+    function(apiFactory, $scope, $location, $routeParams, usersFactory, conversationsFactory, $timeout, $filter, SharedState, settingsFactory) {
 
         var conversationId = $routeParams.param1;
 
@@ -49,19 +60,19 @@ mrApp.controller('MessagesController', [
 
         $scope.openFormModal = function (formId) {
             var formUrl = 'http://m.mobileresponse.se/form/' + formId;
-            console.log(formUrl);
+            //console.log(formUrl);
             SharedState.set('formModalUrl', formUrl);
             SharedState.turnOn('formModal');
         };
 
         function showAlert(text, type, duration) {
-            if (type == 'success') {
+            if (type === 'success') {
                 $scope.successText = text;
                 $timeout(function () {
                     $scope.successText = null;
                 }, duration);
             }
-            if (type == 'error') {
+            if (type === 'error') {
                 $scope.errorText = text;
                 $timeout(function () {
                     $scope.errorText = null;
@@ -101,10 +112,7 @@ mrApp.controller('MessagesController', [
             }
             return messages;
         }
-
-       
-
-
+        
         function listMessages(token, conversationId) {
 
             var listMessagesRequest = {
@@ -113,9 +121,10 @@ mrApp.controller('MessagesController', [
                     'conversationId': conversationId,
                     'sortAscending': false,
                     'pageIndex': 1,
-                    'pageSize': 20
+                    'pageSize': settingsFactory.getNumberOfMessages()
                 }
             };
+            console.log(listMessagesRequest);
             apiFactory.functions.call('conversations/list-messages', listMessagesRequest, function (response) {
 
                 for (var i = 0; i < response.data.items.length; i++) {
@@ -153,7 +162,7 @@ mrApp.controller('MessagesController', [
                     var scrollableContentController = elem.controller('scrollableContent');
                     scrollableContentController.scrollTo(angular.element(document.getElementById('last-message')));
                 },
-                200);
+                400);
         }
         
         $scope.sendMessage = function (message) {

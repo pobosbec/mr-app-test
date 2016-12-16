@@ -67,8 +67,6 @@
 
                 pushNotification.onDeviceReady({ pw_appid: settings.appid });
 
-                alert("[iOS] Pushwoosh reg" + pushNotification);
-
                 pushNotification.registerDevice(
                     function(token) {
                         callback(token.pushToken);
@@ -138,7 +136,7 @@
 
                             var afterRegisterSuccess = function(token) {
                                 console.log(token);
-                                alert("Register success: " + token);
+                                //alert("Register success: " + token);
                                 registerDeviceInMobileResponse(token,
                                     function() {
                                         callback(true);
@@ -148,8 +146,8 @@
                                     });
                             };
 
-                            var afterRegisterFail = function(status) {
-                                alert("Register failed" + JSON.stringify(status));
+                            var afterRegisterFail = function() {
+                                //alert("Register failed");
                                 callback(false);
                             };
 
@@ -159,7 +157,7 @@
                             }
 
                             if (isIOS()) {
-                                alert("iOS");
+                                //alert("iOS");
                                 registerPushwooshIOS(settings, afterRegisterSuccess, afterRegisterFail);
                             }
 

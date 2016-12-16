@@ -97,12 +97,11 @@
                 SharedState.turnOn('mainSidebar');
             }
         };
-
+        
         function onViewLoaded() {
-
-            alert("Main: onViewLoaded");
+            
             $scope.deviceType = deviceFactory.getDeviceTypeId();
-
+            
             //var token = $rootScope.authenticationToken;
             var token = apiFactory.authenticationToken();
 
@@ -111,11 +110,11 @@
                 if ($scope.inboxes == undefined) {
 
                     listInboxes(token,
-                        function(response) {
+                        function (response) {
 
                             getInbox(token,
                                 $scope.inboxes[0].inboxId,
-                                function(response) {
+                                function (response) {
                                     if ($scope.inboxes[0].inboxId != undefined) {
                                         $location.path('/conversations/' + $scope.inboxes[0].inboxId);
                                     }
