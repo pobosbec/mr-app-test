@@ -1,6 +1,6 @@
 ﻿mrApp.controller('LoginController', [
-    'ApiFactory', '$rootScope', '$scope', '$location', '$window', '$routeParams', '$localStorage', 'UsersFactory', 'DeviceFactory',
-    function(apiFactory, $rootScope, $scope, $location, $window, $routeParams, $localStorage, usersFactory, deviceFactory) {
+    'ApiFactory', '$rootScope', '$scope', '$location', '$window', '$routeParams', '$localStorage', 'UsersFactory', 'DeviceFactory','SettingsFactory',
+    function(apiFactory, $rootScope, $scope, $location, $window, $routeParams, $localStorage, usersFactory, deviceFactory, settingsFactory) {
 
 
         var command = $routeParams.param1;
@@ -8,21 +8,7 @@
         if (command === "logout") {
             logout();
         }
-
-        //deviceFactory.registerDevice(function (deviceToken) {
-
-        //    console.log("[LOGIN] DeviceReady: deviceToken=" + deviceToken);
-        //    if (deviceToken) {
-        //        $localStorage.deviceToken = deviceToken;
-        //        alert("[LOGIN] deviceToken: " + $localStorage.deviceToken);
-        //    }
-
-        //    $scope.credentials = $localStorage.savedCredentials;
-        //    if ($scope.credentials != null && $scope.credentials.keepMeSignedIn) {
-        //        login();
-        //    }
-        //});
-
+        
         $scope.saveCredentials = true;
         $scope.keepMeSignedIn = true;
         $scope.signingin = false;
@@ -34,6 +20,7 @@
 
         function init() {
             $scope.$emit('viewChanged', 'login');
+            settingsFactory.initSettings();
             $scope.credentials = $localStorage.savedCredentials;
             if ($scope.credentials != null && $scope.credentials.keepMeSignedIn) {
                 login();

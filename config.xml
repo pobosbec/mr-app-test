@@ -5,10 +5,9 @@
         xmlns:gap = "http://phonegap.com/ns/1.0"
         xmlns:android = "http://schemas.android.com/apk/res/android"
         id        = "com.bosbec.testapp"
-        version   = "0.3.0">
+        version   = "0.3.1">
   <!-- VERSION HERE -->
-  <!--id        = "com.phonegap.hello-world"-->
-
+  
   <name>Mobile Response App</name>
 
   <description>

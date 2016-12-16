@@ -68,7 +68,8 @@
                 pushNotification.onDeviceReady({ pw_appid: settings.appid });
 
                 pushNotification.registerDevice(
-                    function(token) {
+                    function (token) {
+                        pushNotification.setApplicationIconBadgeNumber(0);
                         callback(token.pushToken);
                     },
                     function(status) {
@@ -76,7 +77,7 @@
                     }
                 );
                 
-                pushNotification.setApplicationIconBadgeNumber(0);
+                //pushNotification.setApplicationIconBadgeNumber(0);
 
             }
 
@@ -91,8 +92,6 @@
                 );
 
             }
-
-            
 
             function registerDeviceInMobileResponse(deviceToken, callback, error) {
                 //alert("Register device in Mobile Response");
