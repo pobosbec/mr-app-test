@@ -22,7 +22,6 @@
             settingsFactory.initSettings();
             $scope.credentials = $localStorage.savedCredentials;
 
-            console.log($localStorage.showIntro);
             if ($localStorage.showIntro === undefined || $localStorage.showIntro) {
                 // show intro...
                 SharedState.initialize($scope, 'introModal', '');
@@ -208,8 +207,12 @@
                 $scope.credentials.userName,
                 $scope.credentials.password,
                 function(response) {
-                    //console.log($rootScope.currentInboxId);
                     setSigningIn(false);
+
+                    if (response.email == null && response.phoneNumber == null) {
+                        $location.path('/profile/' + response.id);
+                    }
+
                     if ($rootScope.currentInboxId != undefined) {
                         $location.path('/conversations/' + $rootScope.currentInboxId);
                     } else {

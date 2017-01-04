@@ -33,7 +33,7 @@
         function getAppUserDetails(appUserId) {
             usersFactory.getUser(appUserId, function (appUser) {
                 $scope.myAppUser = appUser;
-                //console.log($scope.myAppUser);
+                console.log($scope.myAppUser);
                 $scope.profile = {
                     'firstName': appUser.firstname,
                     'lastName': appUser.lastname,
@@ -41,6 +41,10 @@
                     'phone': appUser.phoneNumber,
                     'avatar': appUser.avatar
                 };
+
+                if (appUser.email == null && appUser.phoneNumber == null) {
+                    showAlert("Please update your profile with phone and/or email", "error", 20000);
+                }
                 //console.log($scope.myAppUser);
             }, function (error) {
                 showAlert("Unable to get user details", "error", 5000);
