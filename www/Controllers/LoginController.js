@@ -1,8 +1,7 @@
 ﻿mrApp.controller('LoginController', [
-    'ApiFactory', '$rootScope', '$scope', '$location', '$window', '$routeParams', '$localStorage', 'UsersFactory', 'DeviceFactory','SettingsFactory',
-    function(apiFactory, $rootScope, $scope, $location, $window, $routeParams, $localStorage, usersFactory, deviceFactory, settingsFactory) {
-
-
+    'ApiFactory', '$rootScope', '$scope', '$location', '$window', '$routeParams', '$localStorage', 'UsersFactory', 'DeviceFactory', 'SettingsFactory', 'SharedState',
+    function (apiFactory, $rootScope, $scope, $location, $window, $routeParams, $localStorage, usersFactory, deviceFactory, settingsFactory, SharedState) {
+        
         var command = $routeParams.param1;
 
         if (command === "logout") {
@@ -22,9 +21,18 @@
             $scope.$emit('viewChanged', 'login');
             settingsFactory.initSettings();
             $scope.credentials = $localStorage.savedCredentials;
-            if ($scope.credentials != null && $scope.credentials.keepMeSignedIn) {
-                login();
+
+            console.log($localStorage.showIntro);
+            if ($localStorage.showIntro === undefined || $localStorage.showIntro) {
+                // show intro...
+                SharedState.initialize($scope, 'introModal', '');
+                SharedState.turnOn('introModal');
+            } else {
+                if ($scope.credentials != null && $scope.credentials.keepMeSignedIn) {
+                    login();
+                }
             }
+
         }
 
         $scope.signin = {

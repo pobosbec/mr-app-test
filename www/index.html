@@ -27,6 +27,7 @@
 <body ng-controller="MainController" ng-class="{'ios-body': deviceType == 1}">
 
 <div ui-yield-to="modals"></div>
+    <div ui-yield-to="overlays"></div>
 
 <!-- Sidebars -->
 <div class="sidebar sidebar-left" toggleable parent-active-class="sidebar-left-in" id="mainSidebar">
@@ -132,11 +133,12 @@
 <script src="Controllers/MainController.js" type="text/javascript"></script>
 <script src="Controllers/LoginController.js" type="text/javascript"></script>
 <script src="Controllers/LogoutController.js" type="text/javascript"></script>
+<script src="Controllers/IntroController.js" type="text/javascript"></script>
 <script src="Controllers/ConversationsController.js" type="text/javascript"></script>
 <script src="Controllers/MessagesController.js" type="text/javascript"></script>
 <script src="Controllers/ProfileController.js" type="text/javascript"></script>
 <script src="Controllers/NewConversationController.js" type="text/javascript"></script>
-<script src="Controllers/SettingsController.js"></script>
+<script src="Controllers/SettingsController.js" type="text/javascript"></script>
 
 
 <script src="cordova.js" type="text/javascript"></script>

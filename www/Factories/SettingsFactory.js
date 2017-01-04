@@ -53,6 +53,11 @@
                 }
             }
 
+            function setShowIntro(state) {
+                $localStorage.showIntro = state;
+                console.log("ShowIntro: " + $localStorage.showIntro);
+            }
+
             function init() {
                 initSettings();
             }
@@ -65,7 +70,8 @@
                 getNumberOfConversations: getNumberOfConversations,
                 getNumberOfMessages: getNumberOfMessages,
                 setNumberOfConversations: setNumberOfConversations,
-                setNumberOfMessages: setNumberOfMessages
+                setNumberOfMessages: setNumberOfMessages,
+                setShowIntro: setShowIntro
             };
         }
     ]);

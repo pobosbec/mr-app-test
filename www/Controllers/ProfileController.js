@@ -1,6 +1,6 @@
 ﻿mrApp.controller('ProfileController', [
-    'ApiFactory', '$rootScope', '$scope', '$location', '$routeParams', '$timeout', 'UsersFactory',
-    function(apiFactory, $rootScope, $scope, $location, $routeParams, $timeout, usersFactory) {
+    'ApiFactory', '$rootScope', '$scope', '$location', '$routeParams', '$timeout', 'UsersFactory','SharedState',
+    function(apiFactory, $rootScope, $scope, $location, $routeParams, $timeout, usersFactory, SharedState) {
 
         var appUserId = $routeParams.param1;
 

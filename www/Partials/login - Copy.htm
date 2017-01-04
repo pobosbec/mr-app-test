@@ -1,0 +1,74 @@
+﻿<div ng-controller="LoginController" class="login">
+    
+    <div class="container">
+        
+        <div>
+            <form class="form-signin" ng-disabled="signingin" name="signinForm" role="form">
+                <div>
+                    <a ng-show="!signin.show" href="" ng-click="ShowSignin()">Back to sign in</a>
+                </div>
+                <div ng-show="signin.show">
+                    <h2 class="form-signin-heading">Please sign in</h2>
+                    <div ng-if="signin.error.show" class="error-label">{{ signin.error.message }}</div>
+                    <input type="text" ng-disabled="signingin" ng-model="credentials.userName" class="form-control" placeholder="UserName" required autofocus>
+                    <input type="password" ng-disabled="signingin" ng-model="credentials.password" class="form-control" placeholder="Password" required>
+                    <label class="checkbox">
+                        <input type="checkbox" ng-disabled="signingin" ng-model="saveCredentials" value="saveCredentials"> Remember me
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" ng-disabled="signingin" ng-model="keepMeSignedIn" value="keepMeSignedIn"> Keep me signed in
+                    </label>
+                    <button class="btn btn-lg btn-primary btn-block" ng-disabled="signingin" ng-click="Login()" type="submit"><span ng-show="!signingin">Sign in </span><i class="fa fa-circle-o-notch fa-spin fa-1x fa-fw" ng-show="signingin"></i></button>
+                    <a ng-show="credentials!=null" href="" ng-click="ClearCredentials()">Clear credentials</a>
+                </div>
+            </form>
+        </div>
+
+        <hr/>
+        
+        <div>
+            <form class="form-signin" name="registrationForm" role="form">
+                <div>
+                    <a ng-show="!registration.show" href="" ng-click="ShowRegistration()">Register new user</a>
+                </div>
+                <div ng-show="registration.show">
+                    <h3>Register new user</h3>
+                    <div ng-if="registration.error.show" class="error-label">{{ registration.error.message }}</div>
+                    <input type="text" ng-model="register.userName" class="form-control" placeholder="UserName (*)" required>
+                    <input type="password" ng-model="register.password" class="form-control" placeholder="Password (*)" required>
+                    <input type="password" ng-model="register.password2" class="form-control" placeholder="Password again (*)" required>
+                    <br/>
+                    <button class="btn btn-lg btn-primary btn-block" ng-click="Register()" type="submit">Register</button>
+                    <a ng-show="!registrationForm.$invalid" href="" ng-click="ClearRegistration()">Clear registration</a>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <div ui-content-for="overlays">
+        <!--<div ng-include="'Partials/overlay.htm'"></div>-->
+        <div class="modal modal-overlay" ui-if='introModal' ui-shared-state='introModal'>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button class="close"
+                                ui-turn-off="introModal">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">Modal title</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Lorem ipsum ...</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button ui-turn-off="modal2" class="btn btn-default">Close</button>
+                        <button ui-turn-off="modal2" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+

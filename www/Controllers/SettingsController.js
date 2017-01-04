@@ -24,10 +24,12 @@
 
         $scope.numberOfConversations = 10;
         $scope.numberOfMessages = 10;
+        $scope.showIntro = false;
 
         $scope.SaveSettings = function () {
             settingsFactory.setNumberOfConversations($scope.numberOfConversations);
             settingsFactory.setNumberOfMessages($scope.numberOfMessages);
+            settingsFactory.setShowIntro($scope.showIntro);
             showAlert('Settings saved', 'success', 5000);
         };
 
