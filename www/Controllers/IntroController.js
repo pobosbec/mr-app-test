@@ -16,7 +16,7 @@
             {
                 'heading': 'Welcome',
                 'ingress': 'Welcome to the Mobile Response Messaging App',
-                'text':'This app requires a Mobile Response account',
+                'text': 'This app requires a Mobile Response account',
                 'image': './images/mr-logo-vertical.png'
             },
             {
@@ -26,7 +26,25 @@
                 'image': './images/intro/Screenshot_Login.png'
             },
             {
+                'heading': 'Sign-Up',
+                'ingress': 'Morbi euismod feugiat lacus quis finibus. ',
+                'text': 'Nunc ante eros, euismod in tellus eu, tincidunt fermentum erat.',
+                'image': './images/intro/Screenshot_Conversations.png'
+            },
+            {
                 'heading': 'Conversations',
+                'ingress': 'Morbi euismod feugiat lacus quis finibus. ',
+                'text': 'Nunc ante eros, euismod in tellus eu, tincidunt fermentum erat.',
+                'image': './images/intro/Screenshot_Conversations.png'
+            },
+            {
+                'heading': 'Profile',
+                'ingress': 'Morbi euismod feugiat lacus quis finibus. ',
+                'text': 'Nunc ante eros, euismod in tellus eu, tincidunt fermentum erat.',
+                'image': './images/intro/Screenshot_Conversations.png'
+            },
+            {
+                'heading': 'Settings',
                 'ingress': 'Morbi euismod feugiat lacus quis finibus. ',
                 'text': 'Nunc ante eros, euismod in tellus eu, tincidunt fermentum erat.',
                 'image': './images/intro/Screenshot_Conversations.png'

@@ -2,12 +2,12 @@
     <div class="modal-dialog">
         <div class="modal-content">
 
-            
-
             <div class="modal-body text-center">
-                <div ng-show="currentPage<numberOfPages" ng-click="closeIntro();" class="pull-right intro-close"><i class="fa fa-times"></i></div>
+                
+                <div ng-show="currentPage<numberOfPages" ng-click="closeIntro();" class="pull-right intro-close text-primary"><i class="fa fa-times"></i></div>
+                
                 <div class="intro-content">
-                    <div ng-show="currentPage==1">
+                    <div ng-show="currentPage == 1">
                         <img class="intro-image" src="{{content.image}}"/>
                         <p class="intro-heading">{{content.ingress}}</p>
                         <p>{{content.text}}</p>
@@ -15,12 +15,10 @@
                             For more information visit<br/><a href="http://mobileresponse.com">http://mobileresponse.com</a>
                         </p>
                     </div>
-                    <div ng-show="currentPage>1 && currentPage<numberOfPages">
+                    <div ng-show="currentPage > 1 && currentPage < numberOfPages">
                         <img class="intro-screenshot" ng-show="content.image!=''" src="{{content.image}}"/>
                         <p class="intro-heading">{{content.heading}}</p>
-                        <p class="intro-ingress">
-                            {{content.ingress}}
-                        </p>
+                        <p class="intro-ingress">{{content.ingress}}</p>
                     </div>
                     <div ng-show="currentPage==numberOfPages">
                         <img class="intro-image" src="{{content.image}}"/>
@@ -31,8 +29,11 @@
                 </div>
 
                 <div class="intro-footer">
-                    <div class="pull-left" ng-show="currentPage>1">
+                    <div class="pull-left" ng-show="currentPage > 1">
                         <button class="btn btn-primary intro-btn" ng-click="gotoPage(currentPage-1);">Previous</button><br/>
+                    </div>
+                    <div class="intro-dots">
+                        <i ng-repeat="dot in introContent track by $index" ng-class="{'fa-circle': $index+1 == currentPage,'fa-circle-thin': $index+1 != currentPage}" class="fa text-primary"></i>
                     </div>
                     <div class="pull-right" ng-show="currentPage<numberOfPages">
                         <button class="btn btn-primary intro-btn" ng-click="gotoPage(currentPage+1);">Next</button><br/>
