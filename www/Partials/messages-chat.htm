@@ -11,29 +11,22 @@
                      id="{{'msg'+ ($index + 1)}}"
                      class="list-group-item message-chat"
                      ng-class="{ 'message-chat-me': message.author === 'me', 'message-chat-other': message.author === 'other', 'last-message': $index >= messages.length-1}" ng-class="(!message.isRead) ? 'new-item' : ''">
-
-                    <div class="list-item-attachment">
-                        <div ng-repeat="metadata in message.metaData">
-                            <a href="{{metadata.url}}" target="_blank" ng-show="metadata._type == 'image'">
-                                <img height="50" alt="avatar" src="{{ metadata.thumbnail }}"/>
-                            </a>
-                            <a href="https://www.google.com/maps/preview/@{{metadata.value}}" target="_blank" ng-show="metadata._type == 'position'">
-                                <img height="50" alt="avatar" src="https://lh3.googleusercontent.com/MOf9Kxxkj7GvyZlTZOnUzuYv0JAweEhlxJX6gslQvbvlhLK5_bSTK6duxY2xfbBsj43H=w50"/>
-                            </a>
-                            <div ng-show="metadata._type == 'form'">
-                                <a href="" ng-click="openFormModal(message.formId)">
-                                    <span><i class="fa fa-clipboard"></i></span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+                    
                     <div ng-if="conversation.avatars" class="list-item-avatar">
                         <img class="avatar" ng-if="conversation.avatars" ng-repeat="avatar in conversation.avatars" ng-show="avatar.avatar != null && avatar.userId == message.authorId" height="50" alt="avatar" src="{{ avatar.avatar }}"/>
-                        
                     </div>
                     <div>
                         <b>{{ message.authorDisplayName }}</b><br/>
                         <div ng-bind-html="message.content"></div>
+                        <div ng-repeat="metadata in message.metaData" class="attachment">
+                            <a ng-show="metadata._type == 'image'" href="{{metadata.url}}" target="_blank">
+                                <img height="50" alt="thumb" src="{{ metadata.thumbnail }}"/>
+                            </a>
+                            <a ng-show="metadata._type == 'position'" href="https://www.google.com/maps/preview/@{{metadata.value}}" target="_blank">
+                                <img height="50" alt="map" src="https://lh3.googleusercontent.com/MOf9Kxxkj7GvyZlTZOnUzuYv0JAweEhlxJX6gslQvbvlhLK5_bSTK6duxY2xfbBsj43H=w50" />
+                            </a>
+                            <div ng-show="metadata._type == 'form'" ng-click="openFormModal(message.formId)"><span><i class="fa fa-clipboard"></i>View form</span></div>
+                        </div>
                         <span class="smallDateTime">{{ message.createdOn }}</span>
                     </div>
                 </div>
