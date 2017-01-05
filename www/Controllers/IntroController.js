@@ -11,6 +11,8 @@
 
         var initState = $routeParams.param1;
 
+        $scope.initState = initState;
+
         $scope.currentPage = 1;
         $scope.content = null;
         $scope.numberOfPages = 1;
@@ -71,15 +73,22 @@
             $scope.numberOfPages = $scope.introContent.length;
             
             if (initState !== 'manual') {
-                
                 if ($localStorage.showIntro === undefined) {
                     $localStorage.showIntro = true;
                     $localStorage.introCurrentPage = $scope.currentPage;
                 }
-            }
 
-            SharedState.turnOn('introModal');
-            gotoPage($scope.currentPage);
+                if ($localStorage.showIntro) {
+                    SharedState.turnOn('introModal');
+                    gotoPage($scope.currentPage);
+                } else {
+                    SharedState.turnOff('introModal');
+                }
+
+            } else {
+                SharedState.turnOn('introModal');
+                gotoPage($scope.currentPage);
+            } 
 
         }
 
@@ -95,6 +104,7 @@
             if (initState !== 'manual') {
                 $localStorage.showIntro = false;
             }
+            SharedState.turnOff('introModal');
             $location.path('/login/');
         }
 
