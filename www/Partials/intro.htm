@@ -3,7 +3,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
 
-                <div class="modal-body text-center">
+                <div class="modal-body text-center" ui-swipe-right='gotoPage(currentPage-1);' ui-swipe-left='gotoPage(currentPage+1);'>
 
                     <div ng-show="currentPage<numberOfPages" ng-click="closeIntro();" class="pull-right intro-close text-primary"><i class="fa fa-times"></i></div>
 

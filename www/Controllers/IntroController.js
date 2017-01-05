@@ -93,11 +93,13 @@
         }
 
         function gotoPage(pageIndex) {
-            $localStorage.introCurrentPage = $scope.currentPage;
-            if (pageIndex <= $scope.numberOfPages) {
-                $scope.currentPage = pageIndex;
-                $scope.content = $scope.introContent[pageIndex - 1];
-            } 
+            if (pageIndex > 0) {
+                $localStorage.introCurrentPage = $scope.currentPage;
+                if (pageIndex <= $scope.numberOfPages) {
+                    $scope.currentPage = pageIndex;
+                    $scope.content = $scope.introContent[pageIndex - 1];
+                }
+            }
         }
 
         function closeIntro() {
