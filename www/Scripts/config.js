@@ -39,7 +39,7 @@ mrApp.config(function ($routeProvider) {
 
     $routeProvider.when('/newconversation',
     {
-        templateUrl: 'Partials/newConversation.htm',
+        templateUrl: 'Partials/new-conversation.htm',
         resolve: checkToken
     });
 

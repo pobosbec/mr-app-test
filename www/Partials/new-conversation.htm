@@ -17,8 +17,8 @@
                     <form name="findUserForm" role="form" class="form-group form-new-conversation">
                         <h2>Add recipient</h2>
                         <label>Find by username, email or phone</label>
-                        <input type="text" ng-model="searchText" class="form-control" placeholder="Search for user">
-                        <button class="btn btn-lg btn-primary btn-block" ng-click="FindUser(searchText,inboxId)" type="submit">Find user</button>
+                        <input type="text" ng-model="searchText" class="form-control" ng-minlength="3" placeholder="Search for user" required>
+                        <button class="btn btn-lg btn-primary btn-block" ng-click="FindUser(searchText,inboxId)" ng-disabled="!findUserForm.$valid" type="submit">Find user</button>
                         <hr/>
                         <div ng-show="searchResult.items.length > 0">
                             <label>Search results: {{ searchResult.numberOfItems }}, showing {{ searchResult.items.length }}</label>
@@ -52,8 +52,8 @@
                             </div>
                         </div>
                         <label>Message text</label>
-                        <textarea ng-model="messageText" class="form-control" placeholder="Message text"></textarea>
-                        <button class="btn btn-lg btn-primary btn-block" ng-click="CreateNewConversation(inboxId,messageText)" type="submit">Create new conversation</button>
+                        <textarea ng-model="messageText" class="form-control" placeholder="Message text" required></textarea>
+                        <button class="btn btn-lg btn-primary btn-block" ng-click="CreateNewConversation(inboxId,messageText)" ng-disabled="!newConversationForm.$valid" type="submit">Create new conversation</button>
                     </form>
                 </div>
 
