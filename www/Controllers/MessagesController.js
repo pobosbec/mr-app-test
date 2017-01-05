@@ -124,7 +124,7 @@ mrApp.controller('MessagesController', [
                     'pageSize': settingsFactory.getNumberOfMessages()
                 }
             };
-            console.log(listMessagesRequest);
+            //console.log(listMessagesRequest);
             apiFactory.functions.call('conversations/list-messages', listMessagesRequest, function (response) {
 
                 for (var i = 0; i < response.data.items.length; i++) {
@@ -139,6 +139,7 @@ mrApp.controller('MessagesController', [
 
                 response.data.items = parseAuthor(response.data.items);
                 $scope.messages = response.data.items;
+                console.log($scope.messages);
 
                 scrollToLast();
 

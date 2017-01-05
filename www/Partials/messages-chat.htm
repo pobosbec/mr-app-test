@@ -18,14 +18,16 @@
                     <div>
                         <b>{{ message.authorDisplayName }}</b><br/>
                         <div ng-bind-html="message.content"></div>
-                        <div ng-repeat="metadata in message.metaData" class="attachment">
-                            <a ng-show="metadata._type == 'image'" href="{{metadata.url}}" target="_blank">
-                                <img height="50" alt="thumb" src="{{ metadata.thumbnail }}"/>
-                            </a>
-                            <a ng-show="metadata._type == 'position'" href="https://www.google.com/maps/preview/@{{metadata.value}}" target="_blank">
-                                <img height="50" alt="map" src="https://lh3.googleusercontent.com/MOf9Kxxkj7GvyZlTZOnUzuYv0JAweEhlxJX6gslQvbvlhLK5_bSTK6duxY2xfbBsj43H=w50" />
-                            </a>
-                            <div ng-show="metadata._type == 'form'" ng-click="openFormModal(message.formId)"><span><i class="fa fa-clipboard"></i>View form</span></div>
+                        <div ng-repeat="metadata in message.metaData">
+                            <div ng-if="metadata._type == 'image' || metadata._type == 'position' || metadata._type == 'form'" class="attachment">
+                                <a ng-if="metadata._type == 'image'" href="{{metadata.url}}" target="_blank">
+                                    <img height="50" alt="thumb" src="{{ metadata.thumbnail }}" />
+                                </a>
+                                <a ng-if="metadata._type == 'position'" href="https://www.google.com/maps/preview/@{{metadata.value}}" target="_blank">
+                                    <img height="50" alt="map" src="https://lh3.googleusercontent.com/MOf9Kxxkj7GvyZlTZOnUzuYv0JAweEhlxJX6gslQvbvlhLK5_bSTK6duxY2xfbBsj43H=w50" />
+                                </a>
+                                <div ng-if="metadata._type == 'form'" ng-click="openFormModal(message.formId)"><span><i class="fa fa-clipboard"></i>View form</span></div>
+                            </div>
                         </div>
                         <span class="smallDateTime">{{ message.createdOn }}</span>
                     </div>
@@ -42,7 +44,6 @@
     <div class="send-chat-message">
         <form ng-submit="sendMessage(newMessage)" name="newMessageForm">
             <a href="" ng-click="sendMessage(newMessage)" class="btn btn-primary btn-align-right" ng-disable="newMessagesForm.$invalid"><span><i class="fa fa-arrow-right"></i></span></a>
-            <!--<input ng-model="newMessage" class="form-control send-message" placeholder="Compose message"/>-->
             <textarea ng-model="newMessage" class="form-control send-message" placeholder="Compose message" required></textarea>
         </form>
     </div>
