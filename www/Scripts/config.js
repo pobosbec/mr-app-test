@@ -61,6 +61,12 @@ mrApp.config(function ($routeProvider) {
         resolve: checkToken
     });
 
+    $routeProvider.when('/intro/:param1',
+    {
+        templateUrl: 'Partials/intro-container.htm',
+        resolve: checkToken
+    });
+
     $routeProvider.when('/login/:param1',
     {
         templateUrl: 'Partials/login.htm'

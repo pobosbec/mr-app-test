@@ -27,7 +27,7 @@
 <body ng-controller="MainController" ng-class="{'ios-body': deviceType == 1}">
 
 <div ui-yield-to="modals"></div>
-    <div ui-yield-to="overlays"></div>
+<div ui-yield-to="overlays"></div>
 
 <!-- Sidebars -->
 <div class="sidebar sidebar-left" toggleable parent-active-class="sidebar-left-in" id="mainSidebar">
@@ -45,6 +45,7 @@
             <div>
                 <a class="list-group-item" ng-show="validateLoad('profile')" href="#/settings"><i class="fa fa-cog"></i> Settings</a>
                 <a class="list-group-item" ng-show="validateLoad('profile')" href="#/profile/{{ myAppUser.id }}"><i class="fa fa-user"></i> Profile</a>
+                <a class="list-group-item" ng-show="validateLoad('profile')" href="#/intro/manual"><i class="fa fa-question"></i> Introduction</a>
                 <a class="list-group-item" ng-show="validateLoad('logout')" href="#/logout"><i class="fa fa-sign-out"></i> Logout</a>
             </div>
 
@@ -98,7 +99,6 @@
             
         </div>
     </div>
-
 
     <!-- App Body -->
     <div class="app-body" ng-view="">

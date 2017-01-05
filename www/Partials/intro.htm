@@ -1,4 +1,4 @@
-﻿<div ng-controller="IntroController" class="modal modal-overlay" ui-if='introModal' ui-shared-state='introModal'>
+﻿<div ng-controller="IntroController" class="modal modal-overlay" ui-shared-state='introModal'>
     <div class="modal-dialog">
         <div class="modal-content">
 
@@ -12,7 +12,7 @@
                         <p class="intro-heading">{{content.ingress}}</p>
                         <p>{{content.text}}</p>
                         <p>
-                            For more information visit<br/><a href="http://mobileresponse.com">http://mobileresponse.com</a>
+                            For more information visit<br/><a href="http://www.mobileresponse.com">http://www.mobileresponse.com</a>
                         </p>
                     </div>
                     <div ng-show="currentPage > 1 && currentPage < numberOfPages">
@@ -22,6 +22,7 @@
                     </div>
                     <div ng-show="currentPage==numberOfPages">
                         <img class="intro-image" src="{{content.image}}"/>
+                        <p>{{content.text}}</p>
                         <p>
                             <button class="btn btn-primary" ng-click="closeIntro();">Let's go!</button>
                         </p>
