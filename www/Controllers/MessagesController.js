@@ -60,10 +60,17 @@ mrApp.controller('MessagesController', [
 
         $scope.openFormModal = function (formId) {
             var formUrl = 'http://m.mobileresponse.se/form/' + formId;
+            $window.open(formUrl, '_system');
             //console.log(formUrl);
-            SharedState.set('formModalUrl', formUrl);
-            SharedState.turnOn('formModal');
+            //SharedState.set('formModalUrl', formUrl);
+            //SharedState.turnOn('formModal');
         };
+
+        $scope.openExternalLink = function (url) {
+            //console.log("Open external:" + url);
+            $window.open(url, '_system');
+        };
+
 
         function showAlert(text, type, duration) {
             if (type === 'success') {
@@ -216,11 +223,7 @@ mrApp.controller('MessagesController', [
 
         };
 
-        $scope.openExternalLink = function (url) {
-            console.log("Open external:" + url);
-            $window.open(url, '_system');
-        };
-
+       
         // handler
         var onNewMessages = function (event, newMessages) {
             var reload = false;
