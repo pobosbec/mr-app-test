@@ -20,7 +20,7 @@
                         <div ng-bind-html="message.content"></div>
                         <div ng-repeat="metadata in message.metaData">
                             <div ng-if="metadata._type == 'image' || metadata._type == 'position' || metadata._type == 'form'" class="attachment">
-                                <a ng-if="metadata._type == 'image'" href="{{metadata.url}}" target="_blank">
+                                <a ng-if="metadata._type == 'image'" ng-click="openExternalLink(metadata.url);">
                                     <img height="50" alt="thumb" src="{{ metadata.thumbnail }}" />
                                 </a>
                                 <a ng-if="metadata._type == 'position'" href="https://www.google.com/maps/preview/@{{metadata.value}}" target="_blank">

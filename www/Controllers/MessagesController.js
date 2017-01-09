@@ -48,8 +48,8 @@ mrApp.controller('FormModalController',
 ]);
 
 mrApp.controller('MessagesController', [
-    'ApiFactory', '$scope', '$location', '$routeParams', 'UsersFactory', 'ConversationsFactory', '$timeout', '$filter','SharedState','SettingsFactory',
-    function(apiFactory, $scope, $location, $routeParams, usersFactory, conversationsFactory, $timeout, $filter, SharedState, settingsFactory) {
+    'ApiFactory', '$scope', '$location', '$routeParams', '$window', 'UsersFactory', 'ConversationsFactory', '$timeout', '$filter', 'SharedState', 'SettingsFactory',
+    function(apiFactory, $scope, $location, $routeParams, $window, usersFactory, conversationsFactory, $timeout, $filter, SharedState, settingsFactory) {
 
         var conversationId = $routeParams.param1;
 
@@ -214,6 +214,11 @@ mrApp.controller('MessagesController', [
 
             }
 
+        };
+
+        $scope.openExternalLink = function (url) {
+            console.log("Open external:" + url);
+            $window.open(url, '_system');
         };
 
         // handler
