@@ -151,16 +151,16 @@ mrApp.controller('MessagesController', [
                             }
                         }
 
-                        //if (response.data.items[i].metaData[0]._type === "file") {
-                        //    if (response.data.items[i].metaData[0].contentType === 'application/pdf') {
-                        //        response.data.items[i].metaData[0].url = response.data.items[i].metaData[0].url + '.pdf';
-                        //    }
-                        //}
+                        if (response.data.items[i].metaData[0]._type === "file") {
+                            if (response.data.items[i].metaData[0].contentType === 'application/pdf') {
+                                response.data.items[i].metaData[0].url = response.data.items[i].metaData[0].url + '.pdf';
+                            }
+                        }
                     }
                 }
 
                 response.data.items = parseAuthor(response.data.items);
-                //console.log(response.data.items);
+                console.log(response.data.items);
                 $scope.messages = response.data.items;
                 
                 scrollToLast();
