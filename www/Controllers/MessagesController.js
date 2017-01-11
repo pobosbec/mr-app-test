@@ -146,10 +146,8 @@ mrApp.controller('MessagesController', [
 
                         if (response.data.items[i].metaData[0]._type === "image") {
                             if (response.data.items[i].metaData[0].contentType === 'image/jpeg') {
-                                var tempThumbnail = '' + response.data.items[i].metaData[0].thumbnail;
-                                //console.log(tempThumbnail);
-                                response.data.items[i].metaData[0].thumbnail = tempThumbnail.replace('///', 'http://');
-                                //response.data.items[i].metaData[0].url = response.data.items[i].metaData[0].url.replace("///","http://");
+                                response.data.items[i].metaData[0].thumbnail = response.data.items[i].metaData[0].thumbnail.replace('///', 'http://');
+                                response.data.items[i].metaData[0].url = response.data.items[i].metaData[0].url.replace('///', 'http://');
                             }
                         }
 
@@ -162,7 +160,7 @@ mrApp.controller('MessagesController', [
                 }
 
                 response.data.items = parseAuthor(response.data.items);
-                console.log(response.data.items);
+                //console.log(response.data.items);
                 $scope.messages = response.data.items;
                 
                 scrollToLast();

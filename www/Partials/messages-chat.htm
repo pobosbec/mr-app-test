@@ -24,7 +24,7 @@
                                     <img height="50" alt="thumb" src="{{ metadata.thumbnail }}"/>
                                 </a>
                                 <a ng-if="metadata._type == 'file'" ng-click="openExternalLink(metadata.url);">
-                                    <span><i class="fa fa-paperclip"></i>View file</span>
+                                    <span><i class="fa fa-paperclip"></i>{{metadata.name}}</span>
                                 </a>
                                 <a ng-if="metadata._type == 'position'" ng-click="openExternalLink('https://www.google.com/maps/preview/@'+metadata.value);">
                                     <img height="50" alt="map" src="https://lh3.googleusercontent.com/MOf9Kxxkj7GvyZlTZOnUzuYv0JAweEhlxJX6gslQvbvlhLK5_bSTK6duxY2xfbBsj43H=w50" />
