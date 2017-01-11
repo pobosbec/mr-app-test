@@ -144,6 +144,15 @@ mrApp.controller('MessagesController', [
                             response.data.items[i].formId = formObj.id;
                         }
 
+                        if (response.data.items[i].metaData[0]._type === "image") {
+                            if (response.data.items[i].metaData[0].contentType === 'image/jpeg') {
+                                var tempThumbnail = '' + response.data.items[i].metaData[0].thumbnail;
+                                //console.log(tempThumbnail);
+                                response.data.items[i].metaData[0].thumbnail = tempThumbnail.replace('///', 'http://');
+                                //response.data.items[i].metaData[0].url = response.data.items[i].metaData[0].url.replace("///","http://");
+                            }
+                        }
+
                         //if (response.data.items[i].metaData[0]._type === "file") {
                         //    if (response.data.items[i].metaData[0].contentType === 'application/pdf') {
                         //        response.data.items[i].metaData[0].url = response.data.items[i].metaData[0].url + '.pdf';
