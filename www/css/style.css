@@ -203,7 +203,9 @@
 .attachment i {
     margin-right: 5px;
 }
-
+.externalLink {
+    display: block;
+}
 .btn-align-right {
     display: inline;
     float: right;

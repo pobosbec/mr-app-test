@@ -105,7 +105,8 @@ mrApp.controller('MessagesController', [
         function linkify(text) {
             var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
             return text.replace(urlRegex, function (url) {
-                return '<a href="' + url + '" target="_blank">' + url + '</a>';
+                //return '<a ng-click="openExternalLink(' + url + ');" class="externalLink">' + url + '</a>';
+                return '<a href="' + url + '" target="_system" class="externalLink">' + url + '</a>';
             });
         }
 
@@ -137,14 +138,22 @@ mrApp.controller('MessagesController', [
                 for (var i = 0; i < response.data.items.length; i++) {
                     response.data.items[i].content = linkify(response.data.items[i].content);
                     if (response.data.items[i].metaData.length > 0) {
+
                         if (response.data.items[i].metaData[0]._type === "form") {
                             var formObj = angular.fromJson(response.data.items[i].metaData[0].value);
                             response.data.items[i].formId = formObj.id;
                         }
+
+                        //if (response.data.items[i].metaData[0]._type === "file") {
+                        //    if (response.data.items[i].metaData[0].contentType === 'application/pdf') {
+                        //        response.data.items[i].metaData[0].url = response.data.items[i].metaData[0].url + '.pdf';
+                        //    }
+                        //}
                     }
                 }
 
                 response.data.items = parseAuthor(response.data.items);
+                console.log(response.data.items);
                 $scope.messages = response.data.items;
                 
                 scrollToLast();

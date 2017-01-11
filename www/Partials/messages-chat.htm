@@ -19,9 +19,12 @@
                         <b>{{ message.authorDisplayName }}</b><br/>
                         <div ng-bind-html="message.content"></div>
                         <div ng-repeat="metadata in message.metaData">
-                            <div ng-if="metadata._type == 'image' || metadata._type == 'position' || metadata._type == 'form'" class="attachment">
+                            <div ng-if="metadata._type == 'image' || metadata._type == 'file' || metadata._type == 'position' || metadata._type == 'form'" class="attachment">
                                 <a ng-if="metadata._type == 'image'" ng-click="openExternalLink(metadata.url);">
-                                    <img height="50" alt="thumb" src="{{ metadata.thumbnail }}" />
+                                    <img height="50" alt="thumb" src="{{ metadata.thumbnail }}"/>
+                                </a>
+                                <a ng-if="metadata._type == 'file'" ng-click="openExternalLink(metadata.url);">
+                                    <span><i class="fa fa-paperclip"></i>View file</span>
                                 </a>
                                 <a ng-if="metadata._type == 'position'" ng-click="openExternalLink('https://www.google.com/maps/preview/@'+metadata.value);">
                                     <img height="50" alt="map" src="https://lh3.googleusercontent.com/MOf9Kxxkj7GvyZlTZOnUzuYv0JAweEhlxJX6gslQvbvlhLK5_bSTK6duxY2xfbBsj43H=w50" />
